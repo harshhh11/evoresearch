@@ -54,13 +54,13 @@ export default function PapersPage() {
       {/* Header */}
       <div style={{ display: "flex", alignItems: "flex-end", justifyContent: "space-between", borderBottom: "1px solid rgba(226, 239, 229, 0.08)", paddingBottom: 20 }}>
         <div>
-          <div style={{ font: "500 10px/1 var(--mono)", color: "#b5ff8a", letterSpacing: "0.14em", marginBottom: 8 }}>
+          <div style={{ font: "500 10px/1 var(--mono)", color: "#B69A72", letterSpacing: "0.14em", marginBottom: 8 }}>
             SCIENTIFIC GROUNDING // 008
           </div>
-          <h1 style={{ margin: 0, font: "600 24px/1.2 var(--body)", color: "#e8ede8" }}>
+          <h1 style={{ margin: 0, font: "600 24px/1.2 var(--body)", color: "#F2F0E8" }}>
             Research Papers & Theoretical Foundations
           </h1>
-          <p style={{ margin: "6px 0 0", font: "400 12px/1.5 var(--body)", color: "#9ba8a0" }}>
+          <p style={{ margin: "6px 0 0", font: "400 12px/1.5 var(--body)", color: "#AAA99F" }}>
             Curated literature in edge ML, multi-fidelity resource allocation, hyperparameter optimization, and automated failure recovery.
           </p>
         </div>
@@ -72,7 +72,7 @@ export default function PapersPage() {
             placeholder="Search literature corpus..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            style={{ padding: "8px 12px 8px 30px", background: "#050706", border: "1px solid rgba(226, 239, 229, 0.15)", borderRadius: 3, color: "#e8ede8", font: "400 11px var(--mono)", width: 250 }}
+            style={{ padding: "8px 12px 8px 30px", background: "#101110", border: "1px solid rgba(226, 239, 229, 0.15)", borderRadius: 3, color: "#F2F0E8", font: "400 11px var(--mono)", width: 250 }}
           />
         </div>
       </div>
@@ -89,7 +89,7 @@ export default function PapersPage() {
             <div key={p.id} className="research-card">
               <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: 16 }}>
                 <div>
-                  <h2 style={{ margin: "0 0 6px", font: "600 16px/1.3 var(--body)", color: "#e8ede8" }}>
+                  <h2 style={{ margin: "0 0 6px", font: "600 16px/1.3 var(--body)", color: "#F2F0E8" }}>
                     {p.title}
                   </h2>
                   <div style={{ font: "400 11px var(--mono)", color: "#8c9c91", marginBottom: 12 }}>
@@ -107,10 +107,10 @@ export default function PapersPage() {
                       alignItems: "center",
                       gap: 6,
                       padding: "6px 12px",
-                      background: "rgba(181, 255, 138, 0.08)",
-                      border: "1px solid rgba(181, 255, 138, 0.2)",
+                      background: "rgba(182, 154, 114, 0.08)",
+                      border: "1px solid rgba(182, 154, 114, 0.2)",
                       borderRadius: 2,
-                      color: "#b5ff8a",
+                      color: "#B69A72",
                       font: "500 9px var(--mono)",
                       textDecoration: "none"
                     }}
@@ -128,15 +128,15 @@ export default function PapersPage() {
               <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14, background: "rgba(5, 7, 6, 0.5)", padding: 14, borderRadius: 3, border: "1px solid rgba(226, 239, 229, 0.06)", marginBottom: 14 }}>
                 <div>
                   <div style={{ font: "600 9px var(--mono)", color: "#7e9084", marginBottom: 3 }}>RESEARCH PROBLEM:</div>
-                  <div style={{ font: "400 11px/1.4 var(--body)", color: "#e8ede8" }}>{p.problem}</div>
+                  <div style={{ font: "400 11px/1.4 var(--body)", color: "#F2F0E8" }}>{p.problem}</div>
                 </div>
                 <div>
                   <div style={{ font: "600 9px var(--mono)", color: "#7e9084", marginBottom: 3 }}>PROPOSED METHOD:</div>
-                  <div style={{ font: "400 11px/1.4 var(--body)", color: "#e8ede8" }}>{p.method}</div>
+                  <div style={{ font: "400 11px/1.4 var(--body)", color: "#F2F0E8" }}>{p.method}</div>
                 </div>
                 <div>
                   <div style={{ font: "600 9px var(--mono)", color: "#7e9084", marginBottom: 3 }}>CORE FINDINGS:</div>
-                  <div style={{ font: "400 11px/1.4 var(--body)", color: "#b5ff8a" }}>{p.findings}</div>
+                  <div style={{ font: "400 11px/1.4 var(--body)", color: "#B69A72" }}>{p.findings}</div>
                 </div>
                 <div>
                   <div style={{ font: "600 9px var(--mono)", color: "#7e9084", marginBottom: 3 }}>LIMITATIONS:</div>

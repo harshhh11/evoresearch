@@ -181,13 +181,13 @@ export default function ModelCataloguePage() {
       {/* Header */}
       <div style={{ display: "flex", alignItems: "flex-end", justifyContent: "space-between", borderBottom: "1px solid rgba(226, 239, 229, 0.08)", paddingBottom: 20 }}>
         <div>
-          <div style={{ font: "500 10px/1 var(--mono)", color: "#b5ff8a", letterSpacing: "0.14em", marginBottom: 8 }}>
+          <div style={{ font: "500 10px/1 var(--mono)", color: "#B69A72", letterSpacing: "0.14em", marginBottom: 8 }}>
             ALGORITHMIC ARCHITECTURE // 005
           </div>
-          <h1 style={{ margin: 0, font: "600 24px/1.2 var(--body)", color: "#e8ede8" }}>
+          <h1 style={{ margin: 0, font: "600 24px/1.2 var(--body)", color: "#F2F0E8" }}>
             Model Catalogue & Edge Efficiency Profiles
           </h1>
-          <p style={{ margin: "6px 0 0", font: "400 12px/1.5 var(--body)", color: "#9ba8a0" }}>
+          <p style={{ margin: "6px 0 0", font: "400 12px/1.5 var(--body)", color: "#AAA99F" }}>
             Verified CPU estimators with explicit execution safeguards, latency thresholds, and embedded memory bounds.
           </p>
         </div>
@@ -200,9 +200,9 @@ export default function ModelCataloguePage() {
               style={{
                 padding: "6px 14px",
                 borderRadius: 2,
-                border: filter === t ? "1px solid #b5ff8a" : "1px solid rgba(226, 239, 229, 0.15)",
-                background: filter === t ? "rgba(181, 255, 138, 0.1)" : "transparent",
-                color: filter === t ? "#b5ff8a" : "#8c9c91",
+                border: filter === t ? "1px solid #B69A72" : "1px solid rgba(226, 239, 229, 0.15)",
+                background: filter === t ? "rgba(182, 154, 114, 0.1)" : "transparent",
+                color: filter === t ? "#B69A72" : "#8c9c91",
                 font: "500 10px var(--mono)",
                 cursor: "pointer"
               }}
@@ -219,7 +219,7 @@ export default function ModelCataloguePage() {
           <div key={m.name} className="research-card">
             <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", marginBottom: 12 }}>
               <div>
-                <span style={{ font: "600 14px var(--mono)", color: "#e8ede8" }}>{m.name}</span>
+                <span style={{ font: "600 14px var(--mono)", color: "#F2F0E8" }}>{m.name}</span>
                 <div style={{ font: "400 10px var(--mono)", color: "#7e9084", marginTop: 2 }}>
                   {m.family}
                 </div>
@@ -238,11 +238,11 @@ export default function ModelCataloguePage() {
               </div>
               <div>
                 <div style={{ font: "500 8px var(--mono)", color: "#7e9084" }}>SERIALIZED SIZE</div>
-                <div style={{ font: "500 10px var(--mono)", color: "#b5ff8a", marginTop: 2 }}>{m.memoryFootprint}</div>
+                <div style={{ font: "500 10px var(--mono)", color: "#B69A72", marginTop: 2 }}>{m.memoryFootprint}</div>
               </div>
               <div style={{ gridColumn: "span 2", marginTop: 4 }}>
                 <div style={{ font: "500 8px var(--mono)", color: "#7e9084" }}>HARDWARE COMPATIBILITY</div>
-                <div style={{ font: "500 10px var(--mono)", color: "#e8ede8", marginTop: 2 }}>{m.edgeSuitability}</div>
+                <div style={{ font: "500 10px var(--mono)", color: "#F2F0E8", marginTop: 2 }}>{m.edgeSuitability}</div>
               </div>
             </div>
 
@@ -261,7 +261,7 @@ export default function ModelCataloguePage() {
                         border: "1px solid rgba(226, 239, 229, 0.1)",
                         borderRadius: 2,
                         font: "400 9px var(--mono)",
-                        color: "#9ba8a0"
+                        color: "#AAA99F"
                       }}
                       title={p.description}
                     >

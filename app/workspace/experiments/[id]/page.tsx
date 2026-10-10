@@ -142,21 +142,21 @@ export default function ExperimentDetailPage({
       <div className="research-card">
         <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: 20 }}>
           <div>
-            <div style={{ font: "500 10px/1 var(--mono)", color: "#b5ff8a", letterSpacing: "0.14em", marginBottom: 8 }}>
+            <div style={{ font: "500 10px/1 var(--mono)", color: "#B69A72", letterSpacing: "0.14em", marginBottom: 8 }}>
               EXPERIMENT DETAIL // {exp.task_type.toUpperCase()}
             </div>
-            <h1 style={{ margin: 0, font: "600 22px/1.2 var(--body)", color: "#e8ede8" }}>
+            <h1 style={{ margin: 0, font: "600 22px/1.2 var(--body)", color: "#F2F0E8" }}>
               {exp.name}
             </h1>
             <div style={{ display: "flex", alignItems: "center", gap: 16, marginTop: 12 }}>
-              <span style={{ font: "400 10px var(--mono)", color: "#9ba8a0" }}>
-                DATASET: <strong style={{ color: "#e8ede8" }}>{ds?.name || "N/A"}</strong> ({ds?.row_count} rows, {ds?.col_count} features)
+              <span style={{ font: "400 10px var(--mono)", color: "#AAA99F" }}>
+                DATASET: <strong style={{ color: "#F2F0E8" }}>{ds?.name || "N/A"}</strong> ({ds?.row_count} rows, {ds?.col_count} features)
               </span>
-              <span style={{ font: "400 10px var(--mono)", color: "#9ba8a0" }}>
+              <span style={{ font: "400 10px var(--mono)", color: "#AAA99F" }}>
                 BASELINE: <strong style={{ color: "#a7e9e8" }}>{exp.baseline_model}</strong>
               </span>
-              <span style={{ font: "400 10px var(--mono)", color: "#9ba8a0" }}>
-                SEED: <strong style={{ color: "#e8ede8" }}>{exp.random_seed}</strong>
+              <span style={{ font: "400 10px var(--mono)", color: "#AAA99F" }}>
+                SEED: <strong style={{ color: "#F2F0E8" }}>{exp.random_seed}</strong>
               </span>
             </div>
           </div>
@@ -191,16 +191,16 @@ export default function ExperimentDetailPage({
                   alignItems: "center",
                   gap: 8,
                   padding: "9px 20px",
-                  background: executing ? "#557a44" : "#b5ff8a",
-                  border: "1px solid #b5ff8a",
-                  color: "#050706",
+                  background: executing ? "#557a44" : "#B69A72",
+                  border: "1px solid #B69A72",
+                  color: "#101110",
                   font: "600 10px var(--mono)",
                   letterSpacing: "0.08em",
                   borderRadius: 3,
                   cursor: executing ? "not-allowed" : "pointer"
                 }}
               >
-                <Play size={13} fill="#050706" />
+                <Play size={13} fill="#101110" />
                 <span>{executing ? "EXECUTING SCIKIT-LEARN PIPELINES..." : runs.length ? "RE-EXECUTE EXPERIMENT" : "START EXPERIMENT"}</span>
               </button>
             )}
@@ -237,8 +237,8 @@ export default function ExperimentDetailPage({
             border: "none",
             padding: "4px 8px",
             font: activeTab === "runs" ? "600 11px var(--mono)" : "400 11px var(--mono)",
-            color: activeTab === "runs" ? "#b5ff8a" : "#7e9084",
-            borderBottom: activeTab === "runs" ? "2px solid #b5ff8a" : "2px solid transparent",
+            color: activeTab === "runs" ? "#B69A72" : "#7e9084",
+            borderBottom: activeTab === "runs" ? "2px solid #B69A72" : "2px solid transparent",
             cursor: "pointer"
           }}
         >
@@ -295,12 +295,12 @@ export default function ExperimentDetailPage({
 
                     return (
                       <tr key={r.id}>
-                        <td style={{ fontWeight: 600, color: "#e8ede8" }}>{r.model_name}</td>
+                        <td style={{ fontWeight: 600, color: "#F2F0E8" }}>{r.model_name}</td>
                         <td>{r.train_time_ms.toFixed(1)} ms</td>
                         <td style={{ color: "#a7e9e8" }}>{r.inference_latency_us.toFixed(1)} µs</td>
                         <td>{r.model_size_kb.toFixed(1)} KB</td>
                         <td>{r.peak_memory_mb.toFixed(2)} MB</td>
-                        <td style={{ fontWeight: 600, color: "#b5ff8a" }}>{scoreDisplay}</td>
+                        <td style={{ fontWeight: 600, color: "#B69A72" }}>{scoreDisplay}</td>
                         <td>
                           {r.recovery_successful ? (
                             <span className="status-tag status-tag--recovered">
@@ -359,7 +359,7 @@ export default function ExperimentDetailPage({
                   </span>
                 </div>
 
-                <div style={{ font: "500 12px var(--body)", color: "#e8ede8", marginBottom: 8 }}>
+                <div style={{ font: "500 12px var(--body)", color: "#F2F0E8", marginBottom: 8 }}>
                   Diagnosis: {f.diagnosis}
                 </div>
 
@@ -368,8 +368,8 @@ export default function ExperimentDetailPage({
                 </div>
 
                 {f.applied_repair && (
-                  <div style={{ background: "rgba(181, 255, 138, 0.05)", border: "1px solid rgba(181, 255, 138, 0.2)", padding: 12, borderRadius: 3 }}>
-                    <div style={{ font: "600 10px var(--mono)", color: "#b5ff8a", marginBottom: 4 }}>
+                  <div style={{ background: "rgba(182, 154, 114, 0.05)", border: "1px solid rgba(182, 154, 114, 0.2)", padding: 12, borderRadius: 3 }}>
+                    <div style={{ font: "600 10px var(--mono)", color: "#B69A72", marginBottom: 4 }}>
                       APPLIED RECOVERY PROCEDURE:
                     </div>
                     <pre style={{ margin: 0, font: "400 10px var(--mono)", color: "#c6d4c8", whiteSpace: "pre-wrap" }}>

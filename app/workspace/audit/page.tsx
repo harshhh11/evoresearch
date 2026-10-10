@@ -47,13 +47,13 @@ export default function AuditTimelinePage() {
       {/* Header */}
       <div style={{ display: "flex", alignItems: "flex-end", justifyContent: "space-between", borderBottom: "1px solid rgba(226, 239, 229, 0.08)", paddingBottom: 20 }}>
         <div>
-          <div style={{ font: "500 10px/1 var(--mono)", color: "#b5ff8a", letterSpacing: "0.14em", marginBottom: 8 }}>
+          <div style={{ font: "500 10px/1 var(--mono)", color: "#B69A72", letterSpacing: "0.14em", marginBottom: 8 }}>
             PROVENANCE INTEGRITY // 011
           </div>
-          <h1 style={{ margin: 0, font: "600 24px/1.2 var(--body)", color: "#e8ede8" }}>
+          <h1 style={{ margin: 0, font: "600 24px/1.2 var(--body)", color: "#F2F0E8" }}>
             Activity & Experiment Audit Timeline
           </h1>
-          <p style={{ margin: "6px 0 0", font: "400 12px/1.5 var(--body)", color: "#9ba8a0" }}>
+          <p style={{ margin: "6px 0 0", font: "400 12px/1.5 var(--body)", color: "#AAA99F" }}>
             Append-only audit trail logging every configuration creation, state transition, failure diagnosis, and repair verification.
           </p>
         </div>
@@ -66,9 +66,9 @@ export default function AuditTimelinePage() {
               style={{
                 padding: "6px 12px",
                 borderRadius: 2,
-                border: filterType === t ? "1px solid #b5ff8a" : "1px solid rgba(226, 239, 229, 0.15)",
-                background: filterType === t ? "rgba(181, 255, 138, 0.1)" : "transparent",
-                color: filterType === t ? "#b5ff8a" : "#8c9c91",
+                border: filterType === t ? "1px solid #B69A72" : "1px solid rgba(226, 239, 229, 0.15)",
+                background: filterType === t ? "rgba(182, 154, 114, 0.1)" : "transparent",
+                color: filterType === t ? "#B69A72" : "#8c9c91",
                 font: "500 10px var(--mono)",
                 cursor: "pointer"
               }}
@@ -101,13 +101,13 @@ export default function AuditTimelinePage() {
                 }}
               >
                 <div style={{ marginTop: 2 }}>
-                  <Activity size={15} color="#b5ff8a" />
+                  <Activity size={15} color="#B69A72" />
                 </div>
 
                 <div style={{ flex: 1 }}>
                   <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 4 }}>
                     <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                      <span style={{ font: "600 11px var(--mono)", color: "#e8ede8" }}>
+                      <span style={{ font: "600 11px var(--mono)", color: "#F2F0E8" }}>
                         {e.entity_type} {e.action}
                       </span>
                       <span style={{ font: "400 9px var(--mono)", color: "#7e9084" }}>

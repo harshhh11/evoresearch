@@ -74,16 +74,16 @@ export default function WorkspaceLayout({ children }: { children: ReactNode }) {
       {/* 1. COMPACT SCIENTIFIC SIDEBAR */}
       <aside className="workspace-sidebar" aria-label="Scientific Workspace Navigation">
         {/* Top Brand Identity */}
-        <div className="p-[18px_16px_16px] border-b border-[#1b221e]">
+        <div className="p-[16px_16px_14px] border-b border-[#34352F]">
           <Link href="/" className="inline-flex items-center gap-2.5 no-underline group">
-            <div className="w-8 h-8 rounded-[6px] bg-[#111513] border border-[#222b26] flex items-center justify-center transition-colors group-hover:border-[#9aaf98]">
+            <div className="w-8 h-8 rounded-[8px] bg-[#191A18] border border-[#34352F] flex items-center justify-center transition-colors group-hover:border-[#B69A72]">
               <Image src="/evo-mark.svg" alt="EvoResearch Symbol" width={18} height={18} priority />
             </div>
             <div>
-              <div className="font-mono font-semibold text-[11px] leading-tight tracking-[0.14em] text-[#e8e6df]">
+              <div className="font-sans font-semibold text-[13px] leading-tight tracking-[0.06em] text-[#F2F0E8]">
                 EVORESEARCH
               </div>
-              <div className="font-mono text-[7.5px] text-[#8e958f] tracking-[0.08em] mt-0.5 uppercase">
+              <div className="font-mono text-[9px] text-[#77786F] tracking-[0.06em] mt-0.5 uppercase">
                 Materials ML // Edge Studio
               </div>
             </div>
@@ -94,7 +94,7 @@ export default function WorkspaceLayout({ children }: { children: ReactNode }) {
         <nav className="flex-1 p-[12px_10px] overflow-y-auto flex flex-col gap-4" aria-label="Research Tools">
           {navigationGroups.map((grp) => (
             <div key={grp.group} className="flex flex-col gap-0.5">
-              <div className="font-mono text-[8px] text-[#687069] tracking-[0.14em] uppercase px-2.5 py-1 font-medium select-none">
+              <div className="font-mono text-[9px] text-[#77786F] tracking-[0.1em] uppercase px-2.5 py-1 font-medium select-none">
                 {grp.group}
               </div>
               {grp.items.map((item) => {
@@ -112,14 +112,14 @@ export default function WorkspaceLayout({ children }: { children: ReactNode }) {
                   >
                     <div className="flex items-center gap-2.5 min-w-0">
                       <Icon
-                        size={14}
-                        className={isActive ? "text-[#9aaf98]" : "text-[#737b74] group-hover:text-[#a5aaa4]"}
+                        size={15}
+                        className={isActive ? "text-[#B69A72]" : "text-[#77786F] group-hover:text-[#AAA99F]"}
                       />
-                      <span className="truncate text-[11px]">{item.name}</span>
+                      <span className="truncate text-[13px] font-medium">{item.name}</span>
                     </div>
                     {isActive && (
                       <span
-                        className="w-1.5 h-1.5 rounded-full bg-[#9aaf98] shrink-0"
+                        className="w-1.5 h-1.5 rounded-full bg-[#B69A72] shrink-0"
                         aria-hidden="true"
                       />
                     )}
@@ -131,36 +131,36 @@ export default function WorkspaceLayout({ children }: { children: ReactNode }) {
         </nav>
 
         {/* Bottom Engine Telemetry Strip */}
-        <div className="p-[12px_14px] border-t border-[#1b221e] flex flex-col gap-2 bg-[#0c100e]">
+        <div className="p-[12px_14px] border-t border-[#34352F] flex flex-col gap-2 bg-[#141513]">
           {/* Measured Engine Status */}
-          <div className="p-[8px_10px] rounded-[6px] bg-[#111513] border border-[#1f2622] flex items-center justify-between">
+          <div className="p-[8px_10px] rounded-[8px] bg-[#191A18] border border-[#34352F] flex items-center justify-between">
             <div className="flex items-center gap-2 min-w-0">
               <span className="relative flex h-2 w-2 shrink-0">
                 {engineStatus === "ready" ? (
                   <>
-                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#9aaf98] opacity-50" />
-                    <span className="relative inline-flex rounded-full h-2 w-2 bg-[#9aaf98]" />
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#8EA58C] opacity-50" />
+                    <span className="relative inline-flex rounded-full h-2 w-2 bg-[#8EA58C]" />
                   </>
                 ) : engineStatus === "checking" ? (
-                  <span className="relative inline-flex rounded-full h-2 w-2 bg-[#d1a654]" />
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-[#B69A72]" />
                 ) : (
-                  <span className="relative inline-flex rounded-full h-2 w-2 bg-[#d46b6b]" />
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-[#C77F72]" />
                 )}
               </span>
               <div className="min-w-0">
-                <div className="font-mono text-[9.5px] font-medium text-[#e8e6df] leading-none uppercase">
+                <div className="font-sans text-[11px] font-medium text-[#F2F0E8] leading-none">
                   {engineStatus === "ready" ? "ML Engine: Verified" : engineStatus === "checking" ? "Verifying Engine..." : "Engine Offline"}
                 </div>
-                <div className="font-mono text-[8px] text-[#687069] leading-tight mt-1 truncate">
+                <div className="font-mono text-[9px] text-[#77786F] leading-tight mt-1 truncate">
                   Port 8000 // FastDaemon
                 </div>
               </div>
             </div>
-            <ShieldCheck size={13} className={engineStatus === "ready" ? "text-[#9aaf98]" : "text-[#687069]"} />
+            <ShieldCheck size={14} className={engineStatus === "ready" ? "text-[#8EA58C]" : "text-[#77786F]"} />
           </div>
 
           {/* Runtime Spec readout */}
-          <div className="flex items-center justify-between px-1 font-mono text-[8.5px] text-[#687069]">
+          <div className="flex items-center justify-between px-1 font-mono text-[9px] text-[#77786F]">
             <span>ENV: LOCAL_STUDIO</span>
             <span>BUILD v2.1</span>
           </div>
@@ -175,17 +175,17 @@ export default function WorkspaceLayout({ children }: { children: ReactNode }) {
           <div className="relative w-full max-w-[420px]">
             <Search
               size={14}
-              className="absolute left-3 top-1/2 -translate-y-1/2 text-[#737b74] pointer-events-none"
+              className="absolute left-3 top-1/2 -translate-y-1/2 text-[#77786F] pointer-events-none"
             />
             <input
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search experiments, model architectures, memory signatures..."
-              className="w-full h-[34px] pl-9 pr-14 bg-[#111513] border border-[#1f2622] rounded-[6px] text-[11.5px] text-[#e8e6df] placeholder-[#687069] focus:outline-none focus:border-[#2f3d34] transition-colors font-sans"
+              className="w-full h-[36px] pl-9 pr-14 bg-[#191A18] border border-[#34352F] rounded-[8px] text-[13px] text-[#F2F0E8] placeholder-[#77786F] focus:outline-none focus:border-[#B69A72] transition-colors font-sans"
             />
-            <div className="absolute right-2 top-1/2 -translate-y-1/2 pointer-events-none">
-              <kbd className="font-mono text-[9px] px-1.5 py-0.5 rounded bg-[#151a17] border border-[#222b26] text-[#737b74]">
+            <div className="absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none">
+              <kbd className="font-mono text-[10px] px-1.5 py-0.5 rounded bg-[#20211E] border border-[#34352F] text-[#77786F]">
                 ⌘ K
               </kbd>
             </div>
@@ -194,20 +194,20 @@ export default function WorkspaceLayout({ children }: { children: ReactNode }) {
           {/* Right Session Readout */}
           <div className="flex items-center gap-3">
             {/* Quick Engine Ping Indicator */}
-            <div className="hidden md:flex items-center gap-2 px-2.5 py-1 rounded-[6px] bg-[#111513] border border-[#1f2622]">
-              <Activity size={12} className="text-[#9aaf98]" />
-              <span className="font-mono text-[9.5px] text-[#8e958f]">
+            <div className="hidden md:flex items-center gap-2 px-3 py-1.5 rounded-[8px] bg-[#191A18] border border-[#34352F]">
+              <Activity size={13} className="text-[#B69A72]" />
+              <span className="font-mono text-[10px] text-[#AAA99F]">
                 INFERENCE LATENCY PROFILER READY
               </span>
             </div>
 
             {/* Researcher Session Pill */}
-            <div className="flex items-center gap-2 px-2.5 py-1 rounded-[6px] bg-[#111513] border border-[#1f2622]">
-              <div className="w-5 h-5 rounded-[4px] bg-[#151a17] border border-[#242e28] flex items-center justify-center font-mono text-[9px] font-semibold text-[#e8e6df]">
+            <div className="flex items-center gap-2.5 px-3 py-1.5 rounded-[8px] bg-[#191A18] border border-[#34352F]">
+              <div className="w-5 h-5 rounded-[6px] bg-[#20211E] border border-[#34352F] flex items-center justify-center font-mono text-[9px] font-semibold text-[#F2F0E8]">
                 HR
               </div>
               <div className="text-left hidden sm:block">
-                <div className="font-sans text-[10.5px] font-medium text-[#e8e6df] leading-none">
+                <div className="font-sans text-[12px] font-medium text-[#F2F0E8] leading-none">
                   Harsh Rathod
                 </div>
               </div>

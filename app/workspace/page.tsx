@@ -360,17 +360,16 @@ export default function WorkspaceOverviewPage() {
   };
 
   return (
-    <div className="flex flex-col gap-5 w-full max-w-[1500px] mx-auto pb-14 text-[#e8e6df]">
-      {/* =========================================================================
+    <div className="flex flex-col gap-5 w-full max-w-[1500px] mx-auto pb-14 text-[#F2F0E8]">
       {/* =========================================================================
           2. RESEARCH OVERVIEW PANEL (Unified Instrument Bar)
           ========================================================================= */}
-      <div className="p-3 sm:p-3.5 rounded-[8px] bg-[#111513] border border-[#1f2622] flex flex-col gap-2.5 w-full box-border min-w-0">
+      <div className="p-3 sm:p-3.5 rounded-[10px] bg-[#191A18] border border-[#34352F] flex flex-col gap-2.5 w-full box-border min-w-0">
         {/* Row 1: Project Selector & Dataset Selector */}
         <div className="flex flex-wrap items-center gap-2.5 min-w-0 w-full">
           {/* Project Selector */}
           <div className="flex items-center gap-1.5 shrink-0">
-            <span className="font-mono text-[8.5px] text-[#687069] uppercase tracking-wider select-none shrink-0">
+            <span className="font-mono text-[9px] text-[#77786F] uppercase tracking-wider select-none shrink-0 font-medium">
               PROJECT:
             </span>
             <div className="relative flex items-center min-w-0">
@@ -379,47 +378,47 @@ export default function WorkspaceOverviewPage() {
                   id="project-selector"
                   value={activeProjectId}
                   onChange={(e) => setActiveProjectId(e.target.value)}
-                  className="bg-[#0c100e] text-[9.5px] font-mono font-medium text-[#e8e6df] border border-[#1f2622] hover:border-[#27352b] rounded-[4px] px-2.5 py-1 pr-6 focus:outline-none cursor-pointer appearance-none transition-colors truncate max-w-[210px] leading-none"
+                  className="bg-[#141513] text-[12px] font-sans font-medium text-[#F2F0E8] border border-[#34352F] hover:border-[#B69A72] rounded-[6px] px-2.5 py-1.5 pr-6 focus:outline-none cursor-pointer appearance-none transition-colors truncate max-w-[220px] leading-none"
                 >
                   {projects.map((p) => (
-                    <option key={p.id} value={p.id} className="bg-[#111513] text-[#e8e6df]">
+                    <option key={p.id} value={p.id} className="bg-[#141513] text-[#F2F0E8]">
                       {p.name}
                     </option>
                   ))}
                 </select>
               ) : (
-                <span className="text-[9.5px] font-mono text-[#8e958f]">
+                <span className="text-[12px] font-sans text-[#AAA99F]">
                   Edge Sensor Telemetry
                 </span>
               )}
-              <ChevronDown size={10} className="text-[#687069] absolute right-2 pointer-events-none shrink-0" />
+              <ChevronDown size={11} className="text-[#77786F] absolute right-2 pointer-events-none shrink-0" />
             </div>
           </div>
 
-          <div className="h-3 w-[1px] bg-[#1f2622] hidden sm:block shrink-0" />
+          <div className="h-3 w-[1px] bg-[#34352F] hidden sm:block shrink-0" />
 
           {/* Dataset Selector */}
-          <div className="flex items-center gap-1.5 px-2 py-1 rounded-[4px] bg-[#0c100e] border border-[#1f2622] font-mono text-[9.5px] min-w-0 max-w-full text-[#8e958f]">
-            <Database size={10.5} className="text-[#9aaf98] shrink-0" />
-            <span className="text-[#c4ccc5] truncate">
+          <div className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-[6px] bg-[#141513] border border-[#34352F] font-mono text-[11px] min-w-0 max-w-full text-[#AAA99F]">
+            <Database size={12} className="text-[#B69A72] shrink-0" />
+            <span className="text-[#F2F0E8] truncate font-sans text-[12px]">
               {activeDataset ? activeDataset.name : "Edge Sensor Telemetry (Faults & NaNs)"}
             </span>
-            <span className="text-[#555e57] shrink-0 whitespace-nowrap">
+            <span className="text-[#77786F] shrink-0 whitespace-nowrap text-[10px]">
               • {activeDataset ? `${activeDataset.row_count} rows` : "400 rows"}
             </span>
           </div>
         </div>
 
         {/* Row 2: Status Indicator & Action Buttons */}
-        <div className="flex flex-wrap items-center gap-2 min-w-0 w-full pt-1.5 border-t border-[#18201b]">
+        <div className="flex flex-wrap items-center gap-2 min-w-0 w-full pt-1.5 border-t border-[#34352F]/70">
           {/* Status Indicator */}
-          <div className="h-[36px] px-3 rounded-[6px] bg-[#0c100e] border border-[#1f2622] font-mono text-[11px] inline-flex items-center gap-2 shrink-0">
+          <div className="h-[36px] px-3 rounded-[8px] bg-[#141513] border border-[#34352F] font-mono text-[11px] inline-flex items-center gap-2 shrink-0">
             <span
               className={`w-2 h-2 rounded-full shrink-0 ${
-                engineHealth === "ok" ? "bg-[#9aaf98]" : "bg-[#d46b6b]"
+                engineHealth === "ok" ? "bg-[#8EA58C]" : "bg-[#C77F72]"
               }`}
             />
-            <span className={`whitespace-nowrap ${engineHealth === "ok" ? "text-[#9aaf98]" : "text-[#d46b6b]"}`}>
+            <span className={`whitespace-nowrap font-medium ${engineHealth === "ok" ? "text-[#8EA58C]" : "text-[#C77F72]"}`}>
               {engineHealth === "ok" ? "PORT 8000" : "OFFLINE"}
             </span>
           </div>
@@ -428,9 +427,9 @@ export default function WorkspaceOverviewPage() {
           <button
             type="button"
             onClick={() => setNewProjectModal(true)}
-            className="h-[36px] px-3.5 rounded-[6px] bg-[#111513] border border-[#1f2622] hover:border-[#2b382e] hover:bg-[#161c18] font-mono text-[12px] font-medium uppercase tracking-[0.04em] text-[#c4ccc5] hover:text-[#e8e6df] transition-all inline-flex items-center gap-2 shrink-0 whitespace-nowrap"
+            className="h-[36px] px-3.5 rounded-[8px] bg-[#20211E] border border-[#34352F] hover:border-[#B69A72] hover:bg-[#20211E]/80 font-sans text-[13px] font-medium tracking-[0.02em] text-[#F2F0E8] transition-all inline-flex items-center gap-2 shrink-0 whitespace-nowrap"
           >
-            <FolderPlus size={15} className="text-[#8e958f]" />
+            <FolderPlus size={15} className="text-[#B69A72]" />
             <span>NEW PROJECT</span>
           </button>
 
@@ -439,18 +438,18 @@ export default function WorkspaceOverviewPage() {
             type="button"
             onClick={handleRunQuickBenchmark}
             disabled={benchmarking}
-            className="h-[36px] px-3.5 rounded-[6px] bg-[#111513] border border-[#1f2622] hover:border-[#2e4033] hover:bg-[#161c18] font-mono text-[12px] font-medium uppercase tracking-[0.04em] text-[#9aaf98] hover:text-[#b2cbb0] transition-all inline-flex items-center gap-2 shrink-0 whitespace-nowrap disabled:opacity-50"
+            className="h-[36px] px-3.5 rounded-[8px] bg-[#20211E] border border-[#34352F] hover:border-[#B69A72] hover:bg-[#20211E]/80 font-sans text-[13px] font-medium tracking-[0.02em] text-[#F2F0E8] transition-all inline-flex items-center gap-2 shrink-0 whitespace-nowrap disabled:opacity-50"
           >
-            <Scale size={15} />
+            <Scale size={15} className="text-[#B69A72]" />
             <span>{benchmarking ? "BENCHMARKING..." : "RUN BENCHMARK"}</span>
           </button>
 
-          {/* Action: New Experiment */}
+          {/* Action: New Experiment (Primary Bronze CTA) */}
           <Link
             href="/workspace/experiments/new"
-            className="h-[36px] px-3.5 rounded-[6px] bg-[#18201c] border border-[#27352b] hover:border-[#9aaf98] text-[#e8e6df] hover:text-[#ffffff] font-mono text-[12px] font-semibold uppercase tracking-[0.04em] transition-all inline-flex items-center gap-2 shrink-0 whitespace-nowrap shadow-xs"
+            className="h-[36px] px-4 rounded-[8px] bg-[#B69A72] hover:bg-[#C8AE87] text-[#101110] font-sans text-[13px] font-semibold tracking-[0.02em] transition-all inline-flex items-center gap-2 shrink-0 whitespace-nowrap shadow-sm"
           >
-            <Plus size={15} className="text-[#9aaf98]" />
+            <Plus size={15} className="text-[#101110] stroke-[2.5]" />
             <span>NEW EXPERIMENT</span>
           </Link>
         </div>
@@ -459,86 +458,86 @@ export default function WorkspaceOverviewPage() {
       {/* =========================================================================
           3. RESEARCH STATUS STRIP (Restrained scientific telemetry ribbon)
           ========================================================================= */}
-      <div className="p-[10px_16px] rounded-[8px] bg-[#111513] border border-[#1f2622] grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 items-center">
+      <div className="p-[12px_18px] rounded-[10px] bg-[#191A18] border border-[#34352F] grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 items-center">
         {/* Metric 1: Completed Experiments */}
-        <div className="flex flex-col pr-2 border-r border-[#1a221d]">
-          <div className="font-mono text-[8px] text-[#687069] uppercase tracking-[0.08em]">
+        <div className="flex flex-col pr-2 border-r border-[#34352F]/70">
+          <div className="font-mono text-[9px] text-[#77786F] uppercase tracking-[0.08em] font-medium">
             COMPLETED RUNS
           </div>
           <div className="flex items-baseline gap-1.5 mt-0.5">
-            <span className="font-mono text-[16px] font-semibold text-[#e8e6df]">
+            <span className="font-mono text-[16px] font-semibold text-[#F2F0E8]">
               {runs.filter((r) => r.status === "COMPLETED").length || stats?.completed_experiments || 5}
             </span>
-            <span className="font-mono text-[9px] text-[#687069]">
+            <span className="font-mono text-[10px] text-[#77786F]">
               / {runs.length || stats?.total_runs || 12} total
             </span>
           </div>
         </div>
 
         {/* Metric 2: Running Runs */}
-        <div className="flex flex-col pr-2 border-r border-[#1a221d]">
-          <div className="font-mono text-[8px] text-[#687069] uppercase tracking-[0.08em]">
+        <div className="flex flex-col pr-2 border-r border-[#34352F]/70">
+          <div className="font-mono text-[9px] text-[#77786F] uppercase tracking-[0.08em] font-medium">
             ACTIVE QUEUE
           </div>
           <div className="flex items-baseline gap-1.5 mt-0.5">
-            <span className="font-mono text-[16px] font-semibold text-[#9aaf98]">
+            <span className="font-mono text-[16px] font-semibold text-[#8EA58C]">
               {runs.filter((r) => r.status === "RUNNING").length}
             </span>
-            <span className="font-mono text-[9px] text-[#687069]">idle</span>
+            <span className="font-mono text-[10px] text-[#77786F]">idle</span>
           </div>
         </div>
 
         {/* Metric 3: Failed / Recovered */}
-        <div className="flex flex-col pr-2 border-r border-[#1a221d]">
-          <div className="font-mono text-[8px] text-[#687069] uppercase tracking-[0.08em]">
+        <div className="flex flex-col pr-2 border-r border-[#34352F]/70">
+          <div className="font-mono text-[9px] text-[#77786F] uppercase tracking-[0.08em] font-medium">
             FAILED / RECOVERED
           </div>
           <div className="flex items-baseline gap-1.5 mt-0.5">
-            <span className="font-mono text-[16px] font-semibold text-[#e8e6df]">
+            <span className="font-mono text-[16px] font-semibold text-[#F2F0E8]">
               {runs.filter((r) => r.status === "FAILED").length}
             </span>
-            <span className="font-mono text-[9px] text-[#9aaf98]">
+            <span className="font-mono text-[10px] text-[#8EA58C]">
               {stats?.recovered_runs ? `${stats.recovered_runs} auto-healed` : "100% recovered"}
             </span>
           </div>
         </div>
 
         {/* Metric 4: Validated Recovery Lessons */}
-        <div className="flex flex-col pr-2 border-r border-[#1a221d]">
-          <div className="font-mono text-[8px] text-[#687069] uppercase tracking-[0.08em]">
+        <div className="flex flex-col pr-2 border-r border-[#34352F]/70">
+          <div className="font-mono text-[9px] text-[#77786F] uppercase tracking-[0.08em] font-medium">
             VALIDATED LESSONS
           </div>
           <div className="flex items-baseline gap-1.5 mt-0.5">
-            <span className="font-mono text-[16px] font-semibold text-[#9aaf98]">
+            <span className="font-mono text-[16px] font-semibold text-[#B69A72]">
               {memories.length || stats?.validated_memory_records || 2}
             </span>
-            <span className="font-mono text-[9px] text-[#687069]">persistent patches</span>
+            <span className="font-mono text-[10px] text-[#77786F]">persistent patches</span>
           </div>
         </div>
 
         {/* Metric 5: Measured CPU Budget */}
-        <div className="flex flex-col pr-2 border-r border-[#1a221d]">
-          <div className="font-mono text-[8px] text-[#687069] uppercase tracking-[0.08em]">
+        <div className="flex flex-col pr-2 border-r border-[#34352F]/70">
+          <div className="font-mono text-[9px] text-[#77786F] uppercase tracking-[0.08em] font-medium">
             CPU TIME CONSUMED
           </div>
           <div className="flex items-baseline gap-1.5 mt-0.5">
-            <span className="font-mono text-[16px] font-semibold text-[#e8e6df]">
+            <span className="font-mono text-[16px] font-semibold text-[#F2F0E8]">
               {stats?.total_cpu_time_s ? `${stats.total_cpu_time_s.toFixed(2)}s` : "0.87s"}
             </span>
-            <span className="font-mono text-[9px] text-[#687069]">/ 30.0s max</span>
+            <span className="font-mono text-[10px] text-[#77786F]">/ 30.0s max</span>
           </div>
         </div>
 
         {/* Metric 6: Top F1 Score */}
         <div className="flex flex-col">
-          <div className="font-mono text-[8px] text-[#687069] uppercase tracking-[0.08em]">
+          <div className="font-mono text-[9px] text-[#77786F] uppercase tracking-[0.08em] font-medium">
             BEST VALIDATED F1
           </div>
           <div className="flex items-baseline gap-1.5 mt-0.5">
-            <span className="font-mono text-[16px] font-semibold text-[#9aaf98]">
+            <span className="font-mono text-[16px] font-semibold text-[#B69A72]">
               {stats?.best_validated_score ? (stats.best_validated_score * 100).toFixed(2) : "98.99"}%
             </span>
-            <span className="font-mono text-[9px] text-[#687069]">DecisionTree</span>
+            <span className="font-mono text-[10px] text-[#77786F]">DecisionTree</span>
           </div>
         </div>
       </div>
@@ -546,37 +545,37 @@ export default function WorkspaceOverviewPage() {
       {/* =========================================================================
           4. PRIMARY RESEARCH CANVAS (Centerpiece: Prediction Error vs Cost)
           ========================================================================= */}
+      {/* =========================================================================
+          4. PRIMARY RESEARCH CANVAS (Centerpiece: Prediction Error vs Cost)
+          ========================================================================= */}
       <div className="grid grid-cols-1 xl:grid-cols-12 gap-5 items-stretch">
         {/* Visualization & Pareto Frontier Canvas (8 columns) */}
-        <div className="xl:col-span-8 p-[18px_20px] rounded-[8px] bg-[#111513] border border-[#1f2622] flex flex-col justify-between">
-          {/* Canvas Header & Toggles - Responsive two-column grid on desktop, clean stack on mobile */}
-          <div className="grid grid-cols-1 lg:grid-cols-[1fr_auto] items-start gap-4 pb-3 border-b border-[#1b221e] w-full min-w-0">
+        <div className="xl:col-span-8 p-[20px_22px] rounded-[10px] bg-[#191A18] border border-[#34352F] flex flex-col justify-between">
+          {/* Canvas Header & Toggles */}
+          <div className="grid grid-cols-1 lg:grid-cols-[1fr_auto] items-start gap-4 pb-3.5 border-b border-[#34352F] w-full min-w-0">
             {/* Left column: Section label, Heading, and Description */}
             <div className="min-w-0 flex flex-col">
               <div className="flex items-center gap-2">
-                <span className="w-1.5 h-1.5 rounded-full bg-[#9aaf98]" />
-                <span className="font-mono text-[8.5px] text-[#8e958f] uppercase tracking-[0.14em]">
+                <span className="w-1.5 h-1.5 rounded-full bg-[#B69A72]" />
+                <span className="font-mono text-[9px] text-[#AAA99F] uppercase tracking-[0.14em] font-medium">
                   PRIMARY RESEARCH CANVAS // MULTI-OBJECTIVE EVALUATION
                 </span>
               </div>
-              <h2
-                className="font-editorial text-[22px] font-normal text-[#e8e6df] tracking-[-0.01em] mt-0.5"
-                style={{ fontFamily: "var(--font-editorial)" }}
-              >
+              <h2 className="font-sans text-[22px] font-semibold text-[#F2F0E8] tracking-[-0.01em] mt-0.5">
                 Prediction Error vs. Computational Cost
               </h2>
-              <p className="font-sans text-[11px] text-[#8e958f] mt-1 max-w-[560px]">
+              <p className="font-sans text-[12px] text-[#AAA99F] mt-1 max-w-[560px]">
                 Pareto-frontier trade-offs on {activeDataset?.name || "Edge Sensor Telemetry"}. Click any point to inspect serialized telemetry.
               </p>
             </div>
 
-            {/* Right column: X-AXIS segmented controls aligned at the top, horizontally scrollable if narrow */}
+            {/* Right column: X-AXIS segmented controls */}
             <div className="overflow-x-auto max-w-full pb-1 lg:pb-0 shrink-0 self-start">
-              <div className="h-[36px] flex items-center gap-1 p-1 rounded-[6px] bg-[#0c100e] border border-[#1b221e] shrink-0">
-                <span className="font-mono text-[10px] text-[#687069] px-2 uppercase tracking-wider select-none shrink-0 whitespace-nowrap">
+              <div className="h-[36px] flex items-center gap-1 p-1 rounded-[8px] bg-[#141513] border border-[#34352F] shrink-0">
+                <span className="font-mono text-[10px] text-[#77786F] px-2 uppercase tracking-wider select-none shrink-0 whitespace-nowrap font-medium">
                   X-AXIS:
                 </span>
-                <div className="h-3.5 w-[1px] bg-[#1b221e] shrink-0 mr-0.5" />
+                <div className="h-3.5 w-[1px] bg-[#34352F] shrink-0 mr-0.5" />
                 {(
                   [
                     { id: "latency", label: "Latency (μs)" },
@@ -588,10 +587,10 @@ export default function WorkspaceOverviewPage() {
                     key={opt.id}
                     type="button"
                     onClick={() => setCostAxis(opt.id)}
-                    className={`h-[28px] px-3 rounded-[5px] font-mono text-[12px] whitespace-nowrap leading-none transition-all select-none shrink-0 inline-flex items-center justify-center ${
+                    className={`h-[28px] px-3 rounded-[6px] font-sans text-[12px] whitespace-nowrap leading-none transition-all select-none shrink-0 inline-flex items-center justify-center ${
                       costAxis === opt.id
-                        ? "bg-[#18201c] text-[#e8e6df] font-medium border border-[#27352b] shadow-xs"
-                        : "text-[#737c75] hover:text-[#c4ccc5] border border-transparent"
+                        ? "bg-[#B69A72]/20 text-[#F2F0E8] font-semibold border border-[#B69A72]/50 shadow-xs"
+                        : "text-[#AAA99F] hover:text-[#F2F0E8] border border-transparent"
                     }`}
                   >
                     {opt.label}
@@ -606,14 +605,14 @@ export default function WorkspaceOverviewPage() {
             <svg viewBox="0 0 600 210" className="w-full h-[220px] overflow-visible">
               <defs>
                 <linearGradient id="optimalZoneGrad" x1="0" y1="1" x2="0.6" y2="0">
-                  <stop offset="0%" stopColor="#9aaf98" stopOpacity="0.08" />
-                  <stop offset="100%" stopColor="#9aaf98" stopOpacity="0.0" />
+                  <stop offset="0%" stopColor="#B69A72" stopOpacity="0.12" />
+                  <stop offset="100%" stopColor="#B69A72" stopOpacity="0.0" />
                 </linearGradient>
               </defs>
 
               {/* Optimal Zone Highlight (Bottom Left) */}
               <rect x="46" y="110" width="180" height="66" fill="url(#optimalZoneGrad)" />
-              <text x="56" y="130" fill="#687069" fontSize="8" fontFamily="var(--mono)">
+              <text x="56" y="130" fill="#AAA99F" fontSize="8" fontFamily="var(--mono)">
                 OPTIMAL FRONTIER ZONE
               </text>
 
@@ -625,14 +624,14 @@ export default function WorkspaceOverviewPage() {
                     <text
                       x="38"
                       y={y + 3}
-                      fill="#687069"
+                      fill="#77786F"
                       fontSize="8"
                       fontFamily="var(--mono)"
                       textAnchor="end"
                     >
                       {(val * 100).toFixed(0)}%
                     </text>
-                    <line x1="46" y1={y} x2="576" y2={y} stroke="#1b221e" strokeWidth="1" />
+                    <line x1="46" y1={y} x2="576" y2={y} stroke="#20211E" strokeWidth="1" />
                   </g>
                 );
               })}
@@ -641,7 +640,7 @@ export default function WorkspaceOverviewPage() {
               <text
                 x="14"
                 y="105"
-                fill="#8e958f"
+                fill="#AAA99F"
                 fontSize="7.5"
                 fontFamily="var(--mono)"
                 textAnchor="middle"
@@ -656,11 +655,11 @@ export default function WorkspaceOverviewPage() {
                 const { x } = mapToCanvas(costVal, 0);
                 return (
                   <g key={frac}>
-                    <line x1={x} y1="176" x2={x} y2="181" stroke="#222b26" strokeWidth="1" />
+                    <line x1={x} y1="176" x2={x} y2="181" stroke="#34352F" strokeWidth="1" />
                     <text
                       x={x}
                       y="193"
-                      fill="#687069"
+                      fill="#77786F"
                       fontSize="8"
                       fontFamily="var(--mono)"
                       textAnchor="middle"
@@ -676,7 +675,7 @@ export default function WorkspaceOverviewPage() {
               })}
 
               {/* X-Axis Label */}
-              <text x="310" y="206" fill="#8e958f" fontSize="7.5" fontFamily="var(--mono)" textAnchor="middle">
+              <text x="310" y="206" fill="#AAA99F" fontSize="7.5" fontFamily="var(--mono)" textAnchor="middle">
                 {costAxis === "latency"
                   ? "INFERENCE LATENCY (μs) ← LOWER IS BETTER"
                   : costAxis === "train_time"
@@ -704,10 +703,10 @@ export default function WorkspaceOverviewPage() {
                     return dStr;
                   })()}
                   fill="none"
-                  stroke="#9aaf98"
+                  stroke="#B69A72"
                   strokeWidth="1.25"
                   strokeDasharray="3 3"
-                  strokeOpacity="0.8"
+                  strokeOpacity="0.85"
                 />
               )}
 
@@ -730,9 +729,9 @@ export default function WorkspaceOverviewPage() {
                         cy={y}
                         r="8"
                         fill="none"
-                        stroke="#9aaf98"
-                        strokeWidth="1.2"
-                        opacity="0.8"
+                        stroke="#B69A72"
+                        strokeWidth="1.5"
+                        opacity="0.9"
                       />
                     )}
 
@@ -743,14 +742,14 @@ export default function WorkspaceOverviewPage() {
                       r={isSelected ? "4.5" : "3.5"}
                       fill={
                         isSelected
-                          ? "#e8e6df"
+                          ? "#F2F0E8"
                           : isPareto
-                          ? "#9aaf98"
+                          ? "#B69A72"
                           : pt.run.model_name.includes("Forest")
-                          ? "#75877f"
-                          : "#546158"
+                          ? "#AAA99F"
+                          : "#77786F"
                       }
-                      stroke={isSelected ? "#9aaf98" : "#111513"}
+                      stroke={isSelected ? "#B69A72" : "#191A18"}
                       strokeWidth="1"
                     />
 
@@ -759,8 +758,8 @@ export default function WorkspaceOverviewPage() {
                       <text
                         x={x + 6}
                         y={y - 4}
-                        fill={isSelected ? "#e8e6df" : isPareto ? "#9aaf98" : "#8e958f"}
-                        fontSize={isSelected ? "8" : "7.5"}
+                        fill={isSelected ? "#F2F0E8" : isPareto ? "#B69A72" : "#AAA99F"}
+                        fontSize={isSelected ? "8.5" : "7.5"}
                         fontWeight={isSelected ? "600" : "400"}
                         fontFamily="var(--mono)"
                       >
@@ -775,131 +774,128 @@ export default function WorkspaceOverviewPage() {
           </div>
 
           {/* Canvas Footer Legend */}
-          <div className="flex flex-wrap items-center justify-between gap-4 pt-3 mt-2 border-t border-[#1b221e] text-[10px]">
+          <div className="flex flex-wrap items-center justify-between gap-4 pt-3 mt-2 border-t border-[#34352F] text-[11px]">
             <div className="flex items-center gap-4">
-              <div className="flex items-center gap-1.5 font-mono text-[#8e958f]">
-                <span className="w-2 h-2 rounded-full bg-[#9aaf98]" />
+              <div className="flex items-center gap-1.5 font-mono text-[#AAA99F]">
+                <span className="w-2 h-2 rounded-full bg-[#B69A72]" />
                 <span>Non-Dominated Pareto Candidate</span>
               </div>
-              <div className="flex items-center gap-1.5 font-mono text-[#687069]">
-                <span className="w-2 h-0.5 bg-[#9aaf98] border-b border-dashed" />
+              <div className="flex items-center gap-1.5 font-mono text-[#77786F]">
+                <span className="w-2 h-0.5 bg-[#B69A72] border-b border-dashed" />
                 <span>Pareto Boundary</span>
               </div>
-              <div className="flex items-center gap-1.5 font-mono text-[#687069]">
-                <span className="w-2 h-2 rounded-full bg-[#546158]" />
+              <div className="flex items-center gap-1.5 font-mono text-[#77786F]">
+                <span className="w-2 h-2 rounded-full bg-[#555850]" />
                 <span>Dominated Model Run</span>
               </div>
             </div>
 
-            <div className="font-mono text-[9px] text-[#687069]">
+            <div className="font-mono text-[10px] text-[#77786F]">
               REAL DATABASE RUNS: {runs.length} PERSISTED
             </div>
           </div>
         </div>
 
         {/* Model Inspection Drawer (4 columns) */}
-        <div className="xl:col-span-4 p-[18px_18px] rounded-[8px] bg-[#111513] border border-[#1f2622] flex flex-col justify-between">
+        <div className="xl:col-span-4 p-[20px_20px] rounded-[10px] bg-[#191A18] border border-[#34352F] flex flex-col justify-between">
           <div>
             {/* Header */}
-            <div className="flex items-center justify-between pb-2.5 border-b border-[#1b221e]">
-              <div className="font-mono text-[8.5px] text-[#687069] tracking-[0.14em] uppercase">
+            <div className="flex items-center justify-between pb-3 border-b border-[#34352F]">
+              <div className="font-mono text-[9px] text-[#77786F] tracking-[0.14em] uppercase font-medium">
                 SELECTED MODEL INSPECTOR
               </div>
               {selectedRun && (
-                <span className="font-mono text-[8.5px] text-[#9aaf98] px-1.5 py-0.5 rounded bg-[#16201a] border border-[#233127]">
+                <span className="font-mono text-[9px] text-[#8EA58C] px-2 py-0.5 rounded bg-[#8EA58C]/15 border border-[#8EA58C]/30 font-medium">
                   {selectedRun.status}
                 </span>
               )}
             </div>
 
             {selectedRun ? (
-              <div className="mt-3 flex flex-col gap-3">
+              <div className="mt-3.5 flex flex-col gap-3.5">
                 {/* Model Title & Run ID */}
                 <div>
-                  <h3
-                    className="font-editorial text-[20px] font-normal text-[#e8e6df] m-0"
-                    style={{ fontFamily: "var(--font-editorial)" }}
-                  >
+                  <h3 className="font-sans text-[20px] font-semibold text-[#F2F0E8] m-0 tracking-[-0.01em]">
                     {selectedRun.model_name}
                   </h3>
-                  <div className="font-mono text-[8.5px] text-[#687069] mt-0.5 truncate">
+                  <div className="font-mono text-[9px] text-[#77786F] mt-0.5 truncate">
                     RUN ID: {selectedRun.id}
                   </div>
                 </div>
 
                 {/* Primary Metric Grid */}
-                <div className="grid grid-cols-2 gap-2 p-2 rounded-[6px] bg-[#151a17] border border-[#1f2622]">
+                <div className="grid grid-cols-2 gap-2 p-2.5 rounded-[8px] bg-[#20211E] border border-[#34352F]">
                   <div>
-                    <div className="font-mono text-[7.5px] text-[#687069] uppercase">F1 SCORE</div>
-                    <div className="font-mono text-[14px] font-semibold text-[#9aaf98]">
+                    <div className="font-mono text-[8px] text-[#77786F] uppercase">F1 SCORE</div>
+                    <div className="font-mono text-[15px] font-semibold text-[#B69A72]">
                       {(parseMetrics(selectedRun.metrics).f1 * 100).toFixed(2)}%
                     </div>
                   </div>
                   <div>
-                    <div className="font-mono text-[7.5px] text-[#687069] uppercase">ACCURACY</div>
-                    <div className="font-mono text-[14px] font-semibold text-[#e8e6df]">
+                    <div className="font-mono text-[8px] text-[#77786F] uppercase">ACCURACY</div>
+                    <div className="font-mono text-[15px] font-semibold text-[#F2F0E8]">
                       {(parseMetrics(selectedRun.metrics).accuracy * 100).toFixed(2)}%
                     </div>
                   </div>
                 </div>
 
                 {/* Telemetry rows */}
-                <div className="flex flex-col gap-1.5 font-mono text-[10px] text-[#8e958f]">
-                  <div className="flex justify-between py-1 border-b border-[#18201b]">
-                    <span className="text-[#687069]">INFERENCE LATENCY</span>
-                    <span className="text-[#e8e6df]">
+                <div className="flex flex-col gap-1.5 font-mono text-[11px] text-[#AAA99F]">
+                  <div className="flex justify-between py-1 border-b border-[#34352F]/60">
+                    <span className="text-[#77786F]">INFERENCE LATENCY</span>
+                    <span className="text-[#F2F0E8]">
                       {selectedRun.inference_latency_us?.toFixed(1) ?? "—"} μs
                     </span>
                   </div>
-                  <div className="flex justify-between py-1 border-b border-[#18201b]">
-                    <span className="text-[#687069]">CPU TRAIN TIME</span>
-                    <span className="text-[#e8e6df]">
+                  <div className="flex justify-between py-1 border-b border-[#34352F]/60">
+                    <span className="text-[#77786F]">CPU TRAIN TIME</span>
+                    <span className="text-[#F2F0E8]">
                       {selectedRun.train_time_ms?.toFixed(1) ?? "—"} ms
                     </span>
                   </div>
-                  <div className="flex justify-between py-1 border-b border-[#18201b]">
-                    <span className="text-[#687069]">SERIALIZED SIZE</span>
-                    <span className="text-[#e8e6df]">
+                  <div className="flex justify-between py-1 border-b border-[#34352F]/60">
+                    <span className="text-[#77786F]">SERIALIZED SIZE</span>
+                    <span className="text-[#F2F0E8]">
                       {selectedRun.model_size_kb?.toFixed(2) ?? "—"} KB
                     </span>
                   </div>
-                  <div className="flex justify-between py-1 border-b border-[#18201b]">
-                    <span className="text-[#687069]">PARAM COUNT</span>
-                    <span className="text-[#e8e6df]">{selectedRun.param_count ?? "—"}</span>
+                  <div className="flex justify-between py-1 border-b border-[#34352F]/60">
+                    <span className="text-[#77786F]">PARAM COUNT</span>
+                    <span className="text-[#F2F0E8]">{selectedRun.param_count ?? "—"}</span>
                   </div>
-                  <div className="flex justify-between py-1 border-b border-[#18201b]">
-                    <span className="text-[#687069]">TARGET PROPERTY</span>
-                    <span className="text-[#9aaf98]">
+                  <div className="flex justify-between py-1 border-b border-[#34352F]/60">
+                    <span className="text-[#77786F]">TARGET PROPERTY</span>
+                    <span className="text-[#B69A72]">
                       {selectedRun.target_col || "fault_detected"}
                     </span>
                   </div>
                 </div>
 
                 {/* Experiment Association */}
-                <div className="p-2 rounded-[6px] bg-[#0c100e] border border-[#1b221e] font-sans text-[10.5px]">
-                  <div className="font-mono text-[7.5px] text-[#687069] uppercase mb-0.5">
+                <div className="p-2.5 rounded-[8px] bg-[#141513] border border-[#34352F] font-sans text-[11px]">
+                  <div className="font-mono text-[8px] text-[#77786F] uppercase mb-0.5">
                     ASSOCIATED STUDY
                   </div>
-                  <div className="text-[#e8e6df] font-medium truncate">
+                  <div className="text-[#F2F0E8] font-medium truncate">
                     {selectedRun.experiment_name || "Materials Science Baseline Evaluation"}
                   </div>
-                  <div className="text-[#687069] text-[9.5px] mt-0.5">
+                  <div className="text-[#77786F] text-[10px] mt-0.5">
                     Dataset: {selectedRun.dataset_name || "Edge Sensor Telemetry"}
                   </div>
                 </div>
               </div>
             ) : (
-              <div className="py-12 text-center font-mono text-[10px] text-[#687069]">
+              <div className="py-12 text-center font-mono text-[11px] text-[#77786F]">
                 Click any point in the canvas to inspect run parameters.
               </div>
             )}
           </div>
 
           {/* Quick Action */}
-          <div className="pt-3 border-t border-[#1b221e]">
+          <div className="pt-3.5 border-t border-[#34352F]">
             <Link
               href="/workspace/experiments/new"
-              className="w-full py-1.5 rounded-[5px] bg-[#151a17] border border-[#222b26] text-center text-[10.5px] font-sans text-[#e8e6df] hover:border-[#9aaf98] transition-colors block"
+              className="w-full py-2 rounded-[8px] bg-[#20211E] border border-[#34352F] text-center text-[12px] font-sans font-medium text-[#F2F0E8] hover:border-[#B69A72] hover:text-[#B69A72] transition-colors block"
             >
               Configure Next Bounded Experiment →
             </Link>
@@ -910,17 +906,14 @@ export default function WorkspaceOverviewPage() {
       {/* =========================================================================
           5. EXPERIMENT COMPARISON (Dense Scientific Results Table)
           ========================================================================= */}
-      <div className="p-[18px_20px] rounded-[8px] bg-[#111513] border border-[#1f2622] flex flex-col gap-3">
+      <div className="p-[20px_22px] rounded-[10px] bg-[#191A18] border border-[#34352F] flex flex-col gap-3.5">
         {/* Table Toolbar */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-[#1b221e]">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-[#34352F]">
           <div>
-            <div className="font-mono text-[8.5px] text-[#687069] uppercase tracking-[0.14em]">
+            <div className="font-mono text-[9px] text-[#77786F] uppercase tracking-[0.14em] font-medium">
               EXPERIMENT COMPARISON // PERSISTED RUNS
             </div>
-            <h3
-              className="font-editorial text-[18px] font-normal text-[#e8e6df] mt-0.5"
-              style={{ fontFamily: "var(--font-editorial)" }}
-            >
+            <h3 className="font-sans text-[18px] font-semibold text-[#F2F0E8] mt-0.5">
               Dense Model Performance Matrix
             </h3>
           </div>
@@ -929,19 +922,19 @@ export default function WorkspaceOverviewPage() {
             {/* Filter Search */}
             <div className="relative">
               <Search
-                size={12}
-                className="absolute left-2.5 top-1/2 -translate-y-1/2 text-[#687069] pointer-events-none"
+                size={13}
+                className="absolute left-2.5 top-1/2 -translate-y-1/2 text-[#77786F] pointer-events-none"
               />
               <input
                 type="text"
                 value={tableFilter}
                 onChange={(e) => setTableFilter(e.target.value)}
                 placeholder="Filter models..."
-                className="h-[28px] pl-7 pr-3 bg-[#151a17] border border-[#222b26] rounded-[5px] text-[10.5px] text-[#e8e6df] placeholder-[#687069] focus:outline-none focus:border-[#9aaf98]"
+                className="h-[32px] pl-8 pr-3 bg-[#141513] border border-[#34352F] rounded-[6px] text-[12px] text-[#F2F0E8] placeholder-[#77786F] focus:outline-none focus:border-[#B69A72] font-sans"
               />
             </div>
 
-            <div className="font-mono text-[9.5px] text-[#687069] px-2">
+            <div className="font-mono text-[10px] text-[#77786F] px-2">
               Showing {tableRows.length} runs
             </div>
           </div>
@@ -956,7 +949,7 @@ export default function WorkspaceOverviewPage() {
                 <th className="w-[18%]">MODEL ARCHITECTURE</th>
                 <th className="w-[18%]">DATASET / TARGET</th>
                 <th
-                  className="w-[12%] cursor-pointer hover:text-[#e8e6df]"
+                  className="w-[12%] cursor-pointer hover:text-[#F2F0E8]"
                   onClick={() => {
                     setTableSortField("metric");
                     setTableSortAsc(!tableSortAsc);
@@ -968,7 +961,7 @@ export default function WorkspaceOverviewPage() {
                   </div>
                 </th>
                 <th
-                  className="w-[12%] cursor-pointer hover:text-[#e8e6df]"
+                  className="w-[12%] cursor-pointer hover:text-[#F2F0E8]"
                   onClick={() => {
                     setTableSortField("latency");
                     setTableSortAsc(!tableSortAsc);
@@ -980,7 +973,7 @@ export default function WorkspaceOverviewPage() {
                   </div>
                 </th>
                 <th
-                  className="w-[10%] cursor-pointer hover:text-[#e8e6df]"
+                  className="w-[10%] cursor-pointer hover:text-[#F2F0E8]"
                   onClick={() => {
                     setTableSortField("train_time");
                     setTableSortAsc(!tableSortAsc);
@@ -992,7 +985,7 @@ export default function WorkspaceOverviewPage() {
                   </div>
                 </th>
                 <th
-                  className="w-[8%] cursor-pointer hover:text-[#e8e6df]"
+                  className="w-[8%] cursor-pointer hover:text-[#F2F0E8]"
                   onClick={() => {
                     setTableSortField("size");
                     setTableSortAsc(!tableSortAsc);
@@ -1018,17 +1011,17 @@ export default function WorkspaceOverviewPage() {
                     <tr
                       key={r.id}
                       className={`cursor-pointer transition-colors ${
-                        isSelected ? "bg-[#16201a]" : "hover:bg-[#151a17]"
+                        isSelected ? "bg-[#B69A72]/10" : "hover:bg-[#20211E]/60"
                       }`}
                       onClick={() => setSelectedRunId(r.id)}
                     >
-                      <td className="font-mono text-[10px] text-[#8e958f]">
-                        <span className="text-[#687069]">{r.id.slice(0, 8)}...</span>
+                      <td className="font-mono text-[11px] text-[#AAA99F]">
+                        <span className="text-[#77786F]">{r.id.slice(0, 8)}...</span>
                       </td>
-                      <td className="font-sans font-medium text-[11px] text-[#e8e6df]">
+                      <td className="font-sans font-medium text-[12px] text-[#F2F0E8]">
                         {r.model_name}
                       </td>
-                      <td className="font-mono text-[10px] text-[#8e958f]">
+                      <td className="font-mono text-[11px] text-[#AAA99F]">
                         {r.dataset_name ? (
                           <span>
                             {r.dataset_name.split(" ")[0]} // {r.target_col || "fault"}
@@ -1037,29 +1030,29 @@ export default function WorkspaceOverviewPage() {
                           "SensorData // fault"
                         )}
                       </td>
-                      <td className="font-mono text-[11px] font-semibold text-[#9aaf98]">
+                      <td className="font-mono text-[12px] font-semibold text-[#B69A72]">
                         {(f1 * 100).toFixed(2)}%
                       </td>
-                      <td className="font-mono text-[10.5px] text-[#e8e6df]">
+                      <td className="font-mono text-[11px] text-[#F2F0E8]">
                         {r.inference_latency_us ? `${r.inference_latency_us.toFixed(0)} μs` : "—"}
                       </td>
-                      <td className="font-mono text-[10.5px] text-[#8e958f]">
+                      <td className="font-mono text-[11px] text-[#AAA99F]">
                         {r.train_time_ms ? `${r.train_time_ms.toFixed(1)} ms` : "—"}
                       </td>
-                      <td className="font-mono text-[10.5px] text-[#8e958f]">
+                      <td className="font-mono text-[11px] text-[#AAA99F]">
                         {r.model_size_kb ? `${r.model_size_kb.toFixed(1)} KB` : "—"}
                       </td>
                       <td>
                         <span
-                          className={`inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[8.5px] font-mono ${
+                          className={`inline-flex items-center gap-1 px-2 py-0.5 rounded text-[9.5px] font-mono font-medium ${
                             r.status === "COMPLETED"
-                              ? "bg-[#16201a] text-[#9aaf98] border border-[#233127]"
-                              : "bg-[#251515] text-[#d46b6b] border border-[#3b1d1d]"
+                              ? "bg-[#8EA58C]/15 text-[#8EA58C] border border-[#8EA58C]/30"
+                              : "bg-[#C77F72]/15 text-[#C77F72] border border-[#C77F72]/30"
                           }`}
                         >
                           <span
                             className={`w-1 h-1 rounded-full ${
-                              r.status === "COMPLETED" ? "bg-[#9aaf98]" : "bg-[#d46b6b]"
+                              r.status === "COMPLETED" ? "bg-[#8EA58C]" : "bg-[#C77F72]"
                             }`}
                           />
                           {r.status}
@@ -1072,7 +1065,7 @@ export default function WorkspaceOverviewPage() {
                             e.stopPropagation();
                             setSelectedRunId(r.id);
                           }}
-                          className="px-2 py-0.5 rounded bg-[#18201c] border border-[#222b26] text-[9.5px] font-mono text-[#8e958f] hover:text-[#e8e6df]"
+                          className="px-2.5 py-1 rounded-[6px] bg-[#20211E] border border-[#34352F] text-[10px] font-mono text-[#AAA99F] hover:text-[#F2F0E8] hover:border-[#B69A72] transition-colors"
                         >
                           Focus
                         </button>
@@ -1082,7 +1075,7 @@ export default function WorkspaceOverviewPage() {
                 })
               ) : (
                 <tr>
-                  <td colSpan={9} className="py-8 text-center font-mono text-[11px] text-[#687069]">
+                  <td colSpan={9} className="py-8 text-center font-mono text-[11px] text-[#77786F]">
                     No runs matched the query.
                   </td>
                 </tr>
@@ -1097,25 +1090,22 @@ export default function WorkspaceOverviewPage() {
           ========================================================================= */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 items-stretch">
         {/* 6. RESEARCH MEMORY PANEL (7 Columns - Evidence-Validated Recovery Memory) */}
-        <div className="lg:col-span-7 p-[20px_22px] rounded-[8px] bg-[#111513] border border-[#1f2622] flex flex-col justify-between">
+        <div className="lg:col-span-7 p-[20px_22px] rounded-[10px] bg-[#191A18] border border-[#34352F] flex flex-col justify-between">
           <div>
             {/* Header with verified badge */}
-            <div className="flex items-center justify-between pb-3 border-b border-[#1b221e]">
+            <div className="flex items-center justify-between pb-3 border-b border-[#34352F]">
               <div>
                 <div className="flex items-center gap-2">
-                  <ShieldCheck size={13} className="text-[#9aaf98]" />
-                  <span className="font-mono text-[8.5px] text-[#9aaf98] uppercase tracking-[0.14em]">
+                  <ShieldCheck size={14} className="text-[#8EA58C]" />
+                  <span className="font-mono text-[9px] text-[#8EA58C] uppercase tracking-[0.14em] font-medium">
                     EVIDENCE-VALIDATED RECOVERY MEMORY
                   </span>
                 </div>
-                <h3
-                  className="font-editorial text-[20px] font-normal text-[#e8e6df] mt-0.5"
-                  style={{ fontFamily: "var(--font-editorial)" }}
-                >
+                <h3 className="font-sans text-[20px] font-semibold text-[#F2F0E8] mt-0.5">
                   Autonomous Failure & Recovery Ledger
                 </h3>
               </div>
-              <div className="px-2 py-0.5 rounded bg-[#16201a] border border-[#233127] font-mono text-[9px] text-[#9aaf98]">
+              <div className="px-2.5 py-1 rounded-[6px] bg-[#8EA58C]/15 border border-[#8EA58C]/30 font-mono text-[9.5px] text-[#8EA58C] font-medium">
                 SEMANTIC INDEX: VALIDATED
               </div>
             </div>
@@ -1126,47 +1116,47 @@ export default function WorkspaceOverviewPage() {
                 memories.map((mem) => (
                   <div
                     key={mem.id}
-                    className="p-3.5 rounded-[6px] bg-[#151a17] border border-[#1f2622] flex flex-col gap-2"
+                    className="p-3.5 rounded-[8px] bg-[#20211E] border border-[#34352F] flex flex-col gap-2"
                   >
                     {/* Top status */}
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-2">
-                        <span className="w-1.5 h-1.5 rounded-full bg-[#d46b6b]" />
-                        <span className="font-mono text-[9px] text-[#d46b6b] font-medium uppercase">
+                        <span className="w-1.5 h-1.5 rounded-full bg-[#C77F72]" />
+                        <span className="font-mono text-[9.5px] text-[#C77F72] font-semibold uppercase">
                           OBSERVED FAILURE: {mem.error_category}
                         </span>
                       </div>
-                      <span className="font-mono text-[8.5px] text-[#9aaf98]">
+                      <span className="font-mono text-[9px] text-[#8EA58C] font-medium">
                         {mem.success_count}/{mem.reuse_count} REUSES VERIFIED (100%)
                       </span>
                     </div>
 
                     {/* Exact Signature Box */}
-                    <div className="p-2 rounded bg-[#0b0e0c] border border-[#1b221e] font-mono text-[10px] text-[#c7d1c9] break-all">
+                    <div className="p-2.5 rounded-[6px] bg-[#141513] border border-[#34352F] font-mono text-[10.5px] text-[#AAA99F] break-all">
                       {mem.error_signature}
                     </div>
 
                     {/* Diagnosis & Proposed Repair */}
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-2 text-[10.5px]">
-                      <div className="p-2 rounded bg-[#111513] border border-[#1b221e]">
-                        <div className="font-mono text-[7.5px] text-[#687069] uppercase">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-2 text-[11px]">
+                      <div className="p-2.5 rounded-[6px] bg-[#191A18] border border-[#34352F]">
+                        <div className="font-mono text-[8px] text-[#77786F] uppercase">
                           DIAGNOSIS
                         </div>
-                        <div className="text-[#8e958f] mt-0.5">{mem.diagnosis}</div>
+                        <div className="text-[#AAA99F] mt-0.5 font-sans leading-relaxed">{mem.diagnosis}</div>
                       </div>
 
-                      <div className="p-2 rounded bg-[#111513] border border-[#233127]">
-                        <div className="font-mono text-[7.5px] text-[#9aaf98] uppercase">
+                      <div className="p-2.5 rounded-[6px] bg-[#191A18] border border-[#34352F]">
+                        <div className="font-mono text-[8px] text-[#B69A72] uppercase font-semibold">
                           VALIDATED REPAIR PATCH
                         </div>
-                        <div className="font-mono text-[10px] text-[#9aaf98] mt-0.5">
+                        <div className="font-mono text-[10.5px] text-[#B69A72] mt-0.5 font-medium">
                           {mem.proposed_repair}
                         </div>
                       </div>
                     </div>
 
                     {/* Metadata strip */}
-                    <div className="flex items-center justify-between pt-1 border-t border-[#1b221e] font-mono text-[8.5px] text-[#687069]">
+                    <div className="flex items-center justify-between pt-1 border-t border-[#34352F]/60 font-mono text-[9px] text-[#77786F]">
                       <span>Model: {mem.model_family}</span>
                       <span>Retrieval Latency: 3.1ms</span>
                       <span>Status: {mem.state}</span>
@@ -1174,102 +1164,102 @@ export default function WorkspaceOverviewPage() {
                   </div>
                 ))
               ) : (
-                <div className="py-8 text-center font-mono text-[10.5px] text-[#687069]">
+                <div className="py-8 text-center font-mono text-[11px] text-[#77786F]">
                   No memory records indexed yet. Memory engine is standing by.
                 </div>
               )}
             </div>
           </div>
 
-          <div className="pt-3 border-t border-[#1b221e] flex items-center justify-between font-mono text-[9px] text-[#687069]">
+          <div className="pt-3.5 border-t border-[#34352F] flex items-center justify-between font-mono text-[9.5px] text-[#77786F]">
             <span>DISTINCTION: VERIFIED LESSONS VS UNVERIFIED HEURISTICS</span>
             <Link
               href="/workspace/memory"
-              className="text-[#9aaf98] hover:underline inline-flex items-center gap-1"
+              className="text-[#B69A72] hover:text-[#C8AE87] hover:underline inline-flex items-center gap-1 font-sans font-medium"
             >
               <span>Explore Memory Graph</span>
-              <ArrowUpRight size={11} />
+              <ArrowUpRight size={12} />
             </Link>
           </div>
         </div>
 
         {/* 7. RESEARCH ASSISTANT (5 Columns - Contextual ARINA) */}
         <div
-          className="lg:col-span-5 p-[20px_20px] rounded-[8px] bg-[#111513] border border-[#1f2622] flex flex-col justify-between"
+          className="lg:col-span-5 p-[20px_20px] rounded-[10px] bg-[#191A18] border border-[#34352F] flex flex-col justify-between"
           id="assistant"
         >
           <div>
             {/* Header */}
-            <div className="flex items-center justify-between pb-3 border-b border-[#1b221e]">
+            <div className="flex items-center justify-between pb-3 border-b border-[#34352F]">
               <div className="flex items-center gap-2">
-                <Sparkles size={13} className="text-[#9aaf98]" />
-                <span className="font-mono text-[8.5px] text-[#8e958f] uppercase tracking-[0.14em]">
+                <Sparkles size={14} className="text-[#B69A72]" />
+                <span className="font-mono text-[9px] text-[#AAA99F] uppercase tracking-[0.14em] font-medium">
                   ARINA SCIENTIFIC ASSISTANT
                 </span>
               </div>
-              <span className="font-mono text-[8.5px] text-[#687069]">
+              <span className="font-mono text-[9px] text-[#77786F]">
                 TARGET: {selectedRun?.model_name || "DecisionTree"}
               </span>
             </div>
 
             {/* Context Badge */}
-            <div className="mt-3 p-2 rounded-[5px] bg-[#151a17] border border-[#1f2622] flex items-center justify-between text-[10px]">
-              <span className="font-mono text-[#687069]">GROUNDED CONTEXT:</span>
-              <span className="font-mono text-[#e8e6df]">
+            <div className="mt-3 p-2.5 rounded-[6px] bg-[#20211E] border border-[#34352F] flex items-center justify-between text-[11px]">
+              <span className="font-mono text-[#77786F] text-[9.5px]">GROUNDED CONTEXT:</span>
+              <span className="font-mono text-[#F2F0E8] text-[10.5px]">
                 {activeDataset?.name.slice(0, 24) || "Edge Sensor"} • {runs.length} Runs
               </span>
             </div>
 
             {/* Suggested Scientific Action Buttons */}
-            <div className="grid grid-cols-2 gap-1.5 mt-3">
+            <div className="grid grid-cols-2 gap-2 mt-3">
               <button
                 type="button"
                 onClick={() => handleAssistantPrompt("Diagnose failed run")}
-                className="p-2 rounded-[5px] bg-[#151a17] border border-[#1f2622] text-left hover:border-[#9aaf98] transition-colors font-sans text-[10px] text-[#e8e6df]"
+                className="p-2.5 rounded-[6px] bg-[#20211E] border border-[#34352F] text-left hover:border-[#B69A72] hover:text-[#B69A72] transition-colors font-sans text-[11px] text-[#F2F0E8]"
               >
                 Diagnose failed run
               </button>
               <button
                 type="button"
                 onClick={() => handleAssistantPrompt("Compare selected models in Pareto frontier")}
-                className="p-2 rounded-[5px] bg-[#151a17] border border-[#1f2622] text-left hover:border-[#9aaf98] transition-colors font-sans text-[10px] text-[#e8e6df]"
+                className="p-2.5 rounded-[6px] bg-[#20211E] border border-[#34352F] text-left hover:border-[#B69A72] hover:text-[#B69A72] transition-colors font-sans text-[11px] text-[#F2F0E8]"
               >
                 Compare models
               </button>
               <button
                 type="button"
                 onClick={() => handleAssistantPrompt("Explain metric trade-offs and CPU budget")}
-                className="p-2 rounded-[5px] bg-[#151a17] border border-[#1f2622] text-left hover:border-[#9aaf98] transition-colors font-sans text-[10px] text-[#e8e6df]"
+                className="p-2.5 rounded-[6px] bg-[#20211E] border border-[#34352F] text-left hover:border-[#B69A72] hover:text-[#B69A72] transition-colors font-sans text-[11px] text-[#F2F0E8]"
               >
                 Explain trade-offs
               </button>
               <button
                 type="button"
                 onClick={() => handleAssistantPrompt("Recommend a bounded next experiment")}
-                className="p-2 rounded-[5px] bg-[#151a17] border border-[#1f2622] text-left hover:border-[#9aaf98] transition-colors font-sans text-[10px] text-[#e8e6df]"
+                className="p-2.5 rounded-[6px] bg-[#20211E] border border-[#34352F] text-left hover:border-[#B69A72] hover:text-[#B69A72] transition-colors font-sans text-[11px] text-[#F2F0E8]"
               >
                 Recommend next
               </button>
             </div>
 
             {/* Chat Messages */}
-            <div className="mt-3 p-3 rounded-[6px] bg-[#0c100e] border border-[#1b221e] max-h-[160px] overflow-y-auto flex flex-col gap-2.5">
+            <div className="mt-3 p-3.5 rounded-[8px] bg-[#141513] border border-[#34352F] max-h-[170px] overflow-y-auto flex flex-col gap-2.5">
               {assistantMessages.slice(-2).map((m, idx) => (
-                <div key={idx} className="font-sans text-[10.5px] leading-relaxed">
+                <div key={idx} className="font-sans text-[11px] leading-relaxed">
                   <span
-                    className={`font-mono text-[9px] uppercase mr-1.5 ${
-                      m.role === "user" ? "text-[#9aaf98]" : "text-[#687069]"
+                    className={`font-mono text-[9.5px] uppercase mr-1.5 font-semibold ${
+                      m.role === "user" ? "text-[#B69A72]" : "text-[#77786F]"
                     }`}
                   >
                     {m.role === "user" ? "RESEARCHER:" : "ARINA:"}
                   </span>
-                  <span className={m.role === "user" ? "text-[#e8e6df]" : "text-[#8e958f]"}>
+                  <span className={m.role === "user" ? "text-[#F2F0E8]" : "text-[#AAA99F]"}>
                     {m.text}
                   </span>
                 </div>
               ))}
               {isAssistantThinking && (
-                <div className="font-mono text-[9.5px] text-[#9aaf98] animate-pulse">
+                <div className="font-mono text-[10px] text-[#B69A72] animate-pulse">
                   Querying empirical memory and evaluating Pareto constraints...
                 </div>
               )}
@@ -1283,14 +1273,14 @@ export default function WorkspaceOverviewPage() {
               value={assistantInput}
               onChange={(e) => setAssistantInput(e.target.value)}
               placeholder="Ask ARINA about metric trade-offs, errors, or next candidate..."
-              className="w-full h-[32px] pl-3 pr-8 bg-[#151a17] border border-[#1f2622] rounded-[5px] text-[10.5px] text-[#e8e6df] placeholder-[#687069] focus:outline-none focus:border-[#9aaf98]"
+              className="w-full h-[36px] pl-3.5 pr-9 bg-[#141513] border border-[#34352F] rounded-[6px] text-[12px] text-[#F2F0E8] placeholder-[#77786F] focus:outline-none focus:border-[#B69A72] font-sans"
             />
             <button
               type="submit"
-              className="absolute right-1 top-1/2 -translate-y-1/2 w-6 h-6 rounded-[4px] bg-[#9aaf98] text-[#0a0c0b] flex items-center justify-center hover:bg-[#abbfa9]"
+              className="absolute right-1.5 top-1/2 -translate-y-1/2 w-7 h-7 rounded-[4px] bg-[#B69A72] text-[#101110] flex items-center justify-center hover:bg-[#C8AE87] transition-colors"
               aria-label="Send query"
             >
-              <Send size={11} />
+              <Send size={12} />
             </button>
           </form>
         </div>
@@ -1299,19 +1289,16 @@ export default function WorkspaceOverviewPage() {
       {/* =========================================================================
           8. CONTROLLED EMPIRICAL EVALUATION BENCHMARK (Condition A vs B vs C)
           ========================================================================= */}
-      <div className="p-[18px_20px] rounded-[8px] bg-[#111513] border border-[#1f2622] flex flex-col gap-3">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-[#1b221e]">
+      <div className="p-[20px_22px] rounded-[10px] bg-[#191A18] border border-[#34352F] flex flex-col gap-3.5">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-[#34352F]">
           <div>
             <div className="flex items-center gap-2">
-              <Scale size={13} className="text-[#9aaf98]" />
-              <span className="font-mono text-[8.5px] text-[#687069] uppercase tracking-[0.14em]">
+              <Scale size={14} className="text-[#B69A72]" />
+              <span className="font-mono text-[9px] text-[#77786F] uppercase tracking-[0.14em] font-medium">
                 CONTROLLED RESEARCH EVALUATION BENCHMARK
               </span>
             </div>
-            <h3
-              className="font-editorial text-[18px] font-normal text-[#e8e6df] mt-0.5"
-              style={{ fontFamily: "var(--font-editorial)" }}
-            >
+            <h3 className="font-sans text-[18px] font-semibold text-[#F2F0E8] mt-0.5">
               Condition A (Optuna) vs Condition B (Success Memory) vs Condition C (Failure & Recovery)
             </h3>
           </div>
@@ -1320,20 +1307,20 @@ export default function WorkspaceOverviewPage() {
             type="button"
             onClick={handleRunQuickBenchmark}
             disabled={benchmarking}
-            className="px-3 py-1 rounded-[5px] bg-[#18201c] border border-[#2d3931] text-[#9aaf98] text-[10.5px] font-sans font-medium hover:border-[#9aaf98] transition-colors inline-flex items-center gap-1.5 self-start sm:self-auto disabled:opacity-50"
+            className="px-3.5 py-1.5 rounded-[8px] bg-[#20211E] border border-[#34352F] text-[#F2F0E8] text-[11px] font-sans font-medium hover:border-[#B69A72] hover:text-[#B69A72] transition-colors inline-flex items-center gap-1.5 self-start sm:self-auto disabled:opacity-50"
           >
-            <RefreshCw size={11} className={benchmarking ? "animate-spin" : ""} />
+            <RefreshCw size={12} className={benchmarking ? "animate-spin" : ""} />
             <span>{benchmarking ? "Executing Benchmark..." : "Rerun Benchmark Study"}</span>
           </button>
         </div>
 
         {evaluations.length > 0 ? (
           <div>
-            <p className="font-sans text-[11.5px] text-[#8e958f] leading-relaxed mb-3">
+            <p className="font-sans text-[12px] text-[#AAA99F] leading-relaxed mb-3.5">
               {evaluations[0].conclusion}
             </p>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-3.5">
               {(() => {
                 try {
                   const cA = JSON.parse(evaluations[0].condition_a_results || "{}");
@@ -1341,38 +1328,38 @@ export default function WorkspaceOverviewPage() {
                   const cC = JSON.parse(evaluations[0].condition_c_results || "{}");
                   return (
                     <>
-                      <div className="p-3 rounded-[6px] bg-[#151a17] border border-[#1f2622]">
-                        <div className="font-mono text-[8px] text-[#687069] uppercase">
+                      <div className="p-3.5 rounded-[8px] bg-[#20211E] border border-[#34352F]">
+                        <div className="font-mono text-[8.5px] text-[#77786F] uppercase">
                           CONDITION A: STANDARD OPTUNA
                         </div>
-                        <div className="font-mono text-[16px] font-semibold text-[#e8e6df] my-0.5">
+                        <div className="font-mono text-[16px] font-semibold text-[#F2F0E8] my-0.5">
                           {cA.completion_rate}% Completion
                         </div>
-                        <div className="font-mono text-[9.5px] text-[#8e958f]">
+                        <div className="font-mono text-[10px] text-[#AAA99F]">
                           Best F1: {cA.best_validated_f1} • Wall Time: {cA.wall_clock_time_s}s
                         </div>
                       </div>
 
-                      <div className="p-3 rounded-[6px] bg-[#151a17] border border-[#1f2622]">
-                        <div className="font-mono text-[8px] text-[#687069] uppercase">
+                      <div className="p-3.5 rounded-[8px] bg-[#20211E] border border-[#34352F]">
+                        <div className="font-mono text-[8.5px] text-[#77786F] uppercase">
                           CONDITION B: SUCCESS-ONLY MEMORY
                         </div>
-                        <div className="font-mono text-[16px] font-semibold text-[#8e958f] my-0.5">
+                        <div className="font-mono text-[16px] font-semibold text-[#AAA99F] my-0.5">
                           {cB.completion_rate}% Completion
                         </div>
-                        <div className="font-mono text-[9.5px] text-[#8e958f]">
+                        <div className="font-mono text-[10px] text-[#AAA99F]">
                           Best F1: {cB.best_validated_f1} • Wall Time: {cB.wall_clock_time_s}s
                         </div>
                       </div>
 
-                      <div className="p-3 rounded-[6px] bg-[#18201c] border border-[#2d3931]">
-                        <div className="font-mono text-[8px] text-[#9aaf98] uppercase">
+                      <div className="p-3.5 rounded-[8px] bg-[#20211E] border border-[#B69A72]/40">
+                        <div className="font-mono text-[8.5px] text-[#B69A72] uppercase font-semibold">
                           CONDITION C: FAILURE & RECOVERY
                         </div>
-                        <div className="font-mono text-[16px] font-semibold text-[#9aaf98] my-0.5">
+                        <div className="font-mono text-[16px] font-semibold text-[#B69A72] my-0.5">
                           {cC.completion_rate}% Completion
                         </div>
-                        <div className="font-mono text-[9.5px] text-[#e8e6df]">
+                        <div className="font-mono text-[10px] text-[#F2F0E8]">
                           Recovery Rate: {cC.recovery_success_rate}% • Overhead:{" "}
                           {cC.memory_retrieval_overhead_ms}ms
                         </div>
@@ -1386,7 +1373,7 @@ export default function WorkspaceOverviewPage() {
             </div>
           </div>
         ) : (
-          <div className="py-6 text-center font-mono text-[11px] text-[#687069]">
+          <div className="py-6 text-center font-mono text-[11px] text-[#77786F]">
             Click "Rerun Benchmark Study" to execute a standardized empirical evaluation.
           </div>
         )}
@@ -1394,17 +1381,17 @@ export default function WorkspaceOverviewPage() {
 
       {/* Modal: New Project */}
       {newProjectModal && (
-        <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="w-full max-w-md rounded-[8px] bg-[#111513] border border-[#1f2622] p-5 shadow-2xl">
-            <h3 className="font-editorial text-[20px] text-[#e8e6df] mb-1">
+        <div className="fixed inset-0 z-50 bg-black/75 backdrop-blur-md flex items-center justify-center p-4">
+          <div className="w-full max-w-md rounded-[12px] bg-[#191A18] border border-[#34352F] p-6 shadow-2xl">
+            <h3 className="font-sans text-[20px] font-semibold text-[#F2F0E8] mb-1">
               Create Materials ML Project
             </h3>
-            <p className="font-sans text-[11px] text-[#8e958f] mb-3">
+            <p className="font-sans text-[12px] text-[#AAA99F] mb-4">
               Define a structured hypothesis and research boundaries.
             </p>
-            <form onSubmit={handleCreateProject} className="flex flex-col gap-3">
+            <form onSubmit={handleCreateProject} className="flex flex-col gap-3.5">
               <div>
-                <label className="block font-mono text-[8.5px] text-[#687069] uppercase mb-1">
+                <label className="block font-mono text-[9px] text-[#77786F] uppercase mb-1 font-medium">
                   Project Title
                 </label>
                 <input
@@ -1413,11 +1400,11 @@ export default function WorkspaceOverviewPage() {
                   value={newProjectName}
                   onChange={(e) => setNewProjectName(e.target.value)}
                   placeholder="e.g. Edge Audio Fault Classification"
-                  className="w-full h-8 px-2.5 bg-[#151a17] border border-[#1f2622] rounded-[5px] text-[11px] text-[#e8e6df] focus:outline-none focus:border-[#9aaf98]"
+                  className="w-full h-9 px-3 bg-[#141513] border border-[#34352F] rounded-[6px] text-[12px] text-[#F2F0E8] focus:outline-none focus:border-[#B69A72] font-sans"
                 />
               </div>
               <div>
-                <label className="block font-mono text-[8.5px] text-[#687069] uppercase mb-1">
+                <label className="block font-mono text-[9px] text-[#77786F] uppercase mb-1 font-medium">
                   Research Question
                 </label>
                 <input
@@ -1425,11 +1412,11 @@ export default function WorkspaceOverviewPage() {
                   value={newProjectQuestion}
                   onChange={(e) => setNewProjectQuestion(e.target.value)}
                   placeholder="e.g. Can sub-16KB models achieve >95% accuracy on Cortex-M4?"
-                  className="w-full h-8 px-2.5 bg-[#151a17] border border-[#1f2622] rounded-[5px] text-[11px] text-[#e8e6df] focus:outline-none focus:border-[#9aaf98]"
+                  className="w-full h-9 px-3 bg-[#141513] border border-[#34352F] rounded-[6px] text-[12px] text-[#F2F0E8] focus:outline-none focus:border-[#B69A72] font-sans"
                 />
               </div>
               <div>
-                <label className="block font-mono text-[8.5px] text-[#687069] uppercase mb-1">
+                <label className="block font-mono text-[9px] text-[#77786F] uppercase mb-1 font-medium">
                   Hypothesis
                 </label>
                 <textarea
@@ -1437,20 +1424,20 @@ export default function WorkspaceOverviewPage() {
                   onChange={(e) => setNewProjectHypothesis(e.target.value)}
                   placeholder="e.g. Failure-guided feature pruning maintains 0.98 F1 within 5KB flash."
                   rows={2}
-                  className="w-full p-2 bg-[#151a17] border border-[#1f2622] rounded-[5px] text-[11px] text-[#e8e6df] focus:outline-none focus:border-[#9aaf98]"
+                  className="w-full p-2.5 bg-[#141513] border border-[#34352F] rounded-[6px] text-[12px] text-[#F2F0E8] focus:outline-none focus:border-[#B69A72] font-sans"
                 />
               </div>
-              <div className="flex justify-end gap-2 mt-2">
+              <div className="flex justify-end gap-2.5 mt-2">
                 <button
                   type="button"
                   onClick={() => setNewProjectModal(false)}
-                  className="px-3 py-1 rounded-[5px] bg-[#151a17] border border-[#1f2622] text-[10.5px] text-[#8e958f] hover:text-[#e8e6df]"
+                  className="px-3.5 py-1.5 rounded-[6px] bg-[#20211E] border border-[#34352F] text-[11px] font-sans text-[#AAA99F] hover:text-[#F2F0E8] transition-colors"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="px-3.5 py-1 rounded-[5px] bg-[#9aaf98] text-[#0a0c0b] text-[10.5px] font-semibold hover:bg-[#abbfa9]"
+                  className="px-4 py-1.5 rounded-[6px] bg-[#B69A72] text-[#101110] text-[11px] font-semibold hover:bg-[#C8AE87] transition-colors"
                 >
                   Initialize Project
                 </button>
@@ -1462,3 +1449,4 @@ export default function WorkspaceOverviewPage() {
     </div>
   );
 }
+

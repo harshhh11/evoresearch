@@ -68,13 +68,13 @@ export default function MemoryBankPage() {
       {/* Header */}
       <div style={{ display: "flex", alignItems: "flex-end", justifyContent: "space-between", borderBottom: "1px solid rgba(226, 239, 229, 0.08)", paddingBottom: 20 }}>
         <div>
-          <div style={{ font: "500 10px/1 var(--mono)", color: "#b5ff8a", letterSpacing: "0.14em", marginBottom: 8 }}>
+          <div style={{ font: "500 10px/1 var(--mono)", color: "#B69A72", letterSpacing: "0.14em", marginBottom: 8 }}>
             KNOWLEDGE RETENTION // 007
           </div>
-          <h1 style={{ margin: 0, font: "600 24px/1.2 var(--body)", color: "#e8ede8" }}>
+          <h1 style={{ margin: 0, font: "600 24px/1.2 var(--body)", color: "#F2F0E8" }}>
             Failure & Recovery Memory Subsystem
           </h1>
-          <p style={{ margin: "6px 0 0", font: "400 12px/1.5 var(--body)", color: "#9ba8a0" }}>
+          <p style={{ margin: "6px 0 0", font: "400 12px/1.5 var(--body)", color: "#AAA99F" }}>
             Evidence-validated persistent repairs categorized into structured error signatures.
             Only VALIDATED records are automatically applied during autonomous experiment recovery.
           </p>
@@ -88,7 +88,7 @@ export default function MemoryBankPage() {
               placeholder="Search error signatures..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              style={{ padding: "8px 12px 8px 30px", background: "#050706", border: "1px solid rgba(226, 239, 229, 0.15)", borderRadius: 3, color: "#e8ede8", font: "400 11px var(--mono)", width: 220 }}
+              style={{ padding: "8px 12px 8px 30px", background: "#101110", border: "1px solid rgba(226, 239, 229, 0.15)", borderRadius: 3, color: "#F2F0E8", font: "400 11px var(--mono)", width: 220 }}
             />
           </div>
         </div>
@@ -103,9 +103,9 @@ export default function MemoryBankPage() {
             style={{
               padding: "6px 14px",
               borderRadius: 2,
-              border: filterState === s ? "1px solid #b5ff8a" : "1px solid rgba(226, 239, 229, 0.15)",
-              background: filterState === s ? "rgba(181, 255, 138, 0.1)" : "transparent",
-              color: filterState === s ? "#b5ff8a" : "#8c9c91",
+              border: filterState === s ? "1px solid #B69A72" : "1px solid rgba(226, 239, 229, 0.15)",
+              background: filterState === s ? "rgba(182, 154, 114, 0.1)" : "transparent",
+              color: filterState === s ? "#B69A72" : "#8c9c91",
               font: "500 10px var(--mono)",
               cursor: "pointer"
             }}
@@ -129,7 +129,7 @@ export default function MemoryBankPage() {
               style={{
                 borderLeft:
                   m.state === "VALIDATED"
-                    ? "3px solid #b5ff8a"
+                    ? "3px solid #B69A72"
                     : m.state === "REJECTED"
                     ? "3px solid #ff8b8b"
                     : "3px solid #a7e9e8"
@@ -138,8 +138,8 @@ export default function MemoryBankPage() {
               <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", marginBottom: 12 }}>
                 <div>
                   <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                    <BrainCircuit size={15} color={m.state === "VALIDATED" ? "#b5ff8a" : "#a7e9e8"} />
-                    <span style={{ font: "600 13px var(--mono)", color: "#e8ede8" }}>
+                    <BrainCircuit size={15} color={m.state === "VALIDATED" ? "#B69A72" : "#a7e9e8"} />
+                    <span style={{ font: "600 13px var(--mono)", color: "#F2F0E8" }}>
                       {m.error_category} // {m.model_family}
                     </span>
                   </div>
@@ -166,7 +166,7 @@ export default function MemoryBankPage() {
                       <button
                         onClick={() => handleUpdateState(m.id, "VALIDATED")}
                         title="Mark Validated"
-                        style={{ padding: "4px 8px", background: "rgba(181, 255, 138, 0.15)", border: "1px solid rgba(181, 255, 138, 0.4)", color: "#b5ff8a", borderRadius: 2, cursor: "pointer", font: "500 9px var(--mono)" }}
+                        style={{ padding: "4px 8px", background: "rgba(182, 154, 114, 0.15)", border: "1px solid rgba(182, 154, 114, 0.4)", color: "#B69A72", borderRadius: 2, cursor: "pointer", font: "500 9px var(--mono)" }}
                       >
                         VALIDATE
                       </button>
@@ -185,7 +185,7 @@ export default function MemoryBankPage() {
               </div>
 
               <div style={{ font: "400 12px/1.5 var(--body)", color: "#c6d4c8", marginBottom: 12 }}>
-                <strong style={{ color: "#e8ede8" }}>Diagnosis:</strong> {m.diagnosis}
+                <strong style={{ color: "#F2F0E8" }}>Diagnosis:</strong> {m.diagnosis}
               </div>
 
               {/* Proposed & Actual Repair */}
@@ -200,10 +200,10 @@ export default function MemoryBankPage() {
                 </div>
 
                 <div>
-                  <div style={{ font: "600 9px var(--mono)", color: "#b5ff8a", marginBottom: 4 }}>
+                  <div style={{ font: "600 9px var(--mono)", color: "#B69A72", marginBottom: 4 }}>
                     VERIFIED EVIDENCE RESULT:
                   </div>
-                  <pre className="code-box" style={{ margin: 0, maxHeight: 90, color: "#b5ff8a" }}>
+                  <pre className="code-box" style={{ margin: 0, maxHeight: 90, color: "#B69A72" }}>
                     {m.validation_result}
                   </pre>
                 </div>
@@ -211,7 +211,7 @@ export default function MemoryBankPage() {
 
               {/* Provenance & Stats */}
               <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", font: "400 10px var(--mono)", color: "#7e9084", borderTop: "1px solid rgba(226, 239, 229, 0.06)", paddingTop: 10 }}>
-                <span>REUSE COUNT: <strong style={{ color: "#e8ede8" }}>{m.reuse_count}</strong> | SUCCESSES: <strong style={{ color: "#b5ff8a" }}>{m.success_count}</strong></span>
+                <span>REUSE COUNT: <strong style={{ color: "#F2F0E8" }}>{m.reuse_count}</strong> | SUCCESSES: <strong style={{ color: "#B69A72" }}>{m.success_count}</strong></span>
                 <span>EVIDENCE: <strong style={{ color: "#a7e9e8" }}>{m.evidence_reference || "Direct Run Validation"}</strong></span>
               </div>
             </div>

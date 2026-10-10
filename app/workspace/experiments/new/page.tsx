@@ -153,13 +153,13 @@ export default function NewExperimentPage() {
     <div style={{ maxWidth: 980, margin: "0 auto", display: "flex", flexDirection: "column", gap: 28 }}>
       {/* Header */}
       <div style={{ borderBottom: "1px solid rgba(226, 239, 229, 0.08)", paddingBottom: 20 }}>
-        <div style={{ font: "500 10px/1 var(--mono)", color: "#b5ff8a", letterSpacing: "0.14em", marginBottom: 8 }}>
+        <div style={{ font: "500 10px/1 var(--mono)", color: "#B69A72", letterSpacing: "0.14em", marginBottom: 8 }}>
           PLANNING MODULE // 002
         </div>
-        <h1 style={{ margin: 0, font: "600 24px/1.2 var(--body)", color: "#e8ede8" }}>
+        <h1 style={{ margin: 0, font: "600 24px/1.2 var(--body)", color: "#F2F0E8" }}>
           Resource-Aware Experiment Planner
         </h1>
-        <p style={{ margin: "6px 0 0", font: "400 12px/1.5 var(--body)", color: "#9ba8a0" }}>
+        <p style={{ margin: "6px 0 0", font: "400 12px/1.5 var(--body)", color: "#AAA99F" }}>
           Configure reproducible tabular experiments under verified hardware and CPU-time boundaries.
         </p>
       </div>
@@ -168,8 +168,8 @@ export default function NewExperimentPage() {
         {/* Step 1: Project & Identity */}
         <div className="research-card">
           <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 16 }}>
-            <span style={{ width: 20, height: 20, borderRadius: "50%", background: "rgba(181, 255, 138, 0.15)", color: "#b5ff8a", display: "grid", placeContent: "center", font: "600 10px var(--mono)" }}>1</span>
-            <span style={{ font: "600 12px var(--mono)", color: "#e8ede8", letterSpacing: "0.06em" }}>PROJECT & RESEARCH OBJECTIVE</span>
+            <span style={{ width: 20, height: 20, borderRadius: "50%", background: "rgba(182, 154, 114, 0.15)", color: "#B69A72", display: "grid", placeContent: "center", font: "600 10px var(--mono)" }}>1</span>
+            <span style={{ font: "600 12px var(--mono)", color: "#F2F0E8", letterSpacing: "0.06em" }}>PROJECT & RESEARCH OBJECTIVE</span>
           </div>
 
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
@@ -180,7 +180,7 @@ export default function NewExperimentPage() {
               <select
                 value={projectId}
                 onChange={(e) => setProjectId(e.target.value)}
-                style={{ width: "100%", padding: "10px 12px", background: "#050706", border: "1px solid rgba(226, 239, 229, 0.15)", borderRadius: 3, color: "#e8ede8", font: "400 12px var(--mono)" }}
+                style={{ width: "100%", padding: "10px 12px", background: "#101110", border: "1px solid rgba(226, 239, 229, 0.15)", borderRadius: 3, color: "#F2F0E8", font: "400 12px var(--mono)" }}
               >
                 {projects.map((p) => (
                   <option key={p.id} value={p.id}>
@@ -200,7 +200,7 @@ export default function NewExperimentPage() {
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 placeholder="e.g. Latency-Constrained Decision Tree vs Ensemble"
-                style={{ width: "100%", padding: "10px 12px", background: "#050706", border: "1px solid rgba(226, 239, 229, 0.15)", borderRadius: 3, color: "#e8ede8", font: "400 12px var(--mono)" }}
+                style={{ width: "100%", padding: "10px 12px", background: "#101110", border: "1px solid rgba(226, 239, 229, 0.15)", borderRadius: 3, color: "#F2F0E8", font: "400 12px var(--mono)" }}
               />
             </div>
           </div>
@@ -209,8 +209,8 @@ export default function NewExperimentPage() {
         {/* Step 2: Dataset Selection */}
         <div className="research-card">
           <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 16 }}>
-            <span style={{ width: 20, height: 20, borderRadius: "50%", background: "rgba(181, 255, 138, 0.15)", color: "#b5ff8a", display: "grid", placeContent: "center", font: "600 10px var(--mono)" }}>2</span>
-            <span style={{ font: "600 12px var(--mono)", color: "#e8ede8", letterSpacing: "0.06em" }}>DATASET & PREDICTION TASK</span>
+            <span style={{ width: 20, height: 20, borderRadius: "50%", background: "rgba(182, 154, 114, 0.15)", color: "#B69A72", display: "grid", placeContent: "center", font: "600 10px var(--mono)" }}>2</span>
+            <span style={{ font: "600 12px var(--mono)", color: "#F2F0E8", letterSpacing: "0.06em" }}>DATASET & PREDICTION TASK</span>
           </div>
 
           <div style={{ display: "grid", gridTemplateColumns: "1.2fr 1fr", gap: 16 }}>
@@ -221,7 +221,7 @@ export default function NewExperimentPage() {
               <select
                 value={datasetId}
                 onChange={(e) => handleDatasetChange(e.target.value)}
-                style={{ width: "100%", padding: "10px 12px", background: "#050706", border: "1px solid rgba(226, 239, 229, 0.15)", borderRadius: 3, color: "#e8ede8", font: "400 12px var(--mono)" }}
+                style={{ width: "100%", padding: "10px 12px", background: "#101110", border: "1px solid rgba(226, 239, 229, 0.15)", borderRadius: 3, color: "#F2F0E8", font: "400 12px var(--mono)" }}
               >
                 {datasets.map((d) => (
                   <option key={d.id} value={d.id}>
@@ -245,12 +245,12 @@ export default function NewExperimentPage() {
         {/* Step 3: Model Catalogue & Candidates */}
         <div className="research-card">
           <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 16 }}>
-            <span style={{ width: 20, height: 20, borderRadius: "50%", background: "rgba(181, 255, 138, 0.15)", color: "#b5ff8a", display: "grid", placeContent: "center", font: "600 10px var(--mono)" }}>3</span>
-            <span style={{ font: "600 12px var(--mono)", color: "#e8ede8", letterSpacing: "0.06em" }}>BASELINE & CANDIDATE MODELS</span>
+            <span style={{ width: 20, height: 20, borderRadius: "50%", background: "rgba(182, 154, 114, 0.15)", color: "#B69A72", display: "grid", placeContent: "center", font: "600 10px var(--mono)" }}>3</span>
+            <span style={{ font: "600 12px var(--mono)", color: "#F2F0E8", letterSpacing: "0.06em" }}>BASELINE & CANDIDATE MODELS</span>
           </div>
 
           <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-            <div style={{ font: "400 11px var(--mono)", color: "#9ba8a0" }}>
+            <div style={{ font: "400 11px var(--mono)", color: "#AAA99F" }}>
               Select candidate models to execute and compare. Preprocessing pipelines are fitted exclusively on training splits to prevent data leakage.
             </div>
 
@@ -264,8 +264,8 @@ export default function NewExperimentPage() {
                     style={{
                       padding: "12px 14px",
                       borderRadius: 3,
-                      border: isSelected ? "1px solid #b5ff8a" : "1px solid rgba(226, 239, 229, 0.1)",
-                      background: isSelected ? "rgba(181, 255, 138, 0.05)" : "rgba(5, 7, 6, 0.4)",
+                      border: isSelected ? "1px solid #B69A72" : "1px solid rgba(226, 239, 229, 0.1)",
+                      background: isSelected ? "rgba(182, 154, 114, 0.05)" : "rgba(5, 7, 6, 0.4)",
                       cursor: "pointer",
                       display: "flex",
                       alignItems: "flex-start",
@@ -279,7 +279,7 @@ export default function NewExperimentPage() {
                       style={{ marginTop: 2 }}
                     />
                     <div>
-                      <div style={{ font: "600 11px var(--mono)", color: isSelected ? "#e8ede8" : "#9ba8a0" }}>
+                      <div style={{ font: "600 11px var(--mono)", color: isSelected ? "#F2F0E8" : "#AAA99F" }}>
                         {m.name}
                       </div>
                       <div style={{ font: "400 9px var(--mono)", color: "#7e9084", marginTop: 4 }}>
@@ -296,8 +296,8 @@ export default function NewExperimentPage() {
         {/* Step 4: Budget & Efficiency Boundaries */}
         <div className="research-card">
           <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 16 }}>
-            <span style={{ width: 20, height: 20, borderRadius: "50%", background: "rgba(181, 255, 138, 0.15)", color: "#b5ff8a", display: "grid", placeContent: "center", font: "600 10px var(--mono)" }}>4</span>
-            <span style={{ font: "600 12px var(--mono)", color: "#e8ede8", letterSpacing: "0.06em" }}>RESOURCE BUDGETS & EDGE EFFICIENCY CONSTRAINTS</span>
+            <span style={{ width: 20, height: 20, borderRadius: "50%", background: "rgba(182, 154, 114, 0.15)", color: "#B69A72", display: "grid", placeContent: "center", font: "600 10px var(--mono)" }}>4</span>
+            <span style={{ font: "600 12px var(--mono)", color: "#F2F0E8", letterSpacing: "0.06em" }}>RESOURCE BUDGETS & EDGE EFFICIENCY CONSTRAINTS</span>
           </div>
 
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: 16 }}>
@@ -311,7 +311,7 @@ export default function NewExperimentPage() {
                 max={180}
                 value={cpuBudget}
                 onChange={(e) => setCpuBudget(parseFloat(e.target.value) || 30.0)}
-                style={{ width: "100%", padding: "10px 12px", background: "#050706", border: "1px solid rgba(226, 239, 229, 0.15)", borderRadius: 3, color: "#e8ede8", font: "400 12px var(--mono)" }}
+                style={{ width: "100%", padding: "10px 12px", background: "#101110", border: "1px solid rgba(226, 239, 229, 0.15)", borderRadius: 3, color: "#F2F0E8", font: "400 12px var(--mono)" }}
               />
             </div>
 
@@ -323,7 +323,7 @@ export default function NewExperimentPage() {
                 type="number"
                 value={randomSeed}
                 onChange={(e) => setRandomSeed(parseInt(e.target.value) || 42)}
-                style={{ width: "100%", padding: "10px 12px", background: "#050706", border: "1px solid rgba(226, 239, 229, 0.15)", borderRadius: 3, color: "#e8ede8", font: "400 12px var(--mono)" }}
+                style={{ width: "100%", padding: "10px 12px", background: "#101110", border: "1px solid rgba(226, 239, 229, 0.15)", borderRadius: 3, color: "#F2F0E8", font: "400 12px var(--mono)" }}
               />
             </div>
 
@@ -335,7 +335,7 @@ export default function NewExperimentPage() {
                 type="number"
                 value={maxLatencyUs}
                 onChange={(e) => setMaxLatencyUs(parseInt(e.target.value) || 5000)}
-                style={{ width: "100%", padding: "10px 12px", background: "#050706", border: "1px solid rgba(226, 239, 229, 0.15)", borderRadius: 3, color: "#e8ede8", font: "400 12px var(--mono)" }}
+                style={{ width: "100%", padding: "10px 12px", background: "#101110", border: "1px solid rgba(226, 239, 229, 0.15)", borderRadius: 3, color: "#F2F0E8", font: "400 12px var(--mono)" }}
               />
             </div>
 
@@ -347,7 +347,7 @@ export default function NewExperimentPage() {
                 type="number"
                 value={maxSizeKb}
                 onChange={(e) => setMaxSizeKb(parseInt(e.target.value) || 500)}
-                style={{ width: "100%", padding: "10px 12px", background: "#050706", border: "1px solid rgba(226, 239, 229, 0.15)", borderRadius: 3, color: "#e8ede8", font: "400 12px var(--mono)" }}
+                style={{ width: "100%", padding: "10px 12px", background: "#101110", border: "1px solid rgba(226, 239, 229, 0.15)", borderRadius: 3, color: "#F2F0E8", font: "400 12px var(--mono)" }}
               />
             </div>
           </div>
@@ -360,9 +360,9 @@ export default function NewExperimentPage() {
             disabled={submitting}
             style={{
               padding: "12px 28px",
-              background: submitting ? "#557a44" : "#b5ff8a",
-              border: "1px solid #b5ff8a",
-              color: "#050706",
+              background: submitting ? "#557a44" : "#B69A72",
+              border: "1px solid #B69A72",
+              color: "#101110",
               borderRadius: 3,
               font: "600 11px/1 var(--mono)",
               letterSpacing: "0.08em",

@@ -86,13 +86,13 @@ export default function ReportsPage() {
       {/* Header */}
       <div style={{ display: "flex", alignItems: "flex-end", justifyContent: "space-between", borderBottom: "1px solid rgba(226, 239, 229, 0.08)", paddingBottom: 20 }}>
         <div>
-          <div style={{ font: "500 10px/1 var(--mono)", color: "#b5ff8a", letterSpacing: "0.14em", marginBottom: 8 }}>
+          <div style={{ font: "500 10px/1 var(--mono)", color: "#B69A72", letterSpacing: "0.14em", marginBottom: 8 }}>
             EVIDENCE AUDIT // 009
           </div>
-          <h1 style={{ margin: 0, font: "600 24px/1.2 var(--body)", color: "#e8ede8" }}>
+          <h1 style={{ margin: 0, font: "600 24px/1.2 var(--body)", color: "#F2F0E8" }}>
             Evidence-Linked Report Generator
           </h1>
-          <p style={{ margin: "6px 0 0", font: "400 12px/1.5 var(--body)", color: "#9ba8a0" }}>
+          <p style={{ margin: "6px 0 0", font: "400 12px/1.5 var(--body)", color: "#AAA99F" }}>
             Automated research reports grounding every empirical claim directly to stored execution run IDs and metric records.
           </p>
         </div>
@@ -108,7 +108,7 @@ export default function ReportsPage() {
             <select
               value={selectedProjectId}
               onChange={(e) => setSelectedProjectId(e.target.value)}
-              style={{ width: "100%", padding: "9px 10px", background: "#050706", border: "1px solid rgba(226, 239, 229, 0.15)", borderRadius: 3, color: "#e8ede8", font: "400 11px var(--mono)" }}
+              style={{ width: "100%", padding: "9px 10px", background: "#101110", border: "1px solid rgba(226, 239, 229, 0.15)", borderRadius: 3, color: "#F2F0E8", font: "400 11px var(--mono)" }}
             >
               {projects.map((p) => (
                 <option key={p.id} value={p.id}>
@@ -127,7 +127,7 @@ export default function ReportsPage() {
               placeholder="e.g. Empirical Validation of Failure Recovery in Edge ML"
               value={reportTitle}
               onChange={(e) => setReportTitle(e.target.value)}
-              style={{ width: "100%", padding: "9px 10px", background: "#050706", border: "1px solid rgba(226, 239, 229, 0.15)", borderRadius: 3, color: "#e8ede8", font: "400 11px var(--mono)" }}
+              style={{ width: "100%", padding: "9px 10px", background: "#101110", border: "1px solid rgba(226, 239, 229, 0.15)", borderRadius: 3, color: "#F2F0E8", font: "400 11px var(--mono)" }}
             />
           </div>
 
@@ -136,9 +136,9 @@ export default function ReportsPage() {
             disabled={generating}
             style={{
               padding: "9px 20px",
-              background: generating ? "#557a44" : "#b5ff8a",
-              border: "1px solid #b5ff8a",
-              color: "#050706",
+              background: generating ? "#557a44" : "#B69A72",
+              border: "1px solid #B69A72",
+              color: "#101110",
               borderRadius: 3,
               font: "600 10px var(--mono)",
               letterSpacing: "0.08em",
@@ -168,15 +168,15 @@ export default function ReportsPage() {
                 style={{
                   padding: 16,
                   cursor: "pointer",
-                  borderColor: isSelected ? "#b5ff8a" : "rgba(226, 239, 229, 0.1)",
-                  background: isSelected ? "rgba(181, 255, 138, 0.04)" : "rgba(12, 18, 15, 0.6)"
+                  borderColor: isSelected ? "#B69A72" : "rgba(226, 239, 229, 0.1)",
+                  background: isSelected ? "rgba(182, 154, 114, 0.04)" : "rgba(12, 18, 15, 0.6)"
                 }}
               >
-                <div style={{ font: "600 12px var(--body)", color: "#e8ede8", marginBottom: 6 }}>
+                <div style={{ font: "600 12px var(--body)", color: "#F2F0E8", marginBottom: 6 }}>
                   {r.title}
                 </div>
                 <div style={{ font: "400 9px var(--mono)", color: "#7e9084" }}>
-                  STATUS: <strong style={{ color: "#b5ff8a" }}>{r.status}</strong>
+                  STATUS: <strong style={{ color: "#B69A72" }}>{r.status}</strong>
                 </div>
               </div>
             );
@@ -187,20 +187,20 @@ export default function ReportsPage() {
         {selectedReport ? (
           <div className="research-card" style={{ display: "flex", flexDirection: "column", gap: 22 }}>
             <div style={{ borderBottom: "1px solid rgba(226, 239, 229, 0.08)", paddingBottom: 16 }}>
-              <div style={{ font: "500 10px var(--mono)", color: "#b5ff8a", marginBottom: 6 }}>
+              <div style={{ font: "500 10px var(--mono)", color: "#B69A72", marginBottom: 6 }}>
                 RESEARCH REPORT ENTITY
               </div>
-              <h2 style={{ margin: "0 0 10px", font: "600 20px/1.2 var(--body)", color: "#e8ede8" }}>
+              <h2 style={{ margin: "0 0 10px", font: "600 20px/1.2 var(--body)", color: "#F2F0E8" }}>
                 {selectedReport.report.title}
               </h2>
               <div style={{ font: "400 11px var(--mono)", color: "#7e9084" }}>
-                QUESTION: <span style={{ color: "#e8ede8" }}>{selectedReport.report.research_question}</span>
+                QUESTION: <span style={{ color: "#F2F0E8" }}>{selectedReport.report.research_question}</span>
               </div>
             </div>
 
             {/* Abstract / Summary */}
             <div>
-              <div style={{ font: "600 11px var(--mono)", color: "#b5ff8a", marginBottom: 6 }}>
+              <div style={{ font: "600 11px var(--mono)", color: "#B69A72", marginBottom: 6 }}>
                 EXECUTIVE SUMMARY & FINDINGS:
               </div>
               <p style={{ font: "400 13px/1.6 var(--body)", color: "#c6d4c8", margin: 0 }}>
@@ -221,8 +221,8 @@ export default function ReportsPage() {
             {/* Claim Verification Layer */}
             <div>
               <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 12 }}>
-                <ShieldCheck size={16} color="#b5ff8a" />
-                <span style={{ font: "600 11px var(--mono)", color: "#e8ede8", letterSpacing: "0.06em" }}>
+                <ShieldCheck size={16} color="#B69A72" />
+                <span style={{ font: "600 11px var(--mono)", color: "#F2F0E8", letterSpacing: "0.06em" }}>
                   CLAIM–EVIDENCE VERIFICATION LAYER ({selectedReport.claims.length} AUDITED CLAIMS)
                 </span>
               </div>
@@ -239,7 +239,7 @@ export default function ReportsPage() {
                     }}
                   >
                     <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", marginBottom: 6 }}>
-                      <div style={{ font: "500 12px var(--body)", color: "#e8ede8" }}>
+                      <div style={{ font: "500 12px var(--body)", color: "#F2F0E8" }}>
                         "{c.claim_text}"
                       </div>
                       <span className="status-tag status-tag--completed">
@@ -249,8 +249,8 @@ export default function ReportsPage() {
 
                     <div style={{ display: "flex", alignItems: "center", gap: 16, font: "400 10px var(--mono)", color: "#7e9084", marginTop: 8 }}>
                       <span>EVIDENCE: <strong style={{ color: "#a7e9e8" }}>{c.evidence_type}</strong></span>
-                      <span>SOURCE: <strong style={{ color: "#e8ede8" }}>{c.supporting_reference_id}</strong></span>
-                      <span>METRIC: <strong style={{ color: "#b5ff8a" }}>{c.source_metric}</strong></span>
+                      <span>SOURCE: <strong style={{ color: "#F2F0E8" }}>{c.supporting_reference_id}</strong></span>
+                      <span>METRIC: <strong style={{ color: "#B69A72" }}>{c.source_metric}</strong></span>
                     </div>
                   </div>
                 ))}
@@ -261,11 +261,11 @@ export default function ReportsPage() {
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16, background: "rgba(5, 7, 6, 0.4)", padding: 16, borderRadius: 3, border: "1px solid rgba(226, 239, 229, 0.06)" }}>
               <div>
                 <div style={{ font: "600 10px var(--mono)", color: "#7e9084", marginBottom: 6 }}>REPRODUCIBILITY SPECIFICATION:</div>
-                <div style={{ font: "400 11px/1.5 var(--body)", color: "#9ba8a0" }}>{selectedReport.report.reproducibility_notes}</div>
+                <div style={{ font: "400 11px/1.5 var(--body)", color: "#AAA99F" }}>{selectedReport.report.reproducibility_notes}</div>
               </div>
               <div>
                 <div style={{ font: "600 10px var(--mono)", color: "#ff8b8b", marginBottom: 6 }}>LIMITATIONS:</div>
-                <div style={{ font: "400 11px/1.5 var(--body)", color: "#9ba8a0" }}>{selectedReport.report.limitations}</div>
+                <div style={{ font: "400 11px/1.5 var(--body)", color: "#AAA99F" }}>{selectedReport.report.limitations}</div>
               </div>
             </div>
           </div>

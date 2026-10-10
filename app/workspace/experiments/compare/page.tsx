@@ -102,13 +102,13 @@ export default function CompareExperimentsPage() {
     <div style={{ display: "flex", flexDirection: "column", gap: 32 }}>
       {/* Header */}
       <div style={{ borderBottom: "1px solid rgba(226, 239, 229, 0.08)", paddingBottom: 20 }}>
-        <div style={{ font: "500 10px/1 var(--mono)", color: "#b5ff8a", letterSpacing: "0.14em", marginBottom: 8 }}>
+        <div style={{ font: "500 10px/1 var(--mono)", color: "#B69A72", letterSpacing: "0.14em", marginBottom: 8 }}>
           SCIENTIFIC EVALUATION // 003
         </div>
-        <h1 style={{ margin: 0, font: "600 24px/1.2 var(--body)", color: "#e8ede8" }}>
+        <h1 style={{ margin: 0, font: "600 24px/1.2 var(--body)", color: "#F2F0E8" }}>
           Comparative Evaluation & Evidence Benchmarks
         </h1>
-        <p style={{ margin: "6px 0 0", font: "400 12px/1.5 var(--body)", color: "#9ba8a0", maxWidth: 800 }}>
+        <p style={{ margin: "6px 0 0", font: "400 12px/1.5 var(--body)", color: "#AAA99F", maxWidth: 800 }}>
           Controlled 3-condition empirical investigation: evaluating standard Optuna versus success-only memory
           versus evidence-validated failure-and-recovery memory under strictly identical CPU-time budgets and random seeds.
         </p>
@@ -118,8 +118,8 @@ export default function CompareExperimentsPage() {
       <div className="research-card">
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 16 }}>
           <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-            <Scale size={16} color="#b5ff8a" />
-            <span style={{ font: "600 12px var(--mono)", color: "#e8ede8", letterSpacing: "0.06em" }}>
+            <Scale size={16} color="#B69A72" />
+            <span style={{ font: "600 12px var(--mono)", color: "#F2F0E8", letterSpacing: "0.06em" }}>
               RUN CONTROLLED A/B/C EXPERIMENT
             </span>
           </div>
@@ -136,7 +136,7 @@ export default function CompareExperimentsPage() {
             <select
               value={selectedProjectId}
               onChange={(e) => setSelectedProjectId(e.target.value)}
-              style={{ width: "100%", padding: "8px 10px", background: "#050706", border: "1px solid rgba(226, 239, 229, 0.15)", borderRadius: 3, color: "#e8ede8", font: "400 11px var(--mono)" }}
+              style={{ width: "100%", padding: "8px 10px", background: "#101110", border: "1px solid rgba(226, 239, 229, 0.15)", borderRadius: 3, color: "#F2F0E8", font: "400 11px var(--mono)" }}
             >
               {projects.map((p) => (
                 <option key={p.id} value={p.id}>
@@ -153,7 +153,7 @@ export default function CompareExperimentsPage() {
             <select
               value={selectedDatasetId}
               onChange={(e) => setSelectedDatasetId(e.target.value)}
-              style={{ width: "100%", padding: "8px 10px", background: "#050706", border: "1px solid rgba(226, 239, 229, 0.15)", borderRadius: 3, color: "#e8ede8", font: "400 11px var(--mono)" }}
+              style={{ width: "100%", padding: "8px 10px", background: "#101110", border: "1px solid rgba(226, 239, 229, 0.15)", borderRadius: 3, color: "#F2F0E8", font: "400 11px var(--mono)" }}
             >
               {datasets.map((d) => (
                 <option key={d.id} value={d.id}>
@@ -173,7 +173,7 @@ export default function CompareExperimentsPage() {
               max={60}
               value={cpuBudget}
               onChange={(e) => setCpuBudget(parseFloat(e.target.value) || 20.0)}
-              style={{ width: "100%", padding: "8px 10px", background: "#050706", border: "1px solid rgba(226, 239, 229, 0.15)", borderRadius: 3, color: "#e8ede8", font: "400 11px var(--mono)" }}
+              style={{ width: "100%", padding: "8px 10px", background: "#101110", border: "1px solid rgba(226, 239, 229, 0.15)", borderRadius: 3, color: "#F2F0E8", font: "400 11px var(--mono)" }}
             />
           </div>
 
@@ -187,7 +187,7 @@ export default function CompareExperimentsPage() {
               max={15}
               value={trialsPerCond}
               onChange={(e) => setTrialsPerCond(parseInt(e.target.value) || 6)}
-              style={{ width: "100%", padding: "8px 10px", background: "#050706", border: "1px solid rgba(226, 239, 229, 0.15)", borderRadius: 3, color: "#e8ede8", font: "400 11px var(--mono)" }}
+              style={{ width: "100%", padding: "8px 10px", background: "#101110", border: "1px solid rgba(226, 239, 229, 0.15)", borderRadius: 3, color: "#F2F0E8", font: "400 11px var(--mono)" }}
             />
           </div>
 
@@ -196,9 +196,9 @@ export default function CompareExperimentsPage() {
             disabled={running}
             style={{
               padding: "9px 20px",
-              background: running ? "#557a44" : "#b5ff8a",
-              border: "1px solid #b5ff8a",
-              color: "#050706",
+              background: running ? "#557a44" : "#B69A72",
+              border: "1px solid #B69A72",
+              color: "#101110",
               borderRadius: 3,
               font: "600 10px var(--mono)",
               letterSpacing: "0.08em",
@@ -215,10 +215,10 @@ export default function CompareExperimentsPage() {
         <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
           {/* Scientific Conclusion Box */}
           <div className="research-card research-card--highlight">
-            <div style={{ font: "600 11px/1 var(--mono)", color: "#b5ff8a", letterSpacing: "0.08em", marginBottom: 8 }}>
+            <div style={{ font: "600 11px/1 var(--mono)", color: "#B69A72", letterSpacing: "0.08em", marginBottom: 8 }}>
               EMPIRICAL FINDINGS & STATISTICAL CONCLUSION
             </div>
-            <p style={{ font: "400 13px/1.7 var(--body)", color: "#e8ede8", margin: 0 }}>
+            <p style={{ font: "400 13px/1.7 var(--body)", color: "#F2F0E8", margin: 0 }}>
               {latestEval.conclusion}
             </p>
           </div>
@@ -228,7 +228,7 @@ export default function CompareExperimentsPage() {
             {/* Condition A */}
             <div className="research-card">
               <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 12 }}>
-                <span style={{ font: "600 11px var(--mono)", color: "#e8ede8" }}>CONDITION A: STANDARD OPTUNA</span>
+                <span style={{ font: "600 11px var(--mono)", color: "#F2F0E8" }}>CONDITION A: STANDARD OPTUNA</span>
                 <span className="status-tag status-tag--planned">BASELINE</span>
               </div>
               <p style={{ font: "400 11px/1.4 var(--body)", color: "#8c9c91", minHeight: 32 }}>
@@ -237,11 +237,11 @@ export default function CompareExperimentsPage() {
               <div style={{ display: "flex", flexDirection: "column", gap: 8, marginTop: 14 }}>
                 <div style={{ display: "flex", justifyContent: "space-between", font: "400 11px var(--mono)", borderBottom: "1px solid rgba(226, 239, 229, 0.06)", paddingBottom: 6 }}>
                   <span style={{ color: "#7e9084" }}>COMPLETION RATE:</span>
-                  <strong style={{ color: "#e8ede8" }}>{condA.completion_rate}%</strong>
+                  <strong style={{ color: "#F2F0E8" }}>{condA.completion_rate}%</strong>
                 </div>
                 <div style={{ display: "flex", justifyContent: "space-between", font: "400 11px var(--mono)", borderBottom: "1px solid rgba(226, 239, 229, 0.06)", paddingBottom: 6 }}>
                   <span style={{ color: "#7e9084" }}>BEST VALIDATED F1:</span>
-                  <strong style={{ color: "#b5ff8a" }}>{condA.best_validated_f1}</strong>
+                  <strong style={{ color: "#B69A72" }}>{condA.best_validated_f1}</strong>
                 </div>
                 <div style={{ display: "flex", justifyContent: "space-between", font: "400 11px var(--mono)", borderBottom: "1px solid rgba(226, 239, 229, 0.06)", paddingBottom: 6 }}>
                   <span style={{ color: "#7e9084" }}>COMPLETED / ATTEMPTS:</span>
@@ -274,7 +274,7 @@ export default function CompareExperimentsPage() {
                 </div>
                 <div style={{ display: "flex", justifyContent: "space-between", font: "400 11px var(--mono)", borderBottom: "1px solid rgba(226, 239, 229, 0.06)", paddingBottom: 6 }}>
                   <span style={{ color: "#7e9084" }}>BEST VALIDATED F1:</span>
-                  <strong style={{ color: "#b5ff8a" }}>{condB.best_validated_f1}</strong>
+                  <strong style={{ color: "#B69A72" }}>{condB.best_validated_f1}</strong>
                 </div>
                 <div style={{ display: "flex", justifyContent: "space-between", font: "400 11px var(--mono)", borderBottom: "1px solid rgba(226, 239, 229, 0.06)", paddingBottom: 6 }}>
                   <span style={{ color: "#7e9084" }}>COMPLETED / ATTEMPTS:</span>
@@ -292,9 +292,9 @@ export default function CompareExperimentsPage() {
             </div>
 
             {/* Condition C */}
-            <div className="research-card" style={{ border: "1px solid rgba(181, 255, 138, 0.35)", background: "rgba(16, 26, 21, 0.5)" }}>
+            <div className="research-card" style={{ border: "1px solid rgba(182, 154, 114, 0.35)", background: "rgba(16, 26, 21, 0.5)" }}>
               <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 12 }}>
-                <span style={{ font: "600 11px var(--mono)", color: "#b5ff8a" }}>CONDITION C: FAILURE-AND-RECOVERY</span>
+                <span style={{ font: "600 11px var(--mono)", color: "#B69A72" }}>CONDITION C: FAILURE-AND-RECOVERY</span>
                 <span className="status-tag status-tag--completed">PROPOSED</span>
               </div>
               <p style={{ font: "400 11px/1.4 var(--body)", color: "#8c9c91", minHeight: 32 }}>
@@ -303,11 +303,11 @@ export default function CompareExperimentsPage() {
               <div style={{ display: "flex", flexDirection: "column", gap: 8, marginTop: 14 }}>
                 <div style={{ display: "flex", justifyContent: "space-between", font: "400 11px var(--mono)", borderBottom: "1px solid rgba(226, 239, 229, 0.06)", paddingBottom: 6 }}>
                   <span style={{ color: "#7e9084" }}>COMPLETION RATE:</span>
-                  <strong style={{ color: "#b5ff8a" }}>{condC.completion_rate}%</strong>
+                  <strong style={{ color: "#B69A72" }}>{condC.completion_rate}%</strong>
                 </div>
                 <div style={{ display: "flex", justifyContent: "space-between", font: "400 11px var(--mono)", borderBottom: "1px solid rgba(226, 239, 229, 0.06)", paddingBottom: 6 }}>
                   <span style={{ color: "#7e9084" }}>BEST VALIDATED F1:</span>
-                  <strong style={{ color: "#b5ff8a" }}>{condC.best_validated_f1}</strong>
+                  <strong style={{ color: "#B69A72" }}>{condC.best_validated_f1}</strong>
                 </div>
                 <div style={{ display: "flex", justifyContent: "space-between", font: "400 11px var(--mono)", borderBottom: "1px solid rgba(226, 239, 229, 0.06)", paddingBottom: 6 }}>
                   <span style={{ color: "#7e9084" }}>RECOVERY SUCCESS RATE:</span>
