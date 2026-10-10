@@ -411,11 +411,11 @@ export default function WorkspaceOverviewPage() {
         </div>
 
         {/* Row 2: Status Indicator & Action Buttons */}
-        <div className="flex flex-wrap items-center gap-2 min-w-0 w-full pt-1 border-t border-[#18201b]">
+        <div className="flex flex-wrap items-center gap-2 min-w-0 w-full pt-1.5 border-t border-[#18201b]">
           {/* Status Indicator */}
-          <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-[4px] bg-[#0c100e] border border-[#1f2622] font-mono text-[9px] shrink-0">
+          <div className="h-[36px] px-3 rounded-[6px] bg-[#0c100e] border border-[#1f2622] font-mono text-[11px] inline-flex items-center gap-2 shrink-0">
             <span
-              className={`w-1.5 h-1.5 rounded-full shrink-0 ${
+              className={`w-2 h-2 rounded-full shrink-0 ${
                 engineHealth === "ok" ? "bg-[#9aaf98]" : "bg-[#d46b6b]"
               }`}
             />
@@ -428,9 +428,9 @@ export default function WorkspaceOverviewPage() {
           <button
             type="button"
             onClick={() => setNewProjectModal(true)}
-            className="px-2.5 py-1 rounded-[4px] bg-[#0c100e] border border-[#1f2622] hover:border-[#27352b] hover:bg-[#18201c] font-mono text-[9.5px] uppercase tracking-wider text-[#c4ccc5] hover:text-[#e8e6df] transition-all inline-flex items-center gap-1.5 shrink-0 whitespace-nowrap leading-none"
+            className="h-[36px] px-3.5 rounded-[6px] bg-[#111513] border border-[#1f2622] hover:border-[#2b382e] hover:bg-[#161c18] font-mono text-[12px] font-medium uppercase tracking-[0.04em] text-[#c4ccc5] hover:text-[#e8e6df] transition-all inline-flex items-center gap-2 shrink-0 whitespace-nowrap"
           >
-            <FolderPlus size={10.5} className="text-[#7e8780]" />
+            <FolderPlus size={15} className="text-[#8e958f]" />
             <span>NEW PROJECT</span>
           </button>
 
@@ -439,18 +439,18 @@ export default function WorkspaceOverviewPage() {
             type="button"
             onClick={handleRunQuickBenchmark}
             disabled={benchmarking}
-            className="px-2.5 py-1 rounded-[4px] bg-[#0c100e] border border-[#1f2622] hover:border-[#27352b] hover:bg-[#18201c] font-mono text-[9.5px] uppercase tracking-wider text-[#9aaf98] hover:text-[#b2cbb0] transition-all inline-flex items-center gap-1.5 shrink-0 whitespace-nowrap leading-none disabled:opacity-50"
+            className="h-[36px] px-3.5 rounded-[6px] bg-[#111513] border border-[#1f2622] hover:border-[#2e4033] hover:bg-[#161c18] font-mono text-[12px] font-medium uppercase tracking-[0.04em] text-[#9aaf98] hover:text-[#b2cbb0] transition-all inline-flex items-center gap-2 shrink-0 whitespace-nowrap disabled:opacity-50"
           >
-            <Scale size={10.5} />
+            <Scale size={15} />
             <span>{benchmarking ? "BENCHMARKING..." : "RUN BENCHMARK"}</span>
           </button>
 
           {/* Action: New Experiment */}
           <Link
             href="/workspace/experiments/new"
-            className="px-2.5 py-1 rounded-[4px] bg-[#18201c] border border-[#27352b] hover:border-[#9aaf98] text-[#e8e6df] hover:text-[#ffffff] font-mono text-[9.5px] font-medium uppercase tracking-wider transition-all inline-flex items-center gap-1.5 shrink-0 whitespace-nowrap leading-none shadow-xs"
+            className="h-[36px] px-3.5 rounded-[6px] bg-[#18201c] border border-[#27352b] hover:border-[#9aaf98] text-[#e8e6df] hover:text-[#ffffff] font-mono text-[12px] font-semibold uppercase tracking-[0.04em] transition-all inline-flex items-center gap-2 shrink-0 whitespace-nowrap shadow-xs"
           >
-            <Plus size={11} className="text-[#9aaf98]" />
+            <Plus size={15} className="text-[#9aaf98]" />
             <span>NEW EXPERIMENT</span>
           </Link>
         </div>
@@ -572,11 +572,11 @@ export default function WorkspaceOverviewPage() {
 
             {/* Right column: X-AXIS segmented controls aligned at the top, horizontally scrollable if narrow */}
             <div className="overflow-x-auto max-w-full pb-1 lg:pb-0 shrink-0 self-start">
-              <div className="flex items-center p-0.5 rounded-[5px] bg-[#0c100e] border border-[#1b221e] shrink-0">
-                <span className="font-mono text-[8.5px] text-[#555e57] px-2 uppercase tracking-wider select-none shrink-0 whitespace-nowrap">
+              <div className="h-[36px] flex items-center gap-1 p-1 rounded-[6px] bg-[#0c100e] border border-[#1b221e] shrink-0">
+                <span className="font-mono text-[10px] text-[#687069] px-2 uppercase tracking-wider select-none shrink-0 whitespace-nowrap">
                   X-AXIS:
                 </span>
-                <div className="h-3 w-[1px] bg-[#18201b] shrink-0 mr-0.5" />
+                <div className="h-3.5 w-[1px] bg-[#1b221e] shrink-0 mr-0.5" />
                 {(
                   [
                     { id: "latency", label: "Latency (μs)" },
@@ -588,10 +588,10 @@ export default function WorkspaceOverviewPage() {
                     key={opt.id}
                     type="button"
                     onClick={() => setCostAxis(opt.id)}
-                    className={`px-2.5 py-1 rounded-[4px] font-mono text-[9.5px] whitespace-nowrap leading-none transition-all select-none shrink-0 ${
+                    className={`h-[28px] px-3 rounded-[5px] font-mono text-[12px] whitespace-nowrap leading-none transition-all select-none shrink-0 inline-flex items-center justify-center ${
                       costAxis === opt.id
                         ? "bg-[#18201c] text-[#e8e6df] font-medium border border-[#27352b] shadow-xs"
-                        : "text-[#6e7770] hover:text-[#c4ccc5] border border-transparent"
+                        : "text-[#737c75] hover:text-[#c4ccc5] border border-transparent"
                     }`}
                   >
                     {opt.label}
