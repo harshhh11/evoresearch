@@ -48,6 +48,17 @@ import {
   X,
 } from "lucide-react";
 
+// Parse run metrics helper (module-scoped for early hook access)
+function parseMetrics(metricsRaw: string | Record<string, number> | undefined) {
+  if (!metricsRaw) return { f1: 0, accuracy: 0, precision: 0, recall: 0 };
+  if (typeof metricsRaw === "object") return metricsRaw;
+  try {
+    return JSON.parse(metricsRaw);
+  } catch {
+    return { f1: 0, accuracy: 0 };
+  }
+}
+
 export default function WorkspaceOverviewPage() {
   const [stats, setStats] = useState<PlatformStats | null>(null);
   const [projects, setProjects] = useState<Project[]>([]);
@@ -210,18 +221,6 @@ export default function WorkspaceOverviewPage() {
     }
     return datasetRuns[0] || null;
   }, [datasetRuns, selectedRunId]);
-
-
-  // Parse run metrics helper
-  const parseMetrics = (metricsRaw: string | Record<string, number> | undefined) => {
-    if (!metricsRaw) return { f1: 0, accuracy: 0, precision: 0, recall: 0 };
-    if (typeof metricsRaw === "object") return metricsRaw;
-    try {
-      return JSON.parse(metricsRaw);
-    } catch {
-      return { f1: 0, accuracy: 0 };
-    }
-  };
 
   // Scientific Pareto Frontier & Coordinate Calculation (Dataset-Scoped)
   const paretoPoints = useMemo(() => {
