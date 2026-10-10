@@ -3,8 +3,8 @@ import io
 import json
 import time
 import uuid
-import traceback
 import pandas as pd
+import numpy as np
 from typing import List, Optional, Dict, Any
 from contextlib import asynccontextmanager
 
@@ -321,9 +321,21 @@ def get_dataset(dataset_id: str, db: Session = Depends(get_db)):
     if os.path.exists(ds.file_path):
         try:
             df = pd.read_csv(ds.file_path, nrows=10)
-            preview = df.to_dict(orient="records")
+            raw_records = df.to_dict(orient="records")
+            for row in raw_records:
+                clean_row = {}
+                for k, v in row.items():
+                    if pd.isna(v) or (isinstance(v, float) and (np.isnan(v) or np.isinf(v))):
+                        clean_row[k] = None
+                    elif isinstance(v, (np.integer, int)):
+                        clean_row[k] = int(v)
+                    elif isinstance(v, (np.floating, float)):
+                        clean_row[k] = float(v)
+                    else:
+                        clean_row[k] = v
+                preview.append(clean_row)
         except Exception:
-            pass
+            preview = []
 
     return {
         "dataset": ds.to_dict(),
