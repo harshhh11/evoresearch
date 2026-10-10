@@ -24,27 +24,32 @@ def test_health():
 
 def test_sample_datasets_generated():
     metas = generate_sample_datasets()
-    assert len(metas) >= 5
-    bc = next(m for m in metas if "Breast Cancer" in m["name"])
-    assert bc["row_count"] == 569
-    assert bc["task_type"] == "classification"
+    assert len(metas) >= 2
+    nomad = next((m for m in metas if "NOMAD" in m["name"]), None)
+    assert nomad is not None
+    assert nomad["row_count"] == 2400
+    assert nomad["task_type"] == "regression"
 
 def test_real_ml_execution():
-    metas = generate_sample_datasets()
-    bc_meta = next(m for m in metas if "Breast Cancer" in m["name"])
-    df = pd.read_csv(bc_meta["file_path"])
+    from backend.adapters.nomad_adapter import NomadDatasetAdapter
+    adapter = NomadDatasetAdapter()
+    res_proc = adapter.process("backend/data/materials/nomad2018_train.csv")
+    cleaned_df = res_proc["df"]
+    assert len(cleaned_df) == 2400
+    assert "bandgap_energy_ev" in cleaned_df.columns
     
-    prep, _, _ = build_preprocessor(df, target_col="target")
-    model = instantiate_model("LogisticRegression", "classification", random_seed=42)
+    prep, _, _ = build_preprocessor(cleaned_df, target_col="bandgap_energy_ev")
+    model = instantiate_model("Ridge", "regression", random_seed=42)
     pipe = Pipeline([("prep", prep), ("model", model)])
     
-    X = df[[c for c in df.columns if c != "target"]]
-    y = df["target"]
-    X_train, X_val, y_train, y_val = train_test_split(X, y, test_size=0.25, random_state=42)
+    X = cleaned_df[[c for c in cleaned_df.columns if c not in ["bandgap_energy_ev", "formation_energy_ev_natom", "id"]]]
+    y = cleaned_df["bandgap_energy_ev"]
+    X_train, X_val, y_train, y_val = train_test_split(X, y, test_size=0.20, random_state=42)
     
-    res = measure_efficiency_and_metrics(pipe, X_train, y_train, X_val, y_val, task_type="classification")
-    assert "f1" in res["metrics"]
-    assert res["metrics"]["f1"] > 0.85
+    res = measure_efficiency_and_metrics(pipe, X_train, y_train, X_val, y_val, task_type="regression")
+    assert "mae" in res["metrics"]
+    assert res["metrics"]["mae"] < 0.50
+    assert res["metrics"]["r2"] > 0.80
     assert res["train_time_ms"] > 0
     assert res["inference_latency_us"] > 0
     assert res["model_size_kb"] > 0
@@ -75,31 +80,35 @@ def test_api_datasets():
     res = client.get("/api/datasets")
     assert res.status_code == 200
     datasets = res.json()
-    assert len(datasets) > 0
+    assert len(datasets) >= 2
+    names = [d["name"] for d in datasets]
+    assert any("NOMAD" in n for n in names)
+    assert any("Matbench" in n for n in names)
 
 def test_api_projects_and_experiment_lifecycle():
     # 1. Create project
     proj_res = client.post("/api/projects", json={
-        "name": "Test Integration Project",
-        "description": "Integration test validation",
-        "research_question": "Does recovery improve reliability?",
-        "hypothesis": "Recovery memory reduces trial failures."
+        "name": "Materials Science Benchmark Project",
+        "description": "Integration test validation for transparent conductors",
+        "research_question": "Does recovery improve materials ML reliability?",
+        "hypothesis": "Recovery memory reduces trial failures in regression benchmarks."
     })
     assert proj_res.status_code == 200
     proj_id = proj_res.json()["id"]
 
-    # 2. Get dataset
+    # 2. Get dataset (NOMAD)
     ds_res = client.get("/api/datasets")
-    ds_id = ds_res.json()[0]["id"]
+    nomad_ds = next(d for d in ds_res.json() if "NOMAD" in d["name"])
 
-    # 3. Create experiment
+    # 3. Create regression experiment
     exp_res = client.post("/api/experiments", json={
         "project_id": proj_id,
-        "dataset_id": ds_id,
-        "name": "Integration Test Run",
-        "task_type": "classification",
-        "baseline_model": "LogisticRegression",
-        "candidate_models": ["LogisticRegression", "DecisionTreeClassifier"],
+        "dataset_id": nomad_ds["id"],
+        "name": "Integration Test Nomad Run",
+        "task_type": "regression",
+        "target_column": "bandgap_energy_ev",
+        "baseline_model": "DummyRegressor",
+        "candidate_models": ["Ridge", "RandomForestRegressor"],
         "cpu_budget_seconds": 15.0
     })
     assert exp_res.status_code == 200
@@ -120,7 +129,7 @@ def test_api_projects_and_experiment_lifecycle():
     # 6. Generate report
     rep_res = client.post("/api/reports/generate", json={
         "project_id": proj_id,
-        "title": "Integration Test Report"
+        "title": "Materials Science Regression Report"
     })
     assert rep_res.status_code == 200
     rep_data = rep_res.json()
@@ -128,25 +137,26 @@ def test_api_projects_and_experiment_lifecycle():
 
 def test_optuna_optimization_study():
     ds_res = client.get("/api/datasets")
-    ds_id = ds_res.json()[0]["id"]
+    nomad_ds = next(d for d in ds_res.json() if "NOMAD" in d["name"])
     proj_res = client.get("/api/projects")
     proj_id = proj_res.json()[0]["id"]
 
     exp_res = client.post("/api/experiments", json={
         "project_id": proj_id,
-        "dataset_id": ds_id,
-        "name": "Optimization Study Test",
-        "task_type": "classification",
-        "baseline_model": "RandomForestClassifier",
-        "candidate_models": ["RandomForestClassifier"]
+        "dataset_id": nomad_ds["id"],
+        "name": "Nomad HPO Study Test",
+        "task_type": "regression",
+        "target_column": "bandgap_energy_ev",
+        "baseline_model": "Ridge",
+        "candidate_models": ["Ridge"]
     })
     exp_id = exp_res.json()["id"]
 
     opt_res = client.post("/api/optimization/start", json={
         "experiment_id": exp_id,
-        "model_name": "RandomForestClassifier",
-        "objective": "f1",
-        "direction": "maximize",
+        "model_name": "Ridge",
+        "objective": "mae",
+        "direction": "minimize",
         "total_trials": 3,
         "cpu_budget_seconds": 10.0
     })

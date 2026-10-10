@@ -51,13 +51,24 @@ export interface Project {
 export interface Dataset {
   id: string;
   name: string;
+  slug?: string;
   description: string;
+  source_name?: string;
+  source_url?: string;
+  license_notes?: string;
+  dataset_version?: string;
   file_path: string;
+  clean_file_path?: string;
   row_count: number;
   col_count: number;
   target_col: string;
+  target_columns?: string[];
   task_type: string;
   feature_names: string;
+  feature_schema?: any;
+  missing_value_summary?: any;
+  quality_report?: any;
+  content_hash?: string;
   summary_stats: string;
   created_at: string;
 }
@@ -67,9 +78,12 @@ export interface Experiment {
   project_id: string;
   dataset_id: string;
   name: string;
+  target_column?: string;
   task_type: string;
   baseline_model: string;
   candidate_models: string;
+  optimization_method?: string;
+  memory_mode?: "baseline" | "success_only" | "failure_recovery" | string;
   preprocessing_config: string;
   evaluation_metrics: string;
   cpu_budget_seconds: number;
@@ -257,8 +271,12 @@ export const api = {
   createProject: (data: Partial<Project>) => fetchJson<Project>("/api/projects", { method: "POST", body: JSON.stringify(data) }),
   getProject: (id: string) => fetchJson<Project>(`/api/projects/${id}`),
   
+  getSupabaseStatus: () => fetchJson<{ configured: boolean; connected: boolean; supabase_url: string | null; service_role_key_present: boolean; tables_verified: Record<string, any>; local_fallback_active: boolean }>("/api/supabase/status"),
   getDatasets: () => fetchJson<Dataset[]>("/api/datasets"),
   getDataset: (id: string) => fetchJson<{ dataset: Dataset; preview: Record<string, any>[] }>(`/api/datasets/${id}`),
+  getDatasetProfile: (id: string) => fetchJson<any>(`/api/datasets/${id}/profile`),
+  getDatasetQuality: (id: string) => fetchJson<any>(`/api/datasets/${id}/quality`),
+  importDataset: (data: { source_type: string; source_uri?: string }) => fetchJson<any>("/api/datasets/import", { method: "POST", body: JSON.stringify(data) }),
   
   getExperiments: (projectId?: string) => fetchJson<Experiment[]>(`/api/experiments${projectId ? `?project_id=${projectId}` : ""}`),
   getRuns: (limit = 100) => fetchJson<Run[]>(`/api/runs?limit=${limit}`),

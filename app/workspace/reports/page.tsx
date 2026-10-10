@@ -186,15 +186,40 @@ export default function ReportsPage() {
         {/* Selected Report Document Viewer */}
         {selectedReport ? (
           <div className="research-card" style={{ display: "flex", flexDirection: "column", gap: 22 }}>
-            <div style={{ borderBottom: "1px solid rgba(226, 239, 229, 0.08)", paddingBottom: 16 }}>
-              <div style={{ font: "500 10px var(--mono)", color: "#B69A72", marginBottom: 6 }}>
-                RESEARCH REPORT ENTITY
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", borderBottom: "1px solid rgba(226, 239, 229, 0.08)", paddingBottom: 16 }}>
+              <div>
+                <div style={{ font: "500 10px var(--mono)", color: "#B69A72", marginBottom: 6 }}>
+                  RESEARCH REPORT ENTITY
+                </div>
+                <h2 style={{ margin: "0 0 10px", font: "600 20px/1.2 var(--body)", color: "#F2F0E8" }}>
+                  {selectedReport.report.title}
+                </h2>
+                <div style={{ font: "400 11px var(--mono)", color: "#7e9084" }}>
+                  QUESTION: <span style={{ color: "#F2F0E8" }}>{selectedReport.report.research_question}</span>
+                </div>
               </div>
-              <h2 style={{ margin: "0 0 10px", font: "600 20px/1.2 var(--body)", color: "#F2F0E8" }}>
-                {selectedReport.report.title}
-              </h2>
-              <div style={{ font: "400 11px var(--mono)", color: "#7e9084" }}>
-                QUESTION: <span style={{ color: "#F2F0E8" }}>{selectedReport.report.research_question}</span>
+
+              <div style={{ display: "flex", gap: 8 }}>
+                <a
+                  href={`http://127.0.0.1:8000/api/reports/${selectedReport.report.id}/export?format=csv`}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="research-button research-button--secondary"
+                  style={{ display: "inline-flex", alignItems: "center", gap: 6, textDecoration: "none" }}
+                >
+                  <Download size={13} />
+                  CSV
+                </a>
+                <a
+                  href={`http://127.0.0.1:8000/api/reports/${selectedReport.report.id}/export?format=json`}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="research-button research-button--secondary"
+                  style={{ display: "inline-flex", alignItems: "center", gap: 6, textDecoration: "none" }}
+                >
+                  <Download size={13} />
+                  JSON
+                </a>
               </div>
             </div>
 
@@ -217,6 +242,55 @@ export default function ReportsPage() {
                 {selectedReport.report.methodology}
               </p>
             </div>
+
+            {/* Measured Benchmark Results */}
+            {(() => {
+              try {
+                const rows = JSON.parse(selectedReport.report.results_table || "[]");
+                if (!rows.length) return null;
+                return (
+                  <div>
+                    <div style={{ font: "600 11px var(--mono)", color: "#B69A72", marginBottom: 10 }}>
+                      EMPIRICAL BENCHMARK MATRIX ({rows.length} RUNS):
+                    </div>
+                    <div style={{ overflowX: "auto", border: "1px solid rgba(226, 239, 229, 0.08)", borderRadius: 3, background: "rgba(5, 7, 6, 0.5)" }}>
+                      <table style={{ width: "100%", borderCollapse: "collapse", font: "400 11px var(--mono)" }}>
+                        <thead>
+                          <tr style={{ borderBottom: "1px solid rgba(226, 239, 229, 0.1)", textAlign: "left", color: "#7e9084" }}>
+                            <th style={{ padding: "8px 10px" }}>MODEL</th>
+                            <th style={{ padding: "8px 10px" }}>STATUS</th>
+                            <th style={{ padding: "8px 10px" }}>MAE (eV)</th>
+                            <th style={{ padding: "8px 10px" }}>RMSE (eV)</th>
+                            <th style={{ padding: "8px 10px" }}>R²</th>
+                            <th style={{ padding: "8px 10px" }}>TRAIN TIME</th>
+                            <th style={{ padding: "8px 10px" }}>RECOVERED</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {rows.map((r: any, idx: number) => (
+                            <tr key={idx} style={{ borderBottom: "1px solid rgba(226, 239, 229, 0.05)", color: "#F2F0E8" }}>
+                              <td style={{ padding: "8px 10px", fontWeight: 600 }}>{r.model_name}</td>
+                              <td style={{ padding: "8px 10px" }}>
+                                <span className={r.status === "COMPLETED" ? "status-tag status-tag--completed" : "status-tag status-tag--failed"}>
+                                  {r.status}
+                                </span>
+                              </td>
+                              <td style={{ padding: "8px 10px", color: "#B69A72", fontWeight: 600 }}>{r.mae ?? "-"}</td>
+                              <td style={{ padding: "8px 10px" }}>{r.rmse ?? "-"}</td>
+                              <td style={{ padding: "8px 10px", color: "#a7e9e8" }}>{r.r2 ?? r.score ?? "-"}</td>
+                              <td style={{ padding: "8px 10px" }}>{r.train_time_ms ? `${r.train_time_ms} ms` : "-"}</td>
+                              <td style={{ padding: "8px 10px" }}>{r.recovery_successful ? "YES (Verified)" : "NO"}</td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                );
+              } catch {
+                return null;
+              }
+            })()}
 
             {/* Claim Verification Layer */}
             <div>

@@ -28,6 +28,11 @@ def build_evidence_linked_report(db: Session, project_id: str, title: str) -> Re
             best_score = score
             best_run = r
 
+        mae = m.get("mae")
+        rmse = m.get("rmse")
+        r2 = m.get("r2")
+        med_ae = m.get("median_abs_error")
+
         results_table.append({
             "run_id": r.id,
             "model_name": r.model_name,
@@ -36,6 +41,10 @@ def build_evidence_linked_report(db: Session, project_id: str, title: str) -> Re
             "inference_latency_us": round(r.inference_latency_us, 2),
             "model_size_kb": round(r.model_size_kb, 2),
             "score": round(score, 4),
+            "mae": round(mae, 4) if mae is not None else None,
+            "rmse": round(rmse, 4) if rmse is not None else None,
+            "r2": round(r2, 4) if r2 is not None else None,
+            "median_abs_error": round(med_ae, 4) if med_ae is not None else None,
             "recovery_attempted": r.recovery_attempted,
             "recovery_successful": r.recovery_successful
         })

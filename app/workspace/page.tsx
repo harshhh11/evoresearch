@@ -155,8 +155,9 @@ export default function WorkspaceOverviewPage() {
 
     const points = runs.map((run) => {
       const parsed = parseMetrics(run.metrics);
-      const score = parsed.f1 ?? parsed.accuracy ?? 0;
-      const error = Math.max(0, 1.0 - score); // Lower is better
+      const isRegression = parsed.mae != null || parsed.rmse != null || parsed.r2 != null;
+      const score = isRegression ? (parsed.r2 ?? (parsed.mae != null ? 1.0 / (1.0 + parsed.mae) : 0)) : (parsed.f1 ?? parsed.accuracy ?? 0);
+      const error = isRegression ? (parsed.mae ?? (parsed.rmse ?? 0.1)) : Math.max(0, 1.0 - score); // Lower is better
 
       let costVal = 0;
       if (costAxis === "latency") {
@@ -252,8 +253,8 @@ export default function WorkspaceOverviewPage() {
     list.sort((a, b) => {
       const mA = parseMetrics(a.metrics);
       const mB = parseMetrics(b.metrics);
-      const scoreA = mA.f1 ?? mA.accuracy ?? 0;
-      const scoreB = mB.f1 ?? mB.accuracy ?? 0;
+      const scoreA = mA.r2 != null ? mA.r2 : (mA.f1 ?? mA.accuracy ?? (mA.mae != null ? -mA.mae : 0));
+      const scoreB = mB.r2 != null ? mB.r2 : (mB.f1 ?? mB.accuracy ?? (mB.mae != null ? -mB.mae : 0));
 
       let valA = 0;
       let valB = 0;
@@ -1031,7 +1032,7 @@ export default function WorkspaceOverviewPage() {
                         )}
                       </td>
                       <td className="font-mono text-[12px] font-semibold text-[#B69A72]">
-                        {(f1 * 100).toFixed(2)}%
+                        {m.mae != null ? `MAE ${m.mae.toFixed(3)}` : (m.r2 != null ? `R² ${m.r2.toFixed(3)}` : `${(f1 * 100).toFixed(2)}%`)}
                       </td>
                       <td className="font-mono text-[11px] text-[#F2F0E8]">
                         {r.inference_latency_us ? `${r.inference_latency_us.toFixed(0)} μs` : "—"}

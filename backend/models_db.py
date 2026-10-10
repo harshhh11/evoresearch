@@ -45,17 +45,84 @@ class Dataset(Base, SerializerMixin):
 
     id = Column(String(36), primary_key=True, default=gen_uuid)
     name = Column(String(255), nullable=False)
+    slug = Column(String(255), default="")
     description = Column(Text, default="")
+    source_name = Column(String(255), default="")
+    source_url = Column(Text, default="")
+    license_notes = Column(Text, default="")
+    dataset_version = Column(String(64), default="1.0.0")
     file_path = Column(String(512), nullable=False)
+    clean_file_path = Column(String(512), default="")
     row_count = Column(Integer, default=0)
     col_count = Column(Integer, default=0)
     target_col = Column(String(128), default="")
-    task_type = Column(String(64), default="classification")  # classification or regression
+    target_columns = Column(Text, default="[]")  # JSON list of targets
+    task_type = Column(String(64), default="regression")  # regression or classification
     feature_names = Column(Text, default="[]")  # JSON list
+    feature_schema = Column(Text, default="[]")  # JSON list of schema objects
+    missing_value_summary = Column(Text, default="{}")  # JSON object
+    quality_report = Column(Text, default="{}")  # JSON object
+    content_hash = Column(String(64), default="")
+    status = Column(String(64), default="ACTIVE")
     summary_stats = Column(Text, default="{}")  # JSON object
     created_at = Column(DateTime, default=utc_now)
+    updated_at = Column(DateTime, default=utc_now, onupdate=utc_now)
 
     experiments = relationship("Experiment", back_populates="dataset")
+    versions = relationship("DatasetVersion", back_populates="dataset", cascade="all, delete-orphan")
+    columns = relationship("DatasetColumn", back_populates="dataset", cascade="all, delete-orphan")
+
+class DatasetVersion(Base, SerializerMixin):
+    __tablename__ = "dataset_versions"
+
+    id = Column(String(36), primary_key=True, default=gen_uuid)
+    dataset_id = Column(String(36), ForeignKey("datasets.id"), nullable=False)
+    version_tag = Column(String(64), default="v1.0.0")
+    content_hash = Column(String(64), default="")
+    row_count = Column(Integer, default=0)
+    column_count = Column(Integer, default=0)
+    schema_snapshot = Column(Text, default="{}")
+    cleaning_version = Column(String(64), default="v1")
+    provenance = Column(Text, default="{}")
+    created_at = Column(DateTime, default=utc_now)
+
+    dataset = relationship("Dataset", back_populates="versions")
+
+class DatasetImportJob(Base, SerializerMixin):
+    __tablename__ = "dataset_import_jobs"
+
+    id = Column(String(36), primary_key=True, default=gen_uuid)
+    dataset_id = Column(String(36), nullable=True)
+    source_type = Column(String(128), default="FILE_UPLOAD")
+    source_uri = Column(Text, default="")
+    status = Column(String(64), default="COMPLETED")  # STARTED, VALIDATING, CLEANING, COMPLETED, FAILED
+    rows_received = Column(Integer, default=0)
+    rows_accepted = Column(Integer, default=0)
+    rows_rejected = Column(Integer, default=0)
+    rows_deduplicated = Column(Integer, default=0)
+    validation_errors = Column(Text, default="[]")
+    cleaning_summary = Column(Text, default="{}")
+    duration_ms = Column(Float, default=0.0)
+    error_details = Column(Text, default="")
+    started_at = Column(DateTime, default=utc_now)
+    completed_at = Column(DateTime, default=utc_now)
+
+class DatasetColumn(Base, SerializerMixin):
+    __tablename__ = "dataset_columns"
+
+    id = Column(String(36), primary_key=True, default=gen_uuid)
+    dataset_id = Column(String(36), ForeignKey("datasets.id"), nullable=False)
+    column_name = Column(String(255), nullable=False)
+    data_type = Column(String(64), default="float64")
+    role = Column(String(32), default="feature")  # feature, target, identifier, metadata
+    units = Column(String(64), default="")
+    missing_pct = Column(Float, default=0.0)
+    distinct_count = Column(Integer, default=0)
+    summary_statistics = Column(Text, default="{}")
+    is_approved = Column(Boolean, default=True)
+    created_at = Column(DateTime, default=utc_now)
+
+    dataset = relationship("Dataset", back_populates="columns")
 
 class Experiment(Base, SerializerMixin):
     __tablename__ = "experiments"
@@ -63,18 +130,26 @@ class Experiment(Base, SerializerMixin):
     id = Column(String(36), primary_key=True, default=gen_uuid)
     project_id = Column(String(36), ForeignKey("projects.id"), nullable=False)
     dataset_id = Column(String(36), ForeignKey("datasets.id"), nullable=False)
+    dataset_version_id = Column(String(36), nullable=True)
     name = Column(String(255), nullable=False)
-    task_type = Column(String(64), default="classification")
-    baseline_model = Column(String(128), default="LogisticRegression")
+    target_column = Column(String(128), default="")
+    task_type = Column(String(64), default="regression")
+    model_family = Column(String(128), default="Ridge")
+    baseline_model = Column(String(128), default="DummyRegressor")
     candidate_models = Column(Text, default="[]")  # JSON list
+    optimization_method = Column(String(64), default="optuna_tpe")
+    memory_mode = Column(String(64), default="baseline")  # baseline, success_only, failure_recovery
+    split_strategy = Column(String(64), default="holdout_train_val")
     preprocessing_config = Column(Text, default="{}")  # JSON object
     evaluation_metrics = Column(Text, default="[]")  # JSON list
-    cpu_budget_seconds = Column(Float, default=30.0)
-    trial_budget = Column(Integer, default=10)
+    cpu_budget_seconds = Column(Float, default=180.0)
+    trial_budget = Column(Integer, default=15)
     random_seed = Column(Integer, default=42)
-    efficiency_constraints = Column(Text, default="{}")  # JSON object e.g. {"max_latency_us": 5000, "max_size_kb": 500}
+    efficiency_constraints = Column(Text, default="{}")
     status = Column(String(64), default="PLANNED")  # PLANNED, QUEUED, RUNNING, EVALUATING, COMPLETED, FAILED, CANCELLED, BUDGET_EXHAUSTED
     error_message = Column(Text, default="")
+    started_at = Column(DateTime, nullable=True)
+    completed_at = Column(DateTime, nullable=True)
     created_at = Column(DateTime, default=utc_now)
     updated_at = Column(DateTime, default=utc_now, onupdate=utc_now)
 
@@ -82,6 +157,74 @@ class Experiment(Base, SerializerMixin):
     dataset = relationship("Dataset", back_populates="experiments")
     runs = relationship("Run", back_populates="experiment", cascade="all, delete-orphan")
     studies = relationship("OptimizationStudy", back_populates="experiment", cascade="all, delete-orphan")
+    metrics = relationship("ExperimentMetric", back_populates="experiment", cascade="all, delete-orphan")
+    artifacts = relationship("ModelArtifact", back_populates="experiment", cascade="all, delete-orphan")
+    predictions = relationship("PredictionRecord", back_populates="experiment", cascade="all, delete-orphan")
+    resource_profiles = relationship("ResourceProfile", back_populates="experiment", cascade="all, delete-orphan")
+
+class ExperimentMetric(Base, SerializerMixin):
+    __tablename__ = "experiment_metrics"
+
+    id = Column(String(36), primary_key=True, default=gen_uuid)
+    experiment_id = Column(String(36), ForeignKey("experiments.id"), nullable=False)
+    metric_name = Column(String(64), nullable=False)
+    metric_value = Column(Float, nullable=False)
+    dataset_split = Column(String(32), default="val")
+    metric_unit = Column(String(32), default="")
+    sample_count = Column(Integer, default=0)
+    created_at = Column(DateTime, default=utc_now)
+
+    experiment = relationship("Experiment", back_populates="metrics")
+
+class ModelArtifact(Base, SerializerMixin):
+    __tablename__ = "model_artifacts"
+
+    id = Column(String(36), primary_key=True, default=gen_uuid)
+    experiment_id = Column(String(36), ForeignKey("experiments.id"), nullable=False)
+    model_family = Column(String(128), nullable=False)
+    artifact_path = Column(String(512), nullable=False)
+    serialization_format = Column(String(32), default="joblib")
+    model_version = Column(String(64), default="1.0.0")
+    checksum = Column(String(64), default="")
+    feature_schema = Column(Text, default="[]")
+    training_duration_ms = Column(Float, default=0.0)
+    package_versions = Column(Text, default="{}")
+    created_at = Column(DateTime, default=utc_now)
+
+    experiment = relationship("Experiment", back_populates="artifacts")
+
+class PredictionRecord(Base, SerializerMixin):
+    __tablename__ = "predictions"
+
+    id = Column(String(36), primary_key=True, default=gen_uuid)
+    experiment_id = Column(String(36), ForeignKey("experiments.id"), nullable=False)
+    sample_reference = Column(String(255), default="")
+    actual_value = Column(Float, nullable=True)
+    predicted_value = Column(Float, nullable=False)
+    residual = Column(Float, nullable=True)
+    uncertainty = Column(Float, nullable=True)
+    split = Column(String(32), default="val")
+    created_at = Column(DateTime, default=utc_now)
+
+    experiment = relationship("Experiment", back_populates="predictions")
+
+class ResourceProfile(Base, SerializerMixin):
+    __tablename__ = "resource_profiles"
+
+    id = Column(String(36), primary_key=True, default=gen_uuid)
+    experiment_id = Column(String(36), ForeignKey("experiments.id"), nullable=False)
+    elapsed_time_s = Column(Float, default=0.0)
+    cpu_time_s = Column(Float, default=0.0)
+    peak_memory_mb = Column(Float, default=0.0)
+    rows_processed = Column(Integer, default=0)
+    model_fit_time_s = Column(Float, default=0.0)
+    preprocessing_time_s = Column(Float, default=0.0)
+    retrieval_latency_ms = Column(Float, default=0.0)
+    total_run_duration_s = Column(Float, default=0.0)
+    is_measured = Column(Boolean, default=True)
+    created_at = Column(DateTime, default=utc_now)
+
+    experiment = relationship("Experiment", back_populates="resource_profiles")
 
 class Run(Base, SerializerMixin):
     __tablename__ = "runs"
@@ -96,7 +239,7 @@ class Run(Base, SerializerMixin):
     model_size_kb = Column(Float, default=0.0)
     peak_memory_mb = Column(Float, default=0.0)
     param_count = Column(Integer, default=0)
-    metrics = Column(Text, default="{}")  # JSON object with accuracy, f1, roc_auc, mae, rmse etc.
+    metrics = Column(Text, default="{}")  # JSON object
     error_message = Column(Text, default="")
     traceback = Column(Text, default="")
     retry_count = Column(Integer, default=0)
@@ -113,11 +256,11 @@ class OptimizationStudy(Base, SerializerMixin):
     id = Column(String(36), primary_key=True, default=gen_uuid)
     experiment_id = Column(String(36), ForeignKey("experiments.id"), nullable=False)
     name = Column(String(255), nullable=False)
-    objective = Column(String(64), default="f1")  # f1, accuracy, roc_auc, mae, rmse, latency_constrained
-    direction = Column(String(32), default="maximize")
+    objective = Column(String(64), default="mae")  # mae, rmse, r2, f1, accuracy
+    direction = Column(String(32), default="minimize")
     total_trials = Column(Integer, default=15)
     completed_trials = Column(Integer, default=0)
-    cpu_budget_seconds = Column(Float, default=30.0)
+    cpu_budget_seconds = Column(Float, default=180.0)
     elapsed_seconds = Column(Float, default=0.0)
     best_trial_id = Column(String(36), default="")
     best_score = Column(Float, nullable=True)
@@ -164,6 +307,19 @@ class FailureRecord(Base, SerializerMixin):
 
     run = relationship("Run", back_populates="failures")
 
+class FailureEvent(Base, SerializerMixin):
+    __tablename__ = "failure_events"
+
+    id = Column(String(36), primary_key=True, default=gen_uuid)
+    experiment_id = Column(String(36), ForeignKey("experiments.id"), nullable=False)
+    failure_category = Column(String(128), nullable=False)
+    error_summary = Column(Text, default="")
+    error_fingerprint = Column(String(255), default="")
+    stage = Column(String(64), default="TRAINING")
+    retry_number = Column(Integer, default=0)
+    sanitized_diagnostics = Column(Text, default="{}")
+    created_at = Column(DateTime, default=utc_now)
+
 class RecoveryMemory(Base, SerializerMixin):
     __tablename__ = "recovery_memory"
 
@@ -185,15 +341,42 @@ class RecoveryMemory(Base, SerializerMixin):
     created_at = Column(DateTime, default=utc_now)
     updated_at = Column(DateTime, default=utc_now, onupdate=utc_now)
 
+class RecoveryAttempt(Base, SerializerMixin):
+    __tablename__ = "recovery_attempts"
+
+    id = Column(String(36), primary_key=True, default=gen_uuid)
+    failure_event_id = Column(String(36), nullable=True)
+    failure_memory_id = Column(String(36), nullable=True)
+    repair_attempt = Column(Text, default="{}")
+    validation_outcome = Column(String(64), default="PASSED")  # PASSED, FAILED, REJECTED
+    execution_cost_ms = Column(Float, default=0.0)
+    resulting_metrics = Column(Text, default="{}")
+    is_successful = Column(Boolean, default=False)
+    created_at = Column(DateTime, default=utc_now)
+
+class ExperimentComparison(Base, SerializerMixin):
+    __tablename__ = "experiment_comparisons"
+
+    id = Column(String(36), primary_key=True, default=gen_uuid)
+    group_name = Column(String(255), nullable=False)
+    dataset_name = Column(String(255), nullable=False)
+    target_name = Column(String(255), nullable=False)
+    participating_experiment_ids = Column(Text, default="[]")
+    matching_configuration = Column(Text, default="{}")
+    metric_deltas = Column(Text, default="{}")
+    budget_seconds = Column(Float, default=180.0)
+    validity_status = Column(String(64), default="VALID")
+    created_at = Column(DateTime, default=utc_now)
+
 class ScientificEvaluation(Base, SerializerMixin):
     __tablename__ = "scientific_evaluations"
 
     id = Column(String(36), primary_key=True, default=gen_uuid)
     project_id = Column(String(36), ForeignKey("projects.id"), nullable=False)
     name = Column(String(255), nullable=False)
-    dataset_name = Column(String(128), default="breast_cancer")
-    task_type = Column(String(64), default="classification")
-    cpu_budget_seconds = Column(Float, default=20.0)
+    dataset_name = Column(String(128), default="NOMAD 2018")
+    task_type = Column(String(64), default="regression")
+    cpu_budget_seconds = Column(Float, default=30.0)
     trials_per_condition = Column(Integer, default=10)
     condition_a_results = Column(Text, default="{}")  # Standard Optuna
     condition_b_results = Column(Text, default="{}")  # Success-only memory
@@ -253,10 +436,10 @@ class ClaimVerification(Base, SerializerMixin):
     id = Column(String(36), primary_key=True, default=gen_uuid)
     report_id = Column(String(36), ForeignKey("reports.id"), nullable=False)
     claim_text = Column(Text, nullable=False)
-    evidence_type = Column(String(64), default="MEASURED_DATA")  # MEASURED_DATA, CITED_PAPER, SYSTEM_SPEC
+    evidence_type = Column(String(64), default="MEASURED_DATA")
     supporting_reference_id = Column(String(128), default="")
     source_metric = Column(String(128), default="")
-    status = Column(String(64), default="SUPPORTED_MEASURED")  # SUPPORTED_MEASURED, SUPPORTED_CITED, PARTIALLY_SUPPORTED, UNSUPPORTED, REQUIRES_REVIEW
+    status = Column(String(64), default="SUPPORTED_MEASURED")
     notes = Column(Text, default="")
     verified_at = Column(DateTime, default=utc_now)
 
@@ -267,8 +450,8 @@ class AuditEvent(Base, SerializerMixin):
 
     id = Column(String(36), primary_key=True, default=gen_uuid)
     project_id = Column(String(36), nullable=True)
-    entity_type = Column(String(64), nullable=False)  # EXPERIMENT, RUN, OPTIMIZATION, MEMORY, REPORT, DATASET
+    entity_type = Column(String(64), nullable=False)
     entity_id = Column(String(64), nullable=False)
-    action = Column(String(64), nullable=False)       # CREATED, STARTED, COMPLETED, FAILED, RECOVERED, VALIDATED, CANCELLED
+    action = Column(String(64), nullable=False)
     details = Column(Text, default="{}")
     timestamp = Column(DateTime, default=utc_now)

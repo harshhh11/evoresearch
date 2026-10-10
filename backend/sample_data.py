@@ -1,17 +1,94 @@
 import os
+import json
+import logging
 import numpy as np
 import pandas as pd
 from sklearn.datasets import (
-    load_breast_cancer, load_wine, load_iris, fetch_california_housing, load_diabetes
+    load_breast_cancer, load_wine, load_iris, load_diabetes
 )
 
+from .adapters.nomad_adapter import NomadDatasetAdapter
+from .adapters.matbench_adapter import MatbenchDatasetAdapter
+
+logger = logging.getLogger("evoresearch.sample_data")
+
 DATA_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "data")
+MAT_DIR = os.path.join(DATA_DIR, "materials")
 os.makedirs(DATA_DIR, exist_ok=True)
+os.makedirs(MAT_DIR, exist_ok=True)
 
 def generate_sample_datasets():
     datasets_meta = []
 
-    # 1. Breast Cancer (Classification)
+    # ============================================================
+    # MATERIALS SCIENCE DATASETS (CORE BENCHMARKS)
+    # ============================================================
+    # 1. NOMAD 2018 — Transparent Conductors
+    nomad_path = os.path.join(MAT_DIR, "nomad2018_train.csv")
+    if os.path.exists(nomad_path):
+        try:
+            nomad_adapter = NomadDatasetAdapter()
+            n_res = nomad_adapter.process(nomad_path)
+            datasets_meta.append({
+                "name": n_res["name"],
+                "slug": n_res["slug"],
+                "description": n_res["description"],
+                "source_name": n_res["source_name"],
+                "source_url": n_res["source_url"],
+                "license_notes": n_res["license_notes"],
+                "dataset_version": n_res["version"],
+                "file_path": n_res["clean_storage_path"],
+                "clean_file_path": n_res["clean_storage_path"],
+                "row_count": n_res["sample_count"],
+                "col_count": n_res["df"].shape[1],
+                "target_col": "bandgap_energy_ev",
+                "target_columns": n_res["target_columns"],
+                "task_type": "regression",
+                "features": [c for c in n_res["df"].columns if c not in n_res["target_columns"] and c != "id"],
+                "feature_schema": n_res["feature_schema"],
+                "missing_value_summary": n_res["missing_value_summary"],
+                "quality_report": n_res["quality_report"],
+                "content_hash": n_res["content_hash"],
+                "summary_stats": n_res["summary_stats"]
+            })
+        except Exception as e:
+            logger.error(f"Error processing NOMAD dataset: {e}")
+
+    # 2. Matbench — Experimental Band Gap (matbench_expt_gap)
+    mb_path = os.path.join(MAT_DIR, "matbench_expt_gap.csv")
+    if os.path.exists(mb_path):
+        try:
+            mb_adapter = MatbenchDatasetAdapter()
+            mb_res = mb_adapter.process(mb_path)
+            datasets_meta.append({
+                "name": mb_res["name"],
+                "slug": mb_res["slug"],
+                "description": mb_res["description"],
+                "source_name": mb_res["source_name"],
+                "source_url": mb_res["source_url"],
+                "license_notes": mb_res["license_notes"],
+                "dataset_version": mb_res["version"],
+                "file_path": mb_res["clean_storage_path"],
+                "clean_file_path": mb_res["clean_storage_path"],
+                "row_count": mb_res["sample_count"],
+                "col_count": mb_res["df"].shape[1],
+                "target_col": "gap expt",
+                "target_columns": mb_res["target_columns"],
+                "task_type": "regression",
+                "features": mb_adapter.FEATURE_NAMES,
+                "feature_schema": mb_res["feature_schema"],
+                "missing_value_summary": mb_res["missing_value_summary"],
+                "quality_report": mb_res["quality_report"],
+                "content_hash": mb_res["content_hash"],
+                "summary_stats": mb_res["summary_stats"]
+            })
+        except Exception as e:
+            logger.error(f"Error processing Matbench dataset: {e}")
+
+    # ============================================================
+    # TABULAR EDGE & MEDICAL BENCHMARKS (SUPPORTING SUITE)
+    # ============================================================
+    # 3. Breast Cancer (Classification)
     bc_path = os.path.join(DATA_DIR, "breast_cancer.csv")
     if not os.path.exists(bc_path):
         bc = load_breast_cancer(as_frame=True)
@@ -21,113 +98,24 @@ def generate_sample_datasets():
         bc_df = pd.read_csv(bc_path)
     datasets_meta.append({
         "name": "Breast Cancer Diagnostic",
+        "slug": "breast-cancer-diagnostic",
         "description": "Standard binary classification benchmark for edge diagnostic modeling (569 samples, 30 features).",
         "file_path": bc_path,
+        "clean_file_path": bc_path,
         "row_count": len(bc_df),
         "col_count": len(bc_df.columns),
         "target_col": "target",
+        "target_columns": ["target"],
         "task_type": "classification",
-        "features": [c for c in bc_df.columns if c != "target"]
+        "features": [c for c in bc_df.columns if c != "target"],
+        "feature_schema": [],
+        "missing_value_summary": {"total_cells_missing": 0},
+        "quality_report": {"quality_score": 100.0},
+        "content_hash": "",
+        "summary_stats": {}
     })
 
-    # 2. Wine Recognition (Multi-class Classification)
-    wine_path = os.path.join(DATA_DIR, "wine.csv")
-    if not os.path.exists(wine_path):
-        w = load_wine(as_frame=True)
-        w_df = w.frame
-        w_df.to_csv(wine_path, index=False)
-    else:
-        w_df = pd.read_csv(wine_path)
-    datasets_meta.append({
-        "name": "Wine Cultivar Profiling",
-        "description": "Multi-class chemical analysis benchmark with 13 continuous attributes and 3 classes.",
-        "file_path": wine_path,
-        "row_count": len(w_df),
-        "col_count": len(w_df.columns),
-        "target_col": "target",
-        "task_type": "classification",
-        "features": [c for c in w_df.columns if c != "target"]
-    })
-
-    # 3. Iris Flora (Compact Classification)
-    iris_path = os.path.join(DATA_DIR, "iris.csv")
-    if not os.path.exists(iris_path):
-        ir = load_iris(as_frame=True)
-        ir_df = ir.frame
-        ir_df.to_csv(iris_path, index=False)
-    else:
-        ir_df = pd.read_csv(iris_path)
-    datasets_meta.append({
-        "name": "Iris Flower Morphology",
-        "description": "Ultra-compact benchmark (150 rows, 4 features) suited for micro-controller latency tests.",
-        "file_path": iris_path,
-        "row_count": len(ir_df),
-        "col_count": len(ir_df.columns),
-        "target_col": "target",
-        "task_type": "classification",
-        "features": [c for c in ir_df.columns if c != "target"]
-    })
-
-    # 4. Housing Valuation (Deterministic Offline Synthetic Tabular Regression)
-    housing_path = os.path.join(DATA_DIR, "california_housing.csv")
-    if not os.path.exists(housing_path):
-        np.random.seed(42)
-        n_h = 600
-        med_inc = np.random.uniform(1.5, 9.0, n_h)
-        house_age = np.random.uniform(5.0, 50.0, n_h)
-        ave_rooms = np.random.uniform(3.0, 8.0, n_h)
-        ave_bedrms = np.random.uniform(0.8, 2.2, n_h)
-        population = np.random.uniform(300, 3000, n_h)
-        ave_occup = np.random.uniform(2.0, 5.0, n_h)
-        latitude = np.random.uniform(32.5, 42.0, n_h)
-        longitude = np.random.uniform(-124.0, -114.0, n_h)
-        # target
-        med_val = 0.4 * med_inc + 0.01 * house_age - 0.05 * ave_rooms + np.random.normal(0, 0.2, n_h) + 1.2
-        ch_df = pd.DataFrame({
-            "MedInc": med_inc,
-            "HouseAge": house_age,
-            "AveRooms": ave_rooms,
-            "AveBedrms": ave_bedrms,
-            "Population": population,
-            "AveOccup": ave_occup,
-            "Latitude": latitude,
-            "Longitude": longitude,
-            "MedHouseVal": np.clip(med_val, 0.5, 5.0)
-        })
-        ch_df.to_csv(housing_path, index=False)
-    else:
-        ch_df = pd.read_csv(housing_path)
-    datasets_meta.append({
-        "name": "California Housing Valuation",
-        "description": "Tabular regression task with 8 spatial and demographic attributes (1,000 sample subset).",
-        "file_path": housing_path,
-        "row_count": len(ch_df),
-        "col_count": len(ch_df.columns),
-        "target_col": "MedHouseVal",
-        "task_type": "regression",
-        "features": [c for c in ch_df.columns if c != "MedHouseVal"]
-    })
-
-    # 5. Diabetes Disease Progression (Regression)
-    diab_path = os.path.join(DATA_DIR, "diabetes.csv")
-    if not os.path.exists(diab_path):
-        db_data = load_diabetes(as_frame=True)
-        db_df = db_data.frame
-        db_df.to_csv(diab_path, index=False)
-    else:
-        db_df = pd.read_csv(diab_path)
-    datasets_meta.append({
-        "name": "Diabetes Quantitative Progression",
-        "description": "Tabular regression dataset with 10 physiological baseline variables (442 samples).",
-        "file_path": diab_path,
-        "row_count": len(db_df),
-        "col_count": len(db_df.columns),
-        "target_col": "target",
-        "task_type": "regression",
-        "features": [c for c in db_df.columns if c != "target"]
-    })
-
-    # 6. Edge Sensor Faults (Synthetic with missing values & categorical tag to test failure recovery)
+    # 4. Edge Sensor Faults (Synthetic with missing values & categorical tag)
     fault_path = os.path.join(DATA_DIR, "edge_sensor_faults.csv")
     if not os.path.exists(fault_path):
         np.random.seed(42)
@@ -137,11 +125,8 @@ def generate_sample_datasets():
         vibration = np.random.exponential(2.5, n)
         region = np.random.choice(["Node-North", "Node-South", "Node-West"], size=n)
         
-        # Inject 8% random missing values to test failure recovery
         mask_nan = np.random.rand(n) < 0.08
         sensor_a[mask_nan] = np.nan
-
-        # Target: fault triggered if vibration > 4.0 or sensor_a > 65
         fault = ((vibration > 4.0) | (sensor_a > 65)).astype(int)
         
         fault_df = pd.DataFrame({
@@ -156,13 +141,21 @@ def generate_sample_datasets():
         fault_df = pd.read_csv(fault_path)
     datasets_meta.append({
         "name": "Edge Sensor Telemetry (Faults & NaNs)",
+        "slug": "edge-sensor-telemetry",
         "description": "Industrial IoT benchmark containing missing sensor telemetry and categorical node gateways for failure recovery testing.",
         "file_path": fault_path,
+        "clean_file_path": fault_path,
         "row_count": len(fault_df),
         "col_count": len(fault_df.columns),
         "target_col": "fault_detected",
+        "target_columns": ["fault_detected"],
         "task_type": "classification",
-        "features": [c for c in fault_df.columns if c != "fault_detected"]
+        "features": [c for c in fault_df.columns if c != "fault_detected"],
+        "feature_schema": [],
+        "missing_value_summary": {"total_cells_missing": int(fault_df.isnull().sum().sum())},
+        "quality_report": {"quality_score": 92.0},
+        "content_hash": "",
+        "summary_stats": {}
     })
 
     return datasets_meta
