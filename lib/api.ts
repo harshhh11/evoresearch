@@ -121,9 +121,11 @@ export interface Run {
   created_at: string;
   experiment_name?: string;
   dataset_name?: string;
+  dataset_id?: string;
   target_col?: string;
   task_type?: string;
 }
+
 
 export interface FailureRecord {
   id: string;
@@ -309,6 +311,11 @@ export const api = {
   
   // EvolveX Advanced Capabilities
   getAIStatus: () => fetchJson<{ status: string; active_provider: string; active_model: string; is_local_only: boolean; has_openai_key: boolean }>("/api/ai/status"),
+  updateAIConfig: (data: { provider?: string; model?: string; openai_api_key?: string }) =>
+    fetchJson<{ status: string; active_provider: string; active_model: string; is_local_only: boolean; has_openai_key: boolean }>("/api/ai/config", {
+      method: "POST",
+      body: JSON.stringify(data),
+    }),
   generateAICompletion: (prompt: string, system_prompt?: string, use_cache = true) =>
     fetchJson<{ provider: string; model: string; content: string; latency_ms: number; cached?: boolean; tokens_used?: number }>("/api/ai/complete", {
       method: "POST",
@@ -317,6 +324,7 @@ export const api = {
   getCacheStats: () => fetchJson<{ cached_entries: number; total_requests: number; total_hits: number; hit_ratio_pct: number; savings_ms_est: number }>("/api/cache/stats"),
   clearCache: () => fetchJson<{ status: string }>("/api/cache/clear", { method: "POST" }),
   maskSensitiveData: (text: string) => fetchJson<{ masked_text: string; masking_stats: Record<string, any> }>("/api/masking/mask", { method: "POST", body: JSON.stringify({ text }) }),
+
   evaluateJudgeReports: (report_a_id: string, report_b_id: string) =>
     fetchJson<any>("/api/judge/evaluate", { method: "POST", body: JSON.stringify({ report_a_id, report_b_id }) }),
   sendReportEmail: (data: { report_id: string; recipient_email: string; subject?: string; message?: string; confirm_authorized: boolean }) =>

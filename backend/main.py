@@ -1171,7 +1171,7 @@ def get_audit_timeline(limit: int = 50, db: Session = Depends(get_db)):
     return [a.to_dict() for a in db.query(AuditEvent).order_by(desc(AuditEvent.timestamp)).limit(limit).all()]
 
 # ----------------- EVOLVEX ADVANCED CAPABILITIES -----------------
-from .ai_service import get_ai_status, generate_scientific_completion
+from .ai_service import get_ai_status, generate_scientific_completion, config as ai_config
 from .cache_manager import cache_manager
 from .data_masker import masker
 from .judge_agent import judge_agent
@@ -1181,9 +1181,24 @@ class AIPromptRequest(BaseModel):
     system_prompt: Optional[str] = None
     use_cache: bool = True
 
+class AIConfigUpdateRequest(BaseModel):
+    provider: Optional[str] = None
+    model: Optional[str] = None
+    openai_api_key: Optional[str] = None
+
 @app.get("/api/ai/status")
 def ai_status():
     return get_ai_status()
+
+@app.post("/api/ai/config")
+def update_ai_config(req: AIConfigUpdateRequest):
+    ai_config.update_config(
+        provider=req.provider,
+        model=req.model,
+        openai_api_key=req.openai_api_key
+    )
+    return get_ai_status()
+
 
 @app.post("/api/ai/complete")
 def ai_complete(req: AIPromptRequest):

@@ -17,6 +17,14 @@ class AIProviderConfig:
         self.temperature = float(os.environ.get("AI_TEMPERATURE", "0.2"))
         self.timeout_seconds = int(os.environ.get("AI_TIMEOUT_SECONDS", "30"))
 
+    def update_config(self, provider: Optional[str] = None, model: Optional[str] = None, openai_api_key: Optional[str] = None):
+        if provider:
+            self.provider = provider
+        if model:
+            self.model = model
+        if openai_api_key is not None:
+            self.openai_api_key = openai_api_key
+
     def to_dict(self) -> Dict[str, Any]:
         return {
             "provider": self.provider,
@@ -29,6 +37,7 @@ class AIProviderConfig:
         }
 
 config = AIProviderConfig()
+
 
 class AICompletionResult(BaseModel):
     provider: str
