@@ -301,4 +301,17 @@ export const api = {
   getReport: (id: string) => fetchJson<{ report: Report; claims: ClaimVerification[] }>(`/api/reports/${id}`),
   
   getAudit: (limit = 50) => fetchJson<AuditEvent[]>(`/api/audit?limit=${limit}`),
+  
+  // EvolveX Advanced Capabilities
+  getAIStatus: () => fetchJson<{ status: string; active_provider: string; active_model: string; is_local_only: boolean; has_openai_key: boolean }>("/api/ai/status"),
+  generateAICompletion: (prompt: string, system_prompt?: string, use_cache = true) =>
+    fetchJson<{ provider: string; model: string; content: string; latency_ms: number; cached?: boolean; tokens_used?: number }>("/api/ai/complete", {
+      method: "POST",
+      body: JSON.stringify({ prompt, system_prompt, use_cache })
+    }),
+  getCacheStats: () => fetchJson<{ cached_entries: number; total_requests: number; total_hits: number; hit_ratio_pct: number; savings_ms_est: number }>("/api/cache/stats"),
+  clearCache: () => fetchJson<{ status: string }>("/api/cache/clear", { method: "POST" }),
+  maskSensitiveData: (text: string) => fetchJson<{ masked_text: string; masking_stats: Record<string, any> }>("/api/masking/mask", { method: "POST", body: JSON.stringify({ text }) }),
+  evaluateJudgeReports: (report_a_id: string, report_b_id: string) =>
+    fetchJson<any>("/api/judge/evaluate", { method: "POST", body: JSON.stringify({ report_a_id, report_b_id }) }),
 };

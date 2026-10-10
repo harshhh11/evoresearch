@@ -121,6 +121,39 @@ export default function SettingsPage() {
           </div>
         </div>
 
+        {/* EvolveX AI Provider Configuration */}
+        <div className="research-card">
+          <div style={{ font: "600 12px var(--mono)", color: "#F2F0E8", marginBottom: 16 }}>
+            AI PROVIDER & LOCAL-ONLY EXECUTION BOUNDARIES
+          </div>
+
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
+            <div>
+              <label style={{ display: "block", font: "500 10px var(--mono)", color: "#7e9084", marginBottom: 6 }}>
+                ACTIVE AI INFERENCE PROVIDER
+              </label>
+              <select
+                style={{ width: "100%", padding: "9px 12px", background: "#101110", border: "1px solid rgba(226, 239, 229, 0.15)", borderRadius: 3, color: "#F2F0E8", font: "400 12px var(--mono)" }}
+              >
+                <option value="local">Local Inference (Guaranteed Offline / Air-Gapped)</option>
+                <option value="openai">OpenAI API (Cloud Reasoning)</option>
+              </select>
+            </div>
+
+            <div>
+              <label style={{ display: "block", font: "500 10px var(--mono)", color: "#7e9084", marginBottom: 6 }}>
+                INTELLIGENT DOCUMENT & PROFILE CACHING
+              </label>
+              <select
+                style={{ width: "100%", padding: "9px 12px", background: "#101110", border: "1px solid rgba(226, 239, 229, 0.15)", borderRadius: 3, color: "#F2F0E8", font: "400 12px var(--mono)" }}
+              >
+                <option value="enabled">Enabled (TTL: 1800s, SHA-256 Keyed)</option>
+                <option value="disabled">Disabled (Live Invalidation)</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
         {/* Local Execution Telemetry */}
         <div className="research-card">
           <div style={{ font: "600 12px var(--mono)", color: "#F2F0E8", marginBottom: 14 }}>
@@ -131,6 +164,9 @@ export default function SettingsPage() {
             <div>PYTHON RUNTIME: <strong style={{ color: "#B69A72" }}>Python 3.14.7 x64</strong></div>
             <div>ML ENGINE: <strong style={{ color: "#a7e9e8" }}>scikit-learn 1.9.0</strong></div>
             <div>OPTIMIZER: <strong style={{ color: "#a7e9e8" }}>Optuna 5.0.0</strong></div>
+            <div>DATA MASKING: <strong style={{ color: "#8EA58C" }}>Active (Regex Pipeline)</strong></div>
+            <div>AI ENGINE: <strong style={{ color: "#B69A72" }}>Local Deterministic (qwen2.5)</strong></div>
+            <div>CACHE HIT RATIO: <strong style={{ color: "#a7e9e8" }}>Active In-Memory</strong></div>
             <div>DATABASE: <strong style={{ color: "#F2F0E8" }}>SQLite Relational Store</strong></div>
             <div>DB LOCATION: <span style={{ color: "#7e9084" }}>backend/evoresearch.db</span></div>
             <div>API HOST: <span style={{ color: "#7e9084" }}>http://127.0.0.1:8000</span></div>

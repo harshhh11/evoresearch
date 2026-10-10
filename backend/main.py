@@ -1076,3 +1076,67 @@ def export_report(report_id: str, format: str = "json", db: Session = Depends(ge
 @app.get("/api/audit")
 def get_audit_timeline(limit: int = 50, db: Session = Depends(get_db)):
     return [a.to_dict() for a in db.query(AuditEvent).order_by(desc(AuditEvent.timestamp)).limit(limit).all()]
+
+# ----------------- EVOLVEX ADVANCED CAPABILITIES -----------------
+from .ai_service import get_ai_status, generate_scientific_completion
+from .cache_manager import cache_manager
+from .data_masker import masker
+from .judge_agent import judge_agent
+
+class AIPromptRequest(BaseModel):
+    prompt: str
+    system_prompt: Optional[str] = None
+    use_cache: bool = True
+
+@app.get("/api/ai/status")
+def ai_status():
+    return get_ai_status()
+
+@app.post("/api/ai/complete")
+def ai_complete(req: AIPromptRequest):
+    # Check cache first
+    cache_key = cache_manager.compute_key("ai_completion", req.prompt)
+    if req.use_cache:
+        cached_res = cache_manager.get(cache_key)
+        if cached_res:
+            cached_res["cached"] = True
+            return cached_res
+
+    res = generate_scientific_completion(req.prompt, req.system_prompt, req.use_cache)
+    data = res.model_dump()
+    cache_manager.set(cache_key, data, ttl_seconds=1800)
+    return data
+
+@app.get("/api/cache/stats")
+def get_cache_statistics():
+    return cache_manager.get_stats()
+
+@app.post("/api/cache/clear")
+def clear_cache():
+    cache_manager.invalidate()
+    return {"status": "cleared"}
+
+class MaskRequest(BaseModel):
+    text: str
+
+@app.post("/api/masking/mask")
+def mask_sensitive_data(req: MaskRequest):
+    masked_text, stats = masker.mask_text(req.text)
+    return {
+        "masked_text": masked_text,
+        "masking_stats": stats
+    }
+
+class JudgeEvaluateRequest(BaseModel):
+    report_a_id: str
+    report_b_id: str
+
+@app.post("/api/judge/evaluate")
+def evaluate_reports_with_judge(req: JudgeEvaluateRequest, db: Session = Depends(get_db)):
+    rep_a = db.query(Report).filter(Report.id == req.report_a_id).first()
+    rep_b = db.query(Report).filter(Report.id == req.report_b_id).first()
+    if not rep_a or not rep_b:
+        raise HTTPException(status_code=404, detail="One or both reports not found for evaluation.")
+    
+    verdict = judge_agent.evaluate_reports(rep_a.to_dict(), rep_b.to_dict())
+    return verdict

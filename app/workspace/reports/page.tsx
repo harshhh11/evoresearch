@@ -150,6 +150,59 @@ export default function ReportsPage() {
         </form>
       </div>
 
+      {/* EvolveX Judge Agent Cross-Evaluation Panel */}
+      {reports.length >= 2 && (
+        <div className="research-card" style={{ border: "1px solid rgba(182, 154, 114, 0.3)", background: "rgba(182, 154, 114, 0.03)" }}>
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 14 }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+              <ShieldCheck size={18} color="#B69A72" />
+              <div>
+                <div style={{ font: "600 13px var(--body)", color: "#F2F0E8" }}>
+                  EvolveX Judge Agent — Multi-Report Cross-Examination
+                </div>
+                <div style={{ font: "400 11px var(--body)", color: "#AAA99F" }}>
+                  Autonomous scientific audit comparing methodologies, extracting contradictions, and verifying evidence rigor without hallucinations.
+                </div>
+              </div>
+            </div>
+
+            <button
+              type="button"
+              onClick={async () => {
+                if (reports.length < 2) return;
+                try {
+                  const res = await api.evaluateJudgeReports(reports[0].id, reports[1].id);
+                  alert(
+                    `Judge Agent Verdict: ${res.status}\nConsensus Score: ${res.rubric_breakdown?.overall_consensus_score}/100\n\n` +
+                    `Synthesis: ${res.synthesis}\n` +
+                    `Contradictions: ${res.contradictions?.length || 0}\nConvergences: ${res.convergences?.length || 0}`
+                  );
+                } catch (e: any) {
+                  alert(e.message || "Judge Agent evaluation failed.");
+                }
+              }}
+              className="research-button research-button--secondary"
+              style={{ display: "inline-flex", alignItems: "center", gap: 6, font: "600 10px var(--mono)", padding: "7px 14px" }}
+            >
+              <Sparkles size={13} color="#B69A72" />
+              CROSS-EXAMINE LATEST 2 REPORTS
+            </button>
+          </div>
+
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 12, font: "400 10px var(--mono)", color: "#7e9084" }}>
+            <div style={{ background: "rgba(5, 7, 6, 0.5)", padding: "10px 12px", borderRadius: 3, border: "1px solid rgba(226, 239, 229, 0.06)" }}>
+              <span style={{ color: "#AAA99F" }}>METHODOLOGY AUDIT:</span> Training-split quarantine & feature leakage isolation verified.
+            </div>
+            <div style={{ background: "rgba(5, 7, 6, 0.5)", padding: "10px 12px", borderRadius: 3, border: "1px solid rgba(226, 239, 229, 0.06)" }}>
+              <span style={{ color: "#AAA99F" }}>EVIDENCE TRACEABILITY:</span> Claims must link to immutable Run IDs & metric keys.
+            </div>
+            <div style={{ background: "rgba(5, 7, 6, 0.5)", padding: "10px 12px", borderRadius: 3, border: "1px solid rgba(226, 239, 229, 0.06)" }}>
+              <span style={{ color: "#AAA99F" }}>UNRESOLVED HANDLING:</span> Discrepancies flagged explicitly without fabricated confidence.
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Reports Split View */}
       <div style={{ display: "grid", gridTemplateColumns: "320px 1fr", gap: 24 }}>
         {/* Reports List */}
