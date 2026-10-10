@@ -1,0 +1,11 @@
+packages:
+  - .
+
+# No dependency in this pinned frontend stack requires lifecycle compilation.
+# If one becomes required, explicitly review and allow that package before rebuilding.
+allowBuilds: {}
+
+minimumReleaseAgeExclude:
+  - framer-motion@14.1.0
+  - motion-dom@14.1.0
+  - motion-utils@14.1.0
