@@ -37,9 +37,9 @@ export function FloatingNavigation({ activeStage }: FloatingNavigationProps) {
       </nav>
 
       <div className="nav-actions">
-        <span className="system-indicator"><i aria-hidden="true" /> DEMO / NO LIVE RUNS</span>
-        <a className="nav-cta" href="#workspace">
-          <span>OPEN WORKSPACE</span><span aria-hidden="true">↗</span>
+        <span className="system-indicator"><i aria-hidden="true" /> EVORESEARCH ENGINE READY</span>
+        <a className="nav-cta" href="/workspace">
+          <span>ENTER WORKSPACE</span><span aria-hidden="true">↗</span>
         </a>
       </div>
     </motion.header>

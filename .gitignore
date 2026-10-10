@@ -6,3 +6,7 @@ build/
 .env*
 !.env.example
 .vercel/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+backend/*.db
