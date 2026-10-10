@@ -4,7 +4,7 @@ from typing import Dict, Any, List, Tuple
 class SensitiveDataMasker:
     PATTERNS = {
         "EMAIL": re.compile(r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,7}\b'),
-        "API_KEY": re.compile(r'\b(?:sk-[a-zA-Z0-9]{20,}|eyJ[a-zA-Z0-9_-]{20,})\b'),
+        "API_KEY": re.compile(r'\b(?:sk-[a-zA-Z0-9_-]{20,}|eyJ[a-zA-Z0-9_-]{20,})\b'),
         "IP_ADDRESS": re.compile(r'\b(?:\d{1,3}\.){3}\d{1,3}\b'),
         "SSN_ID": re.compile(r'\b\d{3}-\d{2}-\d{4}\b'),
         "INTERNAL_TOKEN": re.compile(r'\b(?:ghp_[a-zA-Z0-9]{30,}|secret_[a-zA-Z0-9]{16,})\b')
