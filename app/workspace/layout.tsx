@@ -31,16 +31,18 @@ const navigationGroups = [
     group: "EXPERIMENTS & DATA",
     items: [
       { name: "Overview Canvas", href: "/workspace", icon: LayoutDashboard },
-      { name: "Analytics & Trends", href: "/workspace/analytics", icon: BarChart3 },
+      { name: "Evolution Timeline", href: "/workspace/evolution", icon: Terminal },
       { name: "Run Experiment", href: "/workspace/experiments/new", icon: FlaskConical },
+      { name: "Analytics & Trends", href: "/workspace/analytics", icon: BarChart3 },
       { name: "Materials Datasets", href: "/workspace/datasets", icon: Database },
     ],
   },
   {
     group: "SCIENTIFIC INTELLIGENCE",
     items: [
-      { name: "Research Knowledge Graph", href: "/workspace/knowledge-graph", icon: Network },
+      { name: "Failure Autopsy", href: "/workspace/autopsy", icon: ShieldCheck },
       { name: "Failure Memory", href: "/workspace/memory", icon: BrainCircuit },
+      { name: "Research Knowledge Graph", href: "/workspace/knowledge-graph", icon: Network },
       { name: "ARINA Assistant", href: "/workspace/assistant", icon: Sparkles },
       { name: "Literature & Insights", href: "/workspace/papers", icon: BookOpen },
     ],
@@ -48,6 +50,7 @@ const navigationGroups = [
   {
     group: "EDGE RUNTIME",
     items: [
+      { name: "System Status & Telemetry", href: "/workspace/status", icon: Activity },
       { name: "Resource Profiler", href: "/workspace/optimization", icon: Cpu },
       { name: "Scientific Reports", href: "/workspace/reports", icon: FileText },
       { name: "Environment Settings", href: "/workspace/settings", icon: Settings },

@@ -1593,3 +1593,99 @@ def run_workflow_pipeline(req: WorkflowRunRequest, db: Session = Depends(get_db)
         "execution_trace": executed_order,
         "task_results": task_results
     }
+
+
+# =====================================================================
+# EvolveX Dedicated Endpoints (Readiness, Observability, Evolution, Autopsy, Upload)
+# =====================================================================
+
+from .readiness_service import ReadinessEvaluator
+from .observability_service import ObservabilityService
+from .evolution_service import EvolutionService
+from .autopsy_service import AutopsyService
+
+readiness_evaluator = ReadinessEvaluator()
+observability_service = ObservabilityService()
+evolution_service = EvolutionService()
+autopsy_service = AutopsyService()
+
+@app.get("/api/readiness")
+def get_readiness_score(db: Session = Depends(get_db)):
+    """Evidence-based Prototype Readiness Score (0-100) calculated from verifiable test and telemetry data."""
+    return readiness_evaluator.evaluate(db)
+
+@app.get("/api/system/observability")
+def get_system_telemetry(db: Session = Depends(get_db)):
+    """Full hardware, database, AI Gateway, cache, and ML service observability metrics."""
+    return observability_service.get_system_telemetry(db)
+
+@app.get("/api/evolution/timeline")
+def get_evolution_timeline(db: Session = Depends(get_db)):
+    """Chronological research evolution timeline demonstrating closed-loop learning."""
+    return evolution_service.get_timeline(db)
+
+class EvolutionStepRequest(BaseModel):
+    step_index: int
+
+@app.post("/api/evolution/run-step")
+def execute_evolution_step(req: EvolutionStepRequest, db: Session = Depends(get_db)):
+    """Executes or advances a specific step of the research evolution loop."""
+    return evolution_service.execute_evolution_step(db, req.step_index)
+
+class AutopsyRequest(BaseModel):
+    run_id: Optional[str] = None
+    error_message: Optional[str] = None
+    model_name: Optional[str] = None
+    traceback: Optional[str] = None
+
+@app.post("/api/autopsy/diagnose")
+def diagnose_autopsy(req: AutopsyRequest, db: Session = Depends(get_db)):
+    """Performs structured, evidence-based failure diagnostics and verified repairs."""
+    err_dict = None
+    if req.error_message:
+        err_dict = {
+            "error_message": req.error_message,
+            "model_name": req.model_name or "Ridge",
+            "traceback": req.traceback or ""
+        }
+    return autopsy_service.diagnose_run(db, run_id=req.run_id, error_details=err_dict)
+
+@app.post("/api/upload/research-file")
+async def upload_research_file(file: UploadFile = File(...)):
+    """Uploads and parses a research document or tabular dataset (CSV, JSON, TXT)."""
+    contents = await file.read()
+    filename = file.filename or "uploaded_file"
+    file_size_kb = round(len(contents) / 1024, 2)
+    ext = filename.split(".")[-1].lower() if "." in filename else ""
+    
+    parsed_info = {
+        "filename": filename,
+        "extension": ext,
+        "size_kb": file_size_kb,
+        "status": "PARSED_SUCCESSFULLY",
+        "preview_columns": [],
+        "num_rows": 0,
+        "summary": ""
+    }
+    
+    try:
+        if ext == "csv":
+            import pandas as pd
+            df = pd.read_csv(io.BytesIO(contents))
+            parsed_info["num_rows"] = len(df)
+            parsed_info["preview_columns"] = list(df.columns[:8])
+            parsed_info["summary"] = f"Tabular dataset with {len(df)} rows and {len(df.columns)} columns."
+        elif ext == "json":
+            data = json.loads(contents.decode("utf-8", errors="ignore"))
+            parsed_info["summary"] = f"JSON payload with {len(data) if isinstance(data, list) else len(data.keys())} items."
+        else:
+            text = contents.decode("utf-8", errors="ignore")
+            lines = text.splitlines()
+            parsed_info["num_rows"] = len(lines)
+            parsed_info["summary"] = f"Research document with {len(lines)} lines and {len(text.split())} words."
+    except Exception as e:
+        parsed_info["status"] = "PARSING_ERROR"
+        parsed_info["summary"] = f"File uploaded ({file_size_kb} KB), but parse preview failed: {str(e)}"
+        
+    return parsed_info
+

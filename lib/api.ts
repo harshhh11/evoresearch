@@ -382,5 +382,53 @@ export const api = {
       method: "POST",
       body: JSON.stringify(data),
     }),
+
+  // EvolveX Core Endpoints
+  getReadinessScore: () => fetchJson<{
+    readiness_score: number;
+    total_possible: number;
+    calculated_at: string;
+    capabilities: Array<{
+      id: string;
+      name: string;
+      weight: number;
+      earned: number;
+      status: string;
+      evidence: string;
+      subtests: Array<{ name: string; passed: boolean; pts: number }>;
+    }>;
+  }>("/api/readiness"),
+
+  getSystemObservability: () => fetchJson<any>("/api/system/observability"),
+
+  getEvolutionTimeline: () => fetchJson<{
+    current_iteration: number;
+    total_steps: number;
+    timeline: any[];
+    learning_evidence_summary: string;
+  }>("/api/evolution/timeline"),
+
+  runEvolutionStep: (step_index: number) => fetchJson<any>("/api/evolution/run-step", {
+    method: "POST",
+    body: JSON.stringify({ step_index }),
+  }),
+
+  diagnoseAutopsy: (data: { run_id?: string; error_message?: string; model_name?: string; traceback?: string }) => fetchJson<any>("/api/autopsy/diagnose", {
+    method: "POST",
+    body: JSON.stringify(data),
+  }),
+
+  uploadResearchFile: async (file: File): Promise<any> => {
+    const formData = new FormData();
+    formData.append("file", file);
+    const res = await fetch("/api/upload/research-file", {
+      method: "POST",
+      body: formData,
+    });
+    if (!res.ok) {
+      throw new Error(`Upload failed with status ${res.status}`);
+    }
+    return res.json();
+  },
 };
 
