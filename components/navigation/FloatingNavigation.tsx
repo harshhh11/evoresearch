@@ -44,7 +44,7 @@ export function FloatingNavigation({ activeStage }: FloatingNavigationProps) {
             onClick={() => setMobileOpen(false)}
           >
             <div className="nav-brand-icon" aria-hidden="true">
-              <Image src="/evo-mark.svg" alt="" width={22} height={22} priority />
+              <Image src="/evo-mark.svg" alt="" width={16} height={16} priority />
             </div>
             <span className="nav-brand-text">EVORESEARCH</span>
           </a>
