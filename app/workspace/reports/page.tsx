@@ -39,6 +39,11 @@ export default function ReportsPage() {
   const [emailSuccess, setEmailSuccess] = useState<string | null>(null);
   const [emailError, setEmailError] = useState<string | null>(null);
 
+  // ARINA AI Executive Synthesis
+  const [isSynthesizing, setIsSynthesizing] = useState(false);
+  const [aiSynthesisText, setAiSynthesisText] = useState<string | null>(null);
+  const [synthesisModel, setSynthesisModel] = useState<string>("gpt-5.6-luna");
+
 
   const loadReports = async () => {
     try {
@@ -101,13 +106,20 @@ export default function ReportsPage() {
         message: emailNotes || undefined,
         confirm_authorized: emailAuthorized,
       });
-      setEmailSuccess(`Report dispatched securely to ${recipientEmail} (ID: ${res.email_id.slice(0, 8)}).`);
-      setTimeout(() => {
-        setEmailModalOpen(false);
-        setEmailSuccess(null);
-        setRecipientEmail("");
-        setEmailAuthorized(false);
-      }, 2500);
+      const shortId = (res?.email_id || "").slice(0, 8) || "N/A";
+      if (res?.status === "CONFIGURATION_REQUIRED") {
+        setEmailError(
+          "SMTP configuration required: Set SMTP_HOST, SMTP_PORT, SMTP_USER, and SMTP_PASS in .env to enable live outbound SMTP transmission."
+        );
+      } else {
+        setEmailSuccess(`Report dispatched securely to ${recipientEmail} (Msg ID: ${shortId}).`);
+        setTimeout(() => {
+          setEmailModalOpen(false);
+          setEmailSuccess(null);
+          setRecipientEmail("");
+          setEmailAuthorized(false);
+        }, 2500);
+      }
     } catch (err: any) {
       setEmailError(err.message || "Failed to dispatch report email");
     } finally {
@@ -306,6 +318,16 @@ export default function ReportsPage() {
                   EMAIL REPORT
                 </button>
                 <a
+                  href={`http://127.0.0.1:8000/api/reports/${selectedReport.report.id}/export?format=pdf`}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="research-button research-button--secondary"
+                  style={{ display: "inline-flex", alignItems: "center", gap: 6, textDecoration: "none", background: "rgba(182, 154, 114, 0.2)", color: "#F2F0E8", border: "1px solid #B69A72" }}
+                >
+                  <Download size={13} />
+                  PDF REPORT
+                </a>
+                <a
                   href={`http://127.0.0.1:8000/api/reports/${selectedReport.report.id}/export?format=csv`}
                   target="_blank"
                   rel="noreferrer"
@@ -328,6 +350,60 @@ export default function ReportsPage() {
               </div>
             </div>
 
+
+            {/* ARINA AI Executive Synthesis Card */}
+            <div style={{ padding: "14px 16px", background: "rgba(182, 154, 114, 0.08)", border: "1px solid rgba(182, 154, 114, 0.25)", borderRadius: 6 }}>
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 8 }}>
+                <div style={{ display: "flex", alignItems: "center", gap: 6, font: "600 11px var(--mono)", color: "#B69A72" }}>
+                  <Sparkles size={13} />
+                  <span>ARINA AI SCIENTIFIC EXECUTIVE SYNTHESIS</span>
+                </div>
+                <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                  <select
+                    value={synthesisModel}
+                    onChange={(e) => setSynthesisModel(e.target.value)}
+                    style={{ background: "#101110", color: "#F2F0E8", border: "1px solid rgba(182, 154, 114, 0.3)", borderRadius: 4, padding: "3px 8px", font: "500 10px var(--mono)", cursor: "pointer" }}
+                  >
+                    <option value="gpt-5.6-luna">GPT-5.6 Luna</option>
+                    <option value="deepseek-v4-pro">DeepSeek V4 Pro</option>
+                    <option value="gpt-5-mini">GPT-5 Mini</option>
+                  </select>
+                  <button
+                    type="button"
+                    disabled={isSynthesizing}
+                    onClick={async () => {
+                      if (!selectedReport) return;
+                      setIsSynthesizing(true);
+                      try {
+                        const res = await api.synthesizeReportAI({
+                          report_id: selectedReport.report.id,
+                          model: synthesisModel,
+                        });
+                        setAiSynthesisText(res.synthesis);
+                      } catch (err: any) {
+                        alert("AI Synthesis failed: " + err.message);
+                      } finally {
+                        setIsSynthesizing(false);
+                      }
+                    }}
+                    className="research-button research-button--secondary"
+                    style={{ display: "inline-flex", alignItems: "center", gap: 6, font: "600 10px var(--mono)", padding: "4px 10px" }}
+                  >
+                    <Sparkles size={11} color="#B69A72" />
+                    <span>{isSynthesizing ? "SYNTHESIZING..." : "GENERATE AI SYNTHESIS"}</span>
+                  </button>
+                </div>
+              </div>
+              {aiSynthesisText ? (
+                <div style={{ font: "400 12.5px/1.6 var(--body)", color: "#F2F0E8", whiteSpace: "pre-wrap", borderTop: "1px solid rgba(182, 154, 114, 0.15)", paddingTop: 8 }}>
+                  {aiSynthesisText}
+                </div>
+              ) : (
+                <div style={{ font: "400 11px var(--mono)", color: "#7e9084" }}>
+                  Autonomous peer-review synthesis examining Pareto frontier trade-offs, leakage quarantine, and edge hardware deployment.
+                </div>
+              )}
+            </div>
 
             {/* Abstract / Summary */}
             <div>

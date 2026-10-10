@@ -185,3 +185,41 @@ def test_scientific_evaluation_abc():
     assert "condition_c" in eval_data
     assert "conclusion" in eval_data
     assert eval_data["condition_c"]["recovery_attempts"] >= 0
+
+def test_ai_status_and_elevate_models():
+    res = client.get("/api/ai/status")
+    assert res.status_code == 200
+    data = res.json()
+    assert "active_provider" in data
+    assert "tokens_used_today" in data
+    assert data["daily_limit"] == 800000
+    assert len(data["available_models"]) >= 3
+    model_ids = [m["id"] for m in data["available_models"]]
+    assert "gpt-5.6-luna" in model_ids
+    assert "deepseek-v4-pro" in model_ids
+    assert "gpt-5-mini" in model_ids
+
+def test_ai_completion_and_diagnosis():
+    # Test completion with prompt
+    res = client.post("/api/ai/complete", json={
+        "prompt": "Analyze band gap Pareto frontier trade-offs on NOMAD 2018.",
+        "model": "gpt-5.6-luna"
+    })
+    assert res.status_code == 200
+    data = res.json()
+    assert "content" in data
+    assert len(data["content"]) > 10
+
+    # Test failure diagnosis
+    diag_res = client.post("/api/ai/diagnose", json={
+        "error_category": "LINALG_SINGULAR_MATRIX",
+        "error_message": "numpy.linalg.LinAlgError: Singular matrix in Ridge regression inversion",
+        "model_name": "Ridge",
+        "dataset_name": "NOMAD 2018 Transparent Conductors",
+        "model": "deepseek-v4-pro"
+    })
+    assert diag_res.status_code == 200
+    diag_data = diag_res.json()
+    assert diag_data["status"] == "DIAGNOSED"
+    assert "diagnosis" in diag_data
+

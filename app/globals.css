@@ -6,47 +6,55 @@
   --font-evo-body: var(--font-body);
   --font-evo-mono: var(--font-mono);
   --font-evo-serif: var(--font-body);
-  --color-research-ink: #101110;
-  --color-research-paper: #F2F0E8;
-  --color-research-green: #8EA58C;
-  --color-research-cyan: #AAA99F;
-  --color-accent-bronze: #B69A72;
-  --color-accent-bronze-hover: #C8AE87;
-  --color-accent-sage: #8EA58C;
-  --color-accent-terracotta: #C77F72;
+  --color-research-ink: #080C0D;
+  --color-research-paper: #F0F4F1;
+  --color-research-green: #55D6A1;
+  --color-research-cyan: #76BFA7;
+  --color-accent-teal: #55D6A1;
+  --color-accent-teal-soft: #76BFA7;
+  --color-accent-blue: #63A9D8;
+  --color-accent-warning: #D6B878;
+  --color-accent-error: #DB817F;
 }
 
 :root {
   color-scheme: dark;
-  --ink: #101110;
-  --paper: #F2F0E8;
-  --muted: #AAA99F;
-  --line: #34352F;
-  --border-glass: rgba(255, 255, 255, 0.07);
+  --ink: #080C0D;
+  --paper: #F0F4F1;
+  --muted: #A7B5B2;
+  --text-muted: #738581;
+  --line: rgba(174, 202, 196, 0.16);
+  --border-glass: rgba(174, 202, 196, 0.16);
+  --border-strong: rgba(174, 202, 196, 0.25);
   --mono: var(--font-mono), "SFMono-Regular", Consolas, monospace;
   --body: var(--font-body), "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   --display: var(--font-body), "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  --font-editorial: var(--font-body), "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   
-  /* Industrial Scientific Design System (Graphite + Warm Ivory + Muted Bronze) */
-  --bg-main: #101110;
-  --bg-dashboard: #101110;
-  --bg-sidebar: #141513;
-  --bg-surface: #191A18;
-  --bg-elevated: #20211E;
-  --bg-input: #141513;
-  --text-primary: #F2F0E8;
-  --text-secondary: #AAA99F;
-  --text-tertiary: #77786F;
-  --border-subtle: #34352F;
-  --border-medium: #3E4038;
-  --accent-bronze: #B69A72;
-  --accent-bronze-hover: #C8AE87;
-  --accent-sage: #8EA58C;
-  --accent-terracotta: #C77F72;
-  --status-completed: #8EA58C;
-  --status-running: #B69A72;
-  --status-failed: #C77F72;
+  /* Exact EvoResearch Premium Glassmorphism Design Tokens */
+  --bg-main: #080C0D;
+  --bg-secondary: #0C1214;
+  --bg-dashboard: #080C0D;
+  --bg-sidebar: rgba(12, 18, 20, 0.72);
+  --bg-surface: rgba(17, 27, 29, 0.68);
+  --bg-elevated: rgba(24, 36, 38, 0.76);
+  --bg-input: rgba(15, 24, 26, 0.72);
+  
+  --text-primary: #F0F4F1;
+  --text-secondary: #A7B5B2;
+  --text-tertiary: #738581;
+  
+  --border-subtle: rgba(174, 202, 196, 0.16);
+  --border-medium: rgba(174, 202, 196, 0.25);
+  
+  --accent-teal: #55D6A1;
+  --accent-teal-soft: #76BFA7;
+  --accent-blue: #63A9D8;
+  --accent-warning: #D6B878;
+  --accent-error: #DB817F;
+  
+  --status-completed: #55D6A1;
+  --status-running: #63A9D8;
+  --status-failed: #DB817F;
   background: var(--bg-main);
 }
 
@@ -637,27 +645,35 @@ main { position: relative; z-index: 2; }
   *, *::before, *::after { scroll-behavior: auto !important; animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
 }
 
-/* ----------------- WORKSPACE RESEARCH SUITE STYLES (INDUSTRIAL GRAPHITE & BRONZE) ----------------- */
+/* ----------------- WORKSPACE RESEARCH SUITE STYLES (PREMIUM GLASSMORPHISM) ----------------- */
 .workspace-shell {
   display: flex;
   min-height: 100vh;
   background-color: var(--bg-dashboard);
+  background-image: 
+    radial-gradient(ellipse at 20% 0%, rgba(85, 214, 161, 0.035) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 20%, rgba(99, 169, 216, 0.025) 0%, transparent 45%),
+    radial-gradient(ellipse at 50% 80%, rgba(17, 27, 29, 0.8) 0%, transparent 60%);
+  background-attachment: fixed;
   color: var(--text-primary);
   font-family: var(--body);
   font-size: 14px;
 }
 
 .workspace-sidebar {
-  width: 250px;
+  width: 260px;
   flex-shrink: 0;
-  border-right: 1px solid var(--border-subtle);
-  background: var(--bg-sidebar);
+  border-right: 1px solid rgba(174, 202, 196, 0.12);
+  background: rgba(12, 18, 20, 0.78);
+  backdrop-filter: blur(28px) saturate(190%);
+  -webkit-backdrop-filter: blur(28px) saturate(190%);
   display: flex;
   flex-direction: column;
   position: sticky;
   top: 0;
   height: 100vh;
   z-index: 40;
+  box-shadow: 4px 0 24px -2px rgba(0, 0, 0, 0.35);
 }
 
 .workspace-main-area {
@@ -666,53 +682,101 @@ main { position: relative; z-index: 2; }
   flex-direction: column;
   min-width: 0;
   overflow-x: hidden;
-  background: var(--bg-dashboard);
+  background: transparent;
 }
 
 .workspace-topbar {
-  height: 48px;
-  border-bottom: 1px solid var(--border-subtle);
+  height: 52px;
+  border-bottom: 1px solid rgba(174, 202, 196, 0.12);
   padding: 0 24px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background: rgba(20, 21, 19, 0.85);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
+  background: rgba(8, 12, 13, 0.78);
+  backdrop-filter: blur(24px) saturate(190%);
+  -webkit-backdrop-filter: blur(24px) saturate(190%);
   position: sticky;
   top: 0;
   z-index: 30;
+  box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.4);
 }
 
 .workspace-content {
   padding: 24px 32px 56px;
   flex: 1;
-  max-width: 1540px;
+  max-width: 1680px;
   width: 100%;
   margin: 0 auto;
   box-sizing: border-box;
 }
 
-/* Restrained Glassmorphism & Industrial Cards */
+/* Premium Dark Glassmorphism Cards */
 .editorial-card,
-.research-card {
-  background: var(--bg-surface);
-  border: 1px solid var(--border-subtle);
-  border-radius: 12px;
-  padding: 20px 22px;
+.research-card,
+.glass-panel {
+  background: linear-gradient(135deg, rgba(20, 32, 35, 0.72) 0%, rgba(12, 19, 21, 0.65) 100%);
+  backdrop-filter: blur(28px) saturate(190%);
+  -webkit-backdrop-filter: blur(28px) saturate(190%);
+  border: 1px solid rgba(174, 202, 196, 0.13);
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+  border-left: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 14px;
+  padding: 18px 20px;
   position: relative;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18);
-  transition: border-color 180ms ease, box-shadow 180ms ease;
+  box-shadow: 
+    0 10px 30px -4px rgba(0, 0, 0, 0.5),
+    0 2px 8px -2px rgba(0, 0, 0, 0.3),
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.08),
+    inset 0 0 24px 0 rgba(85, 214, 161, 0.015);
+  transition: all 220ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.glass-panel-elevated {
+  background: linear-gradient(135deg, rgba(26, 40, 44, 0.8) 0%, rgba(15, 24, 26, 0.74) 100%);
+  backdrop-filter: blur(32px) saturate(200%);
+  -webkit-backdrop-filter: blur(32px) saturate(200%);
+  border: 1px solid rgba(174, 202, 196, 0.18);
+  border-top: 1px solid rgba(255, 255, 255, 0.16);
+  border-left: 1px solid rgba(255, 255, 255, 0.09);
+  border-radius: 14px;
+  box-shadow: 
+    0 14px 38px -4px rgba(0, 0, 0, 0.58),
+    0 4px 12px -2px rgba(0, 0, 0, 0.35),
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.11),
+    inset 0 0 28px 0 rgba(85, 214, 161, 0.02);
+  transition: all 220ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.glass-pill {
+  background: rgba(17, 27, 29, 0.65);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(174, 202, 196, 0.13);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.06);
+  transition: all 180ms ease;
+}
+
+.glass-pill:hover {
+  background: rgba(24, 36, 38, 0.85);
+  border-color: rgba(85, 214, 161, 0.35);
+  border-top-color: rgba(85, 214, 161, 0.45);
+  box-shadow: 
+    0 4px 12px rgba(0, 0, 0, 0.3),
+    0 0 12px rgba(85, 214, 161, 0.08),
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.12);
 }
 
 .editorial-card:hover,
-.research-card:hover {
-  border-color: rgba(182, 154, 114, 0.28);
-}
-
-.research-card--highlight {
-  border-color: rgba(182, 154, 114, 0.4);
-  background: var(--bg-elevated);
+.research-card:hover,
+.glass-panel:hover {
+  border-color: rgba(85, 214, 161, 0.3);
+  border-top-color: rgba(85, 214, 161, 0.45);
+  box-shadow: 
+    0 14px 36px -4px rgba(0, 0, 0, 0.55),
+    0 0 20px 0 rgba(85, 214, 161, 0.06),
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.14);
+  transform: translateY(-1.5px);
 }
 
 .metric-number {
@@ -726,8 +790,8 @@ main { position: relative; z-index: 2; }
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 8px 12px;
-  border-radius: 8px;
+  padding: 8.5px 12px;
+  border-radius: 9px;
   font-size: 13px;
   font-weight: 500;
   color: var(--text-secondary);
@@ -738,13 +802,13 @@ main { position: relative; z-index: 2; }
 
 .sidebar-nav-item:hover {
   color: var(--text-primary);
-  background: rgba(255, 255, 255, 0.04);
+  background: rgba(174, 202, 196, 0.06);
 }
 
 .sidebar-nav-item.active {
-  color: #F2F0E8;
-  background: rgba(182, 154, 114, 0.12);
-  border-color: rgba(182, 154, 114, 0.32);
+  color: #F0F4F1;
+  background: rgba(85, 214, 161, 0.12);
+  border-color: rgba(85, 214, 161, 0.32);
 }
 
 /* Status Tags */

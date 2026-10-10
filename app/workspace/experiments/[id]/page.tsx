@@ -24,7 +24,9 @@ import {
   ShieldCheck,
   Terminal,
   Activity,
-  Layers
+  Layers,
+  Download,
+  FileText
 } from "lucide-react";
 
 export default function ExperimentDetailPage({
@@ -234,6 +236,29 @@ export default function ExperimentDetailPage({
               <Zap size={13} />
               <span>BOUNDED OPTUNA HPO</span>
             </Link>
+
+            {runs.length > 0 && (
+              <a
+                href={`http://127.0.0.1:8000/api/reports/experiment/${exp.id}/export?format=pdf`}
+                target="_blank"
+                rel="noreferrer"
+                style={{
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: 6,
+                  padding: "8px 14px",
+                  background: "rgba(182, 154, 114, 0.15)",
+                  border: "1px solid #B69A72",
+                  color: "#F2F0E8",
+                  font: "600 10px var(--mono)",
+                  borderRadius: 3,
+                  textDecoration: "none"
+                }}
+              >
+                <Download size={13} />
+                <span>DOWNLOAD PDF</span>
+              </a>
+            )}
           </div>
         </div>
       </div>

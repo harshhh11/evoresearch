@@ -61,7 +61,34 @@ class JudgeAgent:
             "overall_consensus_score": round((score_evidence_grounding + score_methodology + score_reproducibility) / 3.0, 1)
         }
 
-        # 4. Formulate Scientific Verdict
+        # 4. Formulate Scientific Verdict with ARINA AI
+        base_synthesis = (
+            f"Judge Agent cross-evaluated {len(claims_a)} claims from Report A and {len(claims_b)} claims from Report B. "
+            f"Identified {len(contradictions)} divergence(s) and {len(convergences)} convergence(s). "
+            f"Consensus scientific quality score: {rubric_breakdown['overall_consensus_score']}/100."
+        )
+
+        ai_synthesis = ""
+        try:
+            from .ai_service import generate_scientific_completion, config as ai_config
+            if ai_config.provider in ["elevate", "openai"]:
+                prompt = (
+                    f"Evaluate and synthesize findings between two scientific reports:\n"
+                    f"Report A: '{report_a.get('title')}' | Score: {score_a} | Methodology: {method_a[:300]}\n"
+                    f"Report B: '{report_b.get('title')}' | Score: {score_b} | Methodology: {method_b[:300]}\n"
+                    f"Detected Contradictions: {json.dumps(contradictions)}\n"
+                    f"Detected Convergences: {json.dumps(convergences)}\n"
+                    f"Provide a 2-paragraph rigorous peer-review evaluation addressing methodology rigor, leakage quarantine, and empirical reproducibility."
+                )
+                ai_res = generate_scientific_completion(
+                    prompt=prompt,
+                    system_prompt="You are ARINA Judge, an impartial autonomous scientific peer reviewer assessing materials science ML papers."
+                )
+                if ai_res and ai_res.content:
+                    ai_synthesis = f"\n\n[ARINA Autonomous Peer Review ({ai_res.model})]:\n" + ai_res.content
+        except Exception:
+            pass
+
         verdict = {
             "verdict_id": str(report_a.get("id", "cmp")) + "_vs_" + str(report_b.get("id", "cmp")),
             "status": "CONCLUDED" if not [c for c in contradictions if c["severity"] == "HIGH"] else "UNRESOLVED_CONTRADICTION",
@@ -70,11 +97,7 @@ class JudgeAgent:
             "convergences": convergences,
             "contradictions": contradictions,
             "rubric_breakdown": rubric_breakdown,
-            "synthesis": (
-                f"Judge Agent cross-evaluated {len(claims_a)} claims from Report A and {len(claims_b)} claims from Report B. "
-                f"Identified {len(contradictions)} divergence(s) and {len(convergences)} convergence(s). "
-                f"Consensus scientific quality score: {rubric_breakdown['overall_consensus_score']}/100."
-            )
+            "synthesis": base_synthesis + ai_synthesis
         }
         return verdict
 

@@ -25,12 +25,14 @@ export default function SettingsPage() {
   const [saved, setSaved] = useState(false);
 
   // Real AI Provider & Cache States
-  const [aiProvider, setAiProvider] = useState<"local" | "openai">("local");
+  const [aiProvider, setAiProvider] = useState<"elevate" | "local" | "openai">("elevate");
+  const [aiModel, setAiModel] = useState("gpt-5.6-luna");
+  const [elevateKey, setElevateKey] = useState("");
   const [openaiKey, setOpenaiKey] = useState("");
   const [aiStatus, setAiStatus] = useState<any>(null);
   const [cacheStats, setCacheStats] = useState<any>(null);
   const [cacheClearing, setCacheClearing] = useState(false);
-  const [maskSample, setMaskSample] = useState("api_key: sk-proj-94819283749812739182, contact: researcher@materials-institute.org");
+  const [maskSample, setMaskSample] = useState("api_key: elev_Y4l3Mx6ldrXLPATRAqZrADmv5GT9q0rQnF1sMN3fdu0, contact: researcher@materials-institute.org");
   const [maskedOutput, setMaskedOutput] = useState("");
   const [maskStats, setMaskStats] = useState<any>(null);
 
@@ -42,7 +44,8 @@ export default function SettingsPage() {
       ]);
       if (ai) {
         setAiStatus(ai);
-        setAiProvider(ai.active_provider as any || "local");
+        setAiProvider((ai.active_provider as any) || "elevate");
+        if (ai.active_model) setAiModel(ai.active_model);
       }
       if (cache) {
         setCacheStats(cache);
@@ -84,7 +87,9 @@ export default function SettingsPage() {
     try {
       await api.updateAIConfig({
         provider: aiProvider,
+        model: aiModel,
         openai_api_key: openaiKey || undefined,
+        elevate_api_key: elevateKey || undefined,
       });
       await loadLiveStats();
       setSaved(true);
@@ -190,38 +195,108 @@ export default function SettingsPage() {
         </div>
 
         {/* EvolveX AI Provider & Local Execution Boundaries */}
+        {/* Elevate AI Gateway & Model Selector */}
         <div className="research-card">
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 16 }}>
-            <div style={{ font: "600 12px var(--mono)", color: "#F2F0E8" }}>
-              AI INFERENCE PROVIDER & LOCAL-ONLY EXECUTION BOUNDARIES
+            <div>
+              <div style={{ font: "600 12px var(--mono)", color: "#F2F0E8" }}>
+                ARINA AI & ELEVATE MULTI-MODEL GATEWAY
+              </div>
+              <div style={{ font: "400 11px var(--body)", color: "#AAA99F", marginTop: 2 }}>
+                Monitored team gateway with 800,000 tokens/day across GPT-5.6 Luna, DeepSeek V4 Pro, and GPT-5 Mini.
+              </div>
             </div>
             {aiStatus && (
-              <span className="font-mono text-[10px] px-2 py-0.5 rounded bg-[#8EA58C]/15 text-[#8EA58C] border border-[#8EA58C]/30">
-                ACTIVE: {aiStatus.active_provider.toUpperCase()} ({aiStatus.active_model})
+              <span className="font-mono text-[10px] px-2.5 py-1 rounded bg-[#8EA58C]/15 text-[#8EA58C] border border-[#8EA58C]/30 font-semibold">
+                ACTIVE: {aiStatus.active_provider.toUpperCase()} // {aiStatus.active_model}
               </span>
             )}
+          </div>
+
+          {/* Daily Quota Meter */}
+          <div style={{ padding: "12px 14px", background: "rgba(10, 12, 11, 0.6)", borderRadius: 4, border: "1px solid rgba(226, 239, 229, 0.08)", marginBottom: 16 }}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 6 }}>
+              <span style={{ font: "600 10px var(--mono)", color: "#B69A72" }}>DAILY TEAM TOKEN QUOTA</span>
+              <span style={{ font: "500 10px var(--mono)", color: "#F2F0E8" }}>
+                {(aiStatus?.tokens_used_today || 0).toLocaleString()} / 800,000 TOKENS (Reset 05:30 AM IST)
+              </span>
+            </div>
+            <div style={{ height: 6, background: "rgba(255, 255, 255, 0.08)", borderRadius: 3, overflow: "hidden" }}>
+              <div
+                style={{
+                  height: "100%",
+                  background: "#8EA58C",
+                  borderRadius: 3,
+                  width: `${Math.min(100, Math.max(1, aiStatus?.percentage_used || 0))}%`,
+                  transition: "width 0.3s ease",
+                }}
+              />
+            </div>
+            <div style={{ display: "flex", justifyContent: "space-between", marginTop: 6, font: "400 9px var(--mono)", color: "#7e9084" }}>
+              <span>Endpoint: https://elevate1-0.vercel.app/api/ai</span>
+              <span>Available: {((aiStatus?.daily_limit || 800000) - (aiStatus?.tokens_used_today || 0)).toLocaleString()} tokens remaining</span>
+            </div>
           </div>
 
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
             <div>
               <label style={{ display: "block", font: "500 10px var(--mono)", color: "#7e9084", marginBottom: 6 }}>
-                INFERENCE PROVIDER SELECTION
+                GATEWAY PROVIDER
               </label>
               <select
                 value={aiProvider}
                 onChange={(e) => setAiProvider(e.target.value as any)}
                 style={{ width: "100%", padding: "9px 12px", background: "#101110", border: "1px solid rgba(226, 239, 229, 0.15)", borderRadius: 3, color: "#F2F0E8", font: "400 12px var(--mono)" }}
               >
-                <option value="local">Local Deterministic Engine (Offline / Air-Gapped)</option>
-                <option value="openai">OpenAI API (Cloud Synthesis)</option>
+                <option value="elevate">Elevate AI Multi-Model Gateway (Monitored)</option>
+                <option value="local">Local Air-Gapped Engine (Offline / Zero-Egress)</option>
+                <option value="openai">Direct OpenAI API (Custom Account)</option>
               </select>
               <div style={{ font: "400 10px var(--mono)", color: "#7e9084", marginTop: 4 }}>
-                {aiProvider === "local" ? "Guaranteed offline zero-data-egress execution" : "Requires OPENAI_API_KEY environment variable or below input"}
+                {aiProvider === "elevate"
+                  ? "Uses ELEVATE_TEAM_API_KEY with GPT-5.6 Luna, DeepSeek V4 Pro, & GPT-5 Mini"
+                  : aiProvider === "local"
+                  ? "Guaranteed zero-data-egress deterministic materials reasoner"
+                  : "Uses standard OPENAI_API_KEY"}
               </div>
             </div>
 
+            <div>
+              <label style={{ display: "block", font: "500 10px var(--mono)", color: "#7e9084", marginBottom: 6 }}>
+                DEFAULT REASONING MODEL
+              </label>
+              <select
+                value={aiModel}
+                onChange={(e) => setAiModel(e.target.value)}
+                style={{ width: "100%", padding: "9px 12px", background: "#101110", border: "1px solid rgba(226, 239, 229, 0.15)", borderRadius: 3, color: "#F2F0E8", font: "400 12px var(--mono)" }}
+              >
+                <option value="gpt-5.6-luna">GPT-5.6 Luna — Deep Reasoning (1,050,000 ctx)</option>
+                <option value="deepseek-v4-pro">DeepSeek V4 Pro — Math & Code (1,000,000 ctx)</option>
+                <option value="gpt-5-mini">GPT-5 Mini — Fast Edge Inference (400,000 ctx)</option>
+                <option value="local">Local Deterministic Engine</option>
+              </select>
+              <div style={{ font: "400 10px var(--mono)", color: "#7e9084", marginTop: 4 }}>
+                Selected model is default for workspace queries, report synthesis, and judge agent
+              </div>
+            </div>
+
+            {aiProvider === "elevate" && (
+              <div style={{ gridColumn: "span 2" }}>
+                <label style={{ display: "block", font: "500 10px var(--mono)", color: "#7e9084", marginBottom: 6 }}>
+                  ELEVATE PRIVATE TEAM API KEY (OPTIONAL OVERRIDE)
+                </label>
+                <input
+                  type="password"
+                  value={elevateKey}
+                  onChange={(e) => setElevateKey(e.target.value)}
+                  placeholder={aiStatus?.has_elevate_key ? "•••••••••••••••••••••••••••••••• (Configured in .env)" : "elev_..."}
+                  style={{ width: "100%", padding: "9px 12px", background: "#101110", border: "1px solid rgba(226, 239, 229, 0.15)", borderRadius: 3, color: "#F2F0E8", font: "400 12px var(--mono)" }}
+                />
+              </div>
+            )}
+
             {aiProvider === "openai" && (
-              <div>
+              <div style={{ gridColumn: "span 2" }}>
                 <label style={{ display: "block", font: "500 10px var(--mono)", color: "#7e9084", marginBottom: 6 }}>
                   OPENAI API KEY (OPTIONAL OVERRIDE)
                 </label>

@@ -270,6 +270,41 @@ export interface AuditEvent {
   timestamp: string;
 }
 
+export interface AIModelInfo {
+  id: string;
+  name: string;
+  context_tokens: number;
+  param_type: string;
+  description: string;
+  recommended_for: string;
+}
+
+export interface AIStatus {
+  status: string;
+  active_provider: string;
+  active_model: string;
+  is_local_only: boolean;
+  has_elevate_key: boolean;
+  has_openai_key: boolean;
+  supported_providers: string[];
+  tokens_used_today: number;
+  daily_limit: number;
+  tokens_remaining: number;
+  percentage_used: number;
+  reset_schedule: string;
+  available_models: AIModelInfo[];
+}
+
+export interface AICompletionResponse {
+  provider: string;
+  model: string;
+  content: string;
+  latency_ms: number;
+  cached?: boolean;
+  tokens_used?: number;
+  request_id?: string;
+}
+
 // API Methods
 export const api = {
   getHealth: () => fetchJson<{ status: string; service?: string; version?: string }>("/api/health"),
@@ -309,17 +344,27 @@ export const api = {
   
   getAudit: (limit = 50) => fetchJson<AuditEvent[]>(`/api/audit?limit=${limit}`),
   
-  // EvolveX Advanced Capabilities
-  getAIStatus: () => fetchJson<{ status: string; active_provider: string; active_model: string; is_local_only: boolean; has_openai_key: boolean }>("/api/ai/status"),
-  updateAIConfig: (data: { provider?: string; model?: string; openai_api_key?: string }) =>
-    fetchJson<{ status: string; active_provider: string; active_model: string; is_local_only: boolean; has_openai_key: boolean }>("/api/ai/config", {
+  // EvolveX Advanced Capabilities & ARINA Elevate Multi-Model AI
+  getAIStatus: () => fetchJson<AIStatus>("/api/ai/status"),
+  updateAIConfig: (data: { provider?: string; model?: string; openai_api_key?: string; elevate_api_key?: string }) =>
+    fetchJson<AIStatus>("/api/ai/config", {
       method: "POST",
       body: JSON.stringify(data),
     }),
-  generateAICompletion: (prompt: string, system_prompt?: string, use_cache = true) =>
-    fetchJson<{ provider: string; model: string; content: string; latency_ms: number; cached?: boolean; tokens_used?: number }>("/api/ai/complete", {
+  generateAICompletion: (prompt: string, system_prompt?: string, use_cache = true, model?: string, max_tokens?: number) =>
+    fetchJson<AICompletionResponse>("/api/ai/complete", {
       method: "POST",
-      body: JSON.stringify({ prompt, system_prompt, use_cache })
+      body: JSON.stringify({ prompt, system_prompt, use_cache, model, max_tokens })
+    }),
+  diagnoseFailureAI: (data: { error_category: string; error_message: string; model_name: string; traceback?: string; dataset_name?: string; model?: string }) =>
+    fetchJson<{ status: string; model: string; provider: string; diagnosis: string; tokens_used?: number; latency_ms: number }>("/api/ai/diagnose", {
+      method: "POST",
+      body: JSON.stringify(data),
+    }),
+  synthesizeReportAI: (data: { report_id: string; model?: string }) =>
+    fetchJson<{ report_id: string; model: string; provider: string; synthesis: string; tokens_used?: number; latency_ms: number }>("/api/ai/synthesize-report", {
+      method: "POST",
+      body: JSON.stringify(data),
     }),
   getCacheStats: () => fetchJson<{ cached_entries: number; total_requests: number; total_hits: number; hit_ratio_pct: number; savings_ms_est: number }>("/api/cache/stats"),
   clearCache: () => fetchJson<{ status: string }>("/api/cache/clear", { method: "POST" }),
