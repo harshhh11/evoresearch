@@ -1,7 +1,8 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
+
 import { api, Experiment, OptimizationStudy, OptimizationTrial } from "@/lib/api";
 import {
   Zap,
@@ -15,10 +16,11 @@ import {
   Sliders,
 } from "lucide-react";
 
-export default function OptimizationPage() {
+function OptimizationContent() {
   const searchParams = useSearchParams();
   const initExpId = searchParams.get("experiment_id") || "";
   const initModel = searchParams.get("model") || "RandomForestClassifier";
+
 
   const [experiments, setExperiments] = useState<Experiment[]>([]);
   const [selectedExpId, setSelectedExpId] = useState(initExpId);
@@ -297,3 +299,12 @@ export default function OptimizationPage() {
     </div>
   );
 }
+
+export default function OptimizationPage() {
+  return (
+    <Suspense fallback={<div style={{ padding: "40px 0", textAlign: "center", font: "400 12px var(--mono)", color: "#8c9c91" }}>LOADING OPTIMIZATION WORKSPACE...</div>}>
+      <OptimizationContent />
+    </Suspense>
+  );
+}
+

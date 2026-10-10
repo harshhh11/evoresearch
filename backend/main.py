@@ -285,11 +285,22 @@ def get_platform_stats(db: Session = Depends(get_db)):
 
     all_runs = db.query(Run).all()
     best_score = 0.0
+    best_mae = None
+    best_rmse = None
+    best_r2 = None
+    best_model_name = "RandomForest"
     total_cpu_time_s = 0.0
     for r in all_runs:
         total_cpu_time_s += (r.train_time_ms / 1000.0)
         try:
             m = json.loads(r.metrics or "{}")
+            if "mae" in m and (best_mae is None or m["mae"] < best_mae):
+                best_mae = m["mae"]
+                best_model_name = r.model_name
+            if "rmse" in m and (best_rmse is None or m["rmse"] < best_rmse):
+                best_rmse = m["rmse"]
+            if "r2" in m and (best_r2 is None or m["r2"] > best_r2):
+                best_r2 = m["r2"]
             score = m.get("r2") or m.get("f1") or m.get("accuracy") or 0.0
             if score > best_score:
                 best_score = score
@@ -306,11 +317,16 @@ def get_platform_stats(db: Session = Depends(get_db)):
         "recovered_runs": recovered_runs,
         "recovery_rate_pct": recovery_rate,
         "best_validated_score": round(best_score, 4),
+        "best_mae": round(best_mae, 4) if best_mae is not None else None,
+        "best_rmse": round(best_rmse, 4) if best_rmse is not None else None,
+        "best_r2": round(best_r2, 4) if best_r2 is not None else None,
+        "best_model_name": best_model_name,
         "total_cpu_time_s": round(total_cpu_time_s, 2),
         "total_datasets": db.query(Dataset).count(),
         "total_memory_records": db.query(RecoveryMemory).count(),
         "validated_memory_records": db.query(RecoveryMemory).filter(RecoveryMemory.state == "VALIDATED").count(),
     }
+
 
 # ----------------- PROJECTS -----------------
 @app.get("/api/projects")
@@ -559,7 +575,84 @@ def import_dataset(req: DatasetImportRequest, db: Session = Depends(get_db)):
         db.commit()
         raise HTTPException(status_code=500, detail=str(e))
 
+@app.post("/api/datasets/upload")
+async def upload_csv_dataset(
+    file: UploadFile = File(...),
+    name: str = Form(...),
+    description: Optional[str] = Form(""),
+    target_col: Optional[str] = Form(""),
+    task_type: Optional[str] = Form("regression"),
+    db: Session = Depends(get_db)
+):
+    """Direct multi-file / CSV upload endpoint with automated schema profiling and quality scoring."""
+    t0 = time.perf_counter()
+    os.makedirs("backend/data", exist_ok=True)
+    clean_name = re.sub(r'[^a-zA-Z0-9_-]', '_', file.filename or "uploaded.csv")
+    file_path = os.path.join("backend", "data", f"upload_{int(time.time())}_{clean_name}")
+    
+    content = await file.read()
+    with open(file_path, "wb") as f:
+        f.write(content)
+        
+    try:
+        df = pd.read_csv(file_path)
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=f"Invalid CSV structure: {str(e)}")
+        
+    if df.empty or len(df.columns) < 2:
+        raise HTTPException(status_code=400, detail="CSV must contain at least 2 columns and 1 row.")
+        
+    actual_target = target_col.strip() if target_col and target_col.strip() in df.columns else df.columns[-1]
+    feature_cols = [c for c in df.columns if c != actual_target]
+    
+    missing_summary = {col: int(df[col].isna().sum()) for col in df.columns}
+    total_missing = sum(missing_summary.values())
+    quality_score = max(0.0, round(100.0 - (total_missing / (len(df) * len(df.columns))) * 100.0, 1))
+    
+    content_hash = hashlib.sha256(content).hexdigest()[:16]
+    slug = re.sub(r'[^a-z0-9]+', '-', name.lower()).strip('-') + f"-{content_hash[:6]}"
+    
+    ds = Dataset(
+        name=name,
+        slug=slug,
+        description=description or f"User-uploaded dataset from {file.filename}",
+        source_name="User Upload",
+        source_url="",
+        license_notes="User Submitted",
+        dataset_version="1.0.0",
+        file_path=os.path.abspath(file_path),
+        clean_file_path=os.path.abspath(file_path),
+        row_count=len(df),
+        col_count=len(df.columns),
+        target_col=actual_target,
+        target_columns=json.dumps([actual_target]),
+        task_type=task_type or ("regression" if pd.api.types.is_numeric_dtype(df[actual_target]) else "classification"),
+        feature_names=json.dumps(feature_cols),
+        feature_schema=json.dumps(feature_cols),
+        missing_value_summary=json.dumps(missing_summary),
+        quality_report=json.dumps({"quality_score": quality_score, "missing_cells": total_missing}),
+        content_hash=content_hash,
+        summary_stats=json.dumps({"rows": len(df), "columns": len(df.columns)})
+    )
+    db.add(ds)
+    db.commit()
+    db.refresh(ds)
+    
+    duration = (time.perf_counter() - t0) * 1000.0
+    sync_record_to_supabase("datasets", {
+        "id": ds.id,
+        "name": ds.name,
+        "slug": ds.slug,
+        "task_type": ds.task_type,
+        "sample_count": ds.row_count,
+        "feature_count": ds.col_count,
+        "content_hash": ds.content_hash
+    })
+    
+    return ds.to_dict()
+
 # ----------------- EXPERIMENTS -----------------
+
 @app.get("/api/experiments")
 def list_experiments(project_id: Optional[str] = None, db: Session = Depends(get_db)):
     q = db.query(Experiment)

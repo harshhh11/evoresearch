@@ -31,11 +31,16 @@ export interface PlatformStats {
   recovered_runs: number;
   recovery_rate_pct: number;
   best_validated_score: number;
+  best_mae?: number | null;
+  best_rmse?: number | null;
+  best_r2?: number | null;
+  best_model_name?: string;
   total_cpu_time_s: number;
   total_datasets: number;
   total_memory_records: number;
   validated_memory_records: number;
 }
+
 
 export interface Project {
   id: string;
@@ -314,4 +319,15 @@ export const api = {
   maskSensitiveData: (text: string) => fetchJson<{ masked_text: string; masking_stats: Record<string, any> }>("/api/masking/mask", { method: "POST", body: JSON.stringify({ text }) }),
   evaluateJudgeReports: (report_a_id: string, report_b_id: string) =>
     fetchJson<any>("/api/judge/evaluate", { method: "POST", body: JSON.stringify({ report_a_id, report_b_id }) }),
+  sendReportEmail: (data: { report_id: string; recipient_email: string; subject?: string; message?: string; confirm_authorized: boolean }) =>
+    fetchJson<{ status: string; email_id: string; recipient: string; subject: string }>("/api/reports/send-email", {
+      method: "POST",
+      body: JSON.stringify(data),
+    }),
+  runWorkflow: (data: { mode: "sequential" | "parallel"; stages: string[]; project_id: string; dataset_id: string; model_names?: string[]; max_workers?: number }) =>
+    fetchJson<any>("/api/workflows/run", {
+      method: "POST",
+      body: JSON.stringify(data),
+    }),
 };
+

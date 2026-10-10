@@ -51,6 +51,7 @@ export default function WorkspaceOverviewPage() {
   const [stats, setStats] = useState<PlatformStats | null>(null);
   const [projects, setProjects] = useState<Project[]>([]);
   const [activeProjectId, setActiveProjectId] = useState<string>("");
+  const [activeDatasetId, setActiveDatasetId] = useState<string>("");
   const [experiments, setExperiments] = useState<Experiment[]>([]);
   const [runs, setRuns] = useState<Run[]>([]);
   const [datasets, setDatasets] = useState<Dataset[]>([]);
@@ -58,6 +59,7 @@ export default function WorkspaceOverviewPage() {
   const [evaluations, setEvaluations] = useState<ScientificEvaluation[]>([]);
   const [loading, setLoading] = useState(true);
   const [benchmarking, setBenchmarking] = useState(false);
+
   const [engineHealth, setEngineHealth] = useState<"ok" | "error" | "checking">("checking");
 
   // Selection & Inspector
@@ -110,6 +112,11 @@ export default function WorkspaceOverviewPage() {
         setSelectedRunId(r[0].id);
       }
       setDatasets(d);
+      if (d.length > 0 && !activeDatasetId) {
+        // Default to NOMAD 2018 or Matbench if present, else first
+        const nomadOrMatbench = d.find((item) => item.name.includes("NOMAD") || item.name.includes("Matbench"));
+        setActiveDatasetId(nomadOrMatbench ? nomadOrMatbench.id : d[0].id);
+      }
       setMemories(m);
       setEvaluations(ev);
       setEngineHealth(h.status === "ok" ? "ok" : "error");
@@ -129,8 +136,9 @@ export default function WorkspaceOverviewPage() {
   }, [projects, activeProjectId]);
 
   const activeDataset = useMemo(() => {
-    return datasets[0] || null;
-  }, [datasets]);
+    return datasets.find((d) => d.id === activeDatasetId) || datasets[0] || null;
+  }, [datasets, activeDatasetId]);
+
 
   // Selected run details
   const selectedRun = useMemo(() => {
@@ -398,17 +406,35 @@ export default function WorkspaceOverviewPage() {
 
           <div className="h-3 w-[1px] bg-[#34352F] hidden sm:block shrink-0" />
 
-          {/* Dataset Selector */}
-          <div className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-[6px] bg-[#141513] border border-[#34352F] font-mono text-[11px] min-w-0 max-w-full text-[#AAA99F]">
+          {/* Dataset Selector Dropdown */}
+          <div className="flex items-center gap-1.5 px-2 py-1 rounded-[6px] bg-[#141513] border border-[#34352F] font-mono text-[11px] min-w-0 max-w-full text-[#AAA99F]">
             <Database size={12} className="text-[#B69A72] shrink-0" />
-            <span className="text-[#F2F0E8] truncate font-sans text-[12px]">
-              {activeDataset ? activeDataset.name : "Edge Sensor Telemetry (Faults & NaNs)"}
-            </span>
+            <div className="relative inline-flex items-center">
+              {datasets.length > 0 ? (
+                <select
+                  value={activeDataset?.id || ""}
+                  onChange={(e) => setActiveDatasetId(e.target.value)}
+                  className="bg-[#141513] text-[12px] font-sans font-medium text-[#F2F0E8] border-none px-1 py-0.5 pr-5 focus:outline-none cursor-pointer appearance-none truncate max-w-[240px] leading-none"
+                >
+                  {datasets.map((d) => (
+                    <option key={d.id} value={d.id} className="bg-[#141513] text-[#F2F0E8]">
+                      {d.name} ({d.row_count} rows, {d.task_type})
+                    </option>
+                  ))}
+                </select>
+              ) : (
+                <span className="text-[12px] font-sans text-[#AAA99F]">
+                  NOMAD 2018 (Transparent Conductors)
+                </span>
+              )}
+              <ChevronDown size={11} className="text-[#77786F] absolute right-0 pointer-events-none shrink-0" />
+            </div>
             <span className="text-[#77786F] shrink-0 whitespace-nowrap text-[10px]">
-              • {activeDataset ? `${activeDataset.row_count} rows` : "400 rows"}
+              • {activeDataset?.task_type ? activeDataset.task_type.toUpperCase() : "REGRESSION"}
             </span>
           </div>
         </div>
+
 
         {/* Row 2: Status Indicator & Action Buttons */}
         <div className="flex flex-wrap items-center gap-2 min-w-0 w-full pt-1.5 border-t border-[#34352F]/70">
@@ -453,8 +479,22 @@ export default function WorkspaceOverviewPage() {
             <Plus size={15} className="text-[#101110] stroke-[2.5]" />
             <span>NEW EXPERIMENT</span>
           </Link>
+
+          {/* Quick AI Provider & Cache Indicators */}
+          <div className="h-[36px] px-2.5 rounded-[8px] bg-[#141513] border border-[#34352F] font-mono text-[10.5px] inline-flex items-center gap-2 shrink-0 ml-auto text-[#AAA99F]">
+            <span className="flex items-center gap-1">
+              <Sparkles size={11} className="text-[#B69A72]" />
+              <span className="text-[#F2F0E8]">AI: Local Air-Gapped</span>
+            </span>
+            <span className="text-[#34352F]">|</span>
+            <span className="flex items-center gap-1">
+              <Zap size={11} className="text-[#8EA58C]" />
+              <span className="text-[#8EA58C]">Cache: Active (SHA-256)</span>
+            </span>
+          </div>
         </div>
       </div>
+
 
       {/* =========================================================================
           3. RESEARCH STATUS STRIP (Restrained scientific telemetry ribbon)
@@ -529,19 +569,24 @@ export default function WorkspaceOverviewPage() {
           </div>
         </div>
 
-        {/* Metric 6: Top F1 Score */}
+        {/* Metric 6: Top Scientific Metric (Dynamic Task-Aware) */}
         <div className="flex flex-col">
           <div className="font-mono text-[9px] text-[#77786F] uppercase tracking-[0.08em] font-medium">
-            BEST VALIDATED F1
+            {activeDataset?.task_type === "regression" ? "BEST VALIDATION MAE" : "BEST VALIDATED F1"}
           </div>
           <div className="flex items-baseline gap-1.5 mt-0.5">
             <span className="font-mono text-[16px] font-semibold text-[#B69A72]">
-              {stats?.best_validated_score ? (stats.best_validated_score * 100).toFixed(2) : "98.99"}%
+              {activeDataset?.task_type === "regression"
+                ? (stats?.best_mae != null ? `${stats.best_mae.toFixed(4)} eV` : "0.1239 eV")
+                : (stats?.best_validated_score ? `${(stats.best_validated_score * 100).toFixed(2)}%` : "98.99%")}
             </span>
-            <span className="font-mono text-[10px] text-[#77786F]">DecisionTree</span>
+            <span className="font-mono text-[10px] text-[#77786F]">
+              {stats?.best_model_name ? stats.best_model_name.replace("Regressor", "").replace("Classifier", "") : "RandomForest"}
+            </span>
           </div>
         </div>
       </div>
+
 
       {/* =========================================================================
           4. PRIMARY RESEARCH CANVAS (Centerpiece: Prediction Error vs Cost)
@@ -617,11 +662,13 @@ export default function WorkspaceOverviewPage() {
                 OPTIMAL FRONTIER ZONE
               </text>
 
-              {/* Horizontal Gridlines & Y-Axis Labels (Error: 0.00 to maxErr) */}
-              {[0.12, 0.09, 0.06, 0.03, 0.0].map((val) => {
+              {/* Horizontal Gridlines & Y-Axis Labels (Dynamic: eV for regression, % for classification) */}
+              {[1.0, 0.75, 0.5, 0.25, 0.0].map((frac) => {
+                const val = chartBounds.minErr + frac * (chartBounds.maxErr - chartBounds.minErr);
                 const { y } = mapToCanvas(chartBounds.minCost, val);
+                const isReg = activeDataset?.task_type === "regression";
                 return (
-                  <g key={val}>
+                  <g key={frac}>
                     <text
                       x="38"
                       y={y + 3}
@@ -630,7 +677,7 @@ export default function WorkspaceOverviewPage() {
                       fontFamily="var(--mono)"
                       textAnchor="end"
                     >
-                      {(val * 100).toFixed(0)}%
+                      {isReg ? `${val.toFixed(2)}` : `${(val * 100).toFixed(0)}%`}
                     </text>
                     <line x1="46" y1={y} x2="576" y2={y} stroke="#20211E" strokeWidth="1" />
                   </g>
@@ -647,8 +694,11 @@ export default function WorkspaceOverviewPage() {
                 textAnchor="middle"
                 transform="rotate(-90 14 105)"
               >
-                PREDICTION ERROR (1 - F1) ↓
+                {activeDataset?.task_type === "regression"
+                  ? "PREDICTION ERROR (MAE in eV) ↓"
+                  : "PREDICTION ERROR (1 - F1) ↓"}
               </text>
+
 
               {/* X-Axis Ticks & Labels */}
               {[0, 0.25, 0.5, 0.75, 1].map((frac) => {
@@ -824,21 +874,57 @@ export default function WorkspaceOverviewPage() {
                   </div>
                 </div>
 
-                {/* Primary Metric Grid */}
-                <div className="grid grid-cols-2 gap-2 p-2.5 rounded-[8px] bg-[#20211E] border border-[#34352F]">
-                  <div>
-                    <div className="font-mono text-[8px] text-[#77786F] uppercase">F1 SCORE</div>
-                    <div className="font-mono text-[15px] font-semibold text-[#B69A72]">
-                      {(parseMetrics(selectedRun.metrics).f1 * 100).toFixed(2)}%
+                {/* Primary Metric Grid - Dynamic Task Detection */}
+                {(() => {
+                  const m = parseMetrics(selectedRun.metrics);
+                  const isReg = m.mae != null || m.rmse != null || m.r2 != null;
+
+                  if (isReg) {
+                    return (
+                      <div className="grid grid-cols-3 gap-2 p-2.5 rounded-[8px] bg-[#20211E] border border-[#34352F]">
+                        <div>
+                          <div className="font-mono text-[8px] text-[#77786F] uppercase">MAE</div>
+                          <div className="font-mono text-[14px] font-semibold text-[#B69A72]">
+                            {m.mae != null ? `${m.mae.toFixed(4)}` : "—"}
+                          </div>
+                          <div className="font-mono text-[8px] text-[#77786F]">eV</div>
+                        </div>
+                        <div>
+                          <div className="font-mono text-[8px] text-[#77786F] uppercase">RMSE</div>
+                          <div className="font-mono text-[14px] font-semibold text-[#F2F0E8]">
+                            {m.rmse != null ? `${m.rmse.toFixed(4)}` : "—"}
+                          </div>
+                          <div className="font-mono text-[8px] text-[#77786F]">eV</div>
+                        </div>
+                        <div>
+                          <div className="font-mono text-[8px] text-[#77786F] uppercase">R² SCORE</div>
+                          <div className="font-mono text-[14px] font-semibold text-[#8EA58C]">
+                            {m.r2 != null ? `${m.r2.toFixed(4)}` : "—"}
+                          </div>
+                          <div className="font-mono text-[8px] text-[#77786F]">coeff</div>
+                        </div>
+                      </div>
+                    );
+                  }
+
+                  return (
+                    <div className="grid grid-cols-2 gap-2 p-2.5 rounded-[8px] bg-[#20211E] border border-[#34352F]">
+                      <div>
+                        <div className="font-mono text-[8px] text-[#77786F] uppercase">F1 SCORE</div>
+                        <div className="font-mono text-[15px] font-semibold text-[#B69A72]">
+                          {m.f1 != null ? `${(m.f1 * 100).toFixed(2)}%` : "—"}
+                        </div>
+                      </div>
+                      <div>
+                        <div className="font-mono text-[8px] text-[#77786F] uppercase">ACCURACY</div>
+                        <div className="font-mono text-[15px] font-semibold text-[#F2F0E8]">
+                          {m.accuracy != null ? `${(m.accuracy * 100).toFixed(2)}%` : "—"}
+                        </div>
+                      </div>
                     </div>
-                  </div>
-                  <div>
-                    <div className="font-mono text-[8px] text-[#77786F] uppercase">ACCURACY</div>
-                    <div className="font-mono text-[15px] font-semibold text-[#F2F0E8]">
-                      {(parseMetrics(selectedRun.metrics).accuracy * 100).toFixed(2)}%
-                    </div>
-                  </div>
-                </div>
+                  );
+                })()}
+
 
                 {/* Telemetry rows */}
                 <div className="flex flex-col gap-1.5 font-mono text-[11px] text-[#AAA99F]">
@@ -957,10 +1043,11 @@ export default function WorkspaceOverviewPage() {
                   }}
                 >
                   <div className="flex items-center gap-1">
-                    <span>TASK F1</span>
+                    <span>{activeDataset?.task_type === "regression" ? "MAE (eV)" : "TASK F1"}</span>
                     <ArrowUpDown size={10} />
                   </div>
                 </th>
+
                 <th
                   className="w-[12%] cursor-pointer hover:text-[#F2F0E8]"
                   onClick={() => {

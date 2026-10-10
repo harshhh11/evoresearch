@@ -11,6 +11,9 @@ import {
   ExternalLink,
   Download,
   Sparkles,
+  Mail,
+  Send,
+  X,
 } from "lucide-react";
 
 export default function ReportsPage() {
@@ -25,6 +28,17 @@ export default function ReportsPage() {
   const [generating, setGenerating] = useState(false);
   const [selectedProjectId, setSelectedProjectId] = useState("");
   const [reportTitle, setReportTitle] = useState("");
+
+  // Secure Email Dispatch State
+  const [emailModalOpen, setEmailModalOpen] = useState(false);
+  const [recipientEmail, setRecipientEmail] = useState("");
+  const [emailSubject, setEmailSubject] = useState("");
+  const [emailNotes, setEmailNotes] = useState("");
+  const [emailAuthorized, setEmailAuthorized] = useState(false);
+  const [sendingEmail, setSendingEmail] = useState(false);
+  const [emailSuccess, setEmailSuccess] = useState<string | null>(null);
+  const [emailError, setEmailError] = useState<string | null>(null);
+
 
   const loadReports = async () => {
     try {
@@ -72,6 +86,35 @@ export default function ReportsPage() {
       setGenerating(false);
     }
   };
+
+  const handleSendEmail = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!selectedReport || !recipientEmail || !emailAuthorized) return;
+    setSendingEmail(true);
+    setEmailError(null);
+    setEmailSuccess(null);
+    try {
+      const res = await api.sendReportEmail({
+        report_id: selectedReport.report.id,
+        recipient_email: recipientEmail,
+        subject: emailSubject || undefined,
+        message: emailNotes || undefined,
+        confirm_authorized: emailAuthorized,
+      });
+      setEmailSuccess(`Report dispatched securely to ${recipientEmail} (ID: ${res.email_id.slice(0, 8)}).`);
+      setTimeout(() => {
+        setEmailModalOpen(false);
+        setEmailSuccess(null);
+        setRecipientEmail("");
+        setEmailAuthorized(false);
+      }, 2500);
+    } catch (err: any) {
+      setEmailError(err.message || "Failed to dispatch report email");
+    } finally {
+      setSendingEmail(false);
+    }
+  };
+
 
   if (loading) {
     return (
@@ -252,7 +295,16 @@ export default function ReportsPage() {
                 </div>
               </div>
 
-              <div style={{ display: "flex", gap: 8 }}>
+              <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
+                <button
+                  type="button"
+                  onClick={() => setEmailModalOpen(true)}
+                  className="research-button research-button--secondary"
+                  style={{ display: "inline-flex", alignItems: "center", gap: 6, cursor: "pointer", background: "rgba(182, 154, 114, 0.12)", border: "1px solid rgba(182, 154, 114, 0.4)", color: "#B69A72" }}
+                >
+                  <Mail size={13} />
+                  EMAIL REPORT
+                </button>
                 <a
                   href={`http://127.0.0.1:8000/api/reports/${selectedReport.report.id}/export?format=csv`}
                   target="_blank"
@@ -275,6 +327,7 @@ export default function ReportsPage() {
                 </a>
               </div>
             </div>
+
 
             {/* Abstract / Summary */}
             <div>
@@ -402,6 +455,114 @@ export default function ReportsPage() {
           </div>
         )}
       </div>
+
+      {/* Secure Report Email Dispatch Modal */}
+      {emailModalOpen && selectedReport && (
+        <div style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.85)", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 9999, backdropFilter: "blur(4px)" }}>
+          <div style={{ background: "#101110", border: "1px solid rgba(182, 154, 114, 0.4)", borderRadius: 6, padding: 28, maxWidth: 500, width: "90%", boxShadow: "0 20px 40px rgba(0,0,0,0.6)" }}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", borderBottom: "1px solid rgba(226, 239, 229, 0.1)", paddingBottom: 14, marginBottom: 18 }}>
+              <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                <Mail size={16} color="#B69A72" />
+                <h3 style={{ margin: 0, font: "600 16px var(--body)", color: "#F2F0E8" }}>
+                  Dispatch Scientific Report via Email
+                </h3>
+              </div>
+              <button
+                type="button"
+                onClick={() => setEmailModalOpen(false)}
+                style={{ background: "transparent", border: "none", color: "#AAA99F", cursor: "pointer" }}
+              >
+                <X size={16} />
+              </button>
+            </div>
+
+            <form onSubmit={handleSendEmail} style={{ display: "flex", flexDirection: "column", gap: 14 }}>
+              <div>
+                <label style={{ display: "block", font: "500 9px var(--mono)", color: "#7e9084", marginBottom: 6 }}>
+                  RECIPIENT EMAIL ADDRESS
+                </label>
+                <input
+                  type="email"
+                  required
+                  placeholder="collaborator@materials-lab.org"
+                  value={recipientEmail}
+                  onChange={(e) => setRecipientEmail(e.target.value)}
+                  style={{ width: "100%", padding: "9px 12px", background: "#141513", border: "1px solid rgba(226, 239, 229, 0.15)", borderRadius: 4, color: "#F2F0E8", font: "400 12px var(--mono)" }}
+                />
+              </div>
+
+              <div>
+                <label style={{ display: "block", font: "500 9px var(--mono)", color: "#7e9084", marginBottom: 6 }}>
+                  EMAIL SUBJECT (OPTIONAL)
+                </label>
+                <input
+                  type="text"
+                  placeholder={`[EvolveX Verified Report] ${selectedReport.report.title}`}
+                  value={emailSubject}
+                  onChange={(e) => setEmailSubject(e.target.value)}
+                  style={{ width: "100%", padding: "9px 12px", background: "#141513", border: "1px solid rgba(226, 239, 229, 0.15)", borderRadius: 4, color: "#F2F0E8", font: "400 12px var(--mono)" }}
+                />
+              </div>
+
+              <div>
+                <label style={{ display: "block", font: "500 9px var(--mono)", color: "#7e9084", marginBottom: 6 }}>
+                  OPTIONAL NOTES
+                </label>
+                <textarea
+                  rows={2}
+                  placeholder="Additional peer-review notes or provenance annotations..."
+                  value={emailNotes}
+                  onChange={(e) => setEmailNotes(e.target.value)}
+                  style={{ width: "100%", padding: "9px 12px", background: "#141513", border: "1px solid rgba(226, 239, 229, 0.15)", borderRadius: 4, color: "#F2F0E8", font: "400 12px var(--mono)" }}
+                />
+              </div>
+
+              <div style={{ background: "rgba(182, 154, 114, 0.06)", border: "1px solid rgba(182, 154, 114, 0.2)", borderRadius: 4, padding: "10px 12px", display: "flex", alignItems: "flex-start", gap: 10 }}>
+                <input
+                  type="checkbox"
+                  id="authConfirm"
+                  required
+                  checked={emailAuthorized}
+                  onChange={(e) => setEmailAuthorized(e.target.checked)}
+                  style={{ marginTop: 2, cursor: "pointer" }}
+                />
+                <label htmlFor="authConfirm" style={{ font: "400 10.5px var(--mono)", color: "#c6d4c8", cursor: "pointer" }}>
+                  I confirm authorization to transmit this synthesized evidence report and associated empirical metric claims to the designated external recipient.
+                </label>
+              </div>
+
+              {emailError && (
+                <div style={{ font: "400 11px var(--mono)", color: "#ff8b8b", padding: "6px 8px", background: "rgba(255, 100, 100, 0.1)", borderRadius: 3 }}>
+                  {emailError}
+                </div>
+              )}
+              {emailSuccess && (
+                <div style={{ font: "400 11px var(--mono)", color: "#8EA58C", padding: "6px 8px", background: "rgba(142, 165, 140, 0.1)", borderRadius: 3 }}>
+                  {emailSuccess}
+                </div>
+              )}
+
+              <div style={{ display: "flex", gap: 10, justifyContent: "flex-end", marginTop: 8 }}>
+                <button
+                  type="button"
+                  onClick={() => setEmailModalOpen(false)}
+                  style={{ padding: "8px 16px", background: "transparent", border: "1px solid rgba(226, 239, 229, 0.2)", color: "#AAA99F", font: "500 11px var(--mono)", borderRadius: 3, cursor: "pointer" }}
+                >
+                  CANCEL
+                </button>
+                <button
+                  type="submit"
+                  disabled={sendingEmail || !emailAuthorized}
+                  style={{ padding: "8px 20px", background: "#B69A72", border: "none", color: "#101110", font: "600 11px var(--mono)", letterSpacing: "0.06em", borderRadius: 3, cursor: sendingEmail || !emailAuthorized ? "not-allowed" : "pointer", opacity: emailAuthorized ? 1 : 0.6 }}
+                >
+                  {sendingEmail ? "TRANSMITTING..." : "DISPATCH EMAIL"}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
+
