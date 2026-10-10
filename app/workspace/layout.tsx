@@ -19,6 +19,8 @@ import {
   Activity,
   Terminal,
   ShieldCheck,
+  BarChart3,
+  Network,
 } from "lucide-react";
 import { ReactNode, useState, useEffect } from "react";
 import { api } from "@/lib/api";
@@ -28,6 +30,7 @@ const navigationGroups = [
     group: "EXPERIMENTS & DATA",
     items: [
       { name: "Overview Canvas", href: "/workspace", icon: LayoutDashboard },
+      { name: "Analytics & Trends", href: "/workspace/analytics", icon: BarChart3 },
       { name: "Run Experiment", href: "/workspace/experiments/new", icon: FlaskConical },
       { name: "Materials Datasets", href: "/workspace/datasets", icon: Database },
     ],
@@ -35,6 +38,7 @@ const navigationGroups = [
   {
     group: "SCIENTIFIC INTELLIGENCE",
     items: [
+      { name: "Research Knowledge Graph", href: "/workspace/knowledge-graph", icon: Network },
       { name: "Failure Memory", href: "/workspace/memory", icon: BrainCircuit },
       { name: "ARINA Assistant", href: "/workspace#assistant", icon: Sparkles },
       { name: "Literature & Insights", href: "/workspace/papers", icon: BookOpen },

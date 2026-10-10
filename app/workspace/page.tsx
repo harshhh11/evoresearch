@@ -45,6 +45,7 @@ import {
   ArrowUpDown,
   Maximize2,
   Terminal,
+  X,
 } from "lucide-react";
 
 export default function WorkspaceOverviewPage() {
@@ -61,6 +62,14 @@ export default function WorkspaceOverviewPage() {
   const [benchmarking, setBenchmarking] = useState(false);
 
   const [engineHealth, setEngineHealth] = useState<"ok" | "error" | "checking">("checking");
+
+  // AI Provider Switcher
+  const [aiModalOpen, setAiModalOpen] = useState(false);
+  const [aiProvider, setAiProvider] = useState<"local" | "openai">("local");
+  const [aiModel, setAiModel] = useState<string>("qwen2.5-coder-7b-instruct-local");
+  const [openaiKey, setOpenaiKey] = useState<string>("");
+  const [aiSaving, setAiSaving] = useState(false);
+  const [aiSuccessMsg, setAiSuccessMsg] = useState("");
 
   // Selection & Inspector
   const [selectedRunId, setSelectedRunId] = useState<string | null>(null);
@@ -120,10 +129,39 @@ export default function WorkspaceOverviewPage() {
       setMemories(m);
       setEvaluations(ev);
       setEngineHealth(h.status === "ok" ? "ok" : "error");
+
+      api.getAIStatus().then((st) => {
+        if (st) {
+          setAiProvider((st.active_provider as any) || "local");
+          setAiModel(st.active_model || "qwen2.5-coder-7b-instruct-local");
+        }
+      }).catch(() => {});
     } catch (err) {
       console.error("Failed to load scientific workspace data:", err);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleSaveAIConfig = async () => {
+    setAiSaving(true);
+    setAiSuccessMsg("");
+    try {
+      const res = await api.updateAIConfig({
+        provider: aiProvider,
+        model: aiProvider === "openai" ? "gpt-4o" : "qwen2.5-coder-7b-instruct-local",
+        openai_api_key: openaiKey || undefined,
+      });
+      setAiModel(res.active_model);
+      setAiSuccessMsg(`Active Provider: ${res.active_provider.toUpperCase()} (${res.active_model})`);
+      setTimeout(() => {
+        setAiSuccessMsg("");
+        setAiModalOpen(false);
+      }, 1200);
+    } catch (err: any) {
+      alert("Failed to update AI config: " + err.message);
+    } finally {
+      setAiSaving(false);
     }
   };
 
@@ -153,10 +191,24 @@ export default function WorkspaceOverviewPage() {
     return filtered.length > 0 ? filtered : runs;
   }, [runs, activeDataset]);
 
-  // Selected run details (strictly bounded to dataset runs)
+  // Selected run details (strictly bounded to dataset runs - defaults to BEST COMPLETED run)
   const selectedRun = useMemo(() => {
-    if (!selectedRunId) return datasetRuns[0] || null;
-    return datasetRuns.find((r) => r.id === selectedRunId) || datasetRuns[0] || null;
+    if (selectedRunId) {
+      const found = datasetRuns.find((r) => r.id === selectedRunId);
+      if (found) return found;
+    }
+    const completed = datasetRuns.filter((r) => r.status === "COMPLETED");
+    if (completed.length > 0) {
+      const withMae = completed.filter((r) => {
+        const m = parseMetrics(r.metrics);
+        return m.mae != null;
+      });
+      if (withMae.length > 0) {
+        return withMae.sort((a, b) => (parseMetrics(a.metrics).mae ?? 999) - (parseMetrics(b.metrics).mae ?? 999))[0];
+      }
+      return completed[0];
+    }
+    return datasetRuns[0] || null;
   }, [datasetRuns, selectedRunId]);
 
 
@@ -490,10 +542,18 @@ export default function WorkspaceOverviewPage() {
 
           {/* Quick AI Provider & Cache Indicators */}
           <div className="h-[36px] px-2.5 rounded-[8px] bg-[#141513] border border-[#34352F] font-mono text-[10.5px] inline-flex items-center gap-2 shrink-0 ml-auto text-[#AAA99F]">
-            <span className="flex items-center gap-1">
-              <Sparkles size={11} className="text-[#B69A72]" />
-              <span className="text-[#F2F0E8]">AI: Local Air-Gapped</span>
-            </span>
+            <button
+              type="button"
+              onClick={() => setAiModalOpen(true)}
+              className="flex items-center gap-1.5 hover:text-[#F2F0E8] transition-colors focus:outline-none cursor-pointer group"
+              title="Click to configure AI Provider (Local Air-Gapped vs OpenAI)"
+            >
+              <Sparkles size={11} className={aiProvider === "openai" ? "text-[#8EA58C]" : "text-[#B69A72]"} />
+              <span className="text-[#F2F0E8] font-medium group-hover:underline">
+                AI: {aiProvider === "openai" ? "OpenAI (GPT-4o)" : "Local Air-Gapped"}
+              </span>
+              <ChevronDown size={10} className="text-[#77786F]" />
+            </button>
             <span className="text-[#34352F]">|</span>
             <span className="flex items-center gap-1">
               <Zap size={11} className="text-[#8EA58C]" />
@@ -898,7 +958,11 @@ export default function WorkspaceOverviewPage() {
                 SELECTED MODEL INSPECTOR
               </div>
               {selectedRun && (
-                <span className="font-mono text-[9px] text-[#8EA58C] px-2 py-0.5 rounded bg-[#8EA58C]/15 border border-[#8EA58C]/30 font-medium">
+                <span className={`font-mono text-[9px] px-2 py-0.5 rounded font-medium ${
+                  selectedRun.status === "FAILED"
+                    ? "text-[#C77F72] bg-[#C77F72]/15 border border-[#C77F72]/30"
+                    : "text-[#8EA58C] bg-[#8EA58C]/15 border border-[#8EA58C]/30"
+                }`}>
                   {selectedRun.status}
                 </span>
               )}
@@ -918,8 +982,30 @@ export default function WorkspaceOverviewPage() {
 
                 {/* Primary Metric Grid - Dynamic Task Detection */}
                 {(() => {
+                  if (selectedRun.status === "FAILED") {
+                    return (
+                      <div className="p-3 rounded-[8px] bg-[#C77F72]/10 border border-[#C77F72]/30 flex flex-col gap-2">
+                        <div className="flex items-center justify-between">
+                          <span className="font-mono text-[9px] font-semibold text-[#C77F72] uppercase tracking-[0.08em]">
+                            TRAINING HALTED / FAILED
+                          </span>
+                          <span className="font-mono text-[9px] text-[#C77F72] px-1.5 py-0.5 rounded bg-[#C77F72]/20">
+                            RECOVERY ELIGIBLE
+                          </span>
+                        </div>
+                        <p className="font-mono text-[11px] text-[#F2F0E8] leading-relaxed m-0">
+                          {selectedRun.error_message || "Convergence failure: Task parameters or model constraints violated."}
+                        </p>
+                        <div className="pt-1.5 border-t border-[#C77F72]/20 flex items-center justify-between font-mono text-[9px] text-[#AAA99F]">
+                          <span>DIAGNOSIS: LOGGED IN FAILURE MEMORY</span>
+                          <Link href="/workspace/memory" className="text-[#B69A72] hover:underline">VIEW PATCH →</Link>
+                        </div>
+                      </div>
+                    );
+                  }
+
                   const m = parseMetrics(selectedRun.metrics);
-                  const isReg = m.mae != null || m.rmse != null || m.r2 != null;
+                  const isReg = activeDataset?.task_type === "regression" || selectedRun.model_name.includes("Regressor") || m.mae != null || m.rmse != null;
 
                   if (isReg) {
                     return (
@@ -973,29 +1059,29 @@ export default function WorkspaceOverviewPage() {
                   <div className="flex justify-between py-1 border-b border-[#34352F]/60">
                     <span className="text-[#77786F]">INFERENCE LATENCY</span>
                     <span className="text-[#F2F0E8]">
-                      {selectedRun.inference_latency_us?.toFixed(1) ?? "—"} μs
+                      {selectedRun.status === "FAILED" ? "N/A (Halted)" : `${selectedRun.inference_latency_us?.toFixed(1) ?? "—"} μs`}
                     </span>
                   </div>
                   <div className="flex justify-between py-1 border-b border-[#34352F]/60">
                     <span className="text-[#77786F]">CPU TRAIN TIME</span>
                     <span className="text-[#F2F0E8]">
-                      {selectedRun.train_time_ms?.toFixed(1) ?? "—"} ms
+                      {selectedRun.status === "FAILED" ? "N/A (Halted)" : `${selectedRun.train_time_ms?.toFixed(1) ?? "—"} ms`}
                     </span>
                   </div>
                   <div className="flex justify-between py-1 border-b border-[#34352F]/60">
                     <span className="text-[#77786F]">SERIALIZED SIZE</span>
                     <span className="text-[#F2F0E8]">
-                      {selectedRun.model_size_kb?.toFixed(2) ?? "—"} KB
+                      {selectedRun.status === "FAILED" ? "N/A" : `${selectedRun.model_size_kb?.toFixed(2) ?? "—"} KB`}
                     </span>
                   </div>
                   <div className="flex justify-between py-1 border-b border-[#34352F]/60">
                     <span className="text-[#77786F]">PARAM COUNT</span>
-                    <span className="text-[#F2F0E8]">{selectedRun.param_count ?? "—"}</span>
+                    <span className="text-[#F2F0E8]">{selectedRun.status === "FAILED" ? "N/A" : (selectedRun.param_count ?? "—")}</span>
                   </div>
                   <div className="flex justify-between py-1 border-b border-[#34352F]/60">
                     <span className="text-[#77786F]">TARGET PROPERTY</span>
                     <span className="text-[#B69A72]">
-                      {selectedRun.target_col || "fault_detected"}
+                      {selectedRun.target_col || activeDataset?.target_col || "bandgap_energy_ev"}
                     </span>
                   </div>
                 </div>
@@ -1009,7 +1095,7 @@ export default function WorkspaceOverviewPage() {
                     {selectedRun.experiment_name || "Materials Science Baseline Evaluation"}
                   </div>
                   <div className="text-[#77786F] text-[10px] mt-0.5">
-                    Dataset: {selectedRun.dataset_name || "Edge Sensor Telemetry"}
+                    Dataset: {selectedRun.dataset_name || activeDataset?.name || "NOMAD 2018"}
                   </div>
                 </div>
               </div>
@@ -1573,6 +1659,125 @@ export default function WorkspaceOverviewPage() {
                 </button>
               </div>
             </form>
+          </div>
+        </div>
+      )}
+
+      {/* Modal: AI Provider Selector */}
+      {aiModalOpen && (
+        <div className="fixed inset-0 z-50 bg-black/75 backdrop-blur-md flex items-center justify-center p-4">
+          <div className="w-full max-w-md rounded-[12px] bg-[#191A18] border border-[#34352F] p-6 shadow-2xl relative">
+            <button
+              type="button"
+              onClick={() => setAiModalOpen(false)}
+              className="absolute right-4 top-4 text-[#77786F] hover:text-[#F2F0E8] transition-colors"
+            >
+              <X size={16} />
+            </button>
+            <div className="flex items-center gap-2 mb-1">
+              <Sparkles size={16} className="text-[#B69A72]" />
+              <h3 className="font-sans text-[18px] font-semibold text-[#F2F0E8] m-0">
+                AI Reasoning Provider
+              </h3>
+            </div>
+            <p className="font-sans text-[12px] text-[#AAA99F] mb-4">
+              Select between private local offline inference or external cloud models.
+            </p>
+
+            <div className="flex flex-col gap-3.5">
+              {/* Option 1: Local Air-Gapped */}
+              <label
+                onClick={() => setAiProvider("local")}
+                className={`p-3 rounded-[8px] border cursor-pointer transition-all flex items-start gap-3 ${
+                  aiProvider === "local"
+                    ? "bg-[#20211E] border-[#B69A72]"
+                    : "bg-[#141513] border-[#34352F] hover:border-[#77786F]"
+                }`}
+              >
+                <input
+                  type="radio"
+                  name="ai_provider"
+                  checked={aiProvider === "local"}
+                  onChange={() => setAiProvider("local")}
+                  className="mt-1"
+                />
+                <div>
+                  <div className="font-sans text-[13px] font-semibold text-[#F2F0E8] flex items-center gap-2">
+                    Local Air-Gapped Engine
+                    <span className="font-mono text-[9px] text-[#8EA58C] px-1.5 py-0.2 rounded bg-[#8EA58C]/15">
+                      ACTIVE
+                    </span>
+                  </div>
+                  <div className="font-mono text-[10px] text-[#77786F] mt-0.5">
+                    Model: qwen2.5-coder-7b-instruct-local (zero egress, deterministic materials science logic)
+                  </div>
+                </div>
+              </label>
+
+              {/* Option 2: OpenAI */}
+              <label
+                onClick={() => setAiProvider("openai")}
+                className={`p-3 rounded-[8px] border cursor-pointer transition-all flex items-start gap-3 ${
+                  aiProvider === "openai"
+                    ? "bg-[#20211E] border-[#B69A72]"
+                    : "bg-[#141513] border-[#34352F] hover:border-[#77786F]"
+                }`}
+              >
+                <input
+                  type="radio"
+                  name="ai_provider"
+                  checked={aiProvider === "openai"}
+                  onChange={() => setAiProvider("openai")}
+                  className="mt-1"
+                />
+                <div className="w-full">
+                  <div className="font-sans text-[13px] font-semibold text-[#F2F0E8]">
+                    OpenAI API Cloud Relay
+                  </div>
+                  <div className="font-mono text-[10px] text-[#77786F] mt-0.5">
+                    Model: gpt-4o (requires API key stored server-side)
+                  </div>
+                  {aiProvider === "openai" && (
+                    <div className="mt-2.5">
+                      <label className="block font-mono text-[9px] text-[#77786F] uppercase mb-1">
+                        OpenAI API Key
+                      </label>
+                      <input
+                        type="password"
+                        value={openaiKey}
+                        onChange={(e) => setOpenaiKey(e.target.value)}
+                        placeholder="sk-proj-..."
+                        className="w-full h-8 px-2.5 bg-[#141513] border border-[#34352F] rounded-[6px] font-mono text-[11px] text-[#F2F0E8] focus:outline-none focus:border-[#B69A72]"
+                      />
+                    </div>
+                  )}
+                </div>
+              </label>
+
+              {aiSuccessMsg && (
+                <div className="p-2 rounded-[6px] bg-[#8EA58C]/15 border border-[#8EA58C]/30 font-mono text-[11px] text-[#8EA58C] text-center">
+                  {aiSuccessMsg}
+                </div>
+              )}
+
+              <div className="flex justify-end gap-2.5 mt-2">
+                <button
+                  type="button"
+                  onClick={() => setAiModalOpen(false)}
+                  className="px-3.5 py-1.5 rounded-[6px] bg-[#20211E] border border-[#34352F] text-[11px] font-sans text-[#AAA99F] hover:text-[#F2F0E8]"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="button"
+                  onClick={handleSaveAIConfig}
+                  disabled={aiSaving}
+                  className="px-4 py-1.5 rounded-[6px] bg-[#B69A72] text-[#101110] text-[11px] font-semibold hover:bg-[#C8AE87] disabled:opacity-50"
+                >
+                  {aiSaving ? "Saving..." : "Apply Provider Settings"}
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       )}
