@@ -365,14 +365,15 @@ export default function WorkspaceOverviewPage() {
       {/* =========================================================================
           2. RESEARCH OVERVIEW PANEL (Unified Instrument Bar)
           ========================================================================= */}
-      <div className="p-2.5 px-3.5 rounded-[8px] bg-[#111513] border border-[#1f2622] flex flex-wrap items-center justify-between gap-3 w-full box-border min-w-0">
-        {/* Left: Project Selector & Dataset Context (matching X-AXIS / UI box styles) */}
-        <div className="flex flex-wrap items-center gap-2.5 min-w-0">
+      <div className="p-3 sm:p-3.5 rounded-[8px] bg-[#111513] border border-[#1f2622] flex flex-col gap-2.5 w-full box-border min-w-0">
+        {/* Row 1: Project Selector & Dataset Selector */}
+        <div className="flex flex-wrap items-center gap-2.5 min-w-0 w-full">
+          {/* Project Selector */}
           <div className="flex items-center gap-1.5 shrink-0">
             <span className="font-mono text-[8.5px] text-[#687069] uppercase tracking-wider select-none shrink-0">
               PROJECT:
             </span>
-            <div className="relative flex items-center shrink-0">
+            <div className="relative flex items-center min-w-0">
               {projects.length > 0 ? (
                 <select
                   id="project-selector"
@@ -397,10 +398,10 @@ export default function WorkspaceOverviewPage() {
 
           <div className="h-3 w-[1px] bg-[#1f2622] hidden sm:block shrink-0" />
 
-          {/* Dataset metadata - matching instrument box */}
-          <div className="flex items-center gap-1.5 px-2 py-1 rounded-[4px] bg-[#0c100e] border border-[#1f2622] font-mono text-[9.5px] min-w-0 shrink-0 text-[#8e958f]">
+          {/* Dataset Selector */}
+          <div className="flex items-center gap-1.5 px-2 py-1 rounded-[4px] bg-[#0c100e] border border-[#1f2622] font-mono text-[9.5px] min-w-0 max-w-full text-[#8e958f]">
             <Database size={10.5} className="text-[#9aaf98] shrink-0" />
-            <span className="text-[#c4ccc5] truncate max-w-[180px] sm:max-w-[240px]">
+            <span className="text-[#c4ccc5] truncate">
               {activeDataset ? activeDataset.name : "Edge Sensor Telemetry (Faults & NaNs)"}
             </span>
             <span className="text-[#555e57] shrink-0 whitespace-nowrap">
@@ -409,9 +410,10 @@ export default function WorkspaceOverviewPage() {
           </div>
         </div>
 
-        {/* Right: Unified Action Controls matching other UI boxes and font */}
-        <div className="flex flex-wrap items-center gap-2 shrink-0">
-          <div className="flex items-center gap-1.5 px-2 py-1 rounded-[4px] bg-[#0c100e] border border-[#1f2622] font-mono text-[9px] shrink-0">
+        {/* Row 2: Status Indicator & Action Buttons */}
+        <div className="flex flex-wrap items-center gap-2 min-w-0 w-full pt-1 border-t border-[#18201b]">
+          {/* Status Indicator */}
+          <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-[4px] bg-[#0c100e] border border-[#1f2622] font-mono text-[9px] shrink-0">
             <span
               className={`w-1.5 h-1.5 rounded-full shrink-0 ${
                 engineHealth === "ok" ? "bg-[#9aaf98]" : "bg-[#d46b6b]"
@@ -422,6 +424,7 @@ export default function WorkspaceOverviewPage() {
             </span>
           </div>
 
+          {/* Action: New Project */}
           <button
             type="button"
             onClick={() => setNewProjectModal(true)}
@@ -431,6 +434,7 @@ export default function WorkspaceOverviewPage() {
             <span>NEW PROJECT</span>
           </button>
 
+          {/* Action: Run Benchmark */}
           <button
             type="button"
             onClick={handleRunQuickBenchmark}
@@ -441,6 +445,7 @@ export default function WorkspaceOverviewPage() {
             <span>{benchmarking ? "BENCHMARKING..." : "RUN BENCHMARK"}</span>
           </button>
 
+          {/* Action: New Experiment */}
           <Link
             href="/workspace/experiments/new"
             className="px-2.5 py-1 rounded-[4px] bg-[#18201c] border border-[#27352b] hover:border-[#9aaf98] text-[#e8e6df] hover:text-[#ffffff] font-mono text-[9.5px] font-medium uppercase tracking-wider transition-all inline-flex items-center gap-1.5 shrink-0 whitespace-nowrap leading-none shadow-xs"
@@ -544,9 +549,10 @@ export default function WorkspaceOverviewPage() {
       <div className="grid grid-cols-1 xl:grid-cols-12 gap-5 items-stretch">
         {/* Visualization & Pareto Frontier Canvas (8 columns) */}
         <div className="xl:col-span-8 p-[18px_20px] rounded-[8px] bg-[#111513] border border-[#1f2622] flex flex-col justify-between">
-          {/* Canvas Header & Toggles */}
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-[#1b221e]">
-            <div>
+          {/* Canvas Header & Toggles - Responsive two-column grid on desktop, clean stack on mobile */}
+          <div className="grid grid-cols-1 lg:grid-cols-[1fr_auto] items-start gap-4 pb-3 border-b border-[#1b221e] w-full min-w-0">
+            {/* Left column: Section label, Heading, and Description */}
+            <div className="min-w-0 flex flex-col">
               <div className="flex items-center gap-2">
                 <span className="w-1.5 h-1.5 rounded-full bg-[#9aaf98]" />
                 <span className="font-mono text-[8.5px] text-[#8e958f] uppercase tracking-[0.14em]">
@@ -559,37 +565,39 @@ export default function WorkspaceOverviewPage() {
               >
                 Prediction Error vs. Computational Cost
               </h2>
-              <p className="font-sans text-[11px] text-[#8e958f] mt-0.5">
+              <p className="font-sans text-[11px] text-[#8e958f] mt-1 max-w-[560px]">
                 Pareto-frontier trade-offs on {activeDataset?.name || "Edge Sensor Telemetry"}. Click any point to inspect serialized telemetry.
               </p>
             </div>
 
-            {/* Cost Axis Segmented Control - Sleek inline instrument toggle */}
-            <div className="flex items-center p-0.5 rounded-[5px] bg-[#0c100e] border border-[#1b221e] shrink-0 self-start sm:self-auto">
-              <span className="font-mono text-[8.5px] text-[#555e57] px-2 uppercase tracking-wider select-none shrink-0 whitespace-nowrap">
-                X-AXIS:
-              </span>
-              <div className="h-3 w-[1px] bg-[#18201b] shrink-0 mr-0.5" />
-              {(
-                [
-                  { id: "latency", label: "Latency (μs)" },
-                  { id: "train_time", label: "Train Time (ms)" },
-                  { id: "model_size", label: "Size (KB)" },
-                ] as const
-              ).map((opt) => (
-                <button
-                  key={opt.id}
-                  type="button"
-                  onClick={() => setCostAxis(opt.id)}
-                  className={`px-2.5 py-1 rounded-[4px] font-mono text-[9.5px] whitespace-nowrap leading-none transition-all select-none shrink-0 ${
-                    costAxis === opt.id
-                      ? "bg-[#18201c] text-[#e8e6df] font-medium border border-[#27352b] shadow-xs"
-                      : "text-[#6e7770] hover:text-[#c4ccc5] border border-transparent"
-                  }`}
-                >
-                  {opt.label}
-                </button>
-              ))}
+            {/* Right column: X-AXIS segmented controls aligned at the top, horizontally scrollable if narrow */}
+            <div className="overflow-x-auto max-w-full pb-1 lg:pb-0 shrink-0 self-start">
+              <div className="flex items-center p-0.5 rounded-[5px] bg-[#0c100e] border border-[#1b221e] shrink-0">
+                <span className="font-mono text-[8.5px] text-[#555e57] px-2 uppercase tracking-wider select-none shrink-0 whitespace-nowrap">
+                  X-AXIS:
+                </span>
+                <div className="h-3 w-[1px] bg-[#18201b] shrink-0 mr-0.5" />
+                {(
+                  [
+                    { id: "latency", label: "Latency (μs)" },
+                    { id: "train_time", label: "Train Time (ms)" },
+                    { id: "model_size", label: "Size (KB)" },
+                  ] as const
+                ).map((opt) => (
+                  <button
+                    key={opt.id}
+                    type="button"
+                    onClick={() => setCostAxis(opt.id)}
+                    className={`px-2.5 py-1 rounded-[4px] font-mono text-[9.5px] whitespace-nowrap leading-none transition-all select-none shrink-0 ${
+                      costAxis === opt.id
+                        ? "bg-[#18201c] text-[#e8e6df] font-medium border border-[#27352b] shadow-xs"
+                        : "text-[#6e7770] hover:text-[#c4ccc5] border border-transparent"
+                    }`}
+                  >
+                    {opt.label}
+                  </button>
+                ))}
+              </div>
             </div>
           </div>
 
