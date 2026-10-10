@@ -12,178 +12,205 @@ import {
   BookOpen,
   Cpu,
   FileText,
-  Users,
   Settings,
   Search,
   Bell,
   ChevronDown,
-  ChevronRight,
-  ArrowUpRight,
+  Activity,
+  Terminal,
+  ShieldCheck,
 } from "lucide-react";
-import { ReactNode, useState } from "react";
+import { ReactNode, useState, useEffect } from "react";
+import { api } from "@/lib/api";
 
-const navigation = [
-  { name: "Dashboard", href: "/workspace", icon: LayoutDashboard },
-  { name: "Experiments", href: "/workspace/experiments/new", icon: FlaskConical },
-  { name: "Datasets", href: "/workspace/datasets", icon: Database },
-  { name: "AI Assistant", href: "/workspace#assistant", icon: Sparkles },
-  { name: "Research Memory", href: "/workspace/memory", icon: BrainCircuit },
-  { name: "Papers & Insights", href: "/workspace/papers", icon: BookOpen },
-  { name: "Workspace", href: "/workspace/optimization", icon: Cpu },
-  { name: "Reports", href: "/workspace/reports", icon: FileText },
-  { name: "Team", href: "/workspace/team", icon: Users },
-  { name: "Settings", href: "/workspace/settings", icon: Settings },
+const navigationGroups = [
+  {
+    group: "EXPERIMENTS & DATA",
+    items: [
+      { name: "Overview Canvas", href: "/workspace", icon: LayoutDashboard },
+      { name: "Run Experiment", href: "/workspace/experiments/new", icon: FlaskConical },
+      { name: "Materials Datasets", href: "/workspace/datasets", icon: Database },
+    ],
+  },
+  {
+    group: "SCIENTIFIC INTELLIGENCE",
+    items: [
+      { name: "Failure Memory", href: "/workspace/memory", icon: BrainCircuit },
+      { name: "ARINA Assistant", href: "/workspace#assistant", icon: Sparkles },
+      { name: "Literature & Insights", href: "/workspace/papers", icon: BookOpen },
+    ],
+  },
+  {
+    group: "EDGE RUNTIME",
+    items: [
+      { name: "Resource Profiler", href: "/workspace/optimization", icon: Cpu },
+      { name: "Scientific Reports", href: "/workspace/reports", icon: FileText },
+      { name: "Environment Settings", href: "/workspace/settings", icon: Settings },
+    ],
+  },
 ];
 
 export default function WorkspaceLayout({ children }: { children: ReactNode }) {
   const pathname = usePathname();
   const [searchQuery, setSearchQuery] = useState("");
+  const [engineStatus, setEngineStatus] = useState<"checking" | "ready" | "offline">("checking");
+
+  useEffect(() => {
+    let mounted = true;
+    api.getHealth()
+      .then((h) => {
+        if (mounted) setEngineStatus(h.status === "ok" ? "ready" : "offline");
+      })
+      .catch(() => {
+        if (mounted) setEngineStatus("offline");
+      });
+    return () => {
+      mounted = false;
+    };
+  }, []);
 
   return (
     <div className="workspace-shell">
-      {/* 1. LEFT SIDEBAR */}
-      <aside className="workspace-sidebar" aria-label="Sidebar Navigation">
+      {/* 1. COMPACT SCIENTIFIC SIDEBAR */}
+      <aside className="workspace-sidebar" aria-label="Scientific Workspace Navigation">
         {/* Top Brand Identity */}
-        <div className="p-[22px_20px_20px] border-b border-[#1c2420]">
-          <Link href="/" className="inline-flex items-center gap-3 no-underline group">
-            <div className="w-9 h-9 rounded-full bg-[#141d18] border border-[#233128] flex items-center justify-center transition-colors group-hover:border-[#384e40]">
-              <Image src="/evo-mark.svg" alt="EvoResearch Symbol" width={20} height={20} priority />
+        <div className="p-[18px_16px_16px] border-b border-[#1b221e]">
+          <Link href="/" className="inline-flex items-center gap-2.5 no-underline group">
+            <div className="w-8 h-8 rounded-[6px] bg-[#111513] border border-[#222b26] flex items-center justify-center transition-colors group-hover:border-[#9aaf98]">
+              <Image src="/evo-mark.svg" alt="EvoResearch Symbol" width={18} height={18} priority />
             </div>
             <div>
-              <div className="font-mono font-bold text-[12px] leading-tight tracking-[0.14em] text-[#e7e5de]">
+              <div className="font-mono font-semibold text-[11px] leading-tight tracking-[0.14em] text-[#e8e6df]">
                 EVORESEARCH
               </div>
-              <div className="font-mono text-[7px] text-[#737b74] tracking-[0.09em] mt-1 uppercase">
-                An Evolving AI Research Environment
+              <div className="font-mono text-[7.5px] text-[#8e958f] tracking-[0.08em] mt-0.5 uppercase">
+                Materials ML // Edge Studio
               </div>
             </div>
           </Link>
         </div>
 
-        {/* Navigation list */}
-        <nav className="flex-1 p-[14px_12px] overflow-y-auto flex flex-col gap-1" aria-label="Workspace Pages">
-          {navigation.map((item) => {
-            const isActive =
-              item.href === "/workspace"
-                ? pathname === "/workspace"
-                : pathname === item.href || (item.href !== "/workspace#assistant" && pathname.startsWith(item.href));
-            const Icon = item.icon;
+        {/* Grouped Navigation list */}
+        <nav className="flex-1 p-[12px_10px] overflow-y-auto flex flex-col gap-4" aria-label="Research Tools">
+          {navigationGroups.map((grp) => (
+            <div key={grp.group} className="flex flex-col gap-0.5">
+              <div className="font-mono text-[8px] text-[#687069] tracking-[0.14em] uppercase px-2.5 py-1 font-medium select-none">
+                {grp.group}
+              </div>
+              {grp.items.map((item) => {
+                const isActive =
+                  item.href === "/workspace"
+                    ? pathname === "/workspace"
+                    : pathname === item.href || (item.href !== "/workspace#assistant" && pathname.startsWith(item.href));
+                const Icon = item.icon;
 
-            return (
-              <Link
-                key={item.name}
-                href={item.href}
-                className={`sidebar-nav-item ${isActive ? "active" : ""}`}
-              >
-                <div className="flex items-center gap-3 min-w-0">
-                  <Icon
-                    size={16}
-                    className={isActive ? "text-[#a2b5a0]" : "text-[#737b74] group-hover:text-[#a5aaa4]"}
-                  />
-                  <span className="truncate">{item.name}</span>
-                </div>
-                {isActive && (
-                  <span
-                    className="w-1.5 h-1.5 rounded-full bg-[#85b888] shadow-[0_0_8px_rgba(133,184,136,0.8)] shrink-0"
-                    aria-hidden="true"
-                  />
-                )}
-              </Link>
-            );
-          })}
+                return (
+                  <Link
+                    key={item.name}
+                    href={item.href}
+                    className={`sidebar-nav-item ${isActive ? "active" : ""}`}
+                  >
+                    <div className="flex items-center gap-2.5 min-w-0">
+                      <Icon
+                        size={14}
+                        className={isActive ? "text-[#9aaf98]" : "text-[#737b74] group-hover:text-[#a5aaa4]"}
+                      />
+                      <span className="truncate text-[11px]">{item.name}</span>
+                    </div>
+                    {isActive && (
+                      <span
+                        className="w-1.5 h-1.5 rounded-full bg-[#9aaf98] shrink-0"
+                        aria-hidden="true"
+                      />
+                    )}
+                  </Link>
+                );
+              })}
+            </div>
+          ))}
         </nav>
 
-        {/* Bottom Status Card & Footer */}
-        <div className="p-[14px_16px_16px] border-t border-[#1c2420] flex flex-col gap-3">
-          {/* Operational Pill Card */}
-          <div className="p-[10px_12px] rounded-[10px] bg-[#111715] border border-[#202924] flex items-center justify-between">
-            <div className="flex items-center gap-2.5 min-w-0">
+        {/* Bottom Engine Telemetry Strip */}
+        <div className="p-[12px_14px] border-t border-[#1b221e] flex flex-col gap-2 bg-[#0c100e]">
+          {/* Measured Engine Status */}
+          <div className="p-[8px_10px] rounded-[6px] bg-[#111513] border border-[#1f2622] flex items-center justify-between">
+            <div className="flex items-center gap-2 min-w-0">
               <span className="relative flex h-2 w-2 shrink-0">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#85b888] opacity-60" />
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-[#85b888]" />
+                {engineStatus === "ready" ? (
+                  <>
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#9aaf98] opacity-50" />
+                    <span className="relative inline-flex rounded-full h-2 w-2 bg-[#9aaf98]" />
+                  </>
+                ) : engineStatus === "checking" ? (
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-[#d1a654]" />
+                ) : (
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-[#d46b6b]" />
+                )}
               </span>
               <div className="min-w-0">
-                <div className="font-sans text-[11px] font-medium text-[#e7e5de] leading-none">Engine Ready</div>
-                <div className="font-sans text-[9px] text-[#737b74] leading-tight mt-1 truncate">All systems operational</div>
+                <div className="font-mono text-[9.5px] font-medium text-[#e8e6df] leading-none uppercase">
+                  {engineStatus === "ready" ? "ML Engine: Verified" : engineStatus === "checking" ? "Verifying Engine..." : "Engine Offline"}
+                </div>
+                <div className="font-mono text-[8px] text-[#687069] leading-tight mt-1 truncate">
+                  Port 8000 // FastDaemon
+                </div>
               </div>
             </div>
-            <ChevronRight size={13} className="text-[#737b74] shrink-0" />
+            <ShieldCheck size={13} className={engineStatus === "ready" ? "text-[#9aaf98]" : "text-[#687069]"} />
           </div>
 
-          {/* Version descriptor */}
-          <div className="flex items-center justify-between px-1">
-            <span className="font-mono text-[9px] text-[#737b74]">v2.0.0</span>
-            <span className="font-sans text-[9px] text-[#5a635c]">Evolving Research Together</span>
-          </div>
-
-          {/* Subtle wavy particle line SVG aura */}
-          <div className="w-full h-5 overflow-hidden opacity-40 -mt-1" aria-hidden="true">
-            <svg viewBox="0 0 240 20" fill="none" className="w-full h-full stroke-[#85b888]">
-              <path
-                d="M0 10 Q 30 2, 60 10 T 120 10 T 180 10 T 240 10"
-                strokeWidth="1"
-                strokeOpacity="0.6"
-              />
-              <path
-                d="M0 10 Q 30 18, 60 10 T 120 10 T 180 10 T 240 10"
-                strokeWidth="0.75"
-                strokeOpacity="0.3"
-              />
-            </svg>
+          {/* Runtime Spec readout */}
+          <div className="flex items-center justify-between px-1 font-mono text-[8.5px] text-[#687069]">
+            <span>ENV: LOCAL_STUDIO</span>
+            <span>BUILD v2.1</span>
           </div>
         </div>
       </aside>
 
-      {/* 2. MAIN WORKSPACE AREA */}
+      {/* 2. MAIN SCIENTIFIC WORKSPACE AREA */}
       <div className="workspace-main-area">
-        {/* Top Navigation Bar */}
-        <header className="workspace-topbar" aria-label="Top Navigation">
-          {/* Global Search */}
-          <div className="relative w-full max-w-[460px]">
+        {/* Top Research Header Bar */}
+        <header className="workspace-topbar" aria-label="Workspace Context Navigation">
+          {/* Scientific Workspace Search */}
+          <div className="relative w-full max-w-[420px]">
             <Search
-              size={15}
-              className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#737b74] pointer-events-none"
+              size={14}
+              className="absolute left-3 top-1/2 -translate-y-1/2 text-[#737b74] pointer-events-none"
             />
             <input
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Search experiments, datasets, papers, or ask anything..."
-              className="w-full h-[38px] pl-10 pr-14 bg-[#111715] border border-[#202924] rounded-[8px] text-[12px] text-[#e7e5de] placeholder-[#5a635c] focus:outline-none focus:border-[#3a493f] transition-colors"
+              placeholder="Search experiments, model architectures, memory signatures..."
+              className="w-full h-[34px] pl-9 pr-14 bg-[#111513] border border-[#1f2622] rounded-[6px] text-[11.5px] text-[#e8e6df] placeholder-[#687069] focus:outline-none focus:border-[#2f3d34] transition-colors font-sans"
             />
-            <div className="absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none">
-              <kbd className="font-mono text-[9.5px] px-1.5 py-0.5 rounded bg-[#161f1a] border border-[#242e28] text-[#737b74]">
+            <div className="absolute right-2 top-1/2 -translate-y-1/2 pointer-events-none">
+              <kbd className="font-mono text-[9px] px-1.5 py-0.5 rounded bg-[#151a17] border border-[#222b26] text-[#737b74]">
                 ⌘ K
               </kbd>
             </div>
           </div>
 
-          {/* Right Profile & Notifications */}
+          {/* Right Session Readout */}
           <div className="flex items-center gap-3">
-            {/* Notifications Button */}
-            <button
-              type="button"
-              className="relative w-9 h-9 rounded-[8px] bg-[#111715] border border-[#202924] flex items-center justify-center text-[#737b74] hover:text-[#e7e5de] hover:border-[#2f3d34] transition-colors"
-              aria-label="Notifications"
-            >
-              <Bell size={15} />
-              <span className="absolute top-2 right-2 w-1.5 h-1.5 rounded-full bg-[#85b888]" />
-            </button>
+            {/* Quick Engine Ping Indicator */}
+            <div className="hidden md:flex items-center gap-2 px-2.5 py-1 rounded-[6px] bg-[#111513] border border-[#1f2622]">
+              <Activity size={12} className="text-[#9aaf98]" />
+              <span className="font-mono text-[9.5px] text-[#8e958f]">
+                INFERENCE LATENCY PROFILER READY
+              </span>
+            </div>
 
-            {/* User Profile Badge */}
-            <div className="flex items-center gap-2.5 px-2.5 py-1.5 rounded-[8px] bg-[#111715] border border-[#202924] cursor-pointer hover:border-[#2f3d34] transition-colors">
-              <div className="w-6 h-6 rounded-full bg-[#1b2520] border border-[#26352c] flex items-center justify-center font-mono text-[10px] font-semibold text-[#e7e5de]">
+            {/* Researcher Session Pill */}
+            <div className="flex items-center gap-2 px-2.5 py-1 rounded-[6px] bg-[#111513] border border-[#1f2622]">
+              <div className="w-5 h-5 rounded-[4px] bg-[#151a17] border border-[#242e28] flex items-center justify-center font-mono text-[9px] font-semibold text-[#e8e6df]">
                 HR
               </div>
               <div className="text-left hidden sm:block">
-                <div className="font-sans text-[11px] font-medium text-[#e7e5de] leading-none">
+                <div className="font-sans text-[10.5px] font-medium text-[#e8e6df] leading-none">
                   Harsh Rathod
                 </div>
-                <div className="font-sans text-[9px] text-[#737b74] leading-tight mt-0.5">
-                  Researcher
-                </div>
               </div>
-              <ChevronDown size={13} className="text-[#737b74] ml-0.5" />
             </div>
           </div>
         </header>

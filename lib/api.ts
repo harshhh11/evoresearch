@@ -100,6 +100,10 @@ export interface Run {
   recovery_attempted: boolean;
   recovery_successful: boolean;
   created_at: string;
+  experiment_name?: string;
+  dataset_name?: string;
+  target_col?: string;
+  task_type?: string;
 }
 
 export interface FailureRecord {
@@ -247,6 +251,7 @@ export interface AuditEvent {
 
 // API Methods
 export const api = {
+  getHealth: () => fetchJson<{ status: string; service?: string; version?: string }>("/api/health"),
   getStats: () => fetchJson<PlatformStats>("/api/stats"),
   getProjects: () => fetchJson<Project[]>("/api/projects"),
   createProject: (data: Partial<Project>) => fetchJson<Project>("/api/projects", { method: "POST", body: JSON.stringify(data) }),
@@ -256,6 +261,7 @@ export const api = {
   getDataset: (id: string) => fetchJson<{ dataset: Dataset; preview: Record<string, any>[] }>(`/api/datasets/${id}`),
   
   getExperiments: (projectId?: string) => fetchJson<Experiment[]>(`/api/experiments${projectId ? `?project_id=${projectId}` : ""}`),
+  getRuns: (limit = 100) => fetchJson<Run[]>(`/api/runs?limit=${limit}`),
   createExperiment: (data: any) => fetchJson<Experiment>("/api/experiments", { method: "POST", body: JSON.stringify(data) }),
   getExperimentDetails: (id: string) => fetchJson<{ experiment: Experiment; dataset: Dataset; runs: Run[]; failures: FailureRecord[]; studies: OptimizationStudy[] }>(`/api/experiments/${id}`),
   startExperiment: (id: string) => fetchJson<{ experiment_id: string; status: string; completed_runs: number }>(`/api/experiments/${id}/start`, { method: "POST" }),

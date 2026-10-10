@@ -407,7 +407,19 @@ def create_experiment(req: ExperimentCreate, db: Session = Depends(get_db)):
         details=json.dumps({"name": exp.name, "task_type": exp.task_type})
     ))
     db.commit()
-    return exp.to_dict()
+@app.get("/api/runs")
+def list_all_runs(limit: int = 100, db: Session = Depends(get_db)):
+    runs = db.query(Run).order_by(desc(Run.created_at)).limit(limit).all()
+    results = []
+    for r in runs:
+        d = r.to_dict()
+        if r.experiment:
+            d["experiment_name"] = r.experiment.name
+            d["dataset_name"] = r.experiment.dataset.name if r.experiment.dataset else "Edge Sensor Telemetry"
+            d["target_col"] = r.experiment.dataset.target_col if r.experiment.dataset else "fault_detected"
+            d["task_type"] = r.experiment.task_type
+        results.append(d)
+    return results
 
 @app.get("/api/experiments/{experiment_id}")
 def get_experiment_details(experiment_id: str, db: Session = Depends(get_db)):
