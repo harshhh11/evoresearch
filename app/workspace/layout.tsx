@@ -40,7 +40,7 @@ const navigationGroups = [
     items: [
       { name: "Research Knowledge Graph", href: "/workspace/knowledge-graph", icon: Network },
       { name: "Failure Memory", href: "/workspace/memory", icon: BrainCircuit },
-      { name: "ARINA Assistant", href: "/workspace#assistant", icon: Sparkles },
+      { name: "ARINA Assistant", href: "/workspace/assistant", icon: Sparkles },
       { name: "Literature & Insights", href: "/workspace/papers", icon: BookOpen },
     ],
   },
