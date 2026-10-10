@@ -362,93 +362,91 @@ export default function WorkspaceOverviewPage() {
   return (
     <div className="flex flex-col gap-5 w-full max-w-[1500px] mx-auto pb-14 text-[#e8e6df]">
       {/* =========================================================================
-          2. RESEARCH HEADER (Scientific workspace bar, compact & restrained)
+      {/* =========================================================================
+          2. RESEARCH OVERVIEW PANEL (Unified Instrument Bar)
           ========================================================================= */}
-      <div className="p-[14px_18px] rounded-[8px] bg-[#111513] border border-[#1f2622] flex flex-col lg:flex-row lg:items-center justify-between gap-3.5">
-        {/* Left: Breadcrumb & Project Selector */}
-        <div className="flex flex-wrap items-center gap-3 min-w-0">
-          <div className="flex items-center gap-1.5 font-mono text-[9px] text-[#687069] uppercase tracking-[0.12em]">
-            <span>EVORESEARCH</span>
-            <span>//</span>
-            <span className="text-[#8e958f]">MATERIALS SCIENCE</span>
-            <span>//</span>
-            <span className="text-[#9aaf98]">EDGE ML</span>
+      <div className="p-2.5 px-3.5 rounded-[8px] bg-[#111513] border border-[#1f2622] flex flex-wrap items-center justify-between gap-3 w-full box-border min-w-0">
+        {/* Left: Project Selector & Dataset Context (matching X-AXIS / UI box styles) */}
+        <div className="flex flex-wrap items-center gap-2.5 min-w-0">
+          <div className="flex items-center gap-1.5 shrink-0">
+            <span className="font-mono text-[8.5px] text-[#687069] uppercase tracking-wider select-none shrink-0">
+              PROJECT:
+            </span>
+            <div className="relative flex items-center shrink-0">
+              {projects.length > 0 ? (
+                <select
+                  id="project-selector"
+                  value={activeProjectId}
+                  onChange={(e) => setActiveProjectId(e.target.value)}
+                  className="bg-[#0c100e] text-[9.5px] font-mono font-medium text-[#e8e6df] border border-[#1f2622] hover:border-[#27352b] rounded-[4px] px-2.5 py-1 pr-6 focus:outline-none cursor-pointer appearance-none transition-colors truncate max-w-[210px] leading-none"
+                >
+                  {projects.map((p) => (
+                    <option key={p.id} value={p.id} className="bg-[#111513] text-[#e8e6df]">
+                      {p.name}
+                    </option>
+                  ))}
+                </select>
+              ) : (
+                <span className="text-[9.5px] font-mono text-[#8e958f]">
+                  Edge Sensor Telemetry
+                </span>
+              )}
+              <ChevronDown size={10} className="text-[#687069] absolute right-2 pointer-events-none shrink-0" />
+            </div>
           </div>
 
-          <div className="h-3.5 w-[1px] bg-[#1f2622] hidden sm:block" />
+          <div className="h-3 w-[1px] bg-[#1f2622] hidden sm:block shrink-0" />
 
-          {/* Project Dropdown Selector */}
-          <div className="relative flex items-center">
-            <span className="font-mono text-[9px] text-[#687069] mr-2 uppercase">PROJECT:</span>
-            {projects.length > 0 ? (
-              <select
-                value={activeProjectId}
-                onChange={(e) => setActiveProjectId(e.target.value)}
-                className="appearance-none pl-2.5 pr-6 py-1 bg-[#151a17] border border-[#222b26] rounded-[5px] font-sans text-[11.5px] font-medium text-[#e8e6df] focus:outline-none focus:border-[#9aaf98] cursor-pointer"
-              >
-                {projects.map((p) => (
-                  <option key={p.id} value={p.id}>
-                    {p.name}
-                  </option>
-                ))}
-              </select>
-            ) : (
-              <span className="font-sans text-[11px] text-[#8e958f]">Edge Sensor Telemetry</span>
-            )}
-            <ChevronDown size={12} className="absolute right-2 text-[#687069] pointer-events-none" />
-          </div>
-
-          {/* Active Dataset Pill */}
-          <div className="flex items-center gap-2 px-2.5 py-1 rounded-[5px] bg-[#151a17] border border-[#222b26] text-[10.5px]">
-            <Database size={12} className="text-[#9aaf98]" />
-            <span className="font-mono text-[10px] text-[#8e958f]">
+          {/* Dataset metadata - matching instrument box */}
+          <div className="flex items-center gap-1.5 px-2 py-1 rounded-[4px] bg-[#0c100e] border border-[#1f2622] font-mono text-[9.5px] min-w-0 shrink-0 text-[#8e958f]">
+            <Database size={10.5} className="text-[#9aaf98] shrink-0" />
+            <span className="text-[#c4ccc5] truncate max-w-[180px] sm:max-w-[240px]">
               {activeDataset ? activeDataset.name : "Edge Sensor Telemetry (Faults & NaNs)"}
             </span>
-            <span className="font-mono text-[9px] text-[#687069]">
+            <span className="text-[#555e57] shrink-0 whitespace-nowrap">
               • {activeDataset ? `${activeDataset.row_count} rows` : "400 rows"}
             </span>
           </div>
         </div>
 
-        {/* Right: Engine Status & Scientific Action Buttons */}
-        <div className="flex items-center gap-2.5 self-start lg:self-auto shrink-0">
-          {/* Verified Engine Health Indicator */}
-          <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-[5px] bg-[#0c100e] border border-[#1f2622] font-mono text-[9.5px]">
+        {/* Right: Unified Action Controls matching other UI boxes and font */}
+        <div className="flex flex-wrap items-center gap-2 shrink-0">
+          <div className="flex items-center gap-1.5 px-2 py-1 rounded-[4px] bg-[#0c100e] border border-[#1f2622] font-mono text-[9px] shrink-0">
             <span
-              className={`w-1.5 h-1.5 rounded-full ${
+              className={`w-1.5 h-1.5 rounded-full shrink-0 ${
                 engineHealth === "ok" ? "bg-[#9aaf98]" : "bg-[#d46b6b]"
               }`}
             />
-            <span className={engineHealth === "ok" ? "text-[#9aaf98]" : "text-[#d46b6b]"}>
-              {engineHealth === "ok" ? "ENGINE READY (PORT 8000)" : "ENGINE OFFLINE"}
+            <span className={`whitespace-nowrap ${engineHealth === "ok" ? "text-[#9aaf98]" : "text-[#d46b6b]"}`}>
+              {engineHealth === "ok" ? "PORT 8000" : "OFFLINE"}
             </span>
           </div>
 
           <button
             type="button"
             onClick={() => setNewProjectModal(true)}
-            className="px-2.5 py-1 rounded-[5px] bg-[#151a17] border border-[#222b26] text-[10.5px] font-sans text-[#e8e6df] hover:border-[#9aaf98] transition-colors inline-flex items-center gap-1"
+            className="px-2.5 py-1 rounded-[4px] bg-[#0c100e] border border-[#1f2622] hover:border-[#27352b] hover:bg-[#18201c] font-mono text-[9.5px] uppercase tracking-wider text-[#c4ccc5] hover:text-[#e8e6df] transition-all inline-flex items-center gap-1.5 shrink-0 whitespace-nowrap leading-none"
           >
-            <FolderPlus size={12} className="text-[#8e958f]" />
-            <span>New Project</span>
+            <FolderPlus size={10.5} className="text-[#7e8780]" />
+            <span>NEW PROJECT</span>
           </button>
 
           <button
             type="button"
             onClick={handleRunQuickBenchmark}
             disabled={benchmarking}
-            className="px-3 py-1 rounded-[5px] bg-[#18201c] border border-[#2d3931] text-[#9aaf98] text-[10.5px] font-sans font-medium hover:border-[#9aaf98] hover:bg-[#1e2823] transition-colors inline-flex items-center gap-1.5 disabled:opacity-50"
+            className="px-2.5 py-1 rounded-[4px] bg-[#0c100e] border border-[#1f2622] hover:border-[#27352b] hover:bg-[#18201c] font-mono text-[9.5px] uppercase tracking-wider text-[#9aaf98] hover:text-[#b2cbb0] transition-all inline-flex items-center gap-1.5 shrink-0 whitespace-nowrap leading-none disabled:opacity-50"
           >
-            <Scale size={12} />
-            <span>{benchmarking ? "Benchmarking..." : "Run A/B/C Benchmark"}</span>
+            <Scale size={10.5} />
+            <span>{benchmarking ? "BENCHMARKING..." : "RUN BENCHMARK"}</span>
           </button>
 
           <Link
             href="/workspace/experiments/new"
-            className="px-3 py-1 rounded-[5px] bg-[#9aaf98] text-[#0a0c0b] text-[10.5px] font-sans font-semibold hover:bg-[#abbfa9] transition-colors inline-flex items-center gap-1"
+            className="px-2.5 py-1 rounded-[4px] bg-[#18201c] border border-[#27352b] hover:border-[#9aaf98] text-[#e8e6df] hover:text-[#ffffff] font-mono text-[9.5px] font-medium uppercase tracking-wider transition-all inline-flex items-center gap-1.5 shrink-0 whitespace-nowrap leading-none shadow-xs"
           >
-            <Plus size={13} />
-            <span>New Experiment</span>
+            <Plus size={11} className="text-[#9aaf98]" />
+            <span>NEW EXPERIMENT</span>
           </Link>
         </div>
       </div>
@@ -566,9 +564,12 @@ export default function WorkspaceOverviewPage() {
               </p>
             </div>
 
-            {/* Cost Axis Toggle */}
-            <div className="flex items-center gap-1.5 p-1 rounded-[6px] bg-[#151a17] border border-[#222b26] self-start sm:self-auto">
-              <span className="font-mono text-[8.5px] text-[#687069] px-1.5 uppercase">X-AXIS:</span>
+            {/* Cost Axis Segmented Control - Sleek inline instrument toggle */}
+            <div className="flex items-center p-0.5 rounded-[5px] bg-[#0c100e] border border-[#1b221e] shrink-0 self-start sm:self-auto">
+              <span className="font-mono text-[8.5px] text-[#555e57] px-2 uppercase tracking-wider select-none shrink-0 whitespace-nowrap">
+                X-AXIS:
+              </span>
+              <div className="h-3 w-[1px] bg-[#18201b] shrink-0 mr-0.5" />
               {(
                 [
                   { id: "latency", label: "Latency (μs)" },
@@ -580,10 +581,10 @@ export default function WorkspaceOverviewPage() {
                   key={opt.id}
                   type="button"
                   onClick={() => setCostAxis(opt.id)}
-                  className={`px-2 py-0.5 rounded-[4px] font-mono text-[9.5px] transition-colors ${
+                  className={`px-2.5 py-1 rounded-[4px] font-mono text-[9.5px] whitespace-nowrap leading-none transition-all select-none shrink-0 ${
                     costAxis === opt.id
-                      ? "bg-[#222b26] text-[#e8e6df] font-medium"
-                      : "text-[#687069] hover:text-[#8e958f]"
+                      ? "bg-[#18201c] text-[#e8e6df] font-medium border border-[#27352b] shadow-xs"
+                      : "text-[#6e7770] hover:text-[#c4ccc5] border border-transparent"
                   }`}
                 >
                   {opt.label}
