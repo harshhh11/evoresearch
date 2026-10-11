@@ -236,3 +236,197 @@ button { color: inherit; }
   border: 1px solid rgba(166, 107, 34, 0.25) !important;
   font-family: "The Seasons", Georgia, serif !important;
 }
+
+/* 3D Background Canvas Positioning */
+.site-environment {
+  position: relative;
+  min-height: 100vh;
+  background: #F8F6EF;
+  color: #26352D;
+}
+
+.cinematic-canvas {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  pointer-events: none !important;
+  z-index: 0 !important;
+}
+
+/* Floating Top Navigation Header Bar */
+.nav-container {
+  position: sticky;
+  top: 16px;
+  z-index: 50;
+  width: 100%;
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 0 20px;
+  pointer-events: auto;
+}
+
+.nav-pill-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.floating-nav {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  width: 100% !important;
+  background: #FFFFFF !important;
+  border: 1px solid #DFE5DC !important;
+  border-radius: 12px !important;
+  padding: 10px 20px !important;
+  box-shadow: 0 4px 20px rgba(38, 53, 45, 0.06) !important;
+  gap: 16px !important;
+}
+
+.nav-brand {
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  font-weight: 700 !important;
+  color: #176B4D !important;
+  font-size: 14px !important;
+  text-decoration: none !important;
+  flex-shrink: 0 !important;
+}
+
+.nav-links {
+  display: flex !important;
+  align-items: center !important;
+  gap: 20px !important;
+  font-size: 12px !important;
+  font-weight: 600 !important;
+  font-family: "The Seasons", Georgia, serif !important;
+}
+
+.nav-links a {
+  color: #68766D !important;
+  text-decoration: none !important;
+  padding: 6px 12px !important;
+  border-radius: 6px !important;
+  transition: all 0.15s ease !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 4px !important;
+  white-space: nowrap !important;
+}
+
+.nav-links a:hover, .nav-links a.active {
+  color: #176B4D !important;
+  background: #E6F0E9 !important;
+}
+
+.nav-actions {
+  display: flex !important;
+  align-items: center !important;
+  gap: 12px !important;
+  flex-shrink: 0 !important;
+}
+
+.system-indicator {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+  font-size: 10px !important;
+  font-weight: 600 !important;
+  color: #176B4D !important;
+  background: #E6F0E9 !important;
+  border: 1px solid #DFE5DC !important;
+  padding: 4px 10px !important;
+  border-radius: 6px !important;
+  font-family: var(--font-primary), serif !important;
+}
+
+.indicator-dot-wrap {
+  position: relative;
+  display: flex;
+  width: 6px;
+  height: 6px;
+}
+
+.indicator-dot-ping {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: #176B4D;
+  opacity: 0.75;
+  animation: ping 1.5s cubic-bezier(0, 0, 0.2, 1) infinite;
+}
+
+.indicator-dot-core {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #176B4D;
+}
+
+.nav-mobile-toggle {
+  display: none !important;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #26352D;
+}
+
+/* Floating Status Widget (Bottom Left) */
+.research-status-panel {
+  position: fixed !important;
+  bottom: 24px !important;
+  left: 24px !important;
+  z-index: 40 !important;
+  background: #FFFFFF !important;
+  border: 1px solid #DFE5DC !important;
+  border-radius: 10px !important;
+  padding: 12px 16px !important;
+  box-shadow: 0 4px 16px rgba(38, 53, 45, 0.06) !important;
+  max-width: 240px !important;
+  font-size: 11px !important;
+  color: #26352D !important;
+}
+
+.status-panel-top {
+  display: flex;
+  justify-content: space-between;
+  font-weight: 600;
+  color: #176B4D;
+  margin-bottom: 4px;
+}
+
+.status-panel-rule {
+  height: 1px;
+  background: #DFE5DC;
+  margin: 6px 0;
+}
+
+.status-panel-current {
+  display: flex;
+  justify-content: space-between;
+  color: #68766D;
+  margin-bottom: 4px;
+}
+
+.status-panel-bottom {
+  font-size: 10px;
+  color: #68766D;
+  margin-top: 6px;
+}
+
+@media (max-width: 900px) {
+  .nav-links {
+    display: none !important;
+  }
+  .nav-mobile-toggle {
+    display: flex !important;
+  }
+  .research-status-panel {
+    display: none !important;
+  }
+}
+

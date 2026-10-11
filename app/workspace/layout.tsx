@@ -292,8 +292,8 @@ export default function WorkspaceLayout({ children }: { children: ReactNode }) {
 
       {/* 2. MAIN SCIENTIFIC WORKSPACE AREA */}
       <div className="workspace-main-area flex-1 flex flex-col min-w-0 overflow-x-hidden bg-[#F8F6EF]">
-        {/* Top Research Header Bar */}
-        <header className="h-[52px] border-b border-[#DDE4DA] px-4 md:px-6 flex items-center justify-between bg-[#FFFFFF] sticky top-0 z-30 shadow-[0_1px_4px_rgba(32,41,35,0.03)]">
+        {/* Top Research Header Bar - Seamless Warm Cream Blend */}
+        <header className="h-[52px] px-4 md:px-6 flex items-center justify-between bg-[#F8F6EF]/90 backdrop-blur-md sticky top-0 z-30">
           <div className="flex items-center gap-3 w-full max-w-[480px]">
             {/* Quick Toggle in Navbar if collapsed */}
             {isCollapsed && (
