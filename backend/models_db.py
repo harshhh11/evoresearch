@@ -174,6 +174,7 @@ class Experiment(Base, SerializerMixin):
     artifacts = relationship("ModelArtifact", back_populates="experiment", cascade="all, delete-orphan")
     predictions = relationship("PredictionRecord", back_populates="experiment", cascade="all, delete-orphan")
     resource_profiles = relationship("ResourceProfile", back_populates="experiment", cascade="all, delete-orphan")
+    code_revisions = relationship("CodeRevision", back_populates="experiment", cascade="all, delete-orphan")
 
 class ExperimentMetric(Base, SerializerMixin):
     __tablename__ = "experiment_metrics"
@@ -511,5 +512,20 @@ class AgentTrace(Base, SerializerMixin):
     retry_count = Column(Integer, default=0)
     created_at = Column(DateTime, default=utc_now)
     updated_at = Column(DateTime, default=utc_now, onupdate=utc_now)
+
+class CodeRevision(Base, SerializerMixin):
+    __tablename__ = "code_revisions"
+
+    id = Column(String(36), primary_key=True, default=gen_uuid)
+    experiment_id = Column(String(36), ForeignKey("experiments.id"), nullable=False)
+    revision = Column(Integer, default=1)
+    file_name = Column(String(255), nullable=False)
+    code_content = Column(Text, nullable=False)
+    content_hash = Column(String(64), default="")
+    status = Column(String(64), default="GENERATED")  # GENERATED, EDITED, VALIDATED, EXECUTED
+    created_at = Column(DateTime, default=utc_now)
+    updated_at = Column(DateTime, default=utc_now, onupdate=utc_now)
+
+    experiment = relationship("Experiment", back_populates="code_revisions")
 
 

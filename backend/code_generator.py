@@ -1,7 +1,10 @@
 import os
 import json
+import hashlib
 import logging
-from typing import Dict, Any, Optional
+from typing import Dict, Any, Optional, List
+from sqlalchemy.orm import Session
+from .models_db import CodeRevision, utc_now
 
 logger = logging.getLogger("evoresearch.code_generator")
 
@@ -9,6 +12,7 @@ class CodeGeneratorService:
     """
     Generates reproducible multi-file research code structures linked to experiment specs.
     Provides multi-file project files (experiment.py, data.py, model.py, evaluate.py, requirements.txt, README.md).
+    Persists revisions to DB and local artifact directory.
     """
 
     def generate_experiment_code(
@@ -60,13 +64,17 @@ def build_model_pipeline(model_family: str = "{model_family}", task_type: str = 
     """Instantiates model architecture according to task specification."""
     if model_family == "Ridge":
         return Ridge(alpha=1.0, random_state=random_seed)
-    elif model_family == "LogisticRegression":
+    elif model_family in ["LogisticRegression", "Classifier"]:
         return LogisticRegression(C=1.0, max_iter=200, random_state=random_seed)
+    elif model_family in ["RandomForestClassifier", "RandomForest"]:
+        return RandomForestClassifier(n_estimators=50, max_depth=10, random_state=random_seed)
     elif model_family == "RandomForestRegressor":
         return RandomForestRegressor(n_estimators=50, max_depth=10, random_state=random_seed)
     elif model_family == "HistGradientBoostingRegressor":
         return HistGradientBoostingRegressor(max_iter=50, random_state=random_seed)
     else:
+        if task_type == "classification":
+            return RandomForestClassifier(n_estimators=50, max_depth=10, random_state=random_seed)
         return Ridge(alpha=1.0, random_state=random_seed)
 '''
 
@@ -151,6 +159,122 @@ python experiment.py
             "domain": domain,
             "model_family": model_family,
             "files": files
+        }
+
+    def generate_and_save_code(
+        self,
+        db: Session,
+        experiment_id: str,
+        name: str,
+        domain: str = "Machine Learning",
+        task_type: str = "regression",
+        model_family: str = "Ridge",
+        target_column: str = "target",
+        cpu_budget_seconds: float = 180.0,
+        random_seed: int = 42
+    ) -> Dict[str, Any]:
+        """Generates code and persists CodeRevision records into DB and local artifact directory."""
+        code_res = self.generate_experiment_code(
+            experiment_id=experiment_id,
+            name=name,
+            domain=domain,
+            task_type=task_type,
+            model_family=model_family,
+            target_column=target_column,
+            cpu_budget_seconds=cpu_budget_seconds,
+            random_seed=random_seed
+        )
+
+        artifact_dir = os.path.join(os.path.dirname(__file__), "artifacts", experiment_id)
+        os.makedirs(artifact_dir, exist_ok=True)
+
+        for filename, content in code_res["files"].items():
+            # Save file on disk
+            file_path = os.path.join(artifact_dir, filename)
+            with open(file_path, "w", encoding="utf-8") as f:
+                f.write(content)
+
+            # Calculate content hash
+            chash = hashlib.sha256(content.encode("utf-8")).hexdigest()[:16]
+
+            # DB persistence
+            rev = db.query(CodeRevision).filter(
+                CodeRevision.experiment_id == experiment_id,
+                CodeRevision.file_name == filename
+            ).first()
+
+            if not rev:
+                rev = CodeRevision(
+                    experiment_id=experiment_id,
+                    revision=1,
+                    file_name=filename,
+                    code_content=content,
+                    content_hash=chash,
+                    status="GENERATED"
+                )
+                db.add(rev)
+            else:
+                rev.code_content = content
+                rev.content_hash = chash
+                rev.updated_at = utc_now()
+
+        db.commit()
+        return code_res
+
+    def get_code_revisions(self, db: Session, experiment_id: str) -> Dict[str, Any]:
+        """Retrieves saved code revisions from DB."""
+        revisions = db.query(CodeRevision).filter(CodeRevision.experiment_id == experiment_id).all()
+        if not revisions:
+            return {}
+        
+        files = {r.file_name: r.code_content for r in revisions}
+        max_rev = max([r.revision for r in revisions]) if revisions else 1
+        return {
+            "experiment_id": experiment_id,
+            "revision": max_rev,
+            "files": files
+        }
+
+    def save_code_file(self, db: Session, experiment_id: str, file_name: str, code_content: str) -> Dict[str, Any]:
+        """Saves edited code file, increments revision, updates disk file and DB."""
+        artifact_dir = os.path.join(os.path.dirname(__file__), "artifacts", experiment_id)
+        os.makedirs(artifact_dir, exist_ok=True)
+
+        file_path = os.path.join(artifact_dir, file_name)
+        with open(file_path, "w", encoding="utf-8") as f:
+            f.write(code_content)
+
+        chash = hashlib.sha256(code_content.encode("utf-8")).hexdigest()[:16]
+
+        rev = db.query(CodeRevision).filter(
+            CodeRevision.experiment_id == experiment_id,
+            CodeRevision.file_name == file_name
+        ).first()
+
+        if not rev:
+            rev = CodeRevision(
+                experiment_id=experiment_id,
+                revision=2,
+                file_name=file_name,
+                code_content=code_content,
+                content_hash=chash,
+                status="EDITED"
+            )
+            db.add(rev)
+        else:
+            rev.code_content = code_content
+            rev.content_hash = chash
+            rev.revision += 1
+            rev.status = "EDITED"
+            rev.updated_at = utc_now()
+
+        db.commit()
+        return {
+            "experiment_id": experiment_id,
+            "file_name": file_name,
+            "status": "SAVED",
+            "revision": rev.revision,
+            "content_hash": chash
         }
 
 code_generator = CodeGeneratorService()

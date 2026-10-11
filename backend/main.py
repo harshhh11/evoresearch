@@ -1977,10 +1977,18 @@ class OrchestrationRequest(BaseModel):
     paper_text: Optional[str] = None
 
 @app.post("/api/orchestrate/run")
+@app.post("/api/experiments/orchestrate")
 def run_multi_agent_orchestration(req: OrchestrationRequest, db: Session = Depends(get_db)):
     """Runs 12-agent multi-agent research orchestration loop for an experiment."""
     return orchestrator.run_full_orchestration_cycle(
         db, experiment_id=req.experiment_id, execution_strategy=req.execution_strategy or "Hybrid", paper_text=req.paper_text
+    )
+
+@app.post("/api/experiments/{experiment_id}/orchestrate")
+def run_multi_agent_orchestration_by_id(experiment_id: str, db: Session = Depends(get_db)):
+    """Runs 12-agent multi-agent research orchestration loop for an experiment by path parameter."""
+    return orchestrator.run_full_orchestration_cycle(
+        db, experiment_id=experiment_id, execution_strategy="Hybrid"
     )
 
 @app.get("/api/experiments/{experiment_id}/orchestration")
@@ -2085,7 +2093,13 @@ def get_experiment_code(experiment_id: str, db: Session = Depends(get_db)):
     exp = db.query(Experiment).filter(Experiment.id == experiment_id).first()
     if not exp:
         raise HTTPException(status_code=404, detail=f"Experiment '{experiment_id}' not found")
-    return code_generator.generate_experiment_code(
+    
+    revs = code_generator.get_code_revisions(db, experiment_id)
+    if revs and revs.get("files"):
+        return revs
+
+    return code_generator.generate_and_save_code(
+        db=db,
         experiment_id=exp.id,
         name=exp.name,
         domain=exp.domain or "Machine Learning",
@@ -2107,21 +2121,18 @@ def save_experiment_code(experiment_id: str, req: SaveCodeRequest, db: Session =
     if not exp:
         raise HTTPException(status_code=404, detail=f"Experiment '{experiment_id}' not found")
 
+    res = code_generator.save_code_file(db, experiment_id, req.file_name, req.code_content)
+
     db.add(AuditEvent(
         project_id=exp.project_id,
         entity_type="EXPERIMENT_CODE",
         entity_id=exp.id,
         action="UPDATE_CODE_REVISION",
-        details=json.dumps({"file_name": req.file_name, "content_len": len(req.code_content)})
+        details=json.dumps({"file_name": req.file_name, "content_len": len(req.code_content), "revision": res["revision"]})
     ))
     db.commit()
 
-    return {
-        "experiment_id": exp.id,
-        "file_name": req.file_name,
-        "status": "SAVED",
-        "revision_updated": True
-    }
+    return res
 
 @app.get("/api/adaptive/recommend/{experiment_id}")
 def get_adaptive_research_recommendation(experiment_id: str, db: Session = Depends(get_db)):
