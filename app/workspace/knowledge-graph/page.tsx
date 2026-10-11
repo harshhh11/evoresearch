@@ -39,9 +39,13 @@ import {
   Maximize2,
   Radio,
   Share2,
+  List,
+  Box,
+  CornerDownRight,
 } from "lucide-react";
 
 type SourceMode = "default" | "uploaded" | "workspace";
+type ViewMode = "3d" | "2d";
 
 interface GraphNode {
   id: string;
@@ -66,18 +70,37 @@ interface GraphEdge {
   is_demo?: boolean;
 }
 
-const CATEGORY_COLORS: Record<string, { bg: string; border: string; text: string; dot: string; threeHex: number }> = {
-  Paper: { bg: "#141c2b", border: "#2563eb", text: "#93c5fd", dot: "#3b82f6", threeHex: 0x3b82f6 },
-  Material: { bg: "#231e13", border: "#d97706", text: "#fde68a", dot: "#f59e0b", threeHex: 0xf59e0b },
-  Dataset: { bg: "#13231a", border: "#059669", text: "#a7f3d0", dot: "#10b981", threeHex: 0x10b981 },
-  Model: { bg: "#22162b", border: "#9333ea", text: "#e9d5ff", dot: "#a855f7", threeHex: 0xa855f7 },
-  Experiment: { bg: "#26151a", border: "#e11d48", text: "#fecdd3", dot: "#f43f5e", threeHex: 0xf43f5e },
-  Metric: { bg: "#132321", border: "#0d9488", text: "#99f6e4", dot: "#14b8a6", threeHex: 0x14b8a6 },
-  Failure: { bg: "#2b1414", border: "#dc2626", text: "#fca5a5", dot: "#ef4444", threeHex: 0xef4444 },
-  Recovery: { bg: "#152618", border: "#16a34a", text: "#bbf7d0", dot: "#22c55e", threeHex: 0x22c55e },
+const CATEGORY_COLORS: Record<string, { bg: string; border: string; text: string; dot: string; threeHex: number; shape: string }> = {
+  Paper: { bg: "#EFF6FF", border: "#3B82F6", text: "#1E40AF", dot: "#2563EB", threeHex: 0x2563eb, shape: "Octahedron" },
+  Method: { bg: "#FEF3C7", border: "#F59E0B", text: "#92400E", dot: "#D97706", threeHex: 0xd97706, shape: "Dodecahedron" },
+  Material: { bg: "#FEF3C7", border: "#F59E0B", text: "#92400E", dot: "#D97706", threeHex: 0xd97706, shape: "Lattice Cube" },
+  Dataset: { bg: "#E8F5EC", border: "#176B4D", text: "#176B4D", dot: "#176B4D", threeHex: 0x176b4d, shape: "Cylinder" },
+  Model: { bg: "#F3E8FF", border: "#A855F7", text: "#6B21A8", dot: "#9333EA", threeHex: 0x9333ea, shape: "Torus" },
+  Experiment: { bg: "#FFE4E6", border: "#F43F5E", text: "#9F1239", dot: "#E11D48", threeHex: 0xe11d48, shape: "Sphere" },
+  Metric: { bg: "#CCFBF1", border: "#14B8A6", text: "#115E59", dot: "#0D9488", threeHex: 0x0d9488, shape: "Tetrahedron" },
+  Failure: { bg: "#FEE2E2", border: "#EF4444", text: "#991B1B", dot: "#DC2626", threeHex: 0xdc2626, shape: "Cone Spike" },
+  Recovery: { bg: "#DCFCE7", border: "#22C55E", text: "#166534", dot: "#16A34A", threeHex: 0x16a34a, shape: "Torus Ring" },
 };
 
-// Stable Persistent Default Graph (DEMO GRAPH) with 3D Coordinates
+const EDGE_COLOR_MAP: Record<string, number> = {
+  investigates: 0x2563eb,
+  proposes_method: 0x2563eb,
+  cataloged_in: 0xd97706,
+  uses_dataset: 0xd97706,
+  evaluated_by: 0x176b4d,
+  evaluates_model: 0x176b4d,
+  trains: 0x9333ea,
+  fits: 0x9333ea,
+  produced_model: 0x9333ea,
+  achieves: 0x0d9488,
+  yields_score: 0x0d9488,
+  triggered_error: 0xdc2626,
+  encounters_failure: 0xdc2626,
+  repaired_by: 0x16a34a,
+  patched_model: 0x16a34a,
+};
+
+// Stable Persistent Default Graph (DEMO GRAPH) with Collision-Avoidance Spaced Coordinates
 const DEFAULT_NODES: GraphNode[] = [
   {
     id: "n-p1",
@@ -88,9 +111,9 @@ const DEFAULT_NODES: GraphNode[] = [
     confidence: 0.98,
     evidence_snippet: "Transparent conductors require band gap Eg > 3.1 eV and low formation energy for thermodynamic stability.",
     source_file: "nomad_conductors_2018.pdf",
-    x: -110,
-    y: 50,
-    z: -30,
+    x: -140,
+    y: 70,
+    z: -40,
     is_demo: true,
   },
   {
@@ -102,9 +125,9 @@ const DEFAULT_NODES: GraphNode[] = [
     confidence: 0.95,
     evidence_snippet: "Lattice parameters [a, b, c, alpha, beta, gamma] establish feature space for electronic structure.",
     source_file: "materials_manifest.json",
-    x: -50,
-    y: 20,
-    z: 35,
+    x: -70,
+    y: 25,
+    z: 45,
     is_demo: true,
   },
   {
@@ -116,9 +139,9 @@ const DEFAULT_NODES: GraphNode[] = [
     confidence: 0.99,
     evidence_snippet: "Target: bandgap_energy_ev. Cleaned samples: 2,400 train, 600 validation.",
     source_file: "nomad_cleaned.csv",
-    x: 10,
+    x: 0,
     y: 10,
-    z: -20,
+    z: -30,
     is_demo: true,
   },
   {
@@ -130,9 +153,9 @@ const DEFAULT_NODES: GraphNode[] = [
     confidence: 0.94,
     evidence_snippet: "Time budget bounded to 180s. Measured CPU time: 15.17s.",
     source_file: "experiment_log_nomad.json",
-    x: 65,
-    y: -25,
-    z: 30,
+    x: 75,
+    y: -30,
+    z: 40,
     is_demo: true,
   },
   {
@@ -144,9 +167,9 @@ const DEFAULT_NODES: GraphNode[] = [
     confidence: 0.97,
     evidence_snippet: "Serialized size: 48.2 KB. Inference latency: 45.2 μs.",
     source_file: "model_rf_bandgap.pkl",
-    x: 120,
-    y: -10,
-    z: -25,
+    x: 140,
+    y: -15,
+    z: -30,
     is_demo: true,
   },
   {
@@ -158,9 +181,9 @@ const DEFAULT_NODES: GraphNode[] = [
     confidence: 0.99,
     evidence_snippet: "Residual standard deviation: 0.2116 eV. Zero target-leakage confirmed.",
     source_file: "metrics_eval.json",
-    x: 170,
-    y: 35,
-    z: 20,
+    x: 200,
+    y: 45,
+    z: 25,
     is_demo: true,
   },
   {
@@ -172,9 +195,9 @@ const DEFAULT_NODES: GraphNode[] = [
     confidence: 0.92,
     evidence_snippet: "Ridge solver crashed with non-positive definite Hessian on one-hot spacegroup vector.",
     source_file: "traceback_run_28.log",
-    x: 60,
-    y: -75,
-    z: -35,
+    x: 70,
+    y: -95,
+    z: -45,
     is_demo: true,
   },
   {
@@ -186,9 +209,9 @@ const DEFAULT_NODES: GraphNode[] = [
     confidence: 0.96,
     evidence_snippet: "Injected ridge penalty stabilized condition number. Run completed in 12.4ms.",
     source_file: "memory_patch_alpha.json",
-    x: 5,
-    y: -80,
-    z: 15,
+    x: -10,
+    y: -100,
+    z: 20,
     is_demo: true,
   },
   {
@@ -200,9 +223,9 @@ const DEFAULT_NODES: GraphNode[] = [
     confidence: 0.99,
     evidence_snippet: "Includes 13 standardized tasks ranging from phononic band gaps to elastic moduli.",
     source_file: "matbench_benchmark.pdf",
-    x: -125,
-    y: -45,
-    z: 50,
+    x: -150,
+    y: -55,
+    z: 60,
     is_demo: true,
   },
   {
@@ -214,9 +237,9 @@ const DEFAULT_NODES: GraphNode[] = [
     confidence: 0.98,
     evidence_snippet: "Target: gap expt. Real sample count: 4,604.",
     source_file: "matbench_expt_gap.csv",
-    x: -65,
-    y: -40,
-    z: -30,
+    x: -80,
+    y: -50,
+    z: -40,
     is_demo: true,
   },
   {
@@ -228,9 +251,9 @@ const DEFAULT_NODES: GraphNode[] = [
     confidence: 0.95,
     evidence_snippet: "Train time: 48.0 ms. Flash memory: sub-32 KB serialized.",
     source_file: "hist_boost_model.pkl",
-    x: 75,
-    y: 55,
-    z: 60,
+    x: 90,
+    y: 70,
+    z: 75,
     is_demo: true,
   },
   {
@@ -242,9 +265,9 @@ const DEFAULT_NODES: GraphNode[] = [
     confidence: 0.96,
     evidence_snippet: "R²: 0.7420. Matches published literature baseline within ±0.03 eV.",
     source_file: "matbench_eval.json",
-    x: 140,
-    y: 80,
-    z: -15,
+    x: 165,
+    y: 100,
+    z: -20,
     is_demo: true,
   },
   {
@@ -256,9 +279,9 @@ const DEFAULT_NODES: GraphNode[] = [
     confidence: 0.97,
     evidence_snippet: "Goldschmidt tolerance factor t = 0.86 confirms stable cubic perovskite geometry.",
     source_file: "perovskite_cif.json",
-    x: -25,
-    y: 65,
-    z: -60,
+    x: -35,
+    y: 80,
+    z: -70,
     is_demo: true,
   },
   {
@@ -270,9 +293,9 @@ const DEFAULT_NODES: GraphNode[] = [
     confidence: 0.95,
     evidence_snippet: "Identified 3 non-dominated models on the Pareto frontier.",
     source_file: "pareto_study.json",
-    x: 45,
-    y: 75,
-    z: -40,
+    x: 55,
+    y: 90,
+    z: -50,
     is_demo: true,
   },
 ];
@@ -296,11 +319,13 @@ const DEFAULT_EDGES: GraphEdge[] = [
 
 export default function ResearchKnowledgeGraphPage() {
   const [sourceMode, setSourceMode] = useState<SourceMode>("default");
+  const [viewMode, setViewMode] = useState<ViewMode>("3d");
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState<string>("ALL");
   const [selectedNodeId, setSelectedNodeId] = useState<string>("n-p1");
   const [isolateNeighbors, setIsolateNeighbors] = useState(false);
   const [isInspectorOpen, setIsInspectorOpen] = useState(true);
+  const [isLibraryOpen, setIsLibraryOpen] = useState(true);
 
   // Ingestion Modal State
   const [uploadModalOpen, setUploadModalOpen] = useState(false);
@@ -341,9 +366,9 @@ export default function ResearchKnowledgeGraphPage() {
           provenance: d.source_name || "Internal Cleaned Repository",
           confidence: 0.99,
           evidence_snippet: `Quality score: 98.4%. Stored slug: ${d.slug}`,
-          x: Math.cos(phi) * 60,
-          y: Math.sin(phi) * 30 + 10,
-          z: Math.sin(phi) * 60 - 20,
+          x: Math.cos(phi) * 80,
+          y: Math.sin(phi) * 40 + 15,
+          z: Math.sin(phi) * 80 - 25,
         });
       });
 
@@ -357,9 +382,9 @@ export default function ResearchKnowledgeGraphPage() {
           provenance: "FastDaemon Execution Record",
           confidence: 0.95,
           evidence_snippet: `CPU Budget: ${e.cpu_budget_seconds}s. Model Family: ${(e as any).model_family || "Tree/Ensemble"}`,
-          x: Math.cos(theta) * 110,
-          y: (i - 2) * 25,
-          z: Math.sin(theta) * 110 + 20,
+          x: Math.cos(theta) * 130,
+          y: (i - 2) * 30,
+          z: Math.sin(theta) * 130 + 25,
         });
         if (e.dataset_id) {
           wEdges.push({
@@ -380,9 +405,9 @@ export default function ResearchKnowledgeGraphPage() {
           provenance: "Serialized Pipeline (.pkl)",
           confidence: 0.97,
           evidence_snippet: `Validation Metrics: ${typeof r.metrics === "string" ? r.metrics : "{}"}`,
-          x: 120 + (i % 2) * 40,
-          y: (i - 3) * 30,
-          z: (i % 2 === 0 ? 30 : -30),
+          x: 140 + (i % 2) * 50,
+          y: (i - 3) * 35,
+          z: (i % 2 === 0 ? 40 : -40),
         });
         if (r.experiment_id) {
           wEdges.push({
@@ -394,7 +419,6 @@ export default function ResearchKnowledgeGraphPage() {
         }
       });
 
-      // Add recovery memories if available
       mList.slice(0, 3).forEach((m: RecoveryMemory, i: number) => {
         wNodes.push({
           id: `w-rec-${m.id}`,
@@ -404,9 +428,9 @@ export default function ResearchKnowledgeGraphPage() {
           provenance: "Failure Memory Cache",
           confidence: 0.96,
           evidence_snippet: `Validation: ${m.validation_result || m.state || "Verified Successful"}`,
-          x: -40 - i * 30,
-          y: -70 - i * 15,
-          z: 20 + i * 20,
+          x: -50 - i * 35,
+          y: -85 - i * 20,
+          z: 25 + i * 25,
         });
       });
 
@@ -464,21 +488,48 @@ export default function ResearchKnowledgeGraphPage() {
     return set;
   }, [connectedEdges, selectedNode]);
 
-  // Three.js 3D WebGL Scene Setup
+  // Keyboard navigation accessibility handler
   useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (["INPUT", "TEXTAREA", "SELECT"].includes((e.target as HTMLElement)?.tagName)) return;
+
+      if (e.key === "Escape") {
+        setIsolateNeighbors(false);
+        setSearchQuery("");
+      } else if (e.key === "Tab" || e.key === "ArrowRight" || e.key === "ArrowDown") {
+        if (filteredNodes.length > 0) {
+          const currentIndex = filteredNodes.findIndex((n) => n.id === selectedNodeId);
+          const nextIndex = (currentIndex + 1) % filteredNodes.length;
+          setSelectedNodeId(filteredNodes[nextIndex].id);
+        }
+      } else if (e.key === "ArrowLeft" || e.key === "ArrowUp") {
+        if (filteredNodes.length > 0) {
+          const currentIndex = filteredNodes.findIndex((n) => n.id === selectedNodeId);
+          const prevIndex = (currentIndex - 1 + filteredNodes.length) % filteredNodes.length;
+          setSelectedNodeId(filteredNodes[prevIndex].id);
+        }
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [filteredNodes, selectedNodeId]);
+
+  // Three.js 3D WebGL Scene Setup with Category Geometries & Edge Color Styling
+  useEffect(() => {
+    if (viewMode !== "3d") return;
     const container = canvasContainerRef.current;
     if (!container) return;
 
     const width = container.clientWidth;
     const height = container.clientHeight;
 
-    // 1. Scene, Camera, Renderer
+    // 1. Scene, Camera, Renderer (Cream Background)
     const scene = new THREE.Scene();
-    scene.background = new THREE.Color(0x0c0e14);
-    scene.fog = new THREE.FogExp2(0x0c0e14, 0.0018);
+    scene.background = new THREE.Color(0xF8F6EF);
+    scene.fog = new THREE.FogExp2(0xF8F6EF, 0.0012);
 
     const camera = new THREE.PerspectiveCamera(45, width / height, 1, 3000);
-    camera.position.set(0, 90, 320);
+    camera.position.set(0, 100, 360);
     cameraRef.current = camera;
 
     const renderer = new THREE.WebGLRenderer({ antialias: true, powerPreference: "high-performance" });
@@ -496,50 +547,50 @@ export default function ResearchKnowledgeGraphPage() {
     // 2. Controls
     const controls = new OrbitControls(camera, renderer.domElement);
     controls.enableDamping = true;
-    controls.dampingFactor = 0.06;
-    controls.maxDistance = 750;
-    controls.minDistance = 60;
+    controls.dampingFactor = 0.05;
+    controls.maxDistance = 800;
+    controls.minDistance = 40;
     controls.target.set(0, 0, 0);
     controlsRef.current = controls;
 
-    // 3. Subtle Materials Science Lattice Grid & Depth Stars
-    const gridHelper = new THREE.GridHelper(500, 25, 0x222a38, 0x141822);
-    gridHelper.position.y = -100;
+    // 3. Subtle Materials Science Reference Plane Grid & Atom Particles
+    const gridHelper = new THREE.GridHelper(600, 30, 0xDFE5DC, 0xEAEFE8);
+    gridHelper.position.y = -120;
     scene.add(gridHelper);
 
-    // Background particle dust (Materials atom cloud)
-    const particleCount = 280;
+    // Background particle dust
+    const particleCount = 320;
     const particleGeometry = new THREE.BufferGeometry();
     const particlePositions = new Float32Array(particleCount * 3);
     for (let i = 0; i < particleCount * 3; i += 3) {
-      particlePositions[i] = (Math.random() - 0.5) * 800;
-      particlePositions[i + 1] = (Math.random() - 0.5) * 600;
-      particlePositions[i + 2] = (Math.random() - 0.5) * 800;
+      particlePositions[i] = (Math.random() - 0.5) * 900;
+      particlePositions[i + 1] = (Math.random() - 0.5) * 700;
+      particlePositions[i + 2] = (Math.random() - 0.5) * 900;
     }
     particleGeometry.setAttribute("position", new THREE.BufferAttribute(particlePositions, 3));
     const particleMaterial = new THREE.PointsMaterial({
-      color: 0x475569,
+      color: 0x68766D,
       size: 1.8,
       transparent: true,
-      opacity: 0.45,
+      opacity: 0.35,
     });
     const particleSystem = new THREE.Points(particleGeometry, particleMaterial);
     scene.add(particleSystem);
 
-    // 4. Lights
-    const ambientLight = new THREE.AmbientLight(0xdde3ea, 1.4);
+    // 4. Physically Plausible Lighting
+    const ambientLight = new THREE.AmbientLight(0xFFFFFF, 1.8);
     scene.add(ambientLight);
 
-    const dirLight1 = new THREE.DirectionalLight(0xfff5ea, 2.2);
-    dirLight1.position.set(160, 220, 160);
-    scene.add(dirLight1);
+    const keyLight = new THREE.DirectionalLight(0xFFFFFF, 2.2);
+    keyLight.position.set(180, 240, 180);
+    scene.add(keyLight);
 
-    const dirLight2 = new THREE.DirectionalLight(0x60a5fa, 1.2);
-    dirLight2.position.set(-160, -100, -120);
-    scene.add(dirLight2);
+    const fillLight = new THREE.DirectionalLight(0x176B4D, 0.9);
+    fillLight.position.set(-180, -110, -140);
+    scene.add(fillLight);
 
-    // Dynamic focal point light
-    const focalLight = new THREE.PointLight(0xf59e0b, 3, 200);
+    // Dynamic Specular Focus Light
+    const focalLight = new THREE.PointLight(0x176B4D, 3.5, 220);
     scene.add(focalLight);
 
     // 5. Mesh Groups
@@ -551,7 +602,30 @@ export default function ResearchKnowledgeGraphPage() {
     const nodeMeshes: { [id: string]: THREE.Mesh } = {};
     const haloMeshes: { [id: string]: THREE.Mesh } = {};
 
-    // Build Node 3D Objects
+    // Helper: Create distinct 3D geometry per Category
+    const createCategoryGeometry = (category: string, radius: number): THREE.BufferGeometry => {
+      switch (category) {
+        case "Paper":
+          return new THREE.OctahedronGeometry(radius * 1.1, 0);
+        case "Material":
+          return new THREE.BoxGeometry(radius * 1.3, radius * 1.3, radius * 1.3);
+        case "Dataset":
+          return new THREE.CylinderGeometry(radius * 0.85, radius * 0.85, radius * 1.6, 16);
+        case "Model":
+          return new THREE.TorusGeometry(radius * 0.85, radius * 0.35, 12, 24);
+        case "Metric":
+          return new THREE.TetrahedronGeometry(radius * 1.25, 0);
+        case "Failure":
+          return new THREE.ConeGeometry(radius * 1.1, radius * 1.8, 16);
+        case "Recovery":
+          return new THREE.TorusGeometry(radius * 1.1, radius * 0.25, 16, 32);
+        case "Experiment":
+        default:
+          return new THREE.SphereGeometry(radius, 24, 24);
+      }
+    };
+
+    // Build Category-Specific 3D Node Meshes
     filteredNodes.forEach((node) => {
       const isSelected = node.id === selectedNodeId;
       const isNeighbor = neighborNodeIds.has(node.id);
@@ -560,52 +634,49 @@ export default function ResearchKnowledgeGraphPage() {
       const catColor = CATEGORY_COLORS[node.category] || CATEGORY_COLORS.Dataset;
       const radius = isSelected ? 8.5 : node.category === "Dataset" || node.category === "Paper" ? 7 : 5.8;
 
-      const sphereGeo = new THREE.SphereGeometry(radius, 24, 24);
-      const sphereMat = new THREE.MeshStandardMaterial({
+      const geo = createCategoryGeometry(node.category, radius);
+      const mat = new THREE.MeshStandardMaterial({
         color: catColor.threeHex,
-        roughness: 0.28,
-        metalness: 0.35,
+        roughness: 0.25,
+        metalness: 0.4,
         emissive: catColor.threeHex,
-        emissiveIntensity: isSelected ? 0.45 : 0.12,
+        emissiveIntensity: isSelected ? 0.5 : 0.15,
         transparent: true,
-        opacity: isDimmed ? 0.2 : 1.0,
+        opacity: isDimmed ? 0.15 : 1.0,
       });
 
-      const sphere = new THREE.Mesh(sphereGeo, sphereMat);
-      sphere.position.set(node.x, node.y, node.z);
-      (sphere as any).nodeData = node;
+      const mesh = new THREE.Mesh(geo, mat);
+      mesh.position.set(node.x, node.y, node.z);
+      (mesh as any).nodeData = node;
 
-      nodesGroup.add(sphere);
-      nodeMeshes[node.id] = sphere;
+      nodesGroup.add(mesh);
+      nodeMeshes[node.id] = mesh;
 
-      // Selection Halo / Ring
+      // Selection Ring / Halo
       if (isSelected || node.category === "Failure" || node.category === "Recovery") {
-        const ringGeo = new THREE.RingGeometry(radius * 1.35, radius * 1.55, 32);
+        const ringGeo = new THREE.RingGeometry(radius * 1.4, radius * 1.6, 32);
         const ringMat = new THREE.MeshBasicMaterial({
-          color: isSelected ? 0xd4a359 : catColor.threeHex,
+          color: isSelected ? 0x176B4D : catColor.threeHex,
           side: THREE.DoubleSide,
           transparent: true,
-          opacity: 0.8,
+          opacity: 0.85,
         });
         const ring = new THREE.Mesh(ringGeo, ringMat);
-        ring.position.copy(sphere.position);
+        ring.position.copy(mesh.position);
         ring.lookAt(camera.position);
         scene.add(ring);
         haloMeshes[node.id] = ring;
       }
     });
 
-    // Update dynamic light position to selected node
+    // Update dynamic focus light to selected node
     const activeSelectedNode = filteredNodes.find((n) => n.id === selectedNodeId);
     if (activeSelectedNode) {
-      focalLight.position.set(activeSelectedNode.x, activeSelectedNode.y + 15, activeSelectedNode.z + 15);
-      focalLight.color.setHex(CATEGORY_COLORS[activeSelectedNode.category]?.threeHex || 0xd4a359);
+      focalLight.position.set(activeSelectedNode.x, activeSelectedNode.y + 18, activeSelectedNode.z + 18);
+      focalLight.color.setHex(CATEGORY_COLORS[activeSelectedNode.category]?.threeHex || 0x176b4d);
     }
 
-    // Build 3D Edges
-    const lineMatActive = new THREE.LineBasicMaterial({ color: 0xd4a359, transparent: true, opacity: 0.9, linewidth: 2 });
-    const lineMatInactive = new THREE.LineBasicMaterial({ color: 0x334155, transparent: true, opacity: 0.35 });
-
+    // Build Styled 3D Relationship Edges with Distinct Colors
     activeEdges.forEach((edge) => {
       const srcNode = filteredNodes.find((n) => n.id === edge.source);
       const tgtNode = filteredNodes.find((n) => n.id === edge.target);
@@ -614,25 +685,43 @@ export default function ResearchKnowledgeGraphPage() {
         const isConnectedToSelected = edge.source === selectedNodeId || edge.target === selectedNodeId;
         const isDimmed = isolateNeighbors && (!neighborNodeIds.has(edge.source) || !neighborNodeIds.has(edge.target));
 
+        const edgeHex = EDGE_COLOR_MAP[edge.label] || 0x176b4d;
+
         const points = [
           new THREE.Vector3(srcNode.x, srcNode.y, srcNode.z),
           new THREE.Vector3(tgtNode.x, tgtNode.y, tgtNode.z),
         ];
 
         const lineGeo = new THREE.BufferGeometry().setFromPoints(points);
-        const line = new THREE.Line(
-          lineGeo,
-          isDimmed
-            ? new THREE.LineBasicMaterial({ color: 0x1e293b, transparent: true, opacity: 0.08 })
-            : isConnectedToSelected
-            ? lineMatActive
-            : lineMatInactive
-        );
+        const lineMat = new THREE.LineBasicMaterial({
+          color: isConnectedToSelected ? edgeHex : 0x68766D,
+          transparent: true,
+          opacity: isDimmed ? 0.05 : isConnectedToSelected ? 0.95 : 0.3,
+          linewidth: isConnectedToSelected ? 2.5 : 1,
+        });
+
+        const line = new THREE.Line(lineGeo, lineMat);
         edgesGroup.add(line);
+
+        // Directional Cone Arrow Indicator for active connected edges
+        if (isConnectedToSelected && !isDimmed) {
+          const dir = new THREE.Vector3().subVectors(points[1], points[0]);
+          const length = dir.length();
+          dir.normalize();
+
+          const arrowGeo = new THREE.ConeGeometry(2.5, 7, 12);
+          const arrowMat = new THREE.MeshBasicMaterial({ color: edgeHex, transparent: true, opacity: 0.9 });
+          const arrowMesh = new THREE.Mesh(arrowGeo, arrowMat);
+
+          const midPoint = new THREE.Vector3().addVectors(points[0], points[1]).multiplyScalar(0.5);
+          arrowMesh.position.copy(midPoint);
+          arrowMesh.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), dir);
+          edgesGroup.add(arrowMesh);
+        }
       }
     });
 
-    // Raycasting for interactive click selection & hover
+    // Raycasting for pointer click & double-click focus
     const raycaster = new THREE.Raycaster();
     const mouse = new THREE.Vector2();
 
@@ -648,6 +737,10 @@ export default function ResearchKnowledgeGraphPage() {
         const hit = intersects[0].object as any;
         if (hit.nodeData) {
           setSelectedNodeId(hit.nodeData.id);
+          if (event.detail === 2) {
+            // Double click: smooth camera focus
+            handleFocusNode(hit.nodeData);
+          }
         }
       }
     };
@@ -660,11 +753,15 @@ export default function ResearchKnowledgeGraphPage() {
 
     const animate = () => {
       animationFrameId = requestAnimationFrame(animate);
-
       controls.update();
 
       // Slow ambient drift
-      particleSystem.rotation.y += 0.0004;
+      particleSystem.rotation.y += 0.0003;
+
+      // Rotate nodes slightly for subtle 3D realism
+      nodesGroup.children.forEach((child) => {
+        child.rotation.y += 0.005;
+      });
 
       // Make halos face camera
       Object.keys(haloMeshes).forEach((key) => {
@@ -703,13 +800,11 @@ export default function ResearchKnowledgeGraphPage() {
       });
 
       setScreenLabels(labels);
-
       renderer.render(scene, camera);
     };
 
     animate();
 
-    // Resize Handler
     const handleResize = () => {
       if (!container) return;
       const newWidth = container.clientWidth;
@@ -731,7 +826,7 @@ export default function ResearchKnowledgeGraphPage() {
         container.removeChild(container.firstChild);
       }
     };
-  }, [filteredNodes, activeEdges, selectedNodeId, isolateNeighbors, neighborNodeIds]);
+  }, [filteredNodes, activeEdges, selectedNodeId, isolateNeighbors, neighborNodeIds, viewMode]);
 
   // Smooth camera zoom / focus on selected node
   const handleFocusNode = useCallback((node: GraphNode) => {
@@ -739,14 +834,14 @@ export default function ResearchKnowledgeGraphPage() {
     if (controlsRef.current && cameraRef.current) {
       const controls = controlsRef.current;
       controls.target.set(node.x, node.y, node.z);
-      cameraRef.current.position.set(node.x, node.y + 35, node.z + 120);
+      cameraRef.current.position.set(node.x, node.y + 40, node.z + 130);
     }
   }, []);
 
   const handleResetCamera = useCallback(() => {
     if (controlsRef.current && cameraRef.current) {
       controlsRef.current.target.set(0, 0, 0);
-      cameraRef.current.position.set(0, 90, 320);
+      cameraRef.current.position.set(0, 100, 360);
     }
   }, []);
 
@@ -783,9 +878,9 @@ export default function ResearchKnowledgeGraphPage() {
           confidence: 0.94,
           evidence_snippet: `Automated parser extracted structure coordinates and materials assertions from ${f.name}.`,
           source_file: f.name,
-          x: Math.cos(phi) * 100,
-          y: (idx - 1) * 35,
-          z: Math.sin(phi) * 100,
+          x: Math.cos(phi) * 110,
+          y: (idx - 1) * 40,
+          z: Math.sin(phi) * 110,
         });
 
         // Link to first default node
@@ -814,43 +909,71 @@ export default function ResearchKnowledgeGraphPage() {
   };
 
   return (
-    <div className="flex flex-col h-[calc(100vh-68px)] bg-[#0d0f14] text-[#f4f1ea] font-sans overflow-hidden">
-      {/* 1. Header Toolbar (Premium Dark Graphite & Muted Bronze) */}
-      <div className="p-[14px_24px] bg-[#12151c] border-b border-[#1f2533] flex flex-wrap items-center justify-between gap-4 shrink-0 shadow-[0_4px_16px_rgba(0,0,0,0.4)]">
+    <div className="flex flex-col h-[calc(100vh-68px)] bg-[#F8F6EF] text-[#26352D] font-sans overflow-hidden">
+      {/* 1. Header Toolbar */}
+      <div className="p-[14px_24px] bg-[#FFFFFF] border-b border-[#DFE5DC] flex flex-wrap items-center justify-between gap-4 shrink-0 shadow-xs">
         <div>
-          <div className="font-mono text-[10px] text-[#8C877D] tracking-[0.16em] uppercase font-semibold flex items-center gap-2">
+          <div className="font-mono text-[10px] text-[#176B4D] tracking-[0.16em] uppercase font-semibold flex items-center gap-2">
             <span>KNOWLEDGE GRAPH / 001</span>
             <span>•</span>
-            <span className="text-[#d4a359]">
+            <span className="text-[#176B4D]">
               {sourceMode === "default" ? "DEMO GRAPH" : sourceMode.toUpperCase()}
             </span>
             {sourceMode === "default" && (
-              <span className="px-1.5 py-0.5 rounded-[4px] bg-[#d4a359]/20 text-[#d4a359] text-[9px] font-mono border border-[#d4a359]/40">
+              <span className="px-1.5 py-0.5 rounded-[4px] bg-[#E8F5EC] text-[#176B4D] text-[9px] font-mono border border-[#176B4D]/30 font-semibold">
                 VERIFIED PERSISTENT BENCHMARK
               </span>
             )}
           </div>
-          <h1 className="text-[19px] font-semibold tracking-tight text-[#f4f1ea] mt-0.5 flex items-center gap-2">
+          <h1 className="text-[19px] font-semibold tracking-tight text-[#26352D] mt-0.5 flex items-center gap-2 font-serif">
             <span>Materials Science Research Knowledge Graph</span>
-            <span className="px-2 py-0.5 rounded-full text-[10px] font-mono bg-[#1a2333] text-[#60a5fa] border border-[#2563eb]/40">
-              3D WebGL Active
+            <span className="px-2 py-0.5 rounded-full text-[10px] font-mono bg-[#E6F0E9] text-[#176B4D] border border-[#176B4D]/30">
+              {viewMode === "3d" ? "3D WebGL Active" : "2D Accessible View"}
             </span>
           </h1>
-          <p className="text-[12px] text-[#9ca3af] mt-0.5">
+          <p className="text-[12px] text-[#68766D] mt-0.5">
             Interactive structural ontology linking papers, materials compositions, benchmark datasets, model runs, and failure recoveries.
           </p>
         </div>
 
         {/* Source Mode Selector & Action Buttons */}
         <div className="flex items-center gap-2.5">
-          <div className="flex items-center p-0.5 bg-[#0d0f14] border border-[#222a3a] rounded-[8px]">
+          {/* View Mode 3D <-> 2D Toggle */}
+          <div className="flex items-center p-0.5 bg-[#F8F6EF] border border-[#DFE5DC] rounded-[8px]">
+            <button
+              type="button"
+              onClick={() => setViewMode("3d")}
+              className={`px-3 py-1.5 rounded-[6px] text-[11px] font-mono transition-all flex items-center gap-1 cursor-pointer ${
+                viewMode === "3d"
+                  ? "bg-[#176B4D] text-[#FFFFFF] font-semibold shadow-xs"
+                  : "text-[#68766D] hover:text-[#26352D]"
+              }`}
+            >
+              <Box size={13} />
+              <span>3D Canvas</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => setViewMode("2d")}
+              className={`px-3 py-1.5 rounded-[6px] text-[11px] font-mono transition-all flex items-center gap-1 cursor-pointer ${
+                viewMode === "2d"
+                  ? "bg-[#176B4D] text-[#FFFFFF] font-semibold shadow-xs"
+                  : "text-[#68766D] hover:text-[#26352D]"
+              }`}
+            >
+              <List size={13} />
+              <span>2D Accessible</span>
+            </button>
+          </div>
+
+          <div className="flex items-center p-0.5 bg-[#F8F6EF] border border-[#DFE5DC] rounded-[8px]">
             <button
               type="button"
               onClick={() => setSourceMode("default")}
               className={`px-3 py-1.5 rounded-[6px] text-[12px] font-mono transition-all ${
                 sourceMode === "default"
-                  ? "bg-[#222a3a] text-[#f4f1ea] font-semibold shadow-sm"
-                  : "text-[#8C877D] hover:text-[#f4f1ea]"
+                  ? "bg-[#176B4D] text-[#FFFFFF] font-semibold shadow-xs"
+                  : "text-[#68766D] hover:text-[#26352D]"
               }`}
             >
               Demo Graph
@@ -860,13 +983,13 @@ export default function ResearchKnowledgeGraphPage() {
               onClick={() => setSourceMode("uploaded")}
               className={`px-3 py-1.5 rounded-[6px] text-[12px] font-mono transition-all ${
                 sourceMode === "uploaded"
-                  ? "bg-[#222a3a] text-[#f4f1ea] font-semibold shadow-sm"
-                  : "text-[#8C877D] hover:text-[#f4f1ea]"
+                  ? "bg-[#176B4D] text-[#FFFFFF] font-semibold shadow-xs"
+                  : "text-[#68766D] hover:text-[#26352D]"
               }`}
             >
               Uploaded Sources
               {uploadedNodes.length > 0 && (
-                <span className="ml-1.5 px-1 py-0.2 bg-[#d4a359] text-[#0d0f14] font-bold rounded-full text-[9px]">
+                <span className="ml-1.5 px-1 py-0.2 bg-[#FFFFFF] text-[#176B4D] font-bold rounded-full text-[9px]">
                   {uploadedNodes.length}
                 </span>
               )}
@@ -876,19 +999,19 @@ export default function ResearchKnowledgeGraphPage() {
               onClick={() => setSourceMode("workspace")}
               className={`px-3 py-1.5 rounded-[6px] text-[12px] font-mono transition-all ${
                 sourceMode === "workspace"
-                  ? "bg-[#222a3a] text-[#f4f1ea] font-semibold shadow-sm"
-                  : "text-[#8C877D] hover:text-[#f4f1ea]"
+                  ? "bg-[#176B4D] text-[#FFFFFF] font-semibold shadow-xs"
+                  : "text-[#68766D] hover:text-[#26352D]"
               }`}
             >
               Research Workspace
             </button>
           </div>
 
-          {/* Add Research Sources Button (Muted Bronze Accent) */}
+          {/* Add Research Sources Button */}
           <button
             type="button"
             onClick={() => setUploadModalOpen(true)}
-            className="h-[34px] px-3.5 rounded-[8px] bg-[#d4a359] hover:bg-[#b88c47] text-[#0d0f14] text-[12px] font-semibold transition-all inline-flex items-center gap-1.5 shadow-sm active:scale-98"
+            className="h-[34px] px-3.5 rounded-[8px] bg-[#176B4D] hover:bg-[#12543c] text-[#FFFFFF] text-[12px] font-semibold transition-all inline-flex items-center gap-1.5 shadow-xs cursor-pointer"
           >
             <Plus size={14} className="stroke-[2.5]" />
             <span>ADD RESEARCH SOURCES</span>
@@ -897,17 +1020,17 @@ export default function ResearchKnowledgeGraphPage() {
       </div>
 
       {/* 2. Secondary Filter & Search Ribbon */}
-      <div className="p-[10px_24px] bg-[#12151c]/90 backdrop-blur-md border-b border-[#1f2533] flex flex-wrap items-center justify-between gap-3 shrink-0">
+      <div className="p-[10px_24px] bg-[#FFFFFF]/90 backdrop-blur-md border-b border-[#DFE5DC] flex flex-wrap items-center justify-between gap-3 shrink-0">
         <div className="flex flex-wrap items-center gap-2">
           {/* Search Box */}
           <div className="relative w-64">
-            <Search size={13} className="absolute left-2.5 top-1/2 -translate-y-1/2 text-[#8C877D]" />
+            <Search size={13} className="absolute left-2.5 top-1/2 -translate-y-1/2 text-[#68766D]" />
             <input
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search concepts, materials, models..."
-              className="w-full h-8 pl-8 pr-3 bg-[#0d0f14] border border-[#222a3a] rounded-[6px] text-[12px] text-[#f4f1ea] placeholder-[#64748b] focus:outline-none focus:border-[#d4a359]"
+              className="w-full h-8 pl-8 pr-3 bg-[#F8F6EF] border border-[#DFE5DC] rounded-[6px] text-[12px] text-[#26352D] placeholder-[#68766D] focus:outline-none focus:border-[#176B4D]"
             />
           </div>
 
@@ -918,10 +1041,10 @@ export default function ResearchKnowledgeGraphPage() {
                 key={cat}
                 type="button"
                 onClick={() => setSelectedCategory(cat)}
-                className={`px-2.5 py-1 rounded-[5px] border transition-colors ${
+                className={`px-2.5 py-1 rounded-[5px] border transition-colors cursor-pointer ${
                   selectedCategory === cat
-                    ? "bg-[#d4a359] text-[#0d0f14] border-[#d4a359] font-bold"
-                    : "bg-[#161a23] text-[#94a3b8] border-[#222a3a] hover:border-[#475569] hover:text-[#f4f1ea]"
+                    ? "bg-[#176B4D] text-[#FFFFFF] border-[#176B4D] font-bold"
+                    : "bg-[#F8F6EF] text-[#68766D] border-[#DFE5DC] hover:border-[#176B4D]/40 hover:text-[#26352D]"
                 }`}
               >
                 {cat}
@@ -931,18 +1054,18 @@ export default function ResearchKnowledgeGraphPage() {
         </div>
 
         {/* 3D View Controls & Statistics */}
-        <div className="flex items-center gap-2 font-mono text-[11px] text-[#94a3b8]">
-          <span className="mr-1 text-[#cbd5e1]">
+        <div className="flex items-center gap-2 font-mono text-[11px] text-[#68766D]">
+          <span className="mr-1 text-[#26352D]">
             {filteredNodes.length} Nodes • {activeEdges.length} Edges
           </span>
 
           <button
             type="button"
             onClick={() => setIsolateNeighbors((prev) => !prev)}
-            className={`px-2.5 py-1 rounded-[5px] border text-[11px] font-mono transition-all flex items-center gap-1.5 ${
+            className={`px-2.5 py-1 rounded-[5px] border text-[11px] font-mono transition-all flex items-center gap-1.5 cursor-pointer ${
               isolateNeighbors
-                ? "bg-[#d4a359]/20 text-[#d4a359] border-[#d4a359]/60 font-semibold"
-                : "bg-[#161a23] text-[#94a3b8] border-[#222a3a] hover:border-[#475569]"
+                ? "bg-[#176B4D] text-[#FFFFFF] border-[#176B4D] font-semibold"
+                : "bg-[#F8F6EF] text-[#68766D] border-[#DFE5DC] hover:border-[#176B4D]/40"
             }`}
             title="Isolate branch connected to selected node"
           >
@@ -950,44 +1073,63 @@ export default function ResearchKnowledgeGraphPage() {
             <span>Isolate Branch</span>
           </button>
 
+          {viewMode === "3d" && (
+            <>
+              <button
+                type="button"
+                onClick={() => {
+                  if (cameraRef.current) {
+                    cameraRef.current.position.multiplyScalar(0.85);
+                  }
+                }}
+                className="w-7 h-7 rounded-[5px] border border-[#DFE5DC] bg-[#FFFFFF] flex items-center justify-center hover:bg-[#F8F6EF] text-[#26352D] cursor-pointer"
+                title="Zoom In"
+              >
+                <ZoomIn size={13} />
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  if (cameraRef.current) {
+                    cameraRef.current.position.multiplyScalar(1.15);
+                  }
+                }}
+                className="w-7 h-7 rounded-[5px] border border-[#DFE5DC] bg-[#FFFFFF] flex items-center justify-center hover:bg-[#F8F6EF] text-[#26352D] cursor-pointer"
+                title="Zoom Out"
+              >
+                <ZoomOut size={13} />
+              </button>
+              <button
+                type="button"
+                onClick={handleResetCamera}
+                className="w-7 h-7 rounded-[5px] border border-[#DFE5DC] bg-[#FFFFFF] flex items-center justify-center hover:bg-[#F8F6EF] text-[#26352D] cursor-pointer"
+                title="Reset 3D Camera View"
+              >
+                <RotateCcw size={13} />
+              </button>
+            </>
+          )}
+
+          {/* Toggle Library Legend Panel Button */}
           <button
             type="button"
-            onClick={() => {
-              if (cameraRef.current) {
-                cameraRef.current.position.multiplyScalar(0.85);
-              }
-            }}
-            className="w-7 h-7 rounded-[5px] border border-[#222a3a] bg-[#161a23] flex items-center justify-center hover:bg-[#202736] text-[#f4f1ea]"
-            title="Zoom In"
+            onClick={() => setIsLibraryOpen((prev) => !prev)}
+            className={`px-2 py-1 rounded-[5px] border text-[10px] font-mono transition-all flex items-center gap-1 cursor-pointer ${
+              isLibraryOpen
+                ? "bg-[#E6F0E9] text-[#176B4D] border-[#176B4D] font-semibold"
+                : "bg-[#FFFFFF] text-[#68766D] border-[#DFE5DC] hover:border-[#176B4D]/40"
+            }`}
+            title={isLibraryOpen ? "Hide Ontology Library" : "Show Ontology Library"}
           >
-            <ZoomIn size={13} />
-          </button>
-          <button
-            type="button"
-            onClick={() => {
-              if (cameraRef.current) {
-                cameraRef.current.position.multiplyScalar(1.15);
-              }
-            }}
-            className="w-7 h-7 rounded-[5px] border border-[#222a3a] bg-[#161a23] flex items-center justify-center hover:bg-[#202736] text-[#f4f1ea]"
-            title="Zoom Out"
-          >
-            <ZoomOut size={13} />
-          </button>
-          <button
-            type="button"
-            onClick={handleResetCamera}
-            className="w-7 h-7 rounded-[5px] border border-[#222a3a] bg-[#161a23] flex items-center justify-center hover:bg-[#202736] text-[#f4f1ea]"
-            title="Reset 3D Camera View"
-          >
-            <RotateCcw size={13} />
+            <Layers size={13} />
+            <span>Library</span>
           </button>
 
           {/* Toggle Inspector Panel Button */}
           <button
             type="button"
             onClick={() => setIsInspectorOpen((prev) => !prev)}
-            className="px-2 py-1 rounded-[5px] border border-[#222a3a] bg-[#161a23] flex items-center gap-1 text-[#f4f1ea] hover:bg-[#202736]"
+            className="px-2 py-1 rounded-[5px] border border-[#DFE5DC] bg-[#FFFFFF] flex items-center gap-1 text-[#26352D] hover:bg-[#F8F6EF] cursor-pointer"
             title={isInspectorOpen ? "Collapse Inspector" : "Expand Inspector"}
           >
             {isInspectorOpen ? <ChevronRight size={14} /> : <ChevronLeft size={14} />}
@@ -996,137 +1138,224 @@ export default function ResearchKnowledgeGraphPage() {
         </div>
       </div>
 
-      {/* 3. Main Workspace: Dominant 3D Graph Canvas (Left) + Balanced Inspector (Right) */}
-      <div className="flex-1 flex overflow-hidden relative">
-        {/* Dominant 3D WebGL Canvas Area */}
-        <div className="flex-1 relative overflow-hidden bg-[#0c0e14] select-none">
-          <div ref={canvasContainerRef} className="w-full h-full cursor-grab active:cursor-grabbing" />
+      {/* 3. Main Workspace: 3D Canvas / 2D List Fallback (Left) + Inspector (Right) */}
+      <div className="flex-1 flex overflow-hidden relative p-3">
+        {viewMode === "3d" ? (
+          /* Dominant 3D WebGL Canvas Area in Framed Box with Border */
+          <div className="flex-1 relative overflow-hidden bg-[#FFFFFF] border border-[#DFE5DC] rounded-[12px] shadow-xs select-none flex flex-col">
+            <div ref={canvasContainerRef} className="w-full h-full cursor-grab active:cursor-grabbing" />
 
-          {/* Projected 2D HTML Labels floating over 3D nodes */}
-          <div className="absolute inset-0 pointer-events-none overflow-hidden">
-            {screenLabels.map((lbl) => {
-              if (!lbl.visible) return null;
-              const isSelected = lbl.id === selectedNodeId;
-              const catConfig = CATEGORY_COLORS[lbl.category] || CATEGORY_COLORS.Dataset;
+            {/* Projected 2D HTML Labels floating over 3D nodes */}
+            <div className="absolute inset-0 pointer-events-none overflow-hidden">
+              {screenLabels.map((lbl) => {
+                if (!lbl.visible) return null;
+                const isSelected = lbl.id === selectedNodeId;
+                const catConfig = CATEGORY_COLORS[lbl.category] || CATEGORY_COLORS.Dataset;
 
-              return (
-                <div
-                  key={lbl.id}
-                  style={{
-                    position: "absolute",
-                    left: `${lbl.x}px`,
-                    top: `${lbl.y}px`,
-                    transform: "translate(-50%, 14px)",
-                  }}
-                  className={`transition-opacity duration-200 pointer-events-auto cursor-pointer ${
-                    isSelected ? "z-30 scale-105" : "z-10 hover:z-20 opacity-85 hover:opacity-100"
-                  }`}
-                  onClick={() => {
-                    const node = filteredNodes.find((n) => n.id === lbl.id);
-                    if (node) handleFocusNode(node);
-                  }}
-                >
+                return (
                   <div
-                    className="flex flex-col items-center px-2 py-0.5 rounded-[5px] border backdrop-blur-md shadow-md"
+                    key={lbl.id}
                     style={{
-                      backgroundColor: isSelected ? "#1e2433ee" : "#11141eee",
-                      borderColor: isSelected ? "#d4a359" : catConfig.border + "66",
+                      position: "absolute",
+                      left: `${lbl.x}px`,
+                      top: `${lbl.y}px`,
+                      transform: "translate(-50%, 14px)",
+                    }}
+                    className={`transition-opacity duration-200 pointer-events-auto cursor-pointer ${
+                      isSelected ? "z-30 scale-105" : "z-10 hover:z-20 opacity-90 hover:opacity-100"
+                    }`}
+                    onClick={() => {
+                      const node = filteredNodes.find((n) => n.id === lbl.id);
+                      if (node) handleFocusNode(node);
                     }}
                   >
-                    <span
-                      className="text-[9px] font-mono uppercase tracking-wider font-bold"
-                      style={{ color: isSelected ? "#d4a359" : catConfig.text }}
+                    <div
+                      className="flex flex-col items-center px-2 py-0.5 rounded-[5px] border backdrop-blur-md shadow-xs"
+                      style={{
+                        backgroundColor: isSelected ? "#FFFFFFee" : "#FFFFFFcc",
+                        borderColor: isSelected ? "#176B4D" : catConfig.border + "88",
+                      }}
                     >
-                      {lbl.category}
-                    </span>
-                    <span className="text-[11px] font-medium text-[#f4f1ea] max-w-[130px] truncate text-center leading-tight">
-                      {lbl.name}
-                    </span>
+                      <span
+                        className="text-[9px] font-mono uppercase tracking-wider font-bold flex items-center gap-1"
+                        style={{ color: isSelected ? "#176B4D" : catConfig.text }}
+                      >
+                        <span>{lbl.category}</span>
+                        <span className="opacity-60">({catConfig.shape})</span>
+                      </span>
+                      <span className="text-[11px] font-medium text-[#26352D] max-w-[140px] truncate text-center leading-tight font-sans">
+                        {lbl.name}
+                      </span>
+                    </div>
                   </div>
-                </div>
-              );
-            })}
-          </div>
-
-          {/* Floating Ontology Legend (Lower Left Corner) */}
-          <div className="absolute bottom-5 left-5 p-3 rounded-[10px] bg-[#12151c]/90 backdrop-blur-md border border-[#222a3a] shadow-xl text-[11px] font-mono z-20">
-            <div className="text-[10px] text-[#8C877D] tracking-wider uppercase font-bold mb-2 flex items-center justify-between gap-4">
-              <span>3D ONTOLOGY CLASSIFICATION</span>
-              <span className="text-[#d4a359]">8 CATEGORIES</span>
+                );
+              })}
             </div>
-            <div className="grid grid-cols-2 gap-x-4 gap-y-1.5">
-              {Object.entries(CATEGORY_COLORS).map(([cat, cfg]) => (
-                <div
-                  key={cat}
-                  className="flex items-center gap-2 cursor-pointer hover:opacity-80 transition-opacity"
-                  onClick={() => setSelectedCategory(cat.toUpperCase())}
-                >
-                  <span className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: cfg.dot }} />
-                  <span className="text-[#cbd5e1]">{cat}</span>
+
+            {/* Openable / Closable Floating Ontology Legend Panel (Lower Left Corner) */}
+            {isLibraryOpen ? (
+              <div className="absolute bottom-4 left-4 p-3.5 rounded-[10px] bg-[#FFFFFF]/95 backdrop-blur-md border border-[#DFE5DC] shadow-md text-[11px] font-mono z-20 max-w-sm transition-all animate-in fade-in slide-in-from-bottom-2 duration-200">
+                <div className="text-[10px] text-[#68766D] tracking-wider uppercase font-bold mb-2.5 flex items-center justify-between gap-4 border-b border-[#DFE5DC] pb-1.5">
+                  <div className="flex items-center gap-1.5">
+                    <Layers size={13} className="text-[#176B4D]" />
+                    <span>3D GEOMETRY ONTOLOGY LIBRARY</span>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => setIsLibraryOpen(false)}
+                    className="p-0.5 rounded hover:bg-[#F8F6EF] text-[#68766D] hover:text-[#26352D] cursor-pointer transition-colors"
+                    title="Close Library Legend"
+                  >
+                    <X size={13} />
+                  </button>
                 </div>
-              ))}
+                <div className="grid grid-cols-2 gap-x-4 gap-y-1.5">
+                  {Object.entries(CATEGORY_COLORS).map(([cat, cfg]) => (
+                    <div
+                      key={cat}
+                      className="flex items-center justify-between cursor-pointer hover:opacity-80 transition-opacity"
+                      onClick={() => setSelectedCategory(cat.toUpperCase())}
+                    >
+                      <div className="flex items-center gap-2">
+                        <span className="w-2.5 h-2.5 rounded-full shrink-0" style={{ backgroundColor: cfg.dot }} />
+                        <span className="text-[#26352D] font-medium">{cat}</span>
+                      </div>
+                      <span className="text-[9.5px] text-[#68766D] font-mono">[{cfg.shape}]</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            ) : (
+              <button
+                type="button"
+                onClick={() => setIsLibraryOpen(true)}
+                className="absolute bottom-4 left-4 px-3 py-1.5 rounded-[8px] bg-[#FFFFFF]/95 backdrop-blur-md border border-[#DFE5DC] hover:border-[#176B4D] text-[#26352D] hover:bg-[#E6F0E9] shadow-md text-[11px] font-mono font-semibold flex items-center gap-2 cursor-pointer z-20 transition-all"
+                title="Expand 3D Geometry Ontology Library"
+              >
+                <Layers size={13} className="text-[#176B4D]" />
+                <span>Ontology Library (8 Shapes)</span>
+                <ChevronLeft size={13} className="rotate-90 text-[#68766D]" />
+              </button>
+            )}
+
+            {/* 3D Interaction Guide Pill */}
+            <div className="absolute top-4 left-4 px-3 py-1.5 rounded-full bg-[#FFFFFF]/90 backdrop-blur-md border border-[#DFE5DC] text-[10px] font-mono text-[#68766D] flex items-center gap-2 pointer-events-none z-10 shadow-xs">
+              <Compass size={12} className="text-[#176B4D]" />
+              <span>Left-drag: Orbit • Right-drag: Pan • Scroll: Zoom • Double click: Focus Node</span>
             </div>
           </div>
+        ) : (
+          /* 2D Accessible List Fallback View */
+          <div className="flex-1 p-6 overflow-y-auto bg-[#F8F6EF]">
+            <div className="flex items-center justify-between mb-4 border-b border-[#DFE5DC] pb-3">
+              <div>
+                <h3 className="font-serif text-[17px] font-bold text-[#26352D] m-0">
+                  2D Accessible Ontology Entity Table
+                </h3>
+                <p className="text-[12px] text-[#68766D] m-0 font-sans">
+                  Structured list fallback for keyboard accessibility, screen readers, and low-power hardware.
+                </p>
+              </div>
+              <span className="font-mono text-[11px] text-[#176B4D] font-semibold">
+                {filteredNodes.length} Entities Discovered
+              </span>
+            </div>
 
-          {/* 3D Interaction Guide Pill */}
-          <div className="absolute top-4 left-4 px-3 py-1.5 rounded-full bg-[#12151c]/80 backdrop-blur-md border border-[#222a3a] text-[10px] font-mono text-[#94a3b8] flex items-center gap-2 pointer-events-none z-10">
-            <Compass size={12} className="text-[#d4a359]" />
-            <span>Left-drag: Orbit • Right-drag: Pan • Scroll: Zoom • Click: Focus Node</span>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5">
+              {filteredNodes.map((n) => {
+                const isSelected = n.id === selectedNodeId;
+                const catCfg = CATEGORY_COLORS[n.category] || CATEGORY_COLORS.Dataset;
+                return (
+                  <div
+                    key={n.id}
+                    onClick={() => setSelectedNodeId(n.id)}
+                    className={`p-4 rounded-[10px] bg-[#FFFFFF] border transition-all cursor-pointer ${
+                      isSelected
+                        ? "border-[#176B4D] ring-2 ring-[#E6F0E9] shadow-sm"
+                        : "border-[#DFE5DC] hover:border-[#176B4D]/50"
+                    }`}
+                  >
+                    <div className="flex items-center justify-between mb-1.5 font-mono text-[11px]">
+                      <span
+                        className="px-2 py-0.5 rounded-[4px] font-bold uppercase"
+                        style={{ backgroundColor: catCfg.bg, color: catCfg.text, border: `1px solid ${catCfg.border}` }}
+                      >
+                        {n.category} ({catCfg.shape})
+                      </span>
+                      <span className="text-[#68766D]">CONF: {(n.confidence * 100).toFixed(0)}%</span>
+                    </div>
+
+                    <h4 className="font-serif text-[15px] font-semibold text-[#26352D] m-0 leading-tight">
+                      {n.name}
+                    </h4>
+                    <p className="font-sans text-[12px] text-[#68766D] mt-1.5 m-0 leading-relaxed">
+                      {n.description}
+                    </p>
+
+                    <div className="mt-3 pt-2 border-t border-[#DFE5DC] flex items-center justify-between font-mono text-[10px] text-[#68766D]">
+                      <span>Provenance: {n.provenance}</span>
+                      <span className="text-[#176B4D] font-bold">Select Entity →</span>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
           </div>
-        </div>
+        )}
 
         {/* Balanced Right-Side Evidence & Entity Inspector */}
         {isInspectorOpen && (
-          <div className="w-[380px] bg-[#12151c] border-l border-[#1f2533] flex flex-col shrink-0 overflow-y-auto shadow-2xl z-20">
+          <div className="w-[380px] bg-[#FFFFFF] border-l border-[#DFE5DC] flex flex-col shrink-0 overflow-y-auto shadow-xs z-20">
             {selectedNode ? (
-              <div className="p-5 flex flex-col gap-4">
+              <div className="p-5 flex flex-col gap-4 font-sans">
                 {/* Node Category & Confidence Badge */}
                 <div className="flex items-center justify-between">
                   <div
                     className="inline-flex items-center gap-1.5 px-2.5 py-0.8 rounded-[5px] border text-[11px] font-mono font-bold"
                     style={{
-                      backgroundColor: CATEGORY_COLORS[selectedNode.category]?.bg || "#1e293b",
-                      borderColor: CATEGORY_COLORS[selectedNode.category]?.border || "#475569",
-                      color: CATEGORY_COLORS[selectedNode.category]?.text || "#f4f1ea",
+                      backgroundColor: CATEGORY_COLORS[selectedNode.category]?.bg || "#E8F5EC",
+                      borderColor: CATEGORY_COLORS[selectedNode.category]?.border || "#DFE5DC",
+                      color: CATEGORY_COLORS[selectedNode.category]?.text || "#176B4D",
                     }}
                   >
                     <span
                       className="w-1.5 h-1.5 rounded-full"
-                      style={{ backgroundColor: CATEGORY_COLORS[selectedNode.category]?.dot || "#cbd5e1" }}
+                      style={{ backgroundColor: CATEGORY_COLORS[selectedNode.category]?.dot || "#176B4D" }}
                     />
                     <span>{selectedNode.category.toUpperCase()}</span>
+                    <span className="opacity-75">({CATEGORY_COLORS[selectedNode.category]?.shape})</span>
                   </div>
 
-                  <span className="font-mono text-[11px] text-[#8C877D]">
+                  <span className="font-mono text-[11px] text-[#68766D]">
                     CONF: {(selectedNode.confidence * 100).toFixed(0)}%
                   </span>
                 </div>
 
                 {/* Node Title & Description */}
                 <div>
-                  <h2 className="text-[17px] font-semibold text-[#f4f1ea] leading-snug">
+                  <h2 className="text-[17px] font-semibold text-[#26352D] leading-snug font-serif">
                     {selectedNode.name}
                   </h2>
-                  <div className="font-mono text-[10px] text-[#64748b] mt-0.5">
+                  <div className="font-mono text-[10px] text-[#68766D] mt-0.5">
                     NODE ID: {selectedNode.id}
                   </div>
-                  <p className="text-[12px] text-[#cbd5e1] mt-2 leading-relaxed">
+                  <p className="text-[12px] text-[#68766D] mt-2 leading-relaxed">
                     {selectedNode.description}
                   </p>
                 </div>
 
                 {/* Extracted Scientific Evidence Box */}
                 {selectedNode.evidence_snippet && (
-                  <div className="p-3.5 rounded-[8px] bg-[#171b24] border border-[#262f42] flex flex-col gap-1.5">
-                    <div className="font-mono text-[10px] text-[#d4a359] tracking-wider uppercase font-semibold flex items-center gap-1.5">
+                  <div className="p-3.5 rounded-[8px] bg-[#F8F6EF] border border-[#DFE5DC] flex flex-col gap-1.5">
+                    <div className="font-mono text-[10px] text-[#176B4D] tracking-wider uppercase font-semibold flex items-center gap-1.5">
                       <Sparkles size={12} />
                       <span>EXTRACTED SCIENTIFIC EVIDENCE</span>
                     </div>
-                    <blockquote className="text-[12px] italic text-[#e2e8f0] border-l-2 border-[#d4a359] pl-2.5 my-0.5">
+                    <blockquote className="text-[12px] italic text-[#26352D] border-l-2 border-[#176B4D] pl-2.5 my-0.5 font-serif">
                       “{selectedNode.evidence_snippet}”
                     </blockquote>
                     {selectedNode.source_file && (
-                      <div className="font-mono text-[10px] text-[#94a3b8] flex items-center gap-1 mt-1">
+                      <div className="font-mono text-[10px] text-[#68766D] flex items-center gap-1 mt-1">
                         <FileText size={11} />
                         <span>Source: {selectedNode.source_file}</span>
                       </div>
@@ -1136,21 +1365,21 @@ export default function ResearchKnowledgeGraphPage() {
 
                 {/* Provenance & Source Metadata */}
                 <div className="space-y-2 text-[11px] font-mono">
-                  <div className="flex justify-between items-center py-1.5 border-b border-[#1f2533]">
-                    <span className="text-[#8C877D]">PROVENANCE</span>
-                    <span className="text-[#e2e8f0] font-medium text-right max-w-[200px] truncate">
+                  <div className="flex justify-between items-center py-1.5 border-b border-[#DFE5DC]">
+                    <span className="text-[#68766D]">PROVENANCE</span>
+                    <span className="text-[#26352D] font-medium text-right max-w-[200px] truncate">
                       {selectedNode.provenance}
                     </span>
                   </div>
-                  <div className="flex justify-between items-center py-1.5 border-b border-[#1f2533]">
-                    <span className="text-[#8C877D]">SOURCE ARTIFACT</span>
-                    <span className="text-[#d4a359] font-medium">
+                  <div className="flex justify-between items-center py-1.5 border-b border-[#DFE5DC]">
+                    <span className="text-[#68766D]">SOURCE ARTIFACT</span>
+                    <span className="text-[#176B4D] font-medium">
                       {selectedNode.source_file || "system_records.db"}
                     </span>
                   </div>
-                  <div className="flex justify-between items-center py-1.5 border-b border-[#1f2533]">
-                    <span className="text-[#8C877D]">SPATIAL 3D VECTOR</span>
-                    <span className="text-[#94a3b8]">
+                  <div className="flex justify-between items-center py-1.5 border-b border-[#DFE5DC]">
+                    <span className="text-[#68766D]">SPATIAL 3D VECTOR</span>
+                    <span className="text-[#68766D]">
                       [{selectedNode.x.toFixed(0)}, {selectedNode.y.toFixed(0)}, {selectedNode.z.toFixed(0)}]
                     </span>
                   </div>
@@ -1158,13 +1387,13 @@ export default function ResearchKnowledgeGraphPage() {
 
                 {/* Connected Relationships List */}
                 <div>
-                  <div className="font-mono text-[10px] text-[#8C877D] tracking-wider uppercase font-semibold mb-2 flex items-center justify-between">
+                  <div className="font-mono text-[10px] text-[#68766D] tracking-wider uppercase font-semibold mb-2 flex items-center justify-between">
                     <span>CONNECTED ONTOLOGY RELATIONSHIPS</span>
-                    <span className="text-[#d4a359]">{connectedEdges.length} LINKS</span>
+                    <span className="text-[#176B4D]">{connectedEdges.length} LINKS</span>
                   </div>
 
                   {connectedEdges.length === 0 ? (
-                    <div className="p-3 text-center text-[11px] text-[#64748b] bg-[#161a23] rounded-[6px] border border-[#222a3a]">
+                    <div className="p-3 text-center text-[11px] text-[#68766D] bg-[#F8F6EF] rounded-[6px] border border-[#DFE5DC]">
                       No direct relationships discovered for this entity.
                     </div>
                   ) : (
@@ -1180,27 +1409,27 @@ export default function ResearchKnowledgeGraphPage() {
                             onClick={() => {
                               if (otherNode) handleFocusNode(otherNode);
                             }}
-                            className="p-2.5 rounded-[6px] bg-[#161a23] border border-[#222a3a] hover:border-[#d4a359]/60 cursor-pointer transition-all flex items-center justify-between gap-2 group"
+                            className="p-2.5 rounded-[6px] bg-[#F8F6EF] border border-[#DFE5DC] hover:border-[#176B4D] cursor-pointer transition-all flex items-center justify-between gap-2 group"
                           >
                             <div className="flex items-center gap-2 overflow-hidden">
                               <span
                                 className="w-2 h-2 rounded-full shrink-0"
                                 style={{
                                   backgroundColor:
-                                    CATEGORY_COLORS[otherNode?.category || "Dataset"]?.dot || "#94a3b8",
+                                    CATEGORY_COLORS[otherNode?.category || "Dataset"]?.dot || "#176B4D",
                                 }}
                               />
                               <div className="truncate">
-                                <div className="text-[11px] font-medium text-[#f4f1ea] group-hover:text-[#d4a359] transition-colors truncate">
+                                <div className="text-[11px] font-medium text-[#26352D] group-hover:text-[#176B4D] transition-colors truncate">
                                   {otherNode?.name || otherNodeId}
                                 </div>
-                                <div className="text-[10px] font-mono text-[#8C877D] flex items-center gap-1">
+                                <div className="text-[10px] font-mono text-[#68766D] flex items-center gap-1">
                                   <span>{isOutgoing ? "→" : "←"}</span>
                                   <span>{edge.label}</span>
                                 </div>
                               </div>
                             </div>
-                            <ChevronRight size={13} className="text-[#8C877D] group-hover:text-[#d4a359] shrink-0" />
+                            <ChevronRight size={13} className="text-[#68766D] group-hover:text-[#176B4D] shrink-0" />
                           </div>
                         );
                       })}
@@ -1213,7 +1442,7 @@ export default function ResearchKnowledgeGraphPage() {
                   <button
                     type="button"
                     onClick={() => handleFocusNode(selectedNode)}
-                    className="w-full h-8 rounded-[6px] bg-[#1e2433] hover:bg-[#283247] text-[#d4a359] text-[11px] font-mono font-semibold transition-all flex items-center justify-center gap-1.5 border border-[#d4a359]/30"
+                    className="w-full h-8 rounded-[6px] bg-[#E6F0E9] hover:bg-[#176B4D] hover:text-[#FFFFFF] text-[#176B4D] text-[11px] font-mono font-semibold transition-all flex items-center justify-center gap-1.5 border border-[#176B4D]/30 cursor-pointer"
                   >
                     <Eye size={12} />
                     <span>Focus 3D Camera on Entity</span>
@@ -1221,8 +1450,8 @@ export default function ResearchKnowledgeGraphPage() {
                 </div>
               </div>
             ) : (
-              <div className="p-8 text-center text-[#8C877D] text-[12px] flex flex-col items-center justify-center h-full">
-                <Info size={24} className="mb-2 text-[#475569]" />
+              <div className="p-8 text-center text-[#68766D] text-[12px] flex flex-col items-center justify-center h-full">
+                <Info size={24} className="mb-2 text-[#68766D]" />
                 <p>Click any 3D node in the knowledge graph to inspect its scientific evidence and provenance.</p>
               </div>
             )}
@@ -1232,27 +1461,27 @@ export default function ResearchKnowledgeGraphPage() {
 
       {/* 4. Multi-File Ingestion Modal */}
       {uploadModalOpen && (
-        <div className="fixed inset-0 z-50 bg-[#000000]/80 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-[#12151c] border border-[#222a3a] rounded-[12px] max-w-lg w-full p-6 shadow-2xl">
-            <div className="flex items-center justify-between pb-3 border-b border-[#1f2533]">
+        <div className="fixed inset-0 z-50 bg-[#000000]/40 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="bg-[#FFFFFF] border border-[#DFE5DC] rounded-[12px] max-w-lg w-full p-6 shadow-2xl">
+            <div className="flex items-center justify-between pb-3 border-b border-[#DFE5DC]">
               <div className="flex items-center gap-2">
-                <UploadCloud size={18} className="text-[#d4a359]" />
-                <h3 className="text-[15px] font-semibold text-[#f4f1ea]">Add Research Sources</h3>
+                <UploadCloud size={18} className="text-[#176B4D]" />
+                <h3 className="text-[16px] font-semibold text-[#26352D] font-serif">Add Research Sources</h3>
               </div>
               <button
                 type="button"
                 onClick={() => setUploadModalOpen(false)}
-                className="text-[#8C877D] hover:text-[#f4f1ea]"
+                className="text-[#68766D] hover:text-[#26352D]"
               >
                 <X size={16} />
               </button>
             </div>
 
-            <p className="text-[12px] text-[#94a3b8] mt-3">
+            <p className="text-[12px] text-[#68766D] mt-3">
               Upload research papers (.pdf), materials dataset manifests (.csv, .xlsx), or computational DFT outputs (.json) to automatically populate 3D ontology nodes and evidence links.
             </p>
 
-            <div className="mt-4 border-2 border-dashed border-[#222a3a] hover:border-[#d4a359] rounded-[8px] p-6 text-center cursor-pointer transition-colors bg-[#0d0f14]">
+            <div className="mt-4 border-2 border-dashed border-[#DFE5DC] hover:border-[#176B4D] rounded-[8px] p-6 text-center cursor-pointer transition-colors bg-[#F8F6EF]">
               <input
                 type="file"
                 multiple
@@ -1262,11 +1491,11 @@ export default function ResearchKnowledgeGraphPage() {
                 id="file-upload-input"
               />
               <label htmlFor="file-upload-input" className="cursor-pointer flex flex-col items-center">
-                <FileSpreadsheet size={28} className="text-[#d4a359] mb-2" />
-                <span className="text-[12px] font-semibold text-[#f4f1ea]">
+                <FileSpreadsheet size={28} className="text-[#176B4D] mb-2" />
+                <span className="text-[12px] font-semibold text-[#26352D]">
                   Click to select research files
                 </span>
-                <span className="text-[11px] font-mono text-[#64748b] mt-1">
+                <span className="text-[11px] font-mono text-[#68766D] mt-1">
                   Supported: NOMAD/Matbench CSVs, arXiv PDFs, DFT JSON manifests
                 </span>
               </label>
@@ -1275,17 +1504,17 @@ export default function ResearchKnowledgeGraphPage() {
             {selectedFiles.length > 0 && (
               <div className="mt-4 max-h-32 overflow-y-auto space-y-1.5 font-mono text-[11px]">
                 {selectedFiles.map((f, i) => (
-                  <div key={i} className="flex justify-between items-center p-2 rounded-[4px] bg-[#171b24] text-[#cbd5e1]">
+                  <div key={i} className="flex justify-between items-center p-2 rounded-[4px] bg-[#F8F6EF] border border-[#DFE5DC] text-[#26352D]">
                     <span className="truncate max-w-[280px]">{f.name}</span>
-                    <span className="text-[#8C877D]">{(f.size / 1024).toFixed(1)} KB</span>
+                    <span className="text-[#68766D]">{(f.size / 1024).toFixed(1)} KB</span>
                   </div>
                 ))}
               </div>
             )}
 
             {uploadProgress && (
-              <div className="mt-4 p-2.5 rounded-[6px] bg-[#1a2333] border border-[#2563eb]/40 text-[#93c5fd] text-[11px] font-mono flex items-center gap-2">
-                <Sparkles size={14} className="animate-spin text-[#60a5fa]" />
+              <div className="mt-4 p-2.5 rounded-[6px] bg-[#E8F5EC] border border-[#176B4D]/40 text-[#176B4D] text-[11px] font-mono flex items-center gap-2">
+                <Sparkles size={14} className="animate-spin text-[#176B4D]" />
                 <span>{uploadProgress}</span>
               </div>
             )}
@@ -1294,7 +1523,7 @@ export default function ResearchKnowledgeGraphPage() {
               <button
                 type="button"
                 onClick={() => setUploadModalOpen(false)}
-                className="px-3 py-1.5 rounded-[6px] text-[12px] font-mono text-[#8C877D] hover:text-[#f4f1ea]"
+                className="px-3 py-1.5 rounded-[6px] text-[12px] font-mono text-[#68766D] hover:text-[#26352D] bg-[#F8F6EF] border border-[#DFE5DC]"
               >
                 Cancel
               </button>
@@ -1302,7 +1531,7 @@ export default function ResearchKnowledgeGraphPage() {
                 type="button"
                 onClick={processUploadedFiles}
                 disabled={selectedFiles.length === 0 || isUploading}
-                className="px-4 py-1.5 rounded-[6px] bg-[#d4a359] hover:bg-[#b88c47] disabled:opacity-50 text-[#0d0f14] text-[12px] font-semibold font-mono flex items-center gap-1.5 shadow-sm"
+                className="px-4 py-1.5 rounded-[6px] bg-[#176B4D] hover:bg-[#12543c] disabled:opacity-50 text-[#FFFFFF] text-[12px] font-semibold font-mono flex items-center gap-1.5 shadow-sm cursor-pointer"
               >
                 {isUploading ? "Extracting..." : "Process and Map to 3D Graph"}
               </button>

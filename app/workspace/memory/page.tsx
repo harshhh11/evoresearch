@@ -46,7 +46,7 @@ export default function MemoryBankPage() {
 
   if (loading) {
     return (
-      <div style={{ padding: "60px 0", textAlign: "center", font: "400 12px var(--mono)", color: "#8c9c91" }}>
+      <div style={{ padding: "60px 0", textAlign: "center", font: "400 12px var(--mono)", color: "#68766D" }}>
         ACCESSING PERSISTENT RESEARCH RECOVERY BANK...
       </div>
     );
@@ -64,17 +64,17 @@ export default function MemoryBankPage() {
   });
 
   return (
-    <div style={{ display: "flex", flexDirection: "column", gap: 28 }}>
+    <div style={{ display: "flex", flexDirection: "column", gap: 24, padding: "4px 0" }}>
       {/* Header */}
-      <div style={{ display: "flex", alignItems: "flex-end", justifyContent: "space-between", borderBottom: "1px solid rgba(226, 239, 229, 0.08)", paddingBottom: 20 }}>
+      <div style={{ display: "flex", alignItems: "flex-end", justifyContent: "space-between", borderBottom: "1px solid #DFE5DC", paddingBottom: 16 }}>
         <div>
-          <div style={{ font: "500 10px/1 var(--mono)", color: "#B69A72", letterSpacing: "0.14em", marginBottom: 8 }}>
+          <div style={{ font: "600 10px/1 var(--mono)", color: "#176B4D", letterSpacing: "0.14em", marginBottom: 6 }}>
             KNOWLEDGE RETENTION // 007
           </div>
-          <h1 style={{ margin: 0, font: "600 24px/1.2 var(--body)", color: "#F2F0E8" }}>
+          <h1 style={{ margin: 0, font: "600 22px/1.2 var(--font-primary), serif", color: "#26352D" }}>
             Failure & Recovery Memory Subsystem
           </h1>
-          <p style={{ margin: "6px 0 0", font: "400 12px/1.5 var(--body)", color: "#AAA99F" }}>
+          <p style={{ margin: "4px 0 0", font: "400 12px/1.5 var(--font-primary), serif", color: "#68766D" }}>
             Evidence-validated persistent repairs categorized into structured error signatures.
             Only VALIDATED records are automatically applied during autonomous experiment recovery.
           </p>
@@ -82,13 +82,13 @@ export default function MemoryBankPage() {
 
         <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
           <div style={{ position: "relative" }}>
-            <Search size={13} style={{ position: "absolute", left: 10, top: 10, color: "#7e9084" }} />
+            <Search size={13} style={{ position: "absolute", left: 10, top: 10, color: "#68766D" }} />
             <input
               type="text"
               placeholder="Search error signatures..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              style={{ padding: "8px 12px 8px 30px", background: "#101110", border: "1px solid rgba(226, 239, 229, 0.15)", borderRadius: 3, color: "#F2F0E8", font: "400 11px var(--mono)", width: 220 }}
+              style={{ padding: "8px 12px 8px 30px", background: "#FFFFFF", border: "1px solid #DFE5DC", borderRadius: 6, color: "#26352D", font: "400 11px var(--mono)", width: 230 }}
             />
           </div>
         </div>
@@ -102,12 +102,13 @@ export default function MemoryBankPage() {
             onClick={() => setFilterState(s)}
             style={{
               padding: "6px 14px",
-              borderRadius: 2,
-              border: filterState === s ? "1px solid #B69A72" : "1px solid rgba(226, 239, 229, 0.15)",
-              background: filterState === s ? "rgba(182, 154, 114, 0.1)" : "transparent",
-              color: filterState === s ? "#B69A72" : "#8c9c91",
-              font: "500 10px var(--mono)",
-              cursor: "pointer"
+              borderRadius: 6,
+              border: filterState === s ? "1px solid #176B4D" : "1px solid #DFE5DC",
+              background: filterState === s ? "#176B4D" : "#FFFFFF",
+              color: filterState === s ? "#FFFFFF" : "#68766D",
+              font: filterState === s ? "600 10px var(--mono)" : "500 10px var(--mono)",
+              cursor: "pointer",
+              transition: "all 0.15s ease"
             }}
           >
             {s}
@@ -116,9 +117,9 @@ export default function MemoryBankPage() {
       </div>
 
       {/* Memories Stream */}
-      <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+      <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
         {filtered.length === 0 ? (
-          <div className="research-card" style={{ padding: "40px 0", textAlign: "center", font: "400 11px var(--mono)", color: "#7e9084" }}>
+          <div className="research-card" style={{ padding: "40px 0", textAlign: "center", font: "400 11px var(--mono)", color: "#68766D", background: "#FFFFFF", border: "1px solid #DFE5DC", borderRadius: 8 }}>
             No recovery memory entries matching query.
           </div>
         ) : (
@@ -127,46 +128,53 @@ export default function MemoryBankPage() {
               key={m.id}
               className="research-card"
               style={{
+                background: "#FFFFFF",
+                border: "1px solid #DFE5DC",
+                borderRadius: 10,
+                padding: 16,
+                boxShadow: "0 1px 3px rgba(0,0,0,0.03)",
                 borderLeft:
                   m.state === "VALIDATED"
-                    ? "3px solid #B69A72"
+                    ? "4px solid #176B4D"
                     : m.state === "REJECTED"
-                    ? "3px solid #ff8b8b"
-                    : "3px solid #a7e9e8"
+                    ? "4px solid #B54747"
+                    : "4px solid #A66B22"
               }}
             >
               <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", marginBottom: 12 }}>
                 <div>
                   <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                    <BrainCircuit size={15} color={m.state === "VALIDATED" ? "#B69A72" : "#a7e9e8"} />
-                    <span style={{ font: "600 13px var(--mono)", color: "#F2F0E8" }}>
+                    <BrainCircuit size={16} color={m.state === "VALIDATED" ? "#176B4D" : "#68766D"} />
+                    <span style={{ font: "600 13px var(--mono)", color: "#26352D" }}>
                       {m.error_category} // {m.model_family}
                     </span>
                   </div>
-                  <div style={{ font: "400 10px var(--mono)", color: "#7e9084", marginTop: 4 }}>
+                  <div style={{ font: "400 10px var(--mono)", color: "#68766D", marginTop: 4 }}>
                     TASK: {m.task_type.toUpperCase()} | SIGNATURE: {m.error_signature}
                   </div>
                 </div>
 
                 <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
                   <span
-                    className={`status-tag status-tag--${
-                      m.state === "VALIDATED"
-                        ? "completed"
-                        : m.state === "REJECTED"
-                        ? "failed"
-                        : "running"
-                    }`}
+                    style={{
+                      padding: "4px 12px",
+                      borderRadius: 6,
+                      font: "600 10px var(--mono)",
+                      letterSpacing: "0.06em",
+                      background: m.state === "VALIDATED" ? "#E6F0E9" : m.state === "REJECTED" ? "#FDF2F2" : "#FEF3C7",
+                      color: m.state === "VALIDATED" ? "#176B4D" : m.state === "REJECTED" ? "#B54747" : "#92400E",
+                      border: m.state === "VALIDATED" ? "1px solid #176B4D" : m.state === "REJECTED" ? "1px solid #B54747" : "1px solid #F59E0B"
+                    }}
                   >
                     {m.state}
                   </span>
 
-                  <div style={{ display: "flex", gap: 4 }}>
+                  <div style={{ display: "flex", gap: 6 }}>
                     {m.state !== "VALIDATED" && (
                       <button
                         onClick={() => handleUpdateState(m.id, "VALIDATED")}
                         title="Mark Validated"
-                        style={{ padding: "4px 8px", background: "rgba(182, 154, 114, 0.15)", border: "1px solid rgba(182, 154, 114, 0.4)", color: "#B69A72", borderRadius: 2, cursor: "pointer", font: "500 9px var(--mono)" }}
+                        style={{ padding: "4px 12px", background: "#FFFFFF", border: "1px solid #176B4D", color: "#176B4D", borderRadius: 6, cursor: "pointer", font: "600 10px var(--mono)", transition: "all 0.15s ease" }}
                       >
                         VALIDATE
                       </button>
@@ -175,7 +183,7 @@ export default function MemoryBankPage() {
                       <button
                         onClick={() => handleUpdateState(m.id, "REJECTED")}
                         title="Mark Rejected"
-                        style={{ padding: "4px 8px", background: "rgba(255, 107, 107, 0.15)", border: "1px solid rgba(255, 107, 107, 0.4)", color: "#ff8b8b", borderRadius: 2, cursor: "pointer", font: "500 9px var(--mono)" }}
+                        style={{ padding: "4px 12px", background: "#FFFFFF", border: "1px solid #DFE5DC", color: "#B54747", borderRadius: 6, cursor: "pointer", font: "600 10px var(--mono)", transition: "all 0.15s ease" }}
                       >
                         REJECT
                       </button>
@@ -184,35 +192,35 @@ export default function MemoryBankPage() {
                 </div>
               </div>
 
-              <div style={{ font: "400 12px/1.5 var(--body)", color: "#c6d4c8", marginBottom: 12 }}>
-                <strong style={{ color: "#F2F0E8" }}>Diagnosis:</strong> {m.diagnosis}
+              <div style={{ font: "400 12.5px/1.5 var(--font-primary), serif", color: "#26352D", marginBottom: 12 }}>
+                <strong style={{ color: "#176B4D" }}>Diagnosis:</strong> {m.diagnosis}
               </div>
 
               {/* Proposed & Actual Repair */}
               <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, marginBottom: 12 }}>
                 <div>
-                  <div style={{ font: "600 9px var(--mono)", color: "#7e9084", marginBottom: 4 }}>
+                  <div style={{ font: "600 9px var(--mono)", color: "#68766D", marginBottom: 4 }}>
                     PROPOSED REPAIR SPEC:
                   </div>
-                  <pre className="code-box" style={{ margin: 0, maxHeight: 90 }}>
+                  <pre style={{ margin: 0, padding: 10, background: "#F8F6EF", border: "1px solid #DFE5DC", borderRadius: 6, font: "400 11px var(--mono)", color: "#26352D", maxHeight: 90, overflowY: "auto" }}>
                     {m.proposed_repair}
                   </pre>
                 </div>
 
                 <div>
-                  <div style={{ font: "600 9px var(--mono)", color: "#B69A72", marginBottom: 4 }}>
+                  <div style={{ font: "600 9px var(--mono)", color: "#176B4D", marginBottom: 4 }}>
                     VERIFIED EVIDENCE RESULT:
                   </div>
-                  <pre className="code-box" style={{ margin: 0, maxHeight: 90, color: "#B69A72" }}>
+                  <pre style={{ margin: 0, padding: 10, background: "#E8F5EC", border: "1px solid #176B4D", borderRadius: 6, font: "500 11px var(--mono)", color: "#176B4D", maxHeight: 90, overflowY: "auto" }}>
                     {m.validation_result}
                   </pre>
                 </div>
               </div>
 
               {/* Provenance & Stats */}
-              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", font: "400 10px var(--mono)", color: "#7e9084", borderTop: "1px solid rgba(226, 239, 229, 0.06)", paddingTop: 10 }}>
-                <span>REUSE COUNT: <strong style={{ color: "#F2F0E8" }}>{m.reuse_count}</strong> | SUCCESSES: <strong style={{ color: "#B69A72" }}>{m.success_count}</strong></span>
-                <span>EVIDENCE: <strong style={{ color: "#a7e9e8" }}>{m.evidence_reference || "Direct Run Validation"}</strong></span>
+              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", font: "400 10px var(--mono)", color: "#68766D", borderTop: "1px solid #DFE5DC", paddingTop: 10 }}>
+                <span>REUSE COUNT: <strong style={{ color: "#26352D" }}>{m.reuse_count}</strong> | SUCCESSES: <strong style={{ color: "#176B4D" }}>{m.success_count}</strong></span>
+                <span>EVIDENCE: <strong style={{ color: "#176B4D" }}>{m.evidence_reference || "Direct Run Validation"}</strong></span>
               </div>
             </div>
           ))

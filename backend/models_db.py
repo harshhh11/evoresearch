@@ -29,6 +29,8 @@ class Project(Base, SerializerMixin):
 
     id = Column(String(36), primary_key=True, default=gen_uuid)
     name = Column(String(255), nullable=False)
+    domain = Column(String(128), default="general_ai")
+    domain_metadata = Column(Text, default="{}")
     description = Column(Text, default="")
     research_question = Column(Text, default="")
     hypothesis = Column(Text, default="")
@@ -45,6 +47,8 @@ class Dataset(Base, SerializerMixin):
 
     id = Column(String(36), primary_key=True, default=gen_uuid)
     name = Column(String(255), nullable=False)
+    domain = Column(String(128), default="general_ai")
+    domain_metadata = Column(Text, default="{}")
     slug = Column(String(255), default="")
     description = Column(Text, default="")
     source_name = Column(String(255), default="")
@@ -132,6 +136,15 @@ class Experiment(Base, SerializerMixin):
     dataset_id = Column(String(36), ForeignKey("datasets.id"), nullable=False)
     dataset_version_id = Column(String(36), nullable=True)
     name = Column(String(255), nullable=False)
+    domain = Column(String(128), default="general_ai")
+    domain_metadata = Column(Text, default="{}")
+    execution_stage = Column(String(64), default="DRAFT") # DRAFT, ANALYZING, PLANNING, AWAITING_APPROVAL, PREPARING_DATA, PREPARING_ENV, QUEUED, EXECUTING, EVALUATING, RECOVERING, COMPLETED, FAILED, CANCELLED
+    paper_reference = Column(Text, default="")
+    hypothesis = Column(Text, default="")
+    research_question = Column(Text, default="")
+    hardware_requirements = Column(Text, default="{}")
+    compute_provider = Column(String(128), default="local")
+    reproducibility_status = Column(String(64), default="REPRODUCIBLE")
     target_column = Column(String(128), default="")
     task_type = Column(String(64), default="regression")
     model_family = Column(String(128), default="Ridge")
@@ -455,3 +468,48 @@ class AuditEvent(Base, SerializerMixin):
     action = Column(String(64), nullable=False)
     details = Column(Text, default="{}")
     timestamp = Column(DateTime, default=utc_now)
+
+class EmailDispatchRecord(Base, SerializerMixin):
+    __tablename__ = "email_dispatches"
+
+    id = Column(String(36), primary_key=True, default=gen_uuid)
+    email_id = Column(String(64), nullable=False, unique=True, index=True)
+    recipient = Column(String(255), nullable=False)
+    sender = Column(String(255), nullable=False)
+    subject = Column(String(512), nullable=False)
+    message_body = Column(Text, default="")
+    template_name = Column(String(128), default="RESEARCH_REPORT")
+    report_id = Column(String(64), nullable=True)
+    status = Column(String(64), default="QUEUED")  # QUEUED, SENDING, ACCEPTED, DELIVERED, DELAYED, BOUNCED, FAILED
+    provider = Column(String(64), default="RESEND")  # RESEND, SMTP, MOCK_TEST
+    provider_msg_id = Column(String(255), default="")
+    idempotency_key = Column(String(128), default="", index=True)
+    attempt_count = Column(Integer, default=1)
+    error_message = Column(Text, default="")
+    delivery_evidence = Column(Text, default="{}")  # JSON metadata
+    dispatched_live = Column(Boolean, default=False)
+    created_at = Column(DateTime, default=utc_now)
+    updated_at = Column(DateTime, default=utc_now, onupdate=utc_now)
+
+class AgentTrace(Base, SerializerMixin):
+    __tablename__ = "agent_traces"
+
+    id = Column(String(36), primary_key=True, default=gen_uuid)
+    experiment_id = Column(String(36), ForeignKey("experiments.id"), nullable=False)
+    agent_name = Column(String(128), nullable=False)
+    stage = Column(String(64), nullable=False)
+    status = Column(String(64), default="COMPLETED")  # PENDING, RUNNING, COMPLETED, FAILED, RECOVERING, SKIPPED, BLOCKED, CANCELLED
+    action = Column(String(255), default="")
+    input_summary = Column(Text, default="{}")
+    output_summary = Column(Text, default="{}")
+    tool_calls = Column(Text, default="[]")
+    model_identifier = Column(String(128), default="auto")
+    tokens_used = Column(Integer, default=0)
+    latency_ms = Column(Float, default=0.0)
+    duration_s = Column(Float, default=0.0)
+    error_message = Column(Text, default="")
+    retry_count = Column(Integer, default=0)
+    created_at = Column(DateTime, default=utc_now)
+    updated_at = Column(DateTime, default=utc_now, onupdate=utc_now)
+
+

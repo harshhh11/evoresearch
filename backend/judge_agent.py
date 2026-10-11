@@ -1,6 +1,6 @@
 import re
 import json
-from typing import Dict, Any, List
+from typing import Dict, Any, List, Optional
 
 class JudgeAgent:
     """Evaluates two or three scientific reports by extracting claims, checking evidence references,

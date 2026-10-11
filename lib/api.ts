@@ -48,6 +48,9 @@ export interface Project {
   description: string;
   research_question: string;
   hypothesis: string;
+  domain?: string;
+  domain_metadata?: any;
+  paper_reference?: string;
   tags: string;
   created_at: string;
   updated_at: string;
@@ -58,6 +61,8 @@ export interface Dataset {
   name: string;
   slug?: string;
   description: string;
+  domain?: string;
+  domain_metadata?: any;
   source_name?: string;
   source_url?: string;
   license_notes?: string;
@@ -83,6 +88,15 @@ export interface Experiment {
   project_id: string;
   dataset_id: string;
   name: string;
+  domain?: string;
+  domain_metadata?: any;
+  execution_stage?: string;
+  paper_reference?: string;
+  hypothesis?: string;
+  research_question?: string;
+  hardware_requirements?: string;
+  compute_provider?: string;
+  reproducibility_status?: string;
   target_column?: string;
   task_type: string;
   baseline_model: string;
@@ -377,6 +391,50 @@ export const api = {
       method: "POST",
       body: JSON.stringify(data),
     }),
+  sendEmail: (data: { recipient_email: string; subject: string; message?: string; report_id?: string; template_name?: string; confirm_authorized?: boolean; idempotency_key?: string }) =>
+    fetchJson<any>("/api/email/dispatch", {
+      method: "POST",
+      body: JSON.stringify({ confirm_authorized: true, ...data }),
+    }),
+  getEmailStatus: (emailId: string) => fetchJson<any>(`/api/email/status/${emailId}`),
+  getEmailHistory: (limit: number = 20) => fetchJson<any[]>(`/api/email/history?limit=${limit}`),
+  getSystemConfidence: () => fetchJson<{
+    system_verification_score: number;
+    max_score: number;
+    confidence_level: string;
+    categories: Array<{
+      id: string;
+      name: string;
+      weight: number;
+      earned: number;
+      status: string;
+      evidence: string;
+      last_verified: string;
+    }>;
+    operational_metrics: {
+      reliability: {
+        total_executions: number;
+        completed_executions: number;
+        failed_executions: number;
+        recovery_success_rate: number;
+        recent_trend: string;
+      };
+      compute_efficiency: {
+        local_gpu_utilization_pct: number;
+        remote_kaggle_success_rate: number;
+        avg_execution_duration_s: number;
+        queue_latency_ms: number;
+      };
+      email_reliability: {
+        dispatch_attempts: number;
+        accepted_messages: number;
+        delivery_rate_pct: number;
+        bounces: number;
+        active_provider: string;
+        provider_details: string;
+      };
+    };
+  }>("/api/system/confidence"),
   runWorkflow: (data: { mode: "sequential" | "parallel"; stages: string[]; project_id: string; dataset_id: string; model_names?: string[]; max_workers?: number }) =>
     fetchJson<any>("/api/workflows/run", {
       method: "POST",
@@ -430,5 +488,21 @@ export const api = {
     }
     return res.json();
   },
+
+  // EvolveX Multi-Domain, Compute Router & Agent Methods
+  getDomains: () => fetchJson<any[]>("/api/domains"),
+  parsePaper: (data: { paper_text: string; filename?: string; title_hint?: string }) => fetchJson<any>("/api/paper/parse", { method: "POST", body: JSON.stringify(data) }),
+  routeCompute: (data: { domain?: string; sample_count?: number; model_family?: string; execution_strategy?: string; cpu_budget_seconds?: number; data_sensitivity?: string }) => fetchJson<any>("/api/compute/router", { method: "POST", body: JSON.stringify(data) }),
+  getSupermemoryStatus: () => fetchJson<any>("/api/supermemory/status"),
+  querySupermemory: (data: { query: string; domain?: string; model_family?: string; limit?: number }) => fetchJson<any>("/api/supermemory/query", { method: "POST", body: JSON.stringify(data) }),
+  runOrchestration: (data: { experiment_id: string; execution_strategy?: string; paper_text?: string }) => fetchJson<any>("/api/orchestrate/run", { method: "POST", body: JSON.stringify(data) }),
+  getExperimentOrchestration: (id: string) => fetchJson<any>(`/api/experiments/${id}/orchestration`),
+  getExperimentEvents: (id: string) => fetchJson<any>(`/api/experiments/${id}/events`),
+  injectFailure: (id: string) => fetchJson<any>(`/api/experiments/${id}/inject-failure`, { method: "POST" }),
+  retryStage: (id: string) => fetchJson<any>(`/api/experiments/${id}/retry-stage`, { method: "POST" }),
+  getSystemBenchmark: () => fetchJson<any>("/api/system/benchmark"),
+  getExperimentCode: (id: string) => fetchJson<any>(`/api/experiments/${id}/code`),
+  saveExperimentCode: (id: string, data: { file_name: string; code_content: string }) => fetchJson<any>(`/api/experiments/${id}/code`, { method: "POST", body: JSON.stringify(data) }),
+  getAdaptiveRecommendation: (experimentId: string) => fetchJson<any>(`/api/adaptive/recommend/${experimentId}`),
 };
 

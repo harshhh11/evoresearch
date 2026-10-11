@@ -7,10 +7,10 @@ import { ArrowUpRight, Menu, X } from "lucide-react";
 import { RESEARCH_SCENES } from "@/lib/research-scenes";
 
 const links = [
-  { label: "Overview", href: "#overview", scene: 0 },
-  { label: "Methodology", href: "#methodology", scene: 1 },
-  { label: "Experiments", href: "#experiments", scene: 4 },
-  { label: "Workspace", href: "#workspace", scene: 6 },
+  { label: "Product", href: "#overview", scene: 0 },
+  { label: "Capabilities", href: "#capabilities", scene: 1 },
+  { label: "How It Works", href: "#how-it-works", scene: 4 },
+  { label: "Research Workspace", href: "/workspace/experiments", scene: 6 },
 ];
 
 type FloatingNavigationProps = {
@@ -83,8 +83,12 @@ export function FloatingNavigation({ activeStage }: FloatingNavigationProps) {
               <span className="system-indicator-text">ENGINE READY</span>
             </div>
 
-            <a className="nav-cta group" href="/workspace">
-              <span className="cta-text">ENTER WORKSPACE</span>
+            <a className="nav-cta-quiet" href="/workspace" style={{ padding: "6px 12px", fontSize: "11px", fontWeight: 600, color: "#26352D" }}>
+              SIGN IN
+            </a>
+
+            <a className="nav-cta group" href="/workspace/experiments/new" style={{ background: "#176B4D", color: "#FFFFFF", padding: "8px 14px", borderRadius: 6, fontSize: "11px", fontWeight: 600, display: "inline-flex", alignItems: "center", gap: 6 }}>
+              <span className="cta-text">GET STARTED</span>
               <ArrowUpRight className="w-3.5 h-3.5 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
             </a>
 

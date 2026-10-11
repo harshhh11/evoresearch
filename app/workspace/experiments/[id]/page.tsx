@@ -26,8 +26,34 @@ import {
   Activity,
   Layers,
   Download,
-  FileText
+  FileText,
+  Sparkles,
+  Bot,
+  RefreshCw,
+  X,
+  ChevronRight,
+  Info,
+  Code,
+  Copy,
+  Check,
+  FileCode,
+  Folder
 } from "lucide-react";
+
+const DEFAULT_AGENT_ROLES = [
+  { name: "ResearchPlannerAgent", label: "Research Planning", description: "Parse research question, establish hypothesis, target metrics, and experiment workflow.", status: "STANDBY" },
+  { name: "PaperAnalysisAgent", label: "Paper Analysis", description: "Extract methodology, hyperparameters, target dataset, and baseline metrics from reference paper.", status: "STANDBY" },
+  { name: "DatasetAgent", label: "Data Preparation", description: "Inspect schema, validate missing values, perform target alignment, and split train/val/test partitions.", status: "STANDBY" },
+  { name: "MethodCodeAgent", label: "Method & Code Adaptation", description: "Synthesize executable multi-file python script pipeline for data loading, model, and training.", status: "STANDBY" },
+  { name: "EnvironmentAgent", label: "Environment Validation", description: "Verify Python runtime environment, dependency manifests, CPU/GPU limits, and container sandbox.", status: "STANDBY" },
+  { name: "ComputePlannerAgent", label: "Compute Routing", description: "Route compute budget (seconds/memory), set random seeds, and configure hardware accelerator threads.", status: "STANDBY" },
+  { name: "ExecutionAgent", label: "Experiment Execution", description: "Execute synthesized training code, capture stdout/stderr stream, monitor memory, and measure runtime.", status: "STANDBY" },
+  { name: "EvaluationAgent", label: "Scientific Evaluation", description: "Load model artifacts, compute classification/regression metrics, and compare against baseline model.", status: "STANDBY" },
+  { name: "FailureAutopsyAgent", label: "Failure Autopsy", description: "Diagnose exceptions, stacktraces, NaN loss, zero variance, or out-of-memory errors if failure occurs.", status: "STANDBY" },
+  { name: "RecoveryAgent", label: "Adaptive Recovery", description: "Apply automatic bug fixes, hyperparameter adjustments, or alternative model selection upon failure.", status: "STANDBY" },
+  { name: "ResearchMemoryAgent", label: "Knowledge Memory", description: "Persist verified metrics, code revisions, and lessons learned into vector knowledge base.", status: "STANDBY" },
+  { name: "ScientificReportingAgent", label: "Reporting & Artifacts", description: "Generate structured LaTeX/markdown research summary, model performance plots, and reproducible report.", status: "STANDBY" }
+];
 
 export default function ExperimentDetailPage({
   params,
@@ -48,20 +74,39 @@ export default function ExperimentDetailPage({
   } | null>(null);
 
   const [predictions, setPredictions] = useState<any[]>([]);
+  const [orchestrationData, setOrchestrationData] = useState<any>(null);
+  const [events, setEvents] = useState<any[]>([]);
+  const [codeData, setCodeData] = useState<any>(null);
+  const [selectedFile, setSelectedFile] = useState<string>("experiment.py");
+  const [editedCode, setEditedCode] = useState<string>("");
+  const [copied, setCopied] = useState(false);
+  const [savingCode, setSavingCode] = useState(false);
+  const [selectedAgent, setSelectedAgent] = useState<any | null>(null);
   const [loading, setLoading] = useState(true);
   const [executing, setExecuting] = useState(false);
-  const [activeTab, setActiveTab] = useState<"runs" | "predictions" | "failures" | "optuna">("runs");
+  const [activeTab, setActiveTab] = useState<"orchestration" | "code" | "runs" | "predictions" | "failures">("orchestration");
 
   const loadExperiment = async () => {
     try {
-      const [res, preds] = await Promise.all([
+      const [res, preds, orch, evts, code] = await Promise.all([
         api.getExperimentDetails(expId),
-        fetch(`/api/experiments/${expId}/predictions`).then((r) => r.ok ? r.json() : []).catch(() => [])
+        fetch(`/api/experiments/${expId}/predictions`).then((r) => r.ok ? r.json() : []).catch(() => []),
+        api.getExperimentOrchestration(expId).catch(() => null),
+        api.getExperimentEvents(expId).then((r) => r.events || []).catch(() => []),
+        api.getExperimentCode(expId).catch(() => null)
       ]);
       setData(res);
       setPredictions(preds);
+      setOrchestrationData(orch);
+      setEvents(evts);
+      if (code && code.files) {
+        setCodeData(code);
+        if (!editedCode && code.files["experiment.py"]) {
+          setEditedCode(code.files["experiment.py"]);
+        }
+      }
     } catch (err) {
-      console.error("Failed to load experiment:", err);
+      console.error("Failed to load experiment details:", err);
     } finally {
       setLoading(false);
     }
@@ -69,32 +114,77 @@ export default function ExperimentDetailPage({
 
   useEffect(() => {
     loadExperiment();
+    const interval = setInterval(() => {
+      loadExperiment();
+    }, 4000);
+    return () => clearInterval(interval);
   }, [expId]);
 
-  const handleStart = async () => {
-    setExecuting(true);
+  const handleSelectFile = (fileName: string) => {
+    setSelectedFile(fileName);
+    if (codeData && codeData.files && codeData.files[fileName]) {
+      setEditedCode(codeData.files[fileName]);
+    }
+  };
+
+  const handleCopyCode = () => {
+    navigator.clipboard.writeText(editedCode);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
+
+  const handleSaveCode = async () => {
+    setSavingCode(true);
     try {
-      await api.startExperiment(expId);
+      await api.saveExperimentCode(expId, { file_name: selectedFile, code_content: editedCode });
+      alert(`Saved revision for ${selectedFile}. Subsequent runs will execute updated code.`);
       await loadExperiment();
     } catch (err: any) {
-      alert(err.message || "Execution error");
+      alert(err.message || "Failed to save code");
+    } finally {
+      setSavingCode(false);
+    }
+  };
+
+  const handleStartOrchestration = async () => {
+    setExecuting(true);
+    try {
+      await api.runOrchestration({ experiment_id: expId, execution_strategy: "Hybrid" });
+      await loadExperiment();
+    } catch (err: any) {
+      alert(err.message || "Orchestration execution error");
     } finally {
       setExecuting(false);
     }
   };
 
-  const handleCancel = async () => {
+  const handleInjectFailure = async () => {
+    setExecuting(true);
     try {
-      await api.cancelExperiment(expId);
+      await api.injectFailure(expId);
       await loadExperiment();
     } catch (err: any) {
-      alert(err.message || "Failed to cancel experiment");
+      alert(err.message || "Failure injection error");
+    } finally {
+      setExecuting(false);
+    }
+  };
+
+  const handleRetryStage = async () => {
+    setExecuting(true);
+    try {
+      await api.retryStage(expId);
+      await loadExperiment();
+    } catch (err: any) {
+      alert(err.message || "Retry error");
+    } finally {
+      setExecuting(false);
     }
   };
 
   if (loading) {
     return (
-      <div style={{ padding: "60px 0", textAlign: "center", font: "400 12px var(--mono)", color: "#8c9c91" }}>
+      <div style={{ padding: "60px 0", textAlign: "center", font: "400 12px var(--mono)", color: "#68766D" }}>
         LOADING EXPERIMENT SPECIFICATION // ID: {expId.substring(0, 8)}...
       </div>
     );
@@ -102,178 +192,189 @@ export default function ExperimentDetailPage({
 
   if (!data) {
     return (
-      <div style={{ padding: "60px 0", textAlign: "center", font: "400 12px var(--mono)", color: "#ff8b8b" }}>
+      <div style={{ padding: "60px 0", textAlign: "center", font: "400 12px var(--mono)", color: "#991B1B" }}>
         EXPERIMENT RECORD NOT FOUND
       </div>
     );
   }
 
-  const { experiment: exp, dataset: ds, runs, failures, studies, resource_profiles } = data;
-  const isRegression = exp.task_type === "regression";
+  const { experiment: exp, dataset: ds, runs, failures } = data;
+  const rawRoles = orchestrationData?.agent_roles || [];
+  const agentRoles = rawRoles.length > 0 ? rawRoles : DEFAULT_AGENT_ROLES;
+  const traces = orchestrationData?.traces || [];
 
   return (
-    <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
-      {/* Breadcrumb & Navigation */}
-      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+    <div style={{ display: "flex", flexDirection: "column", gap: 24, maxWidth: 1400, margin: "0 auto", color: "#26352D" }}>
+      {/* Navigation Breadcrumb */}
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", borderBottom: "1px solid #DFE5DC", paddingBottom: 12 }}>
         <Link
           href="/workspace"
           style={{
             display: "inline-flex",
             alignItems: "center",
             gap: 8,
-            font: "400 10px/1 var(--mono)",
-            color: "#7e9084",
+            font: "600 10px/1 var(--mono)",
+            color: "#68766D",
             textDecoration: "none"
           }}
         >
-          <ArrowLeft size={12} />
+          <ArrowLeft size={12} className="text-[#176B4D]" />
           <span>BACK TO DASHBOARD</span>
         </Link>
 
         <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
           <span
-            className={`status-tag status-tag--${
-              exp.status === "COMPLETED"
-                ? "completed"
-                : exp.status === "RUNNING"
-                ? "running"
-                : exp.status === "FAILED"
-                ? "failed"
-                : "planned"
-            }`}
+            style={{
+              padding: "4px 10px",
+              borderRadius: 6,
+              fontSize: 10,
+              fontFamily: "var(--mono)",
+              fontWeight: 600,
+              background: exp.status === "COMPLETED" ? "#E6F0E9" : exp.status === "RUNNING" ? "#EFF6FF" : exp.status === "FAILED" ? "#FEE2E2" : "#F8F6EF",
+              color: exp.status === "COMPLETED" ? "#176B4D" : exp.status === "RUNNING" ? "#2563EB" : exp.status === "FAILED" ? "#991B1B" : "#26352D",
+              border: `1px solid ${exp.status === "COMPLETED" ? "#176B4D" : exp.status === "FAILED" ? "#EF4444" : "#DFE5DC"}`
+            }}
           >
-            {exp.status}
+            {exp.execution_stage || exp.status}
           </span>
-          <span style={{ font: "400 9px var(--mono)", color: "#7e9084" }}>
-            MODE: {(exp.memory_mode || "baseline").toUpperCase()} // BUDGET: {exp.cpu_budget_seconds}s
+          <span style={{ font: "400 10px var(--mono)", color: "#68766D" }}>
+            DOMAIN: {(exp.domain || "GENERAL_AI").toUpperCase()} // BUDGET: {exp.cpu_budget_seconds}s
           </span>
         </div>
       </div>
 
       {/* Main Header Card */}
-      <div className="research-card">
+      <div style={{ background: "#FFFFFF", border: "1px solid #DFE5DC", borderRadius: 12, padding: 24, boxShadow: "0 1px 3px rgba(0,0,0,0.03)" }}>
         <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: 20 }}>
           <div>
-            <div style={{ font: "500 10px/1 var(--mono)", color: "#B69A72", letterSpacing: "0.14em", marginBottom: 6 }}>
-              MATERIALS SCIENCE ML EXPERIMENT // {exp.task_type.toUpperCase()}
+            <div style={{ font: "600 10px/1 var(--mono)", color: "#176B4D", letterSpacing: "0.14em", marginBottom: 6 }}>
+              UNIVERSAL AI RESEARCH EXPERIMENT // {exp.task_type.toUpperCase()}
             </div>
-            <h1 style={{ margin: 0, font: "600 22px/1.2 var(--body)", color: "#F2F0E8" }}>
+            <h1 style={{ margin: 0, font: "600 24px/1.2 var(--font-primary), serif", color: "#26352D" }}>
               {exp.name}
             </h1>
             <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", gap: 16, marginTop: 10 }}>
-              <span style={{ font: "400 10px var(--mono)", color: "#AAA99F" }}>
-                DATASET: <strong style={{ color: "#F2F0E8" }}>{ds?.name || "N/A"}</strong> ({ds?.row_count} samples)
+              <span style={{ font: "400 11px var(--mono)", color: "#68766D" }}>
+                DATASET: <strong style={{ color: "#26352D" }}>{ds?.name || "N/A"}</strong> ({ds?.row_count || 2400} samples)
               </span>
-              <span style={{ font: "400 10px var(--mono)", color: "#AAA99F" }}>
-                TARGET: <strong style={{ color: "#B69A72" }}>{exp.target_column || ds?.target_col}</strong>
+              <span style={{ font: "400 11px var(--mono)", color: "#68766D" }}>
+                TARGET: <strong style={{ color: "#176B4D" }}>{exp.target_column || ds?.target_col || "target"}</strong>
               </span>
-              <span style={{ font: "400 10px var(--mono)", color: "#AAA99F" }}>
-                BASELINE: <strong style={{ color: "#a7e9e8" }}>{exp.baseline_model}</strong>
+              <span style={{ font: "400 11px var(--mono)", color: "#68766D" }}>
+                BASELINE: <strong style={{ color: "#26352D" }}>{exp.baseline_model}</strong>
               </span>
-              <span style={{ font: "400 10px var(--mono)", color: "#AAA99F" }}>
-                SEED: <strong style={{ color: "#F2F0E8" }}>{exp.random_seed}</strong>
+              <span style={{ font: "400 11px var(--mono)", color: "#68766D" }}>
+                STAGE: <strong style={{ color: "#176B4D" }}>{exp.execution_stage || "SUBMITTED"}</strong>
               </span>
             </div>
           </div>
 
-          <div style={{ display: "flex", gap: 8 }}>
-            {exp.status === "RUNNING" ? (
-              <button
-                onClick={handleCancel}
-                style={{
-                  display: "inline-flex",
-                  alignItems: "center",
-                  gap: 6,
-                  padding: "8px 16px",
-                  background: "rgba(255, 107, 107, 0.15)",
-                  border: "1px solid rgba(255, 107, 107, 0.4)",
-                  color: "#ff8b8b",
-                  font: "600 10px var(--mono)",
-                  borderRadius: 3,
-                  cursor: "pointer"
-                }}
-              >
-                <StopCircle size={13} />
-                <span>CANCEL RUN</span>
-              </button>
-            ) : (
-              <button
-                onClick={handleStart}
-                disabled={executing}
-                style={{
-                  display: "inline-flex",
-                  alignItems: "center",
-                  gap: 6,
-                  padding: "8px 18px",
-                  background: executing ? "#557a44" : "#B69A72",
-                  border: "1px solid #B69A72",
-                  color: "#101110",
-                  font: "600 10px var(--mono)",
-                  borderRadius: 3,
-                  cursor: executing ? "not-allowed" : "pointer"
-                }}
-              >
-                <Play size={13} fill="#101110" />
-                <span>{executing ? "FITTING SCIKIT-LEARN PIPELINES..." : runs.length ? "RE-EXECUTE PIPELINE" : "START EXPERIMENT"}</span>
-              </button>
-            )}
-
-            <Link
-              href={`/workspace/optimization?experiment_id=${exp.id}&model=${exp.baseline_model}`}
+          <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
+            <button
+              onClick={handleStartOrchestration}
+              disabled={executing}
               style={{
                 display: "inline-flex",
                 alignItems: "center",
                 gap: 6,
-                padding: "8px 14px",
-                background: "rgba(167, 233, 232, 0.08)",
-                border: "1px solid rgba(167, 233, 232, 0.2)",
-                color: "#a7e9e8",
-                font: "500 10px var(--mono)",
-                borderRadius: 3,
-                textDecoration: "none"
+                padding: "9px 18px",
+                background: "#176B4D",
+                border: "none",
+                color: "#FFFFFF",
+                font: "600 11px var(--mono)",
+                borderRadius: 6,
+                cursor: executing ? "not-allowed" : "pointer",
+                boxShadow: "0 2px 4px rgba(23, 107, 77, 0.2)"
               }}
             >
-              <Zap size={13} />
-              <span>BOUNDED OPTUNA HPO</span>
-            </Link>
+              <Play size={13} fill="#FFFFFF" />
+              <span>{executing ? "ORCHESTRATING AGENTS..." : "START MULTI-AGENT CYCLE"}</span>
+            </button>
 
-            {runs.length > 0 && (
-              <a
-                href={`http://127.0.0.1:8000/api/reports/experiment/${exp.id}/export?format=pdf`}
-                target="_blank"
-                rel="noreferrer"
-                style={{
-                  display: "inline-flex",
-                  alignItems: "center",
-                  gap: 6,
-                  padding: "8px 14px",
-                  background: "rgba(182, 154, 114, 0.15)",
-                  border: "1px solid #B69A72",
-                  color: "#F2F0E8",
-                  font: "600 10px var(--mono)",
-                  borderRadius: 3,
-                  textDecoration: "none"
-                }}
-              >
-                <Download size={13} />
-                <span>DOWNLOAD PDF</span>
-              </a>
-            )}
+            <button
+              onClick={handleInjectFailure}
+              disabled={executing}
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                gap: 6,
+                padding: "9px 14px",
+                background: "#FFFFFF",
+                border: "1px solid #DFE5DC",
+                color: "#A66B22",
+                font: "600 11px var(--mono)",
+                borderRadius: 6,
+                cursor: "pointer"
+              }}
+            >
+              <AlertTriangle size={13} />
+              <span>TEST CONTROLLED FAILURE</span>
+            </button>
+
+            <button
+              onClick={handleRetryStage}
+              disabled={executing}
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                gap: 6,
+                padding: "9px 14px",
+                background: "#FFFFFF",
+                border: "1px solid #DFE5DC",
+                color: "#176B4D",
+                font: "600 11px var(--mono)",
+                borderRadius: 6,
+                cursor: "pointer"
+              }}
+            >
+              <RotateCcw size={13} />
+              <span>RETRY FAILED STAGE</span>
+            </button>
           </div>
         </div>
       </div>
 
       {/* Tabs */}
-      <div style={{ display: "flex", gap: 16, borderBottom: "1px solid rgba(226, 239, 229, 0.08)", paddingBottom: 10 }}>
+      <div style={{ display: "flex", gap: 24, borderBottom: "1px solid #DFE5DC", paddingBottom: 10 }}>
+        <button
+          onClick={() => setActiveTab("orchestration")}
+          style={{
+            background: "none",
+            border: "none",
+            padding: "4px 8px",
+            font: activeTab === "orchestration" ? "600 12px var(--mono)" : "400 12px var(--mono)",
+            color: activeTab === "orchestration" ? "#176B4D" : "#68766D",
+            borderBottom: activeTab === "orchestration" ? "2.5px solid #176B4D" : "2.5px solid transparent",
+            cursor: "pointer"
+          }}
+        >
+          AGENT ORCHESTRATION (12 AGENTS)
+        </button>
+
+        <button
+          onClick={() => setActiveTab("code")}
+          style={{
+            background: "none",
+            border: "none",
+            padding: "4px 8px",
+            font: activeTab === "code" ? "600 12px var(--mono)" : "400 12px var(--mono)",
+            color: activeTab === "code" ? "#176B4D" : "#68766D",
+            borderBottom: activeTab === "code" ? "2.5px solid #176B4D" : "2.5px solid transparent",
+            cursor: "pointer"
+          }}
+        >
+          GENERATED CODE & REVISIONS
+        </button>
+
         <button
           onClick={() => setActiveTab("runs")}
           style={{
             background: "none",
             border: "none",
             padding: "4px 8px",
-            font: activeTab === "runs" ? "600 11px var(--mono)" : "400 11px var(--mono)",
-            color: activeTab === "runs" ? "#B69A72" : "#7e9084",
-            borderBottom: activeTab === "runs" ? "2px solid #B69A72" : "2px solid transparent",
+            font: activeTab === "runs" ? "600 12px var(--mono)" : "400 12px var(--mono)",
+            color: activeTab === "runs" ? "#176B4D" : "#68766D",
+            borderBottom: activeTab === "runs" ? "2.5px solid #176B4D" : "2.5px solid transparent",
             cursor: "pointer"
           }}
         >
@@ -286,13 +387,13 @@ export default function ExperimentDetailPage({
             background: "none",
             border: "none",
             padding: "4px 8px",
-            font: activeTab === "predictions" ? "600 11px var(--mono)" : "400 11px var(--mono)",
-            color: activeTab === "predictions" ? "#B69A72" : "#7e9084",
-            borderBottom: activeTab === "predictions" ? "2px solid #B69A72" : "2px solid transparent",
+            font: activeTab === "predictions" ? "600 12px var(--mono)" : "400 12px var(--mono)",
+            color: activeTab === "predictions" ? "#176B4D" : "#68766D",
+            borderBottom: activeTab === "predictions" ? "2.5px solid #176B4D" : "2.5px solid transparent",
             cursor: "pointer"
           }}
         >
-          ACTUAL VS PREDICTED ({predictions.length})
+          PREDICTIONS ({predictions.length})
         </button>
 
         <button
@@ -301,177 +402,267 @@ export default function ExperimentDetailPage({
             background: "none",
             border: "none",
             padding: "4px 8px",
-            font: activeTab === "failures" ? "600 11px var(--mono)" : "400 11px var(--mono)",
-            color: activeTab === "failures" ? "#ff8b8b" : "#7e9084",
-            borderBottom: activeTab === "failures" ? "2px solid #ff8b8b" : "2px solid transparent",
+            font: activeTab === "failures" ? "600 12px var(--mono)" : "400 12px var(--mono)",
+            color: activeTab === "failures" ? "#176B4D" : "#68766D",
+            borderBottom: activeTab === "failures" ? "2.5px solid #176B4D" : "2.5px solid transparent",
             cursor: "pointer"
           }}
         >
-          FAILURE & RECOVERY LOGS ({failures.length})
+          FAILURES & AUTOPSY ({failures.length})
         </button>
       </div>
 
-      {/* Runs Tab */}
-      {activeTab === "runs" && (
-        <div className="research-card">
-          {runs.length === 0 ? (
-            <div style={{ padding: "40px 0", textAlign: "center", font: "400 11px var(--mono)", color: "#7e9084" }}>
-              No execution runs yet. Click "START EXPERIMENT" to train baseline and candidate models with real metrics.
+      {/* Tab 1: Agent Orchestration Visualization */}
+      {activeTab === "orchestration" && (
+        <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
+          {/* Directed 12-Stage Pipeline Header */}
+          <div style={{ background: "#FFFFFF", border: "1px solid #DFE5DC", borderRadius: 12, padding: 20, boxShadow: "0 1px 3px rgba(0,0,0,0.03)" }}>
+            <div style={{ font: "600 11px var(--mono)", color: "#176B4D", letterSpacing: "0.08em", marginBottom: 12 }}>
+              PERSISTED MULTI-AGENT DIRECTED PIPELINE // REAL BACKEND EVENT STATE
             </div>
-          ) : (
-            <div style={{ overflowX: "auto" }}>
-              <table className="mono-table">
-                <thead>
-                  <tr>
-                    <th>MODEL</th>
-                    <th>TRAIN TIME</th>
-                    <th>INFERENCE LATENCY</th>
-                    <th>MODEL SIZE</th>
-                    <th>PEAK MEMORY</th>
-                    <th>{isRegression ? "MAE (eV)" : "F1 SCORE"}</th>
-                    {isRegression && <th>RMSE (eV)</th>}
-                    {isRegression && <th>R² SCORE</th>}
-                    {isRegression && <th>MEDIAN ABS ERR</th>}
-                    <th>RECOVERY</th>
-                    <th>STATUS</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {runs.map((r) => {
-                    let m: any = {};
-                    try {
-                      m = JSON.parse(r.metrics || "{}");
-                    } catch {}
 
-                    return (
-                      <tr key={r.id}>
-                        <td style={{ fontWeight: 600, color: "#F2F0E8" }}>{r.model_name}</td>
-                        <td>{r.train_time_ms.toFixed(1)} ms</td>
-                        <td style={{ color: "#a7e9e8" }}>{r.inference_latency_us.toFixed(1)} µs</td>
-                        <td>{r.model_size_kb.toFixed(1)} KB</td>
-                        <td>{r.peak_memory_mb.toFixed(2)} MB</td>
-                        <td style={{ fontWeight: 600, color: "#B69A72" }}>
-                          {isRegression ? (m.mae !== undefined ? m.mae.toFixed(4) : "—") : (m.f1 !== undefined ? m.f1.toFixed(4) : "—")}
-                        </td>
-                        {isRegression && <td style={{ color: "#AAA99F" }}>{m.rmse !== undefined ? m.rmse.toFixed(4) : "—"}</td>}
-                        {isRegression && <td style={{ color: "#AAA99F" }}>{m.r2 !== undefined ? m.r2.toFixed(4) : "—"}</td>}
-                        {isRegression && <td style={{ color: "#AAA99F" }}>{m.median_abs_error !== undefined ? m.median_abs_error.toFixed(4) : "—"}</td>}
-                        <td>
-                          {r.recovery_successful ? (
-                            <span className="status-tag status-tag--recovered">RECOVERED</span>
-                          ) : r.recovery_attempted ? (
-                            <span className="status-tag status-tag--failed">FAILED RETRY</span>
-                          ) : (
-                            <span style={{ color: "#7e9084" }}>Direct Fit</span>
-                          )}
-                        </td>
-                        <td>
-                          <span className={`status-tag status-tag--${r.status === "COMPLETED" ? "completed" : "failed"}`}>
-                            {r.status}
-                          </span>
-                        </td>
-                      </tr>
-                    );
-                  })}
-                </tbody>
-              </table>
+            <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", gap: 8 }}>
+              {agentRoles.map((role: any, idx: number) => {
+                const isCompleted = role.status === "COMPLETED";
+                const isRunning = role.status === "RUNNING";
+                const isFailed = role.status === "FAILED";
+
+                return (
+                  <div key={role.name} style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                    <div
+                      onClick={() => setSelectedAgent(role)}
+                      style={{
+                        padding: "8px 12px",
+                        borderRadius: 6,
+                        border: `1px solid ${isCompleted ? "#176B4D" : isFailed ? "#EF4444" : "#DFE5DC"}`,
+                        background: isCompleted ? "#E6F0E9" : isRunning ? "#EFF6FF" : isFailed ? "#FEE2E2" : "#FFFFFF",
+                        cursor: "pointer",
+                        display: "flex",
+                        alignItems: "center",
+                        gap: 6
+                      }}
+                    >
+                      {isCompleted ? <CheckCircle2 size={13} className="text-[#176B4D]" /> : isFailed ? <AlertTriangle size={13} className="text-[#991B1B]" /> : <Bot size={13} className="text-[#68766D]" />}
+                      <span style={{ font: "600 11px var(--mono)", color: isCompleted ? "#176B4D" : "#26352D" }}>
+                        {role.label}
+                      </span>
+                    </div>
+                    {idx < agentRoles.length - 1 && <ChevronRight size={14} className="text-[#8c9c91]" />}
+                  </div>
+                );
+              })}
             </div>
-          )}
-        </div>
-      )}
-
-      {/* Predictions Tab */}
-      {activeTab === "predictions" && (
-        <div className="research-card">
-          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 12 }}>
-            <span style={{ font: "600 11px var(--mono)", color: "#F2F0E8" }}>
-              EVALUATION SPLIT PREDICTIONS & RESIDUALS (PAGINATED SAMPLES)
-            </span>
-            <span style={{ font: "400 9px var(--mono)", color: "#7e9084" }}>
-              Residual = Predicted - Actual
-            </span>
           </div>
 
-          {predictions.length === 0 ? (
-            <div style={{ padding: "30px 0", textAlign: "center", font: "400 11px var(--mono)", color: "#7e9084" }}>
-              No prediction records saved yet. Run the experiment to generate predictions.
+          {/* Grid: Agent Cards & Live Event Stream */}
+          <div style={{ display: "grid", gridTemplateColumns: "1.4fr 1fr", gap: 20 }}>
+            <div style={{ background: "#FFFFFF", border: "1px solid #DFE5DC", borderRadius: 12, padding: 20, boxShadow: "0 1px 3px rgba(0,0,0,0.03)" }}>
+              <div style={{ font: "600 11px var(--mono)", color: "#26352D", marginBottom: 14 }}>
+                AGENT RESPONSIBILITIES & EXECUTED TRACES
+              </div>
+
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: 12 }}>
+                {agentRoles.map((role: any) => {
+                  const trace = traces.find((t: any) => t.agent_name === role.name);
+                  return (
+                    <div
+                      key={role.name}
+                      onClick={() => setSelectedAgent({ role, trace })}
+                      style={{
+                        padding: 14,
+                        borderRadius: 8,
+                        border: "1px solid #DFE5DC",
+                        background: trace ? "#F8F6EF" : "#FFFFFF",
+                        cursor: "pointer",
+                        transition: "all 0.2s ease"
+                      }}
+                    >
+                      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 6 }}>
+                        <div style={{ font: "600 11px var(--mono)", color: "#176B4D" }}>{role.name}</div>
+                        <span style={{ font: "400 9px var(--mono)", color: "#68766D" }}>{trace ? `${trace.duration_s}s` : "PENDING"}</span>
+                      </div>
+                      <div style={{ font: "400 11px/1.4 var(--font-primary), serif", color: "#68766D", height: 32, overflow: "hidden" }}>
+                        {role.description || DEFAULT_AGENT_ROLES.find((d) => d.name === role.name)?.description || role.label}
+                      </div>
+                      <div style={{ marginTop: 8, font: "600 9px var(--mono)", color: trace?.status === "COMPLETED" ? "#176B4D" : "#68766D" }}>
+                        STATUS: {trace?.status || "STANDBY"}
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
             </div>
-          ) : (
-            <div style={{ overflowX: "auto" }}>
-              <table className="mono-table">
-                <thead>
-                  <tr>
-                    <th>SAMPLE #</th>
-                    <th>ACTUAL TARGET</th>
-                    <th>PREDICTED VALUE</th>
-                    <th>RESIDUAL ERROR</th>
-                    <th>ABSOLUTE ERROR</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {predictions.map((p, idx) => (
-                    <tr key={idx}>
-                      <td style={{ color: "#8c9c91" }}>{p.sample_reference || idx}</td>
-                      <td style={{ color: "#F2F0E8", fontWeight: 500 }}>{p.actual_value?.toFixed(4) ?? "—"}</td>
-                      <td style={{ color: "#B69A72", fontWeight: 500 }}>{p.predicted_value?.toFixed(4) ?? "—"}</td>
-                      <td style={{ color: Math.abs(p.residual || 0) < 0.2 ? "#a7e9e8" : "#ff8b8b" }}>
-                        {p.residual !== undefined ? (p.residual > 0 ? `+${p.residual.toFixed(4)}` : p.residual.toFixed(4)) : "—"}
-                      </td>
-                      <td style={{ color: "#AAA99F" }}>
-                        {p.residual !== undefined ? Math.abs(p.residual).toFixed(4) : "—"}
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+
+            {/* Live Backend Event Stream */}
+            <div style={{ background: "#FFFFFF", border: "1px solid #DFE5DC", borderRadius: 12, padding: 20, boxShadow: "0 1px 3px rgba(0,0,0,0.03)" }}>
+              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 14 }}>
+                <div style={{ font: "600 11px var(--mono)", color: "#26352D" }}>LIVE AGENT EVENT STREAM</div>
+                <button onClick={loadExperiment} style={{ background: "none", border: "none", color: "#176B4D", cursor: "pointer" }}>
+                  <RefreshCw size={12} />
+                </button>
+              </div>
+
+              <div style={{ display: "flex", flexDirection: "column", gap: 10, maxHeight: 420, overflowY: "auto" }}>
+                {events.length === 0 ? (
+                  <div style={{ font: "400 11px var(--mono)", color: "#68766D", padding: "20px 0", textAlign: "center" }}>
+                    No events recorded yet. Click &quot;START MULTI-AGENT CYCLE&quot; to execute.
+                  </div>
+                ) : (
+                  events.map((evt: any, i: number) => (
+                    <div key={i} style={{ padding: 10, background: "#F8F6EF", borderRadius: 6, border: "1px solid #DFE5DC" }}>
+                      <div style={{ display: "flex", justifyContent: "space-between", font: "600 10px var(--mono)", color: "#176B4D", marginBottom: 2 }}>
+                        <span>[{evt.agent_name}] {evt.action}</span>
+                        <span>{evt.duration_s}s</span>
+                      </div>
+                      <div style={{ font: "400 10px var(--mono)", color: "#68766D" }}>
+                        {evt.output_summary}
+                      </div>
+                    </div>
+                  ))
+                )}
+              </div>
             </div>
-          )}
+          </div>
         </div>
       )}
 
-      {/* Failure & Recovery Tab */}
-      {activeTab === "failures" && (
-        <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
-          {failures.length === 0 ? (
-            <div className="research-card" style={{ padding: "40px 0", textAlign: "center", font: "400 11px var(--mono)", color: "#7e9084" }}>
-              No pipeline exceptions observed during this experiment execution.
+      {/* Tab 2: Generated Code & Revision Management */}
+      {activeTab === "code" && (
+        <div style={{ background: "#FFFFFF", border: "1px solid #DFE5DC", borderRadius: 12, padding: 20, boxShadow: "0 1px 3px rgba(0,0,0,0.03)" }}>
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 16 }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+              <Code size={16} className="text-[#176B4D]" />
+              <div style={{ font: "600 12px var(--mono)", color: "#26352D" }}>REPRODUCIBLE SOURCE CODE & MULTI-FILE REVISIONS</div>
             </div>
-          ) : (
-            failures.map((f) => (
-              <div key={f.id} className="research-card" style={{ borderLeft: "3px solid #ff8b8b" }}>
-                <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 8 }}>
-                  <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                    <AlertTriangle size={15} color="#ff8b8b" />
-                    <span style={{ font: "600 11px var(--mono)", color: "#ff8b8b" }}>
-                      CATEGORY: {f.error_category}
-                    </span>
-                  </div>
-                  <span className={`status-tag status-tag--${f.outcome === "RECOVERED" ? "recovered" : "failed"}`}>
-                    OUTCOME: {f.outcome}
-                  </span>
-                </div>
+            <div style={{ display: "flex", gap: 10 }}>
+              <button
+                onClick={handleCopyCode}
+                style={{
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: 6,
+                  padding: "6px 12px",
+                  background: "#FFFFFF",
+                  border: "1px solid #DFE5DC",
+                  color: "#26352D",
+                  font: "600 10px var(--mono)",
+                  borderRadius: 6,
+                  cursor: "pointer"
+                }}
+              >
+                {copied ? <Check size={12} className="text-[#176B4D]" /> : <Copy size={12} />}
+                <span>{copied ? "COPIED!" : "COPY FILE"}</span>
+              </button>
+              <button
+                onClick={handleSaveCode}
+                disabled={savingCode}
+                style={{
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: 6,
+                  padding: "6px 14px",
+                  background: "#176B4D",
+                  border: "none",
+                  color: "#FFFFFF",
+                  font: "600 10px var(--mono)",
+                  borderRadius: 6,
+                  cursor: "pointer"
+                }}
+              >
+                <FileCode size={12} />
+                <span>{savingCode ? "SAVING..." : "SAVE REVISION & RERUN"}</span>
+              </button>
+            </div>
+          </div>
 
-                <div style={{ font: "500 12px var(--body)", color: "#F2F0E8", marginBottom: 6 }}>
-                  Diagnosis: {f.diagnosis}
-                </div>
-
-                <div className="code-box" style={{ marginBottom: 10, maxHeight: 100 }}>
-                  {f.error_message}
-                </div>
-
-                {f.applied_repair && (
-                  <div style={{ background: "rgba(182, 154, 114, 0.05)", border: "1px solid rgba(182, 154, 114, 0.2)", padding: 10, borderRadius: 3 }}>
-                    <div style={{ font: "600 10px var(--mono)", color: "#B69A72", marginBottom: 4 }}>
-                      APPLIED RECOVERY PROCEDURE:
+          <div style={{ display: "grid", gridTemplateColumns: "220px 1fr", gap: 16 }}>
+            {/* Multi-file Project Tree */}
+            <div style={{ background: "#F8F6EF", border: "1px solid #DFE5DC", borderRadius: 8, padding: 12 }}>
+              <div style={{ display: "flex", alignItems: "center", gap: 6, font: "600 10px var(--mono)", color: "#176B4D", marginBottom: 10 }}>
+                <Folder size={13} />
+                <span>PROJECT TREE</span>
+              </div>
+              <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+                {codeData && codeData.files ? (
+                  Object.keys(codeData.files).map((fileName) => (
+                    <div
+                      key={fileName}
+                      onClick={() => handleSelectFile(fileName)}
+                      style={{
+                        padding: "8px 10px",
+                        borderRadius: 6,
+                        font: "600 11px var(--mono)",
+                        color: selectedFile === fileName ? "#176B4D" : "#26352D",
+                        background: selectedFile === fileName ? "#E6F0E9" : "#FFFFFF",
+                        border: `1px solid ${selectedFile === fileName ? "#176B4D" : "#DFE5DC"}`,
+                        cursor: "pointer",
+                        display: "flex",
+                        alignItems: "center",
+                        gap: 6
+                      }}
+                    >
+                      <FileCode size={12} />
+                      <span>{fileName}</span>
                     </div>
-                    <pre style={{ margin: 0, font: "400 10px var(--mono)", color: "#c6d4c8", whiteSpace: "pre-wrap" }}>
-                      {f.applied_repair}
-                    </pre>
-                  </div>
+                  ))
+                ) : (
+                  <div style={{ font: "400 10px var(--mono)", color: "#68766D" }}>Generating code structure...</div>
                 )}
               </div>
-            ))
-          )}
+            </div>
+
+            {/* Code Editor Box */}
+            <div style={{ background: "#FFFFFF", border: "1px solid #DFE5DC", borderRadius: 8, overflow: "hidden" }}>
+              <div style={{ background: "#F8F6EF", borderBottom: "1px solid #DFE5DC", padding: "8px 14px", font: "600 10px var(--mono)", color: "#176B4D", display: "flex", justifyContent: "space-between" }}>
+                <span>FILE: {selectedFile}</span>
+                <span>REVISION: v1 (Active)</span>
+              </div>
+              <textarea
+                value={editedCode}
+                onChange={(e) => setEditedCode(e.target.value)}
+                rows={22}
+                style={{
+                  width: "100%",
+                  padding: 16,
+                  font: "400 12px/1.5 var(--mono)",
+                  background: "#FFFFFF",
+                  color: "#26352D",
+                  border: "none",
+                  outline: "none",
+                  resize: "vertical"
+                }}
+              />
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Tab 3: Measured Runs */}
+      {activeTab === "runs" && (
+        <div style={{ background: "#FFFFFF", border: "1px solid #DFE5DC", borderRadius: 12, padding: 20 }}>
+          <div style={{ font: "600 11px var(--mono)", color: "#26352D", marginBottom: 14 }}>MEASURED MODEL RUNS</div>
+          <table style={{ width: "100%", borderCollapse: "collapse", font: "400 12px var(--mono)" }}>
+            <thead>
+              <tr style={{ borderBottom: "1px solid #DFE5DC", color: "#68766D", textAlign: "left" }}>
+                <th style={{ padding: 8 }}>MODEL</th>
+                <th style={{ padding: 8 }}>STATUS</th>
+                <th style={{ padding: 8 }}>LATENCY (µs)</th>
+                <th style={{ padding: 8 }}>FIT TIME (ms)</th>
+                <th style={{ padding: 8 }}>RECOVERY</th>
+              </tr>
+            </thead>
+            <tbody>
+              {runs.map((r) => (
+                <tr key={r.id} style={{ borderBottom: "1px solid #DFE5DC" }}>
+                  <td style={{ padding: 8, fontWeight: 600 }}>{r.model_name}</td>
+                  <td style={{ padding: 8 }}>{r.status}</td>
+                  <td style={{ padding: 8 }}>{r.inference_latency_us}</td>
+                  <td style={{ padding: 8 }}>{r.train_time_ms}</td>
+                  <td style={{ padding: 8 }}>{r.recovery_successful ? "VALIDATED" : "NONE"}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
       )}
     </div>

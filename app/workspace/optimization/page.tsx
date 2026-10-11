@@ -84,26 +84,26 @@ function OptimizationContent() {
   const selectedExp = experiments.find((e) => e.id === selectedExpId);
 
   return (
-    <div style={{ display: "flex", flexDirection: "column", gap: 28 }}>
+    <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
       {/* Header */}
-      <div style={{ borderBottom: "1px solid rgba(226, 239, 229, 0.08)", paddingBottom: 20 }}>
-        <div style={{ font: "500 10px/1 var(--mono)", color: "#B69A72", letterSpacing: "0.14em", marginBottom: 8 }}>
+      <div style={{ borderBottom: "1px solid #DFE5DC", paddingBottom: 16 }}>
+        <div style={{ font: "500 10px/1 var(--mono)", color: "#176B4D", letterSpacing: "0.14em", marginBottom: 6, textTransform: "uppercase" }}>
           HYPERPARAMETER SEARCH // 006
         </div>
-        <h1 style={{ margin: 0, font: "600 24px/1.2 var(--body)", color: "#F2F0E8" }}>
+        <h1 style={{ margin: 0, font: "600 24px/1.2 var(--font-primary), serif", color: "#26352D" }}>
           Budget-Aware Optuna Optimizer
         </h1>
-        <p style={{ margin: "6px 0 0", font: "400 12px/1.5 var(--body)", color: "#AAA99F" }}>
+        <p style={{ margin: "6px 0 0", font: "400 13px/1.5 var(--body)", color: "#68766D" }}>
           Bayesian search space exploration with strict CPU-time caps, per-trial timeout pruning, and latency profiling.
         </p>
       </div>
 
       {/* Control Card */}
-      <div className="research-card">
+      <div style={{ background: "#FFFFFF", border: "1px solid #DFE5DC", borderRadius: 10, padding: 20, boxShadow: "0 1px 3px rgba(0,0,0,0.03)" }}>
         <form onSubmit={handleStartStudy} style={{ display: "flex", flexDirection: "column", gap: 18 }}>
           <div style={{ display: "grid", gridTemplateColumns: "1.2fr 1fr 1fr 1fr 1fr", gap: 14 }}>
             <div>
-              <label style={{ display: "block", font: "500 9px var(--mono)", color: "#7e9084", marginBottom: 6 }}>
+              <label style={{ display: "block", font: "600 10px var(--mono)", color: "#68766D", marginBottom: 6, letterSpacing: "0.05em" }}>
                 EXPERIMENT TARGET
               </label>
               <select
@@ -113,10 +113,10 @@ function OptimizationContent() {
                   const exp = experiments.find((x) => x.id === e.target.value);
                   if (exp) setModelName(exp.baseline_model);
                 }}
-                style={{ width: "100%", padding: "9px 10px", background: "#101110", border: "1px solid rgba(226, 239, 229, 0.15)", borderRadius: 3, color: "#F2F0E8", font: "400 11px var(--mono)" }}
+                style={{ width: "100%", padding: "10px 12px", background: "#FFFFFF", border: "1px solid #DFE5DC", borderRadius: 6, color: "#26352D", font: "400 12px var(--mono)", outline: "none" }}
               >
                 {experiments.map((e) => (
-                  <option key={e.id} value={e.id}>
+                  <option key={e.id} value={e.id} style={{ background: "#FFFFFF", color: "#26352D" }}>
                     {e.name} ({e.task_type})
                   </option>
                 ))}
@@ -124,27 +124,27 @@ function OptimizationContent() {
             </div>
 
             <div>
-              <label style={{ display: "block", font: "500 9px var(--mono)", color: "#7e9084", marginBottom: 6 }}>
+              <label style={{ display: "block", font: "600 10px var(--mono)", color: "#68766D", marginBottom: 6, letterSpacing: "0.05em" }}>
                 MODEL ARCHITECTURE
               </label>
               <select
                 value={modelName}
                 onChange={(e) => setModelName(e.target.value)}
-                style={{ width: "100%", padding: "9px 10px", background: "#101110", border: "1px solid rgba(226, 239, 229, 0.15)", borderRadius: 3, color: "#F2F0E8", font: "400 11px var(--mono)" }}
+                style={{ width: "100%", padding: "10px 12px", background: "#FFFFFF", border: "1px solid #DFE5DC", borderRadius: 6, color: "#26352D", font: "400 12px var(--mono)", outline: "none" }}
               >
-                <option value="RandomForestClassifier">RandomForestClassifier</option>
-                <option value="HistGradientBoostingClassifier">HistGradientBoostingClassifier</option>
-                <option value="DecisionTreeClassifier">DecisionTreeClassifier</option>
-                <option value="LogisticRegression">LogisticRegression</option>
-                <option value="SVC">SVC</option>
-                <option value="RandomForestRegressor">RandomForestRegressor</option>
-                <option value="HistGradientBoostingRegressor">HistGradientBoostingRegressor</option>
-                <option value="Ridge">Ridge</option>
+                <option value="RandomForestClassifier" style={{ background: "#FFFFFF", color: "#26352D" }}>RandomForestClassifier</option>
+                <option value="HistGradientBoostingClassifier" style={{ background: "#FFFFFF", color: "#26352D" }}>HistGradientBoostingClassifier</option>
+                <option value="DecisionTreeClassifier" style={{ background: "#FFFFFF", color: "#26352D" }}>DecisionTreeClassifier</option>
+                <option value="LogisticRegression" style={{ background: "#FFFFFF", color: "#26352D" }}>LogisticRegression</option>
+                <option value="SVC" style={{ background: "#FFFFFF", color: "#26352D" }}>SVC</option>
+                <option value="RandomForestRegressor" style={{ background: "#FFFFFF", color: "#26352D" }}>RandomForestRegressor</option>
+                <option value="HistGradientBoostingRegressor" style={{ background: "#FFFFFF", color: "#26352D" }}>HistGradientBoostingRegressor</option>
+                <option value="Ridge" style={{ background: "#FFFFFF", color: "#26352D" }}>Ridge</option>
               </select>
             </div>
 
             <div>
-              <label style={{ display: "block", font: "500 9px var(--mono)", color: "#7e9084", marginBottom: 6 }}>
+              <label style={{ display: "block", font: "600 10px var(--mono)", color: "#68766D", marginBottom: 6, letterSpacing: "0.05em" }}>
                 OBJECTIVE METRIC
               </label>
               <select
@@ -153,18 +153,18 @@ function OptimizationContent() {
                   setObjective(e.target.value);
                   setDirection(e.target.value === "mae" || e.target.value === "rmse" ? "minimize" : "maximize");
                 }}
-                style={{ width: "100%", padding: "9px 10px", background: "#101110", border: "1px solid rgba(226, 239, 229, 0.15)", borderRadius: 3, color: "#F2F0E8", font: "400 11px var(--mono)" }}
+                style={{ width: "100%", padding: "10px 12px", background: "#FFFFFF", border: "1px solid #DFE5DC", borderRadius: 6, color: "#26352D", font: "400 12px var(--mono)", outline: "none" }}
               >
-                <option value="f1">Validation F1 (Macro)</option>
-                <option value="accuracy">Validation Accuracy</option>
-                <option value="roc_auc">Validation ROC-AUC</option>
-                <option value="mae">Validation MAE</option>
-                <option value="rmse">Validation RMSE</option>
+                <option value="f1" style={{ background: "#FFFFFF", color: "#26352D" }}>Validation F1 (Macro)</option>
+                <option value="accuracy" style={{ background: "#FFFFFF", color: "#26352D" }}>Validation Accuracy</option>
+                <option value="roc_auc" style={{ background: "#FFFFFF", color: "#26352D" }}>Validation ROC-AUC</option>
+                <option value="mae" style={{ background: "#FFFFFF", color: "#26352D" }}>Validation MAE</option>
+                <option value="rmse" style={{ background: "#FFFFFF", color: "#26352D" }}>Validation RMSE</option>
               </select>
             </div>
 
             <div>
-              <label style={{ display: "block", font: "500 9px var(--mono)", color: "#7e9084", marginBottom: 6 }}>
+              <label style={{ display: "block", font: "600 10px var(--mono)", color: "#68766D", marginBottom: 6, letterSpacing: "0.05em" }}>
                 TRIAL LIMIT
               </label>
               <input
@@ -173,12 +173,12 @@ function OptimizationContent() {
                 max={30}
                 value={totalTrials}
                 onChange={(e) => setTotalTrials(parseInt(e.target.value) || 12)}
-                style={{ width: "100%", padding: "9px 10px", background: "#101110", border: "1px solid rgba(226, 239, 229, 0.15)", borderRadius: 3, color: "#F2F0E8", font: "400 11px var(--mono)" }}
+                style={{ width: "100%", padding: "10px 12px", background: "#FFFFFF", border: "1px solid #DFE5DC", borderRadius: 6, color: "#26352D", font: "400 12px var(--mono)", outline: "none" }}
               />
             </div>
 
             <div>
-              <label style={{ display: "block", font: "500 9px var(--mono)", color: "#7e9084", marginBottom: 6 }}>
+              <label style={{ display: "block", font: "600 10px var(--mono)", color: "#68766D", marginBottom: 6, letterSpacing: "0.05em" }}>
                 CPU BUDGET (s)
               </label>
               <input
@@ -187,30 +187,32 @@ function OptimizationContent() {
                 max={90}
                 value={cpuBudget}
                 onChange={(e) => setCpuBudget(parseFloat(e.target.value) || 25.0)}
-                style={{ width: "100%", padding: "9px 10px", background: "#101110", border: "1px solid rgba(226, 239, 229, 0.15)", borderRadius: 3, color: "#F2F0E8", font: "400 11px var(--mono)" }}
+                style={{ width: "100%", padding: "10px 12px", background: "#FFFFFF", border: "1px solid #DFE5DC", borderRadius: 6, color: "#26352D", font: "400 12px var(--mono)", outline: "none" }}
               />
             </div>
           </div>
 
-          <div style={{ display: "flex", justifyContent: "flex-end" }}>
+          <div style={{ display: "flex", justifyContent: "flex-end", marginTop: 4 }}>
             <button
               type="submit"
               disabled={running}
               style={{
-                padding: "9px 22px",
-                background: running ? "#557a44" : "#B69A72",
-                border: "1px solid #B69A72",
-                color: "#101110",
-                borderRadius: 3,
-                font: "600 10px var(--mono)",
+                padding: "10px 24px",
+                background: running ? "#12543C" : "#176B4D",
+                border: "none",
+                color: "#FFFFFF",
+                borderRadius: 6,
+                font: "600 11px var(--mono)",
                 letterSpacing: "0.08em",
                 cursor: running ? "not-allowed" : "pointer",
                 display: "inline-flex",
                 alignItems: "center",
-                gap: 8
+                gap: 8,
+                boxShadow: "0 2px 4px rgba(23, 107, 77, 0.2)",
+                transition: "all 0.2s ease"
               }}
             >
-              <Zap size={13} fill="#101110" />
+              <Zap size={14} fill="#FFFFFF" />
               <span>{running ? "SAMPLING TRIALS UNDER CPU BUDGET..." : "LAUNCH OPTUNA STUDY"}</span>
             </button>
           </div>
@@ -221,30 +223,30 @@ function OptimizationContent() {
       {activeStudy && (
         <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
           {/* Best Trial Spotlight */}
-          <div className="research-card research-card--highlight">
-            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 12 }}>
-              <span style={{ font: "600 11px var(--mono)", color: "#B69A72", letterSpacing: "0.08em" }}>
+          <div style={{ background: "#FFFFFF", border: "1.5px solid #176B4D", borderRadius: 10, padding: 20, boxShadow: "0 2px 6px rgba(23, 107, 77, 0.08)" }}>
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 14, borderBottom: "1px solid #DFE5DC", paddingBottom: 10 }}>
+              <span style={{ font: "600 11px var(--mono)", color: "#176B4D", letterSpacing: "0.08em" }}>
                 BEST OPTIMIZED TRIAL // {activeStudy.study.status}
               </span>
-              <span style={{ font: "400 9px var(--mono)", color: "#AAA99F" }}>
+              <span style={{ font: "400 10px var(--mono)", color: "#68766D" }}>
                 WALL-CLOCK ELAPSED: {activeStudy.study.elapsed_seconds.toFixed(2)}s / {activeStudy.study.cpu_budget_seconds}s
               </span>
             </div>
 
             <div style={{ display: "grid", gridTemplateColumns: "1.2fr 2fr", gap: 20 }}>
               <div>
-                <div style={{ font: "500 9px var(--mono)", color: "#7e9084" }}>OPTIMAL {activeStudy.study.objective.toUpperCase()} SCORE:</div>
-                <div className="metric-number" style={{ font: "600 32px var(--mono)", color: "#B69A72", marginTop: 4 }}>
+                <div style={{ font: "600 10px var(--mono)", color: "#68766D", textTransform: "uppercase" }}>OPTIMAL {activeStudy.study.objective.toUpperCase()} SCORE:</div>
+                <div style={{ font: "600 34px var(--mono)", color: "#176B4D", marginTop: 4 }}>
                   {activeStudy.study.best_score ? activeStudy.study.best_score.toFixed(4) : "—"}
                 </div>
-                <div style={{ font: "400 10px var(--mono)", color: "#AAA99F", marginTop: 6 }}>
+                <div style={{ font: "400 11px var(--mono)", color: "#68766D", marginTop: 6 }}>
                   Completed {activeStudy.study.completed_trials} / {activeStudy.study.total_trials} planned trials.
                 </div>
               </div>
 
               <div>
-                <div style={{ font: "500 9px var(--mono)", color: "#7e9084", marginBottom: 6 }}>OPTIMAL HYPERPARAMETERS:</div>
-                <div className="code-box" style={{ maxHeight: 90 }}>
+                <div style={{ font: "600 10px var(--mono)", color: "#68766D", marginBottom: 6, textTransform: "uppercase" }}>OPTIMAL HYPERPARAMETERS:</div>
+                <div style={{ background: "#F8F6EF", border: "1px solid #DFE5DC", borderRadius: 6, padding: "10px 14px", font: "400 11px var(--mono)", color: "#26352D", maxHeight: 90, overflowY: "auto" }}>
                   {activeStudy.study.best_params}
                 </div>
               </div>
@@ -252,40 +254,48 @@ function OptimizationContent() {
           </div>
 
           {/* Trials Table */}
-          <div className="research-card">
-            <div style={{ font: "600 12px var(--mono)", color: "#F2F0E8", marginBottom: 14 }}>
+          <div style={{ background: "#FFFFFF", border: "1px solid #DFE5DC", borderRadius: 10, padding: 20, boxShadow: "0 1px 3px rgba(0,0,0,0.03)" }}>
+            <div style={{ font: "600 12px var(--mono)", color: "#26352D", marginBottom: 14 }}>
               INDIVIDUAL TRIAL TRAJECTORY ({activeStudy.trials.length} RECORDED)
             </div>
 
             <div style={{ overflowX: "auto" }}>
-              <table className="mono-table">
+              <table style={{ width: "100%", textAlign: "left", fontFamily: "var(--mono)", fontSize: 11, borderCollapse: "collapse" }}>
                 <thead>
-                  <tr>
-                    <th>TRIAL #</th>
-                    <th>SCORE ({activeStudy.study.objective.toUpperCase()})</th>
-                    <th>TRAIN TIME</th>
-                    <th>LATENCY</th>
-                    <th>SIZE</th>
-                    <th>STATUS</th>
-                    <th>HYPERPARAMETERS</th>
+                  <tr style={{ borderBottom: "1px solid #DFE5DC", color: "#68766D" }}>
+                    <th style={{ padding: "8px 10px" }}>TRIAL #</th>
+                    <th style={{ padding: "8px 10px" }}>SCORE ({activeStudy.study.objective.toUpperCase()})</th>
+                    <th style={{ padding: "8px 10px" }}>TRAIN TIME</th>
+                    <th style={{ padding: "8px 10px" }}>LATENCY</th>
+                    <th style={{ padding: "8px 10px" }}>SIZE</th>
+                    <th style={{ padding: "8px 10px" }}>STATUS</th>
+                    <th style={{ padding: "8px 10px" }}>HYPERPARAMETERS</th>
                   </tr>
                 </thead>
                 <tbody>
                   {activeStudy.trials.map((t) => (
-                    <tr key={t.id}>
-                      <td style={{ fontWeight: 600, color: "#F2F0E8" }}>#{t.trial_number}</td>
-                      <td style={{ fontWeight: 600, color: t.score !== null ? "#B69A72" : "#ff8b8b" }}>
+                    <tr key={t.id} style={{ borderBottom: "1px solid #F8F6EF" }}>
+                      <td style={{ padding: "10px", fontWeight: 600, color: "#26352D" }}>#{t.trial_number}</td>
+                      <td style={{ padding: "10px", fontWeight: 600, color: t.score !== null ? "#176B4D" : "#B54747" }}>
                         {t.score !== null ? t.score.toFixed(4) : "FAILED"}
                       </td>
-                      <td>{t.train_time_ms.toFixed(1)} ms</td>
-                      <td style={{ color: "#a7e9e8" }}>{t.latency_us.toFixed(1)} µs</td>
-                      <td>{t.model_size_kb.toFixed(1)} KB</td>
-                      <td>
-                        <span className={`status-tag status-tag--${t.status === "COMPLETE" ? "completed" : "failed"}`}>
+                      <td style={{ padding: "10px", color: "#26352D" }}>{t.train_time_ms.toFixed(1)} ms</td>
+                      <td style={{ padding: "10px", color: "#176B4D" }}>{t.latency_us.toFixed(1)} µs</td>
+                      <td style={{ padding: "10px", color: "#68766D" }}>{t.model_size_kb.toFixed(1)} KB</td>
+                      <td style={{ padding: "10px" }}>
+                        <span style={{
+                          padding: "2px 8px",
+                          borderRadius: 4,
+                          fontSize: 10,
+                          fontWeight: 600,
+                          background: t.status === "COMPLETE" ? "#E6F0E9" : "#FDF2F2",
+                          color: t.status === "COMPLETE" ? "#176B4D" : "#B54747",
+                          border: t.status === "COMPLETE" ? "1px solid #DFE5DC" : "1px solid #F8D7D7"
+                        }}>
                           {t.status}
                         </span>
                       </td>
-                      <td style={{ maxWidth: 300, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", color: "#8c9c91" }}>
+                      <td style={{ padding: "10px", maxWidth: 300, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", color: "#68766D" }}>
                         {t.params}
                       </td>
                     </tr>

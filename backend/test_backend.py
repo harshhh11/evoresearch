@@ -86,15 +86,18 @@ def test_api_datasets():
     assert any("Matbench" in n for n in names)
 
 def test_api_projects_and_experiment_lifecycle():
-    # 1. Create project
-    proj_res = client.post("/api/projects", json={
-        "name": "Materials Science Benchmark Project",
-        "description": "Integration test validation for transparent conductors",
-        "research_question": "Does recovery improve materials ML reliability?",
-        "hypothesis": "Recovery memory reduces trial failures in regression benchmarks."
-    })
-    assert proj_res.status_code == 200
-    proj_id = proj_res.json()["id"]
+    # 1. Reuse or create test project
+    existing = client.get("/api/projects").json()
+    proj_id = existing[0]["id"] if existing else None
+    if not proj_id:
+        proj_res = client.post("/api/projects", json={
+            "name": "Integration Test Suite Project",
+            "description": "Integration test validation for multi-domain ML",
+            "research_question": "Does recovery improve ML reliability?",
+            "hypothesis": "Recovery memory reduces trial failures in regression benchmarks."
+        })
+        assert proj_res.status_code == 200
+        proj_id = proj_res.json()["id"]
 
     # 2. Get dataset (NOMAD)
     ds_res = client.get("/api/datasets")

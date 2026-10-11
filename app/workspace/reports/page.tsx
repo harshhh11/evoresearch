@@ -130,40 +130,40 @@ export default function ReportsPage() {
 
   if (loading) {
     return (
-      <div style={{ padding: "60px 0", textAlign: "center", font: "400 12px var(--mono)", color: "#8c9c91" }}>
+      <div className="py-16 text-center font-mono text-[12px] text-[#68766D]">
         COMPILING RESEARCH EVIDENCE CORPUS...
       </div>
     );
   }
 
   return (
-    <div style={{ display: "flex", flexDirection: "column", gap: 28 }}>
+    <div className="flex flex-col gap-7 text-[#26352D]">
       {/* Header */}
-      <div style={{ display: "flex", alignItems: "flex-end", justifyContent: "space-between", borderBottom: "1px solid rgba(226, 239, 229, 0.08)", paddingBottom: 20 }}>
+      <div className="flex items-end justify-between border-b border-[#DFE5DC] pb-5">
         <div>
-          <div style={{ font: "500 10px/1 var(--mono)", color: "#B69A72", letterSpacing: "0.14em", marginBottom: 8 }}>
+          <div className="font-mono text-[10px] text-[#176B4D] uppercase tracking-[0.14em] font-semibold mb-2">
             EVIDENCE AUDIT // 009
           </div>
-          <h1 style={{ margin: 0, font: "600 24px/1.2 var(--body)", color: "#F2F0E8" }}>
+          <h1 className="m-0 font-serif text-[24px] font-semibold text-[#26352D]">
             Evidence-Linked Report Generator
           </h1>
-          <p style={{ margin: "6px 0 0", font: "400 12px/1.5 var(--body)", color: "#AAA99F" }}>
+          <p className="m-0 mt-1.5 text-[12px] text-[#68766D]">
             Automated research reports grounding every empirical claim directly to stored execution run IDs and metric records.
           </p>
         </div>
       </div>
 
       {/* Generator Control Card */}
-      <div className="research-card">
-        <form onSubmit={handleGenerate} style={{ display: "grid", gridTemplateColumns: "1.2fr 2fr auto", gap: 14, alignItems: "flex-end" }}>
+      <div className="p-5 rounded-[10px] bg-[#FFFFFF] border border-[#DFE5DC] shadow-xs">
+        <form onSubmit={handleGenerate} className="grid grid-cols-1 md:grid-cols-[1.2fr_2fr_auto] gap-3.5 items-end">
           <div>
-            <label style={{ display: "block", font: "500 9px var(--mono)", color: "#7e9084", marginBottom: 6 }}>
+            <label className="block font-mono text-[9px] font-semibold text-[#68766D] mb-1.5 uppercase">
               TARGET PROJECT
             </label>
             <select
               value={selectedProjectId}
               onChange={(e) => setSelectedProjectId(e.target.value)}
-              style={{ width: "100%", padding: "9px 10px", background: "#101110", border: "1px solid rgba(226, 239, 229, 0.15)", borderRadius: 3, color: "#F2F0E8", font: "400 11px var(--mono)" }}
+              className="w-full px-3 py-2 bg-[#F8F6EF] border border-[#DFE5DC] rounded-[6px] text-[#26352D] font-mono text-[11px] focus:outline-none focus:border-[#176B4D]"
             >
               {projects.map((p) => (
                 <option key={p.id} value={p.id}>
@@ -174,7 +174,7 @@ export default function ReportsPage() {
           </div>
 
           <div>
-            <label style={{ display: "block", font: "500 9px var(--mono)", color: "#7e9084", marginBottom: 6 }}>
+            <label className="block font-mono text-[9px] font-semibold text-[#68766D] mb-1.5 uppercase">
               REPORT TITLE (OPTIONAL)
             </label>
             <input
@@ -182,23 +182,18 @@ export default function ReportsPage() {
               placeholder="e.g. Empirical Validation of Failure Recovery in Edge ML"
               value={reportTitle}
               onChange={(e) => setReportTitle(e.target.value)}
-              style={{ width: "100%", padding: "9px 10px", background: "#101110", border: "1px solid rgba(226, 239, 229, 0.15)", borderRadius: 3, color: "#F2F0E8", font: "400 11px var(--mono)" }}
+              className="w-full px-3 py-2 bg-[#F8F6EF] border border-[#DFE5DC] rounded-[6px] text-[#26352D] font-mono text-[11px] focus:outline-none focus:border-[#176B4D]"
             />
           </div>
 
           <button
             type="submit"
             disabled={generating}
-            style={{
-              padding: "9px 20px",
-              background: generating ? "#557a44" : "#B69A72",
-              border: "1px solid #B69A72",
-              color: "#101110",
-              borderRadius: 3,
-              font: "600 10px var(--mono)",
-              letterSpacing: "0.08em",
-              cursor: generating ? "not-allowed" : "pointer"
-            }}
+            className={`px-5 py-2 rounded-[6px] font-mono text-[10px] font-semibold tracking-[0.08em] transition-colors cursor-pointer ${
+              generating
+                ? "bg-[#68766D] text-[#FFFFFF] cursor-not-allowed"
+                : "bg-[#176B4D] hover:bg-[#12543c] text-[#FFFFFF] shadow-xs"
+            }`}
           >
             {generating ? "SYNTHESIZING EVIDENCE..." : "+ GENERATE REPORT"}
           </button>
@@ -207,15 +202,15 @@ export default function ReportsPage() {
 
       {/* EvolveX Judge Agent Cross-Evaluation Panel */}
       {reports.length >= 2 && (
-        <div className="research-card" style={{ border: "1px solid rgba(182, 154, 114, 0.3)", background: "rgba(182, 154, 114, 0.03)" }}>
-          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 14 }}>
-            <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-              <ShieldCheck size={18} color="#B69A72" />
+        <div className="p-5 rounded-[10px] bg-[#E6F0E9]/30 border border-[#176B4D]/30 shadow-xs">
+          <div className="flex items-center justify-between mb-3.5">
+            <div className="flex items-center gap-2.5">
+              <ShieldCheck size={18} className="text-[#176B4D]" />
               <div>
-                <div style={{ font: "600 13px var(--body)", color: "#F2F0E8" }}>
+                <div className="font-serif font-semibold text-[13px] text-[#26352D]">
                   EvolveX Judge Agent — Multi-Report Cross-Examination
                 </div>
-                <div style={{ font: "400 11px var(--body)", color: "#AAA99F" }}>
+                <div className="text-[11px] text-[#68766D]">
                   Autonomous scientific audit comparing methodologies, extracting contradictions, and verifying evidence rigor without hallucinations.
                 </div>
               </div>
@@ -236,33 +231,32 @@ export default function ReportsPage() {
                   alert(e.message || "Judge Agent evaluation failed.");
                 }
               }}
-              className="research-button research-button--secondary"
-              style={{ display: "inline-flex", alignItems: "center", gap: 6, font: "600 10px var(--mono)", padding: "7px 14px" }}
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-[#FFFFFF] border border-[#176B4D]/40 text-[#176B4D] hover:bg-[#176B4D] hover:text-[#FFFFFF] rounded-[6px] font-mono text-[10px] font-semibold transition-colors cursor-pointer"
             >
-              <Sparkles size={13} color="#B69A72" />
+              <Sparkles size={13} className="text-[#176B4D]" />
               CROSS-EXAMINE LATEST 2 REPORTS
             </button>
           </div>
 
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 12, font: "400 10px var(--mono)", color: "#7e9084" }}>
-            <div style={{ background: "rgba(5, 7, 6, 0.5)", padding: "10px 12px", borderRadius: 3, border: "1px solid rgba(226, 239, 229, 0.06)" }}>
-              <span style={{ color: "#AAA99F" }}>METHODOLOGY AUDIT:</span> Training-split quarantine & feature leakage isolation verified.
+          <div className="grid grid-cols-3 gap-3 font-mono text-[10px] text-[#68766D]">
+            <div className="bg-[#FFFFFF] p-2.5 rounded-[6px] border border-[#DFE5DC]">
+              <span className="text-[#26352D] font-semibold">METHODOLOGY AUDIT:</span> Training-split quarantine & feature leakage isolation verified.
             </div>
-            <div style={{ background: "rgba(5, 7, 6, 0.5)", padding: "10px 12px", borderRadius: 3, border: "1px solid rgba(226, 239, 229, 0.06)" }}>
-              <span style={{ color: "#AAA99F" }}>EVIDENCE TRACEABILITY:</span> Claims must link to immutable Run IDs & metric keys.
+            <div className="bg-[#FFFFFF] p-2.5 rounded-[6px] border border-[#DFE5DC]">
+              <span className="text-[#26352D] font-semibold">EVIDENCE TRACEABILITY:</span> Claims must link to immutable Run IDs & metric keys.
             </div>
-            <div style={{ background: "rgba(5, 7, 6, 0.5)", padding: "10px 12px", borderRadius: 3, border: "1px solid rgba(226, 239, 229, 0.06)" }}>
-              <span style={{ color: "#AAA99F" }}>UNRESOLVED HANDLING:</span> Discrepancies flagged explicitly without fabricated confidence.
+            <div className="bg-[#FFFFFF] p-2.5 rounded-[6px] border border-[#DFE5DC]">
+              <span className="text-[#26352D] font-semibold">UNRESOLVED HANDLING:</span> Discrepancies flagged explicitly without fabricated confidence.
             </div>
           </div>
         </div>
       )}
 
       {/* Reports Split View */}
-      <div style={{ display: "grid", gridTemplateColumns: "320px 1fr", gap: 24 }}>
+      <div className="grid grid-cols-[320px_1fr] gap-6">
         {/* Reports List */}
-        <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-          <div style={{ font: "600 10px var(--mono)", color: "#7e9084", letterSpacing: "0.08em" }}>
+        <div className="flex flex-col gap-2.5">
+          <div className="font-mono text-[10px] font-semibold text-[#68766D] tracking-[0.08em]">
             STORED REPORTS ({reports.length})
           </div>
 
@@ -272,19 +266,17 @@ export default function ReportsPage() {
               <div
                 key={r.id}
                 onClick={() => loadReportDetail(r.id)}
-                className="research-card"
-                style={{
-                  padding: 16,
-                  cursor: "pointer",
-                  borderColor: isSelected ? "#B69A72" : "rgba(226, 239, 229, 0.1)",
-                  background: isSelected ? "rgba(182, 154, 114, 0.04)" : "rgba(12, 18, 15, 0.6)"
-                }}
+                className={`p-4 rounded-[8px] border cursor-pointer transition-all ${
+                  isSelected
+                    ? "bg-[#E6F0E9] border-[#176B4D] shadow-xs"
+                    : "bg-[#FFFFFF] border-[#DFE5DC] hover:border-[#176B4D]/40"
+                }`}
               >
-                <div style={{ font: "600 12px var(--body)", color: "#F2F0E8", marginBottom: 6 }}>
+                <div className="font-serif font-semibold text-[12px] text-[#26352D] mb-1.5">
                   {r.title}
                 </div>
-                <div style={{ font: "400 9px var(--mono)", color: "#7e9084" }}>
-                  STATUS: <strong style={{ color: "#B69A72" }}>{r.status}</strong>
+                <div className="font-mono text-[9px] text-[#68766D]">
+                  STATUS: <strong className="text-[#176B4D]">{r.status}</strong>
                 </div>
               </div>
             );
@@ -293,36 +285,34 @@ export default function ReportsPage() {
 
         {/* Selected Report Document Viewer */}
         {selectedReport ? (
-          <div className="research-card" style={{ display: "flex", flexDirection: "column", gap: 22 }}>
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", borderBottom: "1px solid rgba(226, 239, 229, 0.08)", paddingBottom: 16 }}>
+          <div className="p-5 rounded-[10px] bg-[#FFFFFF] border border-[#DFE5DC] shadow-xs flex flex-col gap-5">
+            <div className="flex justify-between items-start border-b border-[#DFE5DC] pb-4">
               <div>
-                <div style={{ font: "500 10px var(--mono)", color: "#B69A72", marginBottom: 6 }}>
+                <div className="font-mono text-[10px] font-semibold text-[#176B4D] mb-1.5">
                   RESEARCH REPORT ENTITY
                 </div>
-                <h2 style={{ margin: "0 0 10px", font: "600 20px/1.2 var(--body)", color: "#F2F0E8" }}>
+                <h2 className="m-0 font-serif text-[20px] font-semibold text-[#26352D] mb-2.5">
                   {selectedReport.report.title}
                 </h2>
-                <div style={{ font: "400 11px var(--mono)", color: "#7e9084" }}>
-                  QUESTION: <span style={{ color: "#F2F0E8" }}>{selectedReport.report.research_question}</span>
+                <div className="font-mono text-[11px] text-[#68766D]">
+                  QUESTION: <span className="text-[#26352D]">{selectedReport.report.research_question}</span>
                 </div>
               </div>
 
-              <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
+              <div className="flex gap-2 items-center">
                 <button
                   type="button"
                   onClick={() => setEmailModalOpen(true)}
-                  className="research-button research-button--secondary"
-                  style={{ display: "inline-flex", alignItems: "center", gap: 6, cursor: "pointer", background: "rgba(182, 154, 114, 0.12)", border: "1px solid rgba(182, 154, 114, 0.4)", color: "#B69A72" }}
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-[#FFFFFF] border border-[#DFE5DC] text-[#26352D] hover:bg-[#F8F6EF] rounded-[6px] font-mono text-[10px] font-semibold cursor-pointer transition-colors"
                 >
-                  <Mail size={13} />
+                  <Mail size={13} className="text-[#176B4D]" />
                   EMAIL REPORT
                 </button>
                 <a
                   href={`http://127.0.0.1:8000/api/reports/${selectedReport.report.id}/export?format=pdf`}
                   target="_blank"
                   rel="noreferrer"
-                  className="research-button research-button--secondary"
-                  style={{ display: "inline-flex", alignItems: "center", gap: 6, textDecoration: "none", background: "rgba(182, 154, 114, 0.2)", color: "#F2F0E8", border: "1px solid #B69A72" }}
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-[#176B4D] text-[#FFFFFF] rounded-[6px] font-mono text-[10px] font-semibold hover:bg-[#12543c] transition-colors"
                 >
                   <Download size={13} />
                   PDF REPORT
@@ -331,8 +321,7 @@ export default function ReportsPage() {
                   href={`http://127.0.0.1:8000/api/reports/${selectedReport.report.id}/export?format=csv`}
                   target="_blank"
                   rel="noreferrer"
-                  className="research-button research-button--secondary"
-                  style={{ display: "inline-flex", alignItems: "center", gap: 6, textDecoration: "none" }}
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-[#FFFFFF] border border-[#DFE5DC] text-[#26352D] hover:bg-[#F8F6EF] rounded-[6px] font-mono text-[10px] font-semibold transition-colors"
                 >
                   <Download size={13} />
                   CSV
@@ -341,8 +330,7 @@ export default function ReportsPage() {
                   href={`http://127.0.0.1:8000/api/reports/${selectedReport.report.id}/export?format=json`}
                   target="_blank"
                   rel="noreferrer"
-                  className="research-button research-button--secondary"
-                  style={{ display: "inline-flex", alignItems: "center", gap: 6, textDecoration: "none" }}
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-[#FFFFFF] border border-[#DFE5DC] text-[#26352D] hover:bg-[#F8F6EF] rounded-[6px] font-mono text-[10px] font-semibold transition-colors"
                 >
                   <Download size={13} />
                   JSON
@@ -350,19 +338,18 @@ export default function ReportsPage() {
               </div>
             </div>
 
-
             {/* ARINA AI Executive Synthesis Card */}
-            <div style={{ padding: "14px 16px", background: "rgba(182, 154, 114, 0.08)", border: "1px solid rgba(182, 154, 114, 0.25)", borderRadius: 6 }}>
-              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 8 }}>
-                <div style={{ display: "flex", alignItems: "center", gap: 6, font: "600 11px var(--mono)", color: "#B69A72" }}>
+            <div className="p-4 bg-[#F8F6EF] border border-[#DFE5DC] rounded-[8px]">
+              <div className="flex justify-between items-center mb-2">
+                <div className="flex items-center gap-1.5 font-mono text-[11px] font-semibold text-[#176B4D]">
                   <Sparkles size={13} />
                   <span>ARINA AI SCIENTIFIC EXECUTIVE SYNTHESIS</span>
                 </div>
-                <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                <div className="flex items-center gap-2">
                   <select
                     value={synthesisModel}
                     onChange={(e) => setSynthesisModel(e.target.value)}
-                    style={{ background: "#101110", color: "#F2F0E8", border: "1px solid rgba(182, 154, 114, 0.3)", borderRadius: 4, padding: "3px 8px", font: "500 10px var(--mono)", cursor: "pointer" }}
+                    className="bg-[#FFFFFF] text-[#26352D] border border-[#DFE5DC] rounded-[4px] px-2 py-1 font-mono text-[10px] focus:outline-none"
                   >
                     <option value="gpt-5.6-luna">GPT-5.6 Luna</option>
                     <option value="deepseek-v4-pro">DeepSeek V4 Pro</option>
@@ -386,20 +373,19 @@ export default function ReportsPage() {
                         setIsSynthesizing(false);
                       }
                     }}
-                    className="research-button research-button--secondary"
-                    style={{ display: "inline-flex", alignItems: "center", gap: 6, font: "600 10px var(--mono)", padding: "4px 10px" }}
+                    className="inline-flex items-center gap-1.5 px-3 py-1 bg-[#176B4D] text-[#FFFFFF] rounded-[4px] font-mono text-[10px] font-semibold hover:bg-[#12543c] cursor-pointer"
                   >
-                    <Sparkles size={11} color="#B69A72" />
+                    <Sparkles size={11} />
                     <span>{isSynthesizing ? "SYNTHESIZING..." : "GENERATE AI SYNTHESIS"}</span>
                   </button>
                 </div>
               </div>
               {aiSynthesisText ? (
-                <div style={{ font: "400 12.5px/1.6 var(--body)", color: "#F2F0E8", whiteSpace: "pre-wrap", borderTop: "1px solid rgba(182, 154, 114, 0.15)", paddingTop: 8 }}>
+                <div className="text-[12.5px] leading-relaxed text-[#26352D] whitespace-pre-wrap border-t border-[#DFE5DC] pt-2">
                   {aiSynthesisText}
                 </div>
               ) : (
-                <div style={{ font: "400 11px var(--mono)", color: "#7e9084" }}>
+                <div className="font-mono text-[11px] text-[#68766D]">
                   Autonomous peer-review synthesis examining Pareto frontier trade-offs, leakage quarantine, and edge hardware deployment.
                 </div>
               )}
@@ -407,20 +393,20 @@ export default function ReportsPage() {
 
             {/* Abstract / Summary */}
             <div>
-              <div style={{ font: "600 11px var(--mono)", color: "#B69A72", marginBottom: 6 }}>
+              <div className="font-mono text-[11px] font-semibold text-[#176B4D] mb-1.5">
                 EXECUTIVE SUMMARY & FINDINGS:
               </div>
-              <p style={{ font: "400 13px/1.6 var(--body)", color: "#c6d4c8", margin: 0 }}>
+              <p className="text-[13px] leading-relaxed text-[#26352D] m-0">
                 {selectedReport.report.summary}
               </p>
             </div>
 
             {/* Methodology */}
             <div>
-              <div style={{ font: "600 11px var(--mono)", color: "#a7e9e8", marginBottom: 6 }}>
+              <div className="font-mono text-[11px] font-semibold text-[#176B4D] mb-1.5">
                 EXPERIMENTAL METHODOLOGY:
               </div>
-              <p style={{ font: "400 12px/1.6 var(--body)", color: "#c6d4c8", margin: 0 }}>
+              <p className="text-[12px] leading-relaxed text-[#68766D] m-0">
                 {selectedReport.report.methodology}
               </p>
             </div>
@@ -432,36 +418,38 @@ export default function ReportsPage() {
                 if (!rows.length) return null;
                 return (
                   <div>
-                    <div style={{ font: "600 11px var(--mono)", color: "#B69A72", marginBottom: 10 }}>
+                    <div className="font-mono text-[11px] font-semibold text-[#176B4D] mb-2.5">
                       EMPIRICAL BENCHMARK MATRIX ({rows.length} RUNS):
                     </div>
-                    <div style={{ overflowX: "auto", border: "1px solid rgba(226, 239, 229, 0.08)", borderRadius: 3, background: "rgba(5, 7, 6, 0.5)" }}>
-                      <table style={{ width: "100%", borderCollapse: "collapse", font: "400 11px var(--mono)" }}>
+                    <div className="overflow-x-auto border border-[#DFE5DC] rounded-[6px] bg-[#F8F6EF]">
+                      <table className="w-full text-left border-collapse font-mono text-[11px]">
                         <thead>
-                          <tr style={{ borderBottom: "1px solid rgba(226, 239, 229, 0.1)", textAlign: "left", color: "#7e9084" }}>
-                            <th style={{ padding: "8px 10px" }}>MODEL</th>
-                            <th style={{ padding: "8px 10px" }}>STATUS</th>
-                            <th style={{ padding: "8px 10px" }}>MAE (eV)</th>
-                            <th style={{ padding: "8px 10px" }}>RMSE (eV)</th>
-                            <th style={{ padding: "8px 10px" }}>R²</th>
-                            <th style={{ padding: "8px 10px" }}>TRAIN TIME</th>
-                            <th style={{ padding: "8px 10px" }}>RECOVERED</th>
+                          <tr className="border-b border-[#DFE5DC] text-[#68766D]">
+                            <th className="p-2">MODEL</th>
+                            <th className="p-2">STATUS</th>
+                            <th className="p-2">MAE (eV)</th>
+                            <th className="p-2">RMSE (eV)</th>
+                            <th className="p-2">R²</th>
+                            <th className="p-2">TRAIN TIME</th>
+                            <th className="p-2">RECOVERED</th>
                           </tr>
                         </thead>
-                        <tbody>
+                        <tbody className="divide-y divide-[#DFE5DC]">
                           {rows.map((r: any, idx: number) => (
-                            <tr key={idx} style={{ borderBottom: "1px solid rgba(226, 239, 229, 0.05)", color: "#F2F0E8" }}>
-                              <td style={{ padding: "8px 10px", fontWeight: 600 }}>{r.model_name}</td>
-                              <td style={{ padding: "8px 10px" }}>
-                                <span className={r.status === "COMPLETED" ? "status-tag status-tag--completed" : "status-tag status-tag--failed"}>
+                            <tr key={idx} className="text-[#26352D] hover:bg-[#FFFFFF]">
+                              <td className="p-2 font-semibold">{r.model_name}</td>
+                              <td className="p-2">
+                                <span className={`px-2 py-0.5 rounded text-[10px] font-semibold ${
+                                  r.status === "COMPLETED" ? "bg-[#E8F5EC] text-[#176B4D]" : "bg-[#B54747]/10 text-[#B54747]"
+                                }`}>
                                   {r.status}
                                 </span>
                               </td>
-                              <td style={{ padding: "8px 10px", color: "#B69A72", fontWeight: 600 }}>{r.mae ?? "-"}</td>
-                              <td style={{ padding: "8px 10px" }}>{r.rmse ?? "-"}</td>
-                              <td style={{ padding: "8px 10px", color: "#a7e9e8" }}>{r.r2 ?? r.score ?? "-"}</td>
-                              <td style={{ padding: "8px 10px" }}>{r.train_time_ms ? `${r.train_time_ms} ms` : "-"}</td>
-                              <td style={{ padding: "8px 10px" }}>{r.recovery_successful ? "YES (Verified)" : "NO"}</td>
+                              <td className="p-2 text-[#176B4D] font-semibold">{r.mae ?? "-"}</td>
+                              <td className="p-2">{r.rmse ?? "-"}</td>
+                              <td className="p-2 text-[#176B4D]">{r.r2 ?? r.score ?? "-"}</td>
+                              <td className="p-2">{r.train_time_ms ? `${r.train_time_ms} ms` : "-"}</td>
+                              <td className="p-2">{r.recovery_successful ? "YES (Verified)" : "NO"}</td>
                             </tr>
                           ))}
                         </tbody>
@@ -476,37 +464,32 @@ export default function ReportsPage() {
 
             {/* Claim Verification Layer */}
             <div>
-              <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 12 }}>
-                <ShieldCheck size={16} color="#B69A72" />
-                <span style={{ font: "600 11px var(--mono)", color: "#F2F0E8", letterSpacing: "0.06em" }}>
+              <div className="flex items-center gap-2 mb-3">
+                <ShieldCheck size={16} className="text-[#176B4D]" />
+                <span className="font-mono text-[11px] font-semibold text-[#26352D] tracking-[0.06em]">
                   CLAIM–EVIDENCE VERIFICATION LAYER ({selectedReport.claims.length} AUDITED CLAIMS)
                 </span>
               </div>
 
-              <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+              <div className="flex flex-col gap-2.5">
                 {selectedReport.claims.map((c) => (
                   <div
                     key={c.id}
-                    style={{
-                      background: "rgba(5, 7, 6, 0.6)",
-                      border: "1px solid rgba(226, 239, 229, 0.1)",
-                      borderRadius: 3,
-                      padding: 14
-                    }}
+                    className="bg-[#F8F6EF] border border-[#DFE5DC] rounded-[6px] p-3.5"
                   >
-                    <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", marginBottom: 6 }}>
-                      <div style={{ font: "500 12px var(--body)", color: "#F2F0E8" }}>
+                    <div className="flex items-start justify-between mb-1.5">
+                      <div className="font-serif font-semibold text-[12px] text-[#26352D]">
                         "{c.claim_text}"
                       </div>
-                      <span className="status-tag status-tag--completed">
+                      <span className="px-2 py-0.5 rounded bg-[#E8F5EC] text-[#176B4D] font-mono text-[10px] font-semibold">
                         {c.status}
                       </span>
                     </div>
 
-                    <div style={{ display: "flex", alignItems: "center", gap: 16, font: "400 10px var(--mono)", color: "#7e9084", marginTop: 8 }}>
-                      <span>EVIDENCE: <strong style={{ color: "#a7e9e8" }}>{c.evidence_type}</strong></span>
-                      <span>SOURCE: <strong style={{ color: "#F2F0E8" }}>{c.supporting_reference_id}</strong></span>
-                      <span>METRIC: <strong style={{ color: "#B69A72" }}>{c.source_metric}</strong></span>
+                    <div className="flex items-center gap-4 font-mono text-[10px] text-[#68766D] mt-2">
+                      <span>EVIDENCE: <strong className="text-[#176B4D]">{c.evidence_type}</strong></span>
+                      <span>SOURCE: <strong className="text-[#26352D]">{c.supporting_reference_id}</strong></span>
+                      <span>METRIC: <strong className="text-[#176B4D]">{c.source_metric}</strong></span>
                     </div>
                   </div>
                 ))}
@@ -514,19 +497,19 @@ export default function ReportsPage() {
             </div>
 
             {/* Limitations & Reproducibility */}
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16, background: "rgba(5, 7, 6, 0.4)", padding: 16, borderRadius: 3, border: "1px solid rgba(226, 239, 229, 0.06)" }}>
+            <div className="grid grid-cols-2 gap-4 bg-[#F8F6EF] p-4 rounded-[6px] border border-[#DFE5DC]">
               <div>
-                <div style={{ font: "600 10px var(--mono)", color: "#7e9084", marginBottom: 6 }}>REPRODUCIBILITY SPECIFICATION:</div>
-                <div style={{ font: "400 11px/1.5 var(--body)", color: "#AAA99F" }}>{selectedReport.report.reproducibility_notes}</div>
+                <div className="font-mono text-[10px] font-semibold text-[#68766D] mb-1.5">REPRODUCIBILITY SPECIFICATION:</div>
+                <div className="text-[11px] leading-relaxed text-[#68766D]">{selectedReport.report.reproducibility_notes}</div>
               </div>
               <div>
-                <div style={{ font: "600 10px var(--mono)", color: "#ff8b8b", marginBottom: 6 }}>LIMITATIONS:</div>
-                <div style={{ font: "400 11px/1.5 var(--body)", color: "#AAA99F" }}>{selectedReport.report.limitations}</div>
+                <div className="font-mono text-[10px] font-semibold text-[#B54747] mb-1.5">LIMITATIONS:</div>
+                <div className="text-[11px] leading-relaxed text-[#68766D]">{selectedReport.report.limitations}</div>
               </div>
             </div>
           </div>
         ) : (
-          <div className="research-card" style={{ padding: "40px 0", textAlign: "center", font: "400 11px var(--mono)", color: "#7e9084" }}>
+          <div className="p-10 text-center font-mono text-[11px] text-[#68766D] bg-[#FFFFFF] border border-[#DFE5DC] rounded-[10px]">
             Select a report from the list to view evidence details.
           </div>
         )}
@@ -534,27 +517,27 @@ export default function ReportsPage() {
 
       {/* Secure Report Email Dispatch Modal */}
       {emailModalOpen && selectedReport && (
-        <div style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.85)", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 9999, backdropFilter: "blur(4px)" }}>
-          <div style={{ background: "#101110", border: "1px solid rgba(182, 154, 114, 0.4)", borderRadius: 6, padding: 28, maxWidth: 500, width: "90%", boxShadow: "0 20px 40px rgba(0,0,0,0.6)" }}>
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", borderBottom: "1px solid rgba(226, 239, 229, 0.1)", paddingBottom: 14, marginBottom: 18 }}>
-              <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                <Mail size={16} color="#B69A72" />
-                <h3 style={{ margin: 0, font: "600 16px var(--body)", color: "#F2F0E8" }}>
+        <div className="fixed inset-0 bg-black/40 backdrop-blur-xs flex items-center justify-center z-[9999]">
+          <div className="bg-[#FFFFFF] border border-[#DFE5DC] rounded-[10px] p-7 max-w-[500px] w-[90%] shadow-xl">
+            <div className="flex justify-between items-center border-b border-[#DFE5DC] pb-3.5 mb-4">
+              <div className="flex items-center gap-2">
+                <Mail size={16} className="text-[#176B4D]" />
+                <h3 className="m-0 font-serif text-[16px] font-semibold text-[#26352D]">
                   Dispatch Scientific Report via Email
                 </h3>
               </div>
               <button
                 type="button"
                 onClick={() => setEmailModalOpen(false)}
-                style={{ background: "transparent", border: "none", color: "#AAA99F", cursor: "pointer" }}
+                className="bg-transparent border-none text-[#68766D] hover:text-[#26352D] cursor-pointer"
               >
                 <X size={16} />
               </button>
             </div>
 
-            <form onSubmit={handleSendEmail} style={{ display: "flex", flexDirection: "column", gap: 14 }}>
+            <form onSubmit={handleSendEmail} className="flex flex-col gap-3.5">
               <div>
-                <label style={{ display: "block", font: "500 9px var(--mono)", color: "#7e9084", marginBottom: 6 }}>
+                <label className="block font-mono text-[9px] font-semibold text-[#68766D] mb-1.5 uppercase">
                   RECIPIENT EMAIL ADDRESS
                 </label>
                 <input
@@ -563,12 +546,12 @@ export default function ReportsPage() {
                   placeholder="collaborator@materials-lab.org"
                   value={recipientEmail}
                   onChange={(e) => setRecipientEmail(e.target.value)}
-                  style={{ width: "100%", padding: "9px 12px", background: "#141513", border: "1px solid rgba(226, 239, 229, 0.15)", borderRadius: 4, color: "#F2F0E8", font: "400 12px var(--mono)" }}
+                  className="w-full px-3 py-2 bg-[#F8F6EF] border border-[#DFE5DC] rounded-[6px] text-[#26352D] font-mono text-[12px] focus:outline-none focus:border-[#176B4D]"
                 />
               </div>
 
               <div>
-                <label style={{ display: "block", font: "500 9px var(--mono)", color: "#7e9084", marginBottom: 6 }}>
+                <label className="block font-mono text-[9px] font-semibold text-[#68766D] mb-1.5 uppercase">
                   EMAIL SUBJECT (OPTIONAL)
                 </label>
                 <input
@@ -576,12 +559,12 @@ export default function ReportsPage() {
                   placeholder={`[EvolveX Verified Report] ${selectedReport.report.title}`}
                   value={emailSubject}
                   onChange={(e) => setEmailSubject(e.target.value)}
-                  style={{ width: "100%", padding: "9px 12px", background: "#141513", border: "1px solid rgba(226, 239, 229, 0.15)", borderRadius: 4, color: "#F2F0E8", font: "400 12px var(--mono)" }}
+                  className="w-full px-3 py-2 bg-[#F8F6EF] border border-[#DFE5DC] rounded-[6px] text-[#26352D] font-mono text-[12px] focus:outline-none focus:border-[#176B4D]"
                 />
               </div>
 
               <div>
-                <label style={{ display: "block", font: "500 9px var(--mono)", color: "#7e9084", marginBottom: 6 }}>
+                <label className="block font-mono text-[9px] font-semibold text-[#68766D] mb-1.5 uppercase">
                   OPTIONAL NOTES
                 </label>
                 <textarea
@@ -589,47 +572,49 @@ export default function ReportsPage() {
                   placeholder="Additional peer-review notes or provenance annotations..."
                   value={emailNotes}
                   onChange={(e) => setEmailNotes(e.target.value)}
-                  style={{ width: "100%", padding: "9px 12px", background: "#141513", border: "1px solid rgba(226, 239, 229, 0.15)", borderRadius: 4, color: "#F2F0E8", font: "400 12px var(--mono)" }}
+                  className="w-full px-3 py-2 bg-[#F8F6EF] border border-[#DFE5DC] rounded-[6px] text-[#26352D] font-mono text-[12px] focus:outline-none focus:border-[#176B4D]"
                 />
               </div>
 
-              <div style={{ background: "rgba(182, 154, 114, 0.06)", border: "1px solid rgba(182, 154, 114, 0.2)", borderRadius: 4, padding: "10px 12px", display: "flex", alignItems: "flex-start", gap: 10 }}>
+              <div className="bg-[#F8F6EF] border border-[#DFE5DC] rounded-[6px] p-3 flex items-start gap-2.5">
                 <input
                   type="checkbox"
                   id="authConfirm"
                   required
                   checked={emailAuthorized}
                   onChange={(e) => setEmailAuthorized(e.target.checked)}
-                  style={{ marginTop: 2, cursor: "pointer" }}
+                  className="mt-0.5 accent-[#176B4D] cursor-pointer"
                 />
-                <label htmlFor="authConfirm" style={{ font: "400 10.5px var(--mono)", color: "#c6d4c8", cursor: "pointer" }}>
+                <label htmlFor="authConfirm" className="font-mono text-[10.5px] text-[#68766D] cursor-pointer">
                   I confirm authorization to transmit this synthesized evidence report and associated empirical metric claims to the designated external recipient.
                 </label>
               </div>
 
               {emailError && (
-                <div style={{ font: "400 11px var(--mono)", color: "#ff8b8b", padding: "6px 8px", background: "rgba(255, 100, 100, 0.1)", borderRadius: 3 }}>
+                <div className="font-mono text-[11px] text-[#B54747] p-2 bg-[#B54747]/10 rounded-[4px]">
                   {emailError}
                 </div>
               )}
               {emailSuccess && (
-                <div style={{ font: "400 11px var(--mono)", color: "#8EA58C", padding: "6px 8px", background: "rgba(142, 165, 140, 0.1)", borderRadius: 3 }}>
+                <div className="font-mono text-[11px] text-[#176B4D] p-2 bg-[#E8F5EC] rounded-[4px]">
                   {emailSuccess}
                 </div>
               )}
 
-              <div style={{ display: "flex", gap: 10, justifyContent: "flex-end", marginTop: 8 }}>
+              <div className="flex gap-2.5 justify-end mt-2">
                 <button
                   type="button"
                   onClick={() => setEmailModalOpen(false)}
-                  style={{ padding: "8px 16px", background: "transparent", border: "1px solid rgba(226, 239, 229, 0.2)", color: "#AAA99F", font: "500 11px var(--mono)", borderRadius: 3, cursor: "pointer" }}
+                  className="px-4 py-2 bg-transparent border border-[#DFE5DC] text-[#68766D] font-mono text-[11px] font-semibold rounded-[6px] cursor-pointer"
                 >
                   CANCEL
                 </button>
                 <button
                   type="submit"
                   disabled={sendingEmail || !emailAuthorized}
-                  style={{ padding: "8px 20px", background: "#B69A72", border: "none", color: "#101110", font: "600 11px var(--mono)", letterSpacing: "0.06em", borderRadius: 3, cursor: sendingEmail || !emailAuthorized ? "not-allowed" : "pointer", opacity: emailAuthorized ? 1 : 0.6 }}
+                  className={`px-5 py-2 bg-[#176B4D] hover:bg-[#12543c] text-[#FFFFFF] font-mono text-[11px] font-semibold tracking-[0.06em] rounded-[6px] cursor-pointer ${
+                    sendingEmail || !emailAuthorized ? "opacity-50 cursor-not-allowed" : ""
+                  }`}
                 >
                   {sendingEmail ? "TRANSMITTING..." : "DISPATCH EMAIL"}
                 </button>
@@ -641,4 +626,5 @@ export default function ReportsPage() {
     </div>
   );
 }
+
 

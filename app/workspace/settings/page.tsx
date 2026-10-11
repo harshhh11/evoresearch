@@ -101,30 +101,30 @@ export default function SettingsPage() {
 
 
   return (
-    <div style={{ maxWidth: 880, margin: "0 auto", display: "flex", flexDirection: "column", gap: 28 }}>
+    <div className="max-w-[880px] mx-auto flex flex-col gap-7 text-[#26352D]">
       {/* Header */}
-      <div style={{ borderBottom: "1px solid rgba(226, 239, 229, 0.08)", paddingBottom: 20 }}>
-        <div style={{ font: "500 10px/1 var(--mono)", color: "#B69A72", letterSpacing: "0.14em", marginBottom: 8 }}>
+      <div className="border-b border-[#DFE5DC] pb-5">
+        <div className="font-mono text-[10px] text-[#176B4D] uppercase tracking-[0.14em] font-semibold mb-2">
           RUNTIME CONFIGURATION // 012
         </div>
-        <h1 style={{ margin: 0, font: "600 24px/1.2 var(--body)", color: "#F2F0E8" }}>
+        <h1 className="m-0 font-serif text-[24px] font-semibold text-[#26352D]">
           Execution Parameters & Hardware Profiler
         </h1>
-        <p style={{ margin: "6px 0 0", font: "400 12px/1.5 var(--body)", color: "#AAA99F" }}>
+        <p className="m-0 mt-1.5 text-[12px] text-[#68766D]">
           Configure system timeouts, retry limits, latency benchmarking cycles, and examine local execution host telemetry.
         </p>
       </div>
 
-      <form onSubmit={handleSave} style={{ display: "flex", flexDirection: "column", gap: 22 }}>
+      <form onSubmit={handleSave} className="flex flex-col gap-5">
         {/* Execution Settings */}
-        <div className="research-card">
-          <div style={{ font: "600 12px var(--mono)", color: "#F2F0E8", marginBottom: 16 }}>
+        <div className="p-5 rounded-[10px] bg-[#FFFFFF] border border-[#DFE5DC] shadow-xs">
+          <div className="font-mono text-[12px] font-semibold text-[#26352D] mb-4">
             RESOURCE-AWARE EXECUTION BOUNDARIES
           </div>
 
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
+          <div className="grid grid-cols-2 gap-4">
             <div>
-              <label style={{ display: "block", font: "500 10px var(--mono)", color: "#7e9084", marginBottom: 6 }}>
+              <label className="block font-mono text-[10px] font-semibold text-[#68766D] mb-1.5 uppercase">
                 GLOBAL DEFAULT CPU BUDGET (SECONDS)
               </label>
               <input
@@ -133,18 +133,18 @@ export default function SettingsPage() {
                 max={180}
                 value={defaultCpuBudget}
                 onChange={(e) => setDefaultCpuBudget(parseFloat(e.target.value) || 30.0)}
-                style={{ width: "100%", padding: "9px 12px", background: "#101110", border: "1px solid rgba(226, 239, 229, 0.15)", borderRadius: 3, color: "#F2F0E8", font: "400 12px var(--mono)" }}
+                className="w-full px-3 py-2 bg-[#F8F6EF] border border-[#DFE5DC] rounded-[6px] text-[#26352D] font-mono text-[12px] focus:outline-none focus:border-[#176B4D]"
               />
             </div>
 
             <div>
-              <label style={{ display: "block", font: "500 10px var(--mono)", color: "#7e9084", marginBottom: 6 }}>
+              <label className="block font-mono text-[10px] font-semibold text-[#68766D] mb-1.5 uppercase">
                 MAX BOUNDED RECOVERY ATTEMPTS
               </label>
               <select
                 value={maxRetries}
                 onChange={(e) => setMaxRetries(parseInt(e.target.value))}
-                style={{ width: "100%", padding: "9px 12px", background: "#101110", border: "1px solid rgba(226, 239, 229, 0.15)", borderRadius: 3, color: "#F2F0E8", font: "400 12px var(--mono)" }}
+                className="w-full px-3 py-2 bg-[#F8F6EF] border border-[#DFE5DC] rounded-[6px] text-[#26352D] font-mono text-[12px] focus:outline-none focus:border-[#176B4D]"
               >
                 <option value={1}>1 Attempt (Single Retry)</option>
                 <option value={2}>2 Attempts</option>
@@ -153,7 +153,7 @@ export default function SettingsPage() {
             </div>
 
             <div>
-              <label style={{ display: "block", font: "500 10px var(--mono)", color: "#7e9084", marginBottom: 6 }}>
+              <label className="block font-mono text-[10px] font-semibold text-[#68766D] mb-1.5 uppercase">
                 INFERENCE LATENCY WARMUP CYCLES
               </label>
               <input
@@ -162,12 +162,12 @@ export default function SettingsPage() {
                 max={50}
                 value={warmupIterations}
                 onChange={(e) => setWarmupIterations(parseInt(e.target.value) || 10)}
-                style={{ width: "100%", padding: "9px 12px", background: "#101110", border: "1px solid rgba(226, 239, 229, 0.15)", borderRadius: 3, color: "#F2F0E8", font: "400 12px var(--mono)" }}
+                className="w-full px-3 py-2 bg-[#F8F6EF] border border-[#DFE5DC] rounded-[6px] text-[#26352D] font-mono text-[12px] focus:outline-none focus:border-[#176B4D]"
               />
             </div>
 
             <div>
-              <label style={{ display: "block", font: "500 10px var(--mono)", color: "#7e9084", marginBottom: 6 }}>
+              <label className="block font-mono text-[10px] font-semibold text-[#68766D] mb-1.5 uppercase">
                 INFERENCE TIMING REPETITIONS
               </label>
               <input
@@ -176,83 +176,80 @@ export default function SettingsPage() {
                 max={200}
                 value={latencyBenchmarkRepetitions}
                 onChange={(e) => setLatencyBenchmarkRepetitions(parseInt(e.target.value) || 50)}
-                style={{ width: "100%", padding: "9px 12px", background: "#101110", border: "1px solid rgba(226, 239, 229, 0.15)", borderRadius: 3, color: "#F2F0E8", font: "400 12px var(--mono)" }}
+                className="w-full px-3 py-2 bg-[#F8F6EF] border border-[#DFE5DC] rounded-[6px] text-[#26352D] font-mono text-[12px] focus:outline-none focus:border-[#176B4D]"
               />
             </div>
           </div>
 
-          <div style={{ marginTop: 16, display: "flex", alignItems: "center", gap: 10 }}>
+          <div className="mt-4 flex items-center gap-2.5">
             <input
               type="checkbox"
               id="leakage"
               checked={enforceLeakageProtection}
               onChange={(e) => setEnforceLeakageProtection(e.target.checked)}
+              className="accent-[#176B4D]"
             />
-            <label htmlFor="leakage" style={{ font: "400 11px var(--mono)", color: "#c6d4c8", cursor: "pointer" }}>
+            <label htmlFor="leakage" className="font-mono text-[11px] text-[#26352D] cursor-pointer">
               Enforce strict data-leakage prevention (fit transforms strictly on train partition)
             </label>
           </div>
         </div>
 
         {/* EvolveX AI Provider & Local Execution Boundaries */}
-        {/* Elevate AI Gateway & Model Selector */}
-        <div className="research-card">
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 16 }}>
+        <div className="p-5 rounded-[10px] bg-[#FFFFFF] border border-[#DFE5DC] shadow-xs">
+          <div className="flex justify-between items-center mb-4">
             <div>
-              <div style={{ font: "600 12px var(--mono)", color: "#F2F0E8" }}>
+              <div className="font-mono text-[12px] font-semibold text-[#26352D]">
                 ARINA AI & ELEVATE MULTI-MODEL GATEWAY
               </div>
-              <div style={{ font: "400 11px var(--body)", color: "#AAA99F", marginTop: 2 }}>
+              <div className="text-[11px] text-[#68766D] mt-0.5">
                 Monitored team gateway with 800,000 tokens/day across GPT-5.6 Luna, DeepSeek V4 Pro, and GPT-5 Mini.
               </div>
             </div>
             {aiStatus && (
-              <span className="font-mono text-[10px] px-2.5 py-1 rounded bg-[#8EA58C]/15 text-[#8EA58C] border border-[#8EA58C]/30 font-semibold">
+              <span className="font-mono text-[10px] px-2.5 py-1 rounded-[6px] bg-[#E6F0E9] text-[#176B4D] border border-[#176B4D]/30 font-semibold">
                 ACTIVE: {aiStatus.active_provider.toUpperCase()} // {aiStatus.active_model}
               </span>
             )}
           </div>
 
           {/* Daily Quota Meter */}
-          <div style={{ padding: "12px 14px", background: "rgba(10, 12, 11, 0.6)", borderRadius: 4, border: "1px solid rgba(226, 239, 229, 0.08)", marginBottom: 16 }}>
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 6 }}>
-              <span style={{ font: "600 10px var(--mono)", color: "#B69A72" }}>DAILY TEAM TOKEN QUOTA</span>
-              <span style={{ font: "500 10px var(--mono)", color: "#F2F0E8" }}>
+          <div className="p-3 bg-[#F8F6EF] rounded-[8px] border border-[#DFE5DC] mb-4">
+            <div className="flex justify-between items-center mb-1.5">
+              <span className="font-mono text-[10px] font-semibold text-[#176B4D]">DAILY TEAM TOKEN QUOTA</span>
+              <span className="font-mono text-[10px] text-[#26352D] font-semibold">
                 {(aiStatus?.tokens_used_today || 0).toLocaleString()} / 800,000 TOKENS (Reset 05:30 AM IST)
               </span>
             </div>
-            <div style={{ height: 6, background: "rgba(255, 255, 255, 0.08)", borderRadius: 3, overflow: "hidden" }}>
+            <div className="h-1.5 bg-[#DFE5DC] rounded-full overflow-hidden">
               <div
+                className="h-full bg-[#176B4D] rounded-full transition-all duration-300"
                 style={{
-                  height: "100%",
-                  background: "#8EA58C",
-                  borderRadius: 3,
                   width: `${Math.min(100, Math.max(1, aiStatus?.percentage_used || 0))}%`,
-                  transition: "width 0.3s ease",
                 }}
               />
             </div>
-            <div style={{ display: "flex", justifyContent: "space-between", marginTop: 6, font: "400 9px var(--mono)", color: "#7e9084" }}>
+            <div className="flex justify-between mt-1.5 font-mono text-[9px] text-[#68766D]">
               <span>Endpoint: https://elevate1-0.vercel.app/api/ai</span>
               <span>Available: {((aiStatus?.daily_limit || 800000) - (aiStatus?.tokens_used_today || 0)).toLocaleString()} tokens remaining</span>
             </div>
           </div>
 
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
+          <div className="grid grid-cols-2 gap-4">
             <div>
-              <label style={{ display: "block", font: "500 10px var(--mono)", color: "#7e9084", marginBottom: 6 }}>
+              <label className="block font-mono text-[10px] font-semibold text-[#68766D] mb-1.5 uppercase">
                 GATEWAY PROVIDER
               </label>
               <select
                 value={aiProvider}
                 onChange={(e) => setAiProvider(e.target.value as any)}
-                style={{ width: "100%", padding: "9px 12px", background: "#101110", border: "1px solid rgba(226, 239, 229, 0.15)", borderRadius: 3, color: "#F2F0E8", font: "400 12px var(--mono)" }}
+                className="w-full px-3 py-2 bg-[#F8F6EF] border border-[#DFE5DC] rounded-[6px] text-[#26352D] font-mono text-[12px] focus:outline-none focus:border-[#176B4D]"
               >
                 <option value="elevate">Elevate AI Multi-Model Gateway (Monitored)</option>
                 <option value="local">Local Air-Gapped Engine (Offline / Zero-Egress)</option>
                 <option value="openai">Direct OpenAI API (Custom Account)</option>
               </select>
-              <div style={{ font: "400 10px var(--mono)", color: "#7e9084", marginTop: 4 }}>
+              <div className="font-mono text-[10px] text-[#68766D] mt-1">
                 {aiProvider === "elevate"
                   ? "Uses ELEVATE_TEAM_API_KEY with GPT-5.6 Luna, DeepSeek V4 Pro, & GPT-5 Mini"
                   : aiProvider === "local"
@@ -262,27 +259,27 @@ export default function SettingsPage() {
             </div>
 
             <div>
-              <label style={{ display: "block", font: "500 10px var(--mono)", color: "#7e9084", marginBottom: 6 }}>
+              <label className="block font-mono text-[10px] font-semibold text-[#68766D] mb-1.5 uppercase">
                 DEFAULT REASONING MODEL
               </label>
               <select
                 value={aiModel}
                 onChange={(e) => setAiModel(e.target.value)}
-                style={{ width: "100%", padding: "9px 12px", background: "#101110", border: "1px solid rgba(226, 239, 229, 0.15)", borderRadius: 3, color: "#F2F0E8", font: "400 12px var(--mono)" }}
+                className="w-full px-3 py-2 bg-[#F8F6EF] border border-[#DFE5DC] rounded-[6px] text-[#26352D] font-mono text-[12px] focus:outline-none focus:border-[#176B4D]"
               >
                 <option value="gpt-5.6-luna">GPT-5.6 Luna — Deep Reasoning (1,050,000 ctx)</option>
                 <option value="deepseek-v4-pro">DeepSeek V4 Pro — Math & Code (1,000,000 ctx)</option>
                 <option value="gpt-5-mini">GPT-5 Mini — Fast Edge Inference (400,000 ctx)</option>
                 <option value="local">Local Deterministic Engine</option>
               </select>
-              <div style={{ font: "400 10px var(--mono)", color: "#7e9084", marginTop: 4 }}>
+              <div className="font-mono text-[10px] text-[#68766D] mt-1">
                 Selected model is default for workspace queries, report synthesis, and judge agent
               </div>
             </div>
 
             {aiProvider === "elevate" && (
-              <div style={{ gridColumn: "span 2" }}>
-                <label style={{ display: "block", font: "500 10px var(--mono)", color: "#7e9084", marginBottom: 6 }}>
+              <div className="col-span-2">
+                <label className="block font-mono text-[10px] font-semibold text-[#68766D] mb-1.5 uppercase">
                   ELEVATE PRIVATE TEAM API KEY (OPTIONAL OVERRIDE)
                 </label>
                 <input
@@ -290,14 +287,14 @@ export default function SettingsPage() {
                   value={elevateKey}
                   onChange={(e) => setElevateKey(e.target.value)}
                   placeholder={aiStatus?.has_elevate_key ? "•••••••••••••••••••••••••••••••• (Configured in .env)" : "elev_..."}
-                  style={{ width: "100%", padding: "9px 12px", background: "#101110", border: "1px solid rgba(226, 239, 229, 0.15)", borderRadius: 3, color: "#F2F0E8", font: "400 12px var(--mono)" }}
+                  className="w-full px-3 py-2 bg-[#F8F6EF] border border-[#DFE5DC] rounded-[6px] text-[#26352D] font-mono text-[12px] focus:outline-none focus:border-[#176B4D]"
                 />
               </div>
             )}
 
             {aiProvider === "openai" && (
-              <div style={{ gridColumn: "span 2" }}>
-                <label style={{ display: "block", font: "500 10px var(--mono)", color: "#7e9084", marginBottom: 6 }}>
+              <div className="col-span-2">
+                <label className="block font-mono text-[10px] font-semibold text-[#68766D] mb-1.5 uppercase">
                   OPENAI API KEY (OPTIONAL OVERRIDE)
                 </label>
                 <input
@@ -305,7 +302,7 @@ export default function SettingsPage() {
                   value={openaiKey}
                   onChange={(e) => setOpenaiKey(e.target.value)}
                   placeholder="sk-proj-..."
-                  style={{ width: "100%", padding: "9px 12px", background: "#101110", border: "1px solid rgba(226, 239, 229, 0.15)", borderRadius: 3, color: "#F2F0E8", font: "400 12px var(--mono)" }}
+                  className="w-full px-3 py-2 bg-[#F8F6EF] border border-[#DFE5DC] rounded-[6px] text-[#26352D] font-mono text-[12px] focus:outline-none focus:border-[#176B4D]"
                 />
               </div>
             )}
@@ -313,55 +310,44 @@ export default function SettingsPage() {
         </div>
 
         {/* Intelligent Document & Profile Caching Telemetry */}
-        <div className="research-card">
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 14 }}>
-            <div style={{ font: "600 12px var(--mono)", color: "#F2F0E8" }}>
+        <div className="p-5 rounded-[10px] bg-[#FFFFFF] border border-[#DFE5DC] shadow-xs">
+          <div className="flex justify-between items-center mb-3.5">
+            <div className="font-mono text-[12px] font-semibold text-[#26352D]">
               MEASURED CACHE PERFORMANCE & INVALIDATION
             </div>
             <button
               type="button"
               onClick={handleClearCache}
               disabled={cacheClearing}
-              style={{
-                display: "inline-flex",
-                alignItems: "center",
-                gap: 6,
-                padding: "6px 12px",
-                background: "rgba(199, 127, 114, 0.15)",
-                border: "1px solid rgba(199, 127, 114, 0.4)",
-                color: "#C77F72",
-                borderRadius: 3,
-                font: "600 10px var(--mono)",
-                cursor: "pointer",
-              }}
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-[#B54747]/10 border border-[#B54747]/30 text-[#B54747] hover:bg-[#B54747]/20 rounded-[6px] font-mono text-[10px] font-semibold cursor-pointer transition-colors"
             >
               <Trash2 size={12} />
               <span>{cacheClearing ? "PURGING..." : "INVALIDATE CACHE"}</span>
             </button>
           </div>
 
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 12 }}>
-            <div style={{ padding: 12, background: "rgba(5, 7, 6, 0.5)", borderRadius: 3, border: "1px solid rgba(226, 239, 229, 0.08)" }}>
-              <div style={{ font: "500 9px var(--mono)", color: "#7e9084" }}>CACHED ENTRIES</div>
-              <div style={{ font: "600 16px var(--mono)", color: "#F2F0E8", marginTop: 4 }}>
+          <div className="grid grid-cols-4 gap-3">
+            <div className="p-3 bg-[#F8F6EF] rounded-[6px] border border-[#DFE5DC]">
+              <div className="font-mono text-[9px] font-semibold text-[#68766D]">CACHED ENTRIES</div>
+              <div className="font-mono text-[16px] font-semibold text-[#26352D] mt-1">
                 {cacheStats?.cached_entries ?? 0}
               </div>
             </div>
-            <div style={{ padding: 12, background: "rgba(5, 7, 6, 0.5)", borderRadius: 3, border: "1px solid rgba(226, 239, 229, 0.08)" }}>
-              <div style={{ font: "500 9px var(--mono)", color: "#7e9084" }}>TOTAL REQUESTS</div>
-              <div style={{ font: "600 16px var(--mono)", color: "#AAA99F", marginTop: 4 }}>
+            <div className="p-3 bg-[#F8F6EF] rounded-[6px] border border-[#DFE5DC]">
+              <div className="font-mono text-[9px] font-semibold text-[#68766D]">TOTAL REQUESTS</div>
+              <div className="font-mono text-[16px] font-semibold text-[#68766D] mt-1">
                 {cacheStats?.total_requests ?? 0}
               </div>
             </div>
-            <div style={{ padding: 12, background: "rgba(5, 7, 6, 0.5)", borderRadius: 3, border: "1px solid rgba(226, 239, 229, 0.08)" }}>
-              <div style={{ font: "500 9px var(--mono)", color: "#7e9084" }}>MEASURED HIT RATIO</div>
-              <div style={{ font: "600 16px var(--mono)", color: "#8EA58C", marginTop: 4 }}>
+            <div className="p-3 bg-[#F8F6EF] rounded-[6px] border border-[#DFE5DC]">
+              <div className="font-mono text-[9px] font-semibold text-[#68766D]">MEASURED HIT RATIO</div>
+              <div className="font-mono text-[16px] font-semibold text-[#176B4D] mt-1">
                 {cacheStats?.hit_ratio_pct != null ? `${cacheStats.hit_ratio_pct}%` : "0.0%"}
               </div>
             </div>
-            <div style={{ padding: 12, background: "rgba(5, 7, 6, 0.5)", borderRadius: 3, border: "1px solid rgba(226, 239, 229, 0.08)" }}>
-              <div style={{ font: "500 9px var(--mono)", color: "#7e9084" }}>MEASURED CPU SAVINGS</div>
-              <div style={{ font: "600 16px var(--mono)", color: "#B69A72", marginTop: 4 }}>
+            <div className="p-3 bg-[#F8F6EF] rounded-[6px] border border-[#DFE5DC]">
+              <div className="font-mono text-[9px] font-semibold text-[#68766D]">MEASURED CPU SAVINGS</div>
+              <div className="font-mono text-[16px] font-semibold text-[#176B4D] mt-1">
                 {cacheStats?.savings_ms_est != null ? `${cacheStats.savings_ms_est} ms` : "0 ms"}
               </div>
             </div>
@@ -369,76 +355,63 @@ export default function SettingsPage() {
         </div>
 
         {/* Live Sensitive Data Masking Verification */}
-        <div className="research-card">
-          <div style={{ font: "600 12px var(--mono)", color: "#F2F0E8", marginBottom: 12 }}>
+        <div className="p-5 rounded-[10px] bg-[#FFFFFF] border border-[#DFE5DC] shadow-xs">
+          <div className="font-mono text-[12px] font-semibold text-[#26352D] mb-3">
             SENSITIVE DATA MASKING VERIFICATION PIPELINE
           </div>
-          <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+          <div className="flex flex-col gap-2.5">
             <input
               type="text"
               value={maskSample}
               onChange={(e) => setMaskSample(e.target.value)}
               placeholder="Enter text with API keys, tokens, or emails to test masking..."
-              style={{ width: "100%", padding: "9px 12px", background: "#101110", border: "1px solid rgba(226, 239, 229, 0.15)", borderRadius: 3, color: "#F2F0E8", font: "400 12px var(--mono)" }}
+              className="w-full px-3 py-2 bg-[#F8F6EF] border border-[#DFE5DC] rounded-[6px] text-[#26352D] font-mono text-[12px] focus:outline-none focus:border-[#176B4D]"
             />
-            <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
+            <div className="flex gap-2 items-center">
               <button
                 type="button"
                 onClick={handleTestMasking}
-                style={{ padding: "7px 16px", background: "rgba(182, 154, 114, 0.15)", border: "1px solid rgba(182, 154, 114, 0.4)", color: "#B69A72", borderRadius: 3, font: "600 10px var(--mono)", cursor: "pointer" }}
+                className="px-4 py-1.5 bg-[#E6F0E9] border border-[#176B4D]/30 text-[#176B4D] hover:bg-[#176B4D] hover:text-[#FFFFFF] rounded-[6px] font-mono text-[10px] font-semibold cursor-pointer transition-colors"
               >
                 RUN MASKING TRANSFORM
               </button>
               {maskStats && (
-                <span style={{ font: "400 10px var(--mono)", color: "#8EA58C" }}>
+                <span className="font-mono text-[10px] text-[#176B4D] font-semibold">
                   Masked {maskStats.total_masked || 0} patterns ({Object.keys(maskStats).filter(k => k !== 'total_masked').join(", ")})
                 </span>
               )}
             </div>
             {maskedOutput && (
-              <div style={{ padding: "8px 12px", background: "rgba(5, 7, 6, 0.6)", border: "1px solid rgba(142, 165, 140, 0.3)", borderRadius: 3, font: "400 11px var(--mono)", color: "#F2F0E8" }}>
+              <div className="p-3 bg-[#E8F5EC] border border-[#176B4D]/20 rounded-[6px] font-mono text-[11px] text-[#176B4D]">
                 RESULT: {maskedOutput}
               </div>
             )}
           </div>
         </div>
 
-
         {/* Local Execution Telemetry */}
-        <div className="research-card">
-          <div style={{ font: "600 12px var(--mono)", color: "#F2F0E8", marginBottom: 14 }}>
+        <div className="p-5 rounded-[10px] bg-[#FFFFFF] border border-[#DFE5DC] shadow-xs">
+          <div className="font-mono text-[12px] font-semibold text-[#26352D] mb-3.5">
             HOST SYSTEM ENVIRONMENT TELEMETRY
           </div>
 
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, background: "rgba(5, 7, 6, 0.5)", padding: 14, borderRadius: 3, border: "1px solid rgba(226, 239, 229, 0.08)", font: "400 11px var(--mono)" }}>
-            <div>PYTHON RUNTIME: <strong style={{ color: "#B69A72" }}>Python 3.14.7 x64</strong></div>
-            <div>ML ENGINE: <strong style={{ color: "#a7e9e8" }}>scikit-learn 1.9.0</strong></div>
-            <div>OPTIMIZER: <strong style={{ color: "#a7e9e8" }}>Optuna 5.0.0</strong></div>
-            <div>DATA MASKING: <strong style={{ color: "#8EA58C" }}>Active (Regex Pipeline)</strong></div>
-            <div>AI ENGINE: <strong style={{ color: "#B69A72" }}>Local Deterministic (qwen2.5)</strong></div>
-            <div>CACHE HIT RATIO: <strong style={{ color: "#a7e9e8" }}>Active In-Memory</strong></div>
-            <div>DATABASE: <strong style={{ color: "#F2F0E8" }}>SQLite Relational Store</strong></div>
-            <div>DB LOCATION: <span style={{ color: "#7e9084" }}>backend/evoresearch.db</span></div>
-            <div>API HOST: <span style={{ color: "#7e9084" }}>http://127.0.0.1:8000</span></div>
+          <div className="grid grid-cols-2 gap-3 bg-[#F8F6EF] p-3.5 rounded-[6px] border border-[#DFE5DC] font-mono text-[11px]">
+            <div>PYTHON RUNTIME: <strong className="text-[#176B4D]">Python 3.14.7 x64</strong></div>
+            <div>ML ENGINE: <strong className="text-[#26352D]">scikit-learn 1.9.0</strong></div>
+            <div>OPTIMIZER: <strong className="text-[#26352D]">Optuna 5.0.0</strong></div>
+            <div>DATA MASKING: <strong className="text-[#176B4D]">Active (Regex Pipeline)</strong></div>
+            <div>AI ENGINE: <strong className="text-[#176B4D]">Local Deterministic (qwen2.5)</strong></div>
+            <div>CACHE HIT RATIO: <strong className="text-[#26352D]">Active In-Memory</strong></div>
+            <div>DATABASE: <strong className="text-[#26352D]">SQLite Relational Store</strong></div>
+            <div>DB LOCATION: <span className="text-[#68766D]">backend/evoresearch.db</span></div>
+            <div>API HOST: <span className="text-[#68766D]">http://127.0.0.1:8000</span></div>
           </div>
         </div>
 
-        <div style={{ display: "flex", justifyContent: "flex-end" }}>
+        <div className="flex justify-end">
           <button
             type="submit"
-            style={{
-              display: "inline-flex",
-              alignItems: "center",
-              gap: 8,
-              padding: "10px 24px",
-              background: saved ? "#38a169" : "#B69A72",
-              border: "none",
-              color: "#101110",
-              borderRadius: 3,
-              font: "600 10px var(--mono)",
-              letterSpacing: "0.08em",
-              cursor: "pointer"
-            }}
+            className="inline-flex items-center gap-2 px-6 py-2.5 bg-[#176B4D] hover:bg-[#12543c] text-[#FFFFFF] font-mono text-[10px] font-semibold tracking-[0.08em] rounded-[6px] shadow-xs transition-colors cursor-pointer"
           >
             {saved ? <CheckCircle2 size={13} /> : <Save size={13} />}
             <span>{saved ? "SETTINGS PERSISTED" : "SAVE CONFIGURATION"}</span>
@@ -448,3 +421,4 @@ export default function SettingsPage() {
     </div>
   );
 }
+
