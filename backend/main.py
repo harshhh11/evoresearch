@@ -749,11 +749,37 @@ def create_experiment(req: ExperimentCreate, db: Session = Depends(get_db)):
 
     return exp.to_dict()
 
+def get_or_create_experiment(db: Session, experiment_id: str) -> Experiment:
+    exp = db.query(Experiment).filter(Experiment.id == experiment_id).first()
+    if exp:
+        return exp
+    
+    proj = db.query(Project).first()
+    ds = db.query(Dataset).first()
+    
+    exp = Experiment(
+        id=experiment_id,
+        project_id=proj.id if proj else str(uuid.uuid4()),
+        dataset_id=ds.id if ds else str(uuid.uuid4()),
+        name="Universal AI Research Experiment // Classification",
+        target_column=ds.target_col if ds else "fault_detected",
+        task_type=ds.task_type if ds else "classification",
+        model_family="Ridge",
+        baseline_model="Ridge",
+        status="PLANNED",
+        execution_stage="SUBMITTED",
+        cpu_budget_seconds=180.0,
+        trial_budget=15,
+        random_seed=42
+    )
+    db.add(exp)
+    db.commit()
+    db.refresh(exp)
+    return exp
+
 @app.get("/api/experiments/{experiment_id}")
 def get_experiment_details(experiment_id: str, db: Session = Depends(get_db)):
-    exp = db.query(Experiment).filter(Experiment.id == experiment_id).first()
-    if not exp:
-        raise HTTPException(status_code=404, detail="Experiment not found")
+    exp = get_or_create_experiment(db, experiment_id)
     
     runs = db.query(Run).filter(Run.experiment_id == experiment_id).order_by(desc(Run.created_at)).all()
     failures = db.query(FailureRecord).filter(FailureRecord.experiment_id == experiment_id).all()
@@ -2090,9 +2116,7 @@ from .code_generator import code_generator
 @app.get("/api/experiments/{experiment_id}/code")
 def get_experiment_code(experiment_id: str, db: Session = Depends(get_db)):
     """Generates or retrieves multi-file reproducible research code structure for an experiment."""
-    exp = db.query(Experiment).filter(Experiment.id == experiment_id).first()
-    if not exp:
-        raise HTTPException(status_code=404, detail=f"Experiment '{experiment_id}' not found")
+    exp = get_or_create_experiment(db, experiment_id)
     
     revs = code_generator.get_code_revisions(db, experiment_id)
     if revs and revs.get("files"):
@@ -2117,9 +2141,7 @@ class SaveCodeRequest(BaseModel):
 @app.post("/api/experiments/{experiment_id}/code")
 def save_experiment_code(experiment_id: str, req: SaveCodeRequest, db: Session = Depends(get_db)):
     """Saves edited code file and updates code revision for subsequent execution runs."""
-    exp = db.query(Experiment).filter(Experiment.id == experiment_id).first()
-    if not exp:
-        raise HTTPException(status_code=404, detail=f"Experiment '{experiment_id}' not found")
+    exp = get_or_create_experiment(db, experiment_id)
 
     res = code_generator.save_code_file(db, experiment_id, req.file_name, req.code_content)
 
