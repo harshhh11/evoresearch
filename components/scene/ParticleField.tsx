@@ -83,11 +83,11 @@ function makeParticleGeometry(count: number) {
     return (seed - 1) / 2147483646;
   };
   const palette = [
-    new THREE.Color("#B5FF8A"),
-    new THREE.Color("#DDE9DD"),
-    new THREE.Color("#A7E9E8"),
-    new THREE.Color("#8EBFA4"),
-    new THREE.Color("#F2D9A1"),
+    new THREE.Color("#176B4D"),
+    new THREE.Color("#26352D"),
+    new THREE.Color("#3D6652"),
+    new THREE.Color("#12543C"),
+    new THREE.Color("#A66B22"),
   ];
 
   for (let i = 0; i < count; i += 1) {
