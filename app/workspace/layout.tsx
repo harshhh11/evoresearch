@@ -128,7 +128,7 @@ export default function WorkspaceLayout({ children }: { children: ReactNode }) {
           }`}
         >
           {!isCollapsed && (
-            <Link href="/workspace" className="inline-flex items-center gap-2.5 no-underline group min-w-0">
+            <Link href="/" className="inline-flex items-center gap-2.5 no-underline group min-w-0" title="Return to EvolveX Landing Page">
               <div className="w-8 h-8 rounded-[8px] bg-[rgba(23,107,77,0.08)] border border-[rgba(23,107,77,0.25)] flex items-center justify-center transition-all group-hover:border-[#176B4D] shrink-0">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#176B4D" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <circle cx="12" cy="12" r="3" />

@@ -39,8 +39,8 @@ export function FloatingNavigation({ activeStage }: FloatingNavigationProps) {
           {/* Group 1: Left Brand (flex-shrink: 0) */}
           <a
             className="nav-brand"
-            href="#overview"
-            aria-label="EvoResearch home"
+            href="/"
+            aria-label="EvolveX home"
             onClick={() => setMobileOpen(false)}
           >
             <div className="nav-brand-icon" aria-hidden="true">
