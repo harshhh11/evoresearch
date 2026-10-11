@@ -12,3 +12,4 @@ __pycache__/
 backend/*.db
 *.pkl
 backend/artifacts/
+.vercel
