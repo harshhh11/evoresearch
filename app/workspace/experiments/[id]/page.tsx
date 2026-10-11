@@ -81,10 +81,26 @@ export default function ExperimentDetailPage({
   const [editedCode, setEditedCode] = useState<string>("");
   const [copied, setCopied] = useState(false);
   const [savingCode, setSavingCode] = useState(false);
+  const [codeLoading, setCodeLoading] = useState(false);
   const [selectedAgent, setSelectedAgent] = useState<any | null>(null);
   const [loading, setLoading] = useState(true);
   const [executing, setExecuting] = useState(false);
   const [activeTab, setActiveTab] = useState<"orchestration" | "code" | "runs" | "predictions" | "failures">("orchestration");
+
+  const handleGenerateCode = async () => {
+    setCodeLoading(true);
+    try {
+      const code = await api.getExperimentCode(expId);
+      if (code && code.files) {
+        setCodeData(code);
+        setEditedCode(code.files[selectedFile] || code.files["experiment.py"] || Object.values(code.files)[0] || "");
+      }
+    } catch (err) {
+      console.error("Failed to generate code structure:", err);
+    } finally {
+      setCodeLoading(false);
+    }
+  };
 
   const loadExperiment = async () => {
     try {
@@ -99,11 +115,13 @@ export default function ExperimentDetailPage({
       setPredictions(preds);
       setOrchestrationData(orch);
       setEvents(evts);
-      if (code && code.files) {
+      if (code && code.files && Object.keys(code.files).length > 0) {
         setCodeData(code);
-        if (!editedCode && code.files["experiment.py"]) {
-          setEditedCode(code.files["experiment.py"]);
+        if (!editedCode) {
+          setEditedCode(code.files[selectedFile] || code.files["experiment.py"] || Object.values(code.files)[0] || "");
         }
+      } else if (!codeData && !codeLoading) {
+        handleGenerateCode();
       }
     } catch (err) {
       console.error("Failed to load experiment details:", err);
@@ -128,7 +146,8 @@ export default function ExperimentDetailPage({
   };
 
   const handleCopyCode = () => {
-    navigator.clipboard.writeText(editedCode);
+    const textToCopy = editedCode || (codeData?.files?.[selectedFile] || "");
+    navigator.clipboard.writeText(textToCopy);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
@@ -136,7 +155,8 @@ export default function ExperimentDetailPage({
   const handleSaveCode = async () => {
     setSavingCode(true);
     try {
-      await api.saveExperimentCode(expId, { file_name: selectedFile, code_content: editedCode });
+      const contentToSave = editedCode || (codeData?.files?.[selectedFile] || "");
+      await api.saveExperimentCode(expId, { file_name: selectedFile, code_content: contentToSave });
       alert(`Saved revision for ${selectedFile}. Subsequent runs will execute updated code.`);
       await loadExperiment();
     } catch (err: any) {
@@ -536,6 +556,25 @@ export default function ExperimentDetailPage({
             </div>
             <div style={{ display: "flex", gap: 10 }}>
               <button
+                onClick={handleGenerateCode}
+                disabled={codeLoading}
+                style={{
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: 6,
+                  padding: "6px 12px",
+                  background: "#FFFFFF",
+                  border: "1px solid #DFE5DC",
+                  color: "#176B4D",
+                  font: "600 10px var(--mono)",
+                  borderRadius: 6,
+                  cursor: "pointer"
+                }}
+              >
+                <RefreshCw size={12} className={codeLoading ? "animate-spin" : ""} />
+                <span>{codeLoading ? "GENERATING..." : "SYNTHESIZE CODE"}</span>
+              </button>
+              <button
                 onClick={handleCopyCode}
                 style={{
                   display: "inline-flex",
@@ -606,7 +645,15 @@ export default function ExperimentDetailPage({
                     </div>
                   ))
                 ) : (
-                  <div style={{ font: "400 10px var(--mono)", color: "#68766D" }}>Generating code structure...</div>
+                  <div style={{ font: "400 10px var(--mono)", color: "#68766D", padding: "10px 0" }}>
+                    <div>{codeLoading ? "Synthesizing code..." : "No code structure loaded."}</div>
+                    <button
+                      onClick={handleGenerateCode}
+                      style={{ marginTop: 8, padding: "4px 8px", background: "#176B4D", color: "#FFFFFF", border: "none", borderRadius: 4, cursor: "pointer", font: "600 9px var(--mono)" }}
+                    >
+                      GENERATE CODE
+                    </button>
+                  </div>
                 )}
               </div>
             </div>
@@ -615,10 +662,10 @@ export default function ExperimentDetailPage({
             <div style={{ background: "#FFFFFF", border: "1px solid #DFE5DC", borderRadius: 8, overflow: "hidden" }}>
               <div style={{ background: "#F8F6EF", borderBottom: "1px solid #DFE5DC", padding: "8px 14px", font: "600 10px var(--mono)", color: "#176B4D", display: "flex", justifyContent: "space-between" }}>
                 <span>FILE: {selectedFile}</span>
-                <span>REVISION: v1 (Active)</span>
+                <span>REVISION: v{codeData?.revision || 1} (Active)</span>
               </div>
               <textarea
-                value={editedCode}
+                value={editedCode || (codeData?.files?.[selectedFile] || "")}
                 onChange={(e) => setEditedCode(e.target.value)}
                 rows={22}
                 style={{

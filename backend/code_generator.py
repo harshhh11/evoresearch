@@ -27,6 +27,11 @@ class CodeGeneratorService:
         random_seed: int = 42
     ) -> Dict[str, Any]:
 
+        domain = domain or "Machine Learning"
+        task_type = task_type or "regression"
+        model_family = model_family or "Ridge"
+        target_column = target_column or "target"
+
         data_py = f'''# data.py — Automated Dataset Ingestion & Preprocessing
 import pandas as pd
 import numpy as np
