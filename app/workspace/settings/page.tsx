@@ -231,7 +231,7 @@ export default function SettingsPage() {
             </div>
             <div className="flex justify-between mt-1.5 font-mono text-[9px] text-[#68766D]">
               <span>Endpoint: https://elevate1-0.vercel.app/api/ai</span>
-              <span>Available: {((aiStatus?.daily_limit || 800000) - (aiStatus?.tokens_used_today || 0)).toLocaleString()} tokens remaining</span>
+              <span suppressHydrationWarning>Available: {((aiStatus?.daily_limit || 800000) - (aiStatus?.tokens_used_today || 0)).toLocaleString("en-US")} tokens remaining</span>
             </div>
           </div>
 
