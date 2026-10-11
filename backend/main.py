@@ -2020,9 +2020,7 @@ def run_multi_agent_orchestration_by_id(experiment_id: str, db: Session = Depend
 @app.get("/api/experiments/{experiment_id}/orchestration")
 def get_experiment_orchestration(experiment_id: str, db: Session = Depends(get_db)):
     """Returns real-time 12-agent orchestration state, stage pipeline, and execution traces."""
-    exp = db.query(Experiment).filter(Experiment.id == experiment_id).first()
-    if not exp:
-        raise HTTPException(status_code=404, detail=f"Experiment '{experiment_id}' not found")
+    exp = get_or_create_experiment(db, experiment_id)
     traces = orchestrator.get_agent_traces(db, experiment_id)
     return {
         "experiment_id": exp.id,

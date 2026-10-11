@@ -145,7 +145,26 @@ class ResearchOrchestrator:
         start_wall_time = time.time()
         exp = db.query(Experiment).filter(Experiment.id == experiment_id).first()
         if not exp:
-            raise ValueError(f"Experiment {experiment_id} not found.")
+            proj = db.query(Project).first()
+            ds = db.query(Dataset).first()
+            exp = Experiment(
+                id=experiment_id,
+                project_id=proj.id if proj else "proj-default",
+                dataset_id=ds.id if ds else "ds-default",
+                name="Experiment on Edge Sensor Telemetry (Faults & NaNs)",
+                target_column="fault_detected",
+                task_type="classification",
+                model_family="Ridge",
+                baseline_model="Ridge",
+                status="PLANNED",
+                execution_stage="SUBMITTED",
+                cpu_budget_seconds=180.0,
+                trial_budget=15,
+                random_seed=42
+            )
+            db.add(exp)
+            db.commit()
+            db.refresh(exp)
 
         # Initialize State Machine
         self.transition_experiment_state(db, exp, "SUBMITTED", "Orchestration lifecycle initialized")
