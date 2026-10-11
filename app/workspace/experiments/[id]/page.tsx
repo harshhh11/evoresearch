@@ -105,13 +105,13 @@ export default function ExperimentDetailPage({
   const loadExperiment = async () => {
     try {
       const [res, preds, orch, evts, code] = await Promise.all([
-        api.getExperimentDetails(expId),
+        api.getExperimentDetails(expId).catch(() => null),
         fetch(`/api/experiments/${expId}/predictions`).then((r) => r.ok ? r.json() : []).catch(() => []),
         api.getExperimentOrchestration(expId).catch(() => null),
         api.getExperimentEvents(expId).then((r) => r.events || []).catch(() => []),
         api.getExperimentCode(expId).catch(() => null)
       ]);
-      setData(res);
+      if (res) setData(res);
       setPredictions(preds);
       setOrchestrationData(orch);
       setEvents(evts);
