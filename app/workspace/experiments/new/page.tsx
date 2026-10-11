@@ -55,6 +55,83 @@ const CATEGORIZED_MODEL_CATALOG: Record<string, Array<{ id: string; name: string
   ]
 };
 
+// Default seed projects & datasets if backend is cold-starting or empty
+const DEFAULT_SEED_PROJECTS: Project[] = [
+  {
+    id: "368af2a4-6ffb-4647-8995-07f26ce5f6a0",
+    name: "Materials Science ML & Transparent Conductors Benchmark",
+    domain: "general_ai",
+    description: "Controlled benchmark investigating verified failure-and-recovery memory under strict CPU-time constraints on materials-science regression benchmarks.",
+    research_question: "Can evidence-validated failure-and-recovery memory improve the optimization efficiency of materials models?",
+    hypothesis: "Retaining structured error signatures reduces repeated trial failures.",
+    tags: "[\"materials-science\", \"band-gap\", \"nomad2018\"]",
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString()
+  },
+  {
+    id: "9cbaaa23-6ce2-4bab-8cbc-45ab5796ab71",
+    name: "Industrial IoT Sensor Time-Series Forecasting",
+    domain: "Time-Series Forecasting",
+    description: "Predictive maintenance and anomaly detection on multivariate sensor telemetry.",
+    research_question: "What horizon-aware forecasting models achieve minimum RMSE?",
+    hypothesis: "Dilated temporal convolutions outperform recurrent models.",
+    tags: "[]",
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString()
+  },
+  {
+    id: "720411fa-1f92-46bc-97aa-5d6299da39cb",
+    name: "LLM Reasoning & Sequence-to-Sequence Benchmark",
+    domain: "NLP & Transformers",
+    description: "Evaluation of open-weight Transformers and LLM reasoning accuracy.",
+    research_question: "How do lightweight local Transformer architectures compare on complex Q&A?",
+    hypothesis: "Local LLM quantization preserves reasoning accuracy.",
+    tags: "[]",
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString()
+  },
+  {
+    id: "b41cb8ae-ed06-4d79-8b51-24be968a1722",
+    name: "Medical Image Segmentation & Diagnostic AI",
+    domain: "Computer Vision",
+    description: "High-resolution biomedical image segmentation using Vision Transformers.",
+    research_question: "Can hybrid Vision Transformers improve mean IoU scores on medical imaging?",
+    hypothesis: "Dense skip connections enhance boundary localization.",
+    tags: "[]",
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString()
+  }
+];
+
+const DEFAULT_SEED_DATASETS: Dataset[] = [
+  {
+    id: "ds-materials-nomad",
+    name: "NOMAD 2018 Band-Gap Benchmark",
+    description: "NOMAD 2018 transparent conductors dataset with measured and computed bandgap targets.",
+    file_path: "data/nomad.csv",
+    feature_names: "[]",
+    summary_stats: "{}",
+    task_type: "regression",
+    target_col: "formation_energy_ev_natom",
+    row_count: 3000,
+    col_count: 14,
+    created_at: new Date().toISOString()
+  },
+  {
+    id: "ds-sensor-iot",
+    name: "Multivariate IoT Sensor Telemetry",
+    description: "Multivariate industrial sensor readings with equipment fault flags.",
+    file_path: "data/sensor.csv",
+    feature_names: "[]",
+    summary_stats: "{}",
+    task_type: "classification",
+    target_col: "fault_detected",
+    row_count: 5000,
+    col_count: 12,
+    created_at: new Date().toISOString()
+  }
+];
+
 const EXECUTION_APPROACHES = [
   { id: "single_model", name: "Single Model Experiment", desc: "Execute bounded hyperparameter tuning on a single chosen architecture." },
   { id: "comparative_model", name: "Comparative Model Benchmark", desc: "Run side-by-side evaluation across baseline and candidate models." },
@@ -69,19 +146,19 @@ function NewExperimentContent() {
   const initialProjectId = searchParams.get("project_id") || "";
   const initialDatasetId = searchParams.get("dataset_id") || "";
 
-  const [projects, setProjects] = useState<Project[]>([]);
-  const [datasets, setDatasets] = useState<Dataset[]>([]);
+  const [projects, setProjects] = useState<Project[]>(DEFAULT_SEED_PROJECTS);
+  const [datasets, setDatasets] = useState<Dataset[]>(DEFAULT_SEED_DATASETS);
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
 
   // Form State
-  const [projectId, setProjectId] = useState(initialProjectId);
-  const [name, setName] = useState("");
+  const [projectId, setProjectId] = useState(initialProjectId || DEFAULT_SEED_PROJECTS[0].id);
+  const [name, setName] = useState("Experiment on NOMAD 2018 Band-Gap Benchmark");
   const [domain, setDomain] = useState("Machine Learning");
   const [executionApproach, setExecutionApproach] = useState("ai_agent_orchestrated");
   const [taskType, setTaskType] = useState("regression");
-  const [datasetId, setDatasetId] = useState("");
-  const [targetColumn, setTargetColumn] = useState("");
+  const [datasetId, setDatasetId] = useState(DEFAULT_SEED_DATASETS[0].id);
+  const [targetColumn, setTargetColumn] = useState("formation_energy_ev_natom");
   const [selectedCategory, setSelectedCategory] = useState("Traditional ML");
   const [baselineModel, setBaselineModel] = useState("Ridge");
   const [candidateModels, setCandidateModels] = useState<string[]>(["Ridge", "HistGradientBoostingRegressor"]);
@@ -103,28 +180,37 @@ function NewExperimentContent() {
 
   const loadResources = async () => {
     try {
-      const [pList, dList] = await Promise.all([api.getProjects(), api.getDatasets()]);
+      const [pList, dList] = await Promise.all([
+        api.getProjects().catch(() => []),
+        api.getDatasets().catch(() => [])
+      ]);
       
-      // Deduplicate projects by ID
+      // Deduplicate projects by ID, fallback to seed projects if empty
+      const rawList = (pList && pList.length > 0) ? pList : DEFAULT_SEED_PROJECTS;
       const uniqueProjects: Project[] = [];
       const seenIds = new Set<string>();
-      for (const p of pList) {
+      for (const p of rawList) {
         if (!seenIds.has(p.id)) {
           seenIds.add(p.id);
           uniqueProjects.push(p);
         }
       }
 
-      setProjects(uniqueProjects);
-      setDatasets(dList);
+      const activeDatasets = (dList && dList.length > 0) ? dList : DEFAULT_SEED_DATASETS;
 
-      if (uniqueProjects.length && !projectId) {
-        setProjectId(uniqueProjects[0].id);
+      setProjects(uniqueProjects);
+      setDatasets(activeDatasets);
+
+      if (uniqueProjects.length) {
+        const matchingProj = initialProjectId && uniqueProjects.some((p) => p.id === initialProjectId)
+          ? initialProjectId
+          : uniqueProjects[0].id;
+        setProjectId(matchingProj);
       }
 
-      let targetDs = dList[0];
+      let targetDs = activeDatasets[0];
       if (initialDatasetId) {
-        const match = dList.find((d) => d.id === initialDatasetId);
+        const match = activeDatasets.find((d) => d.id === initialDatasetId);
         if (match) targetDs = match;
       }
 
@@ -136,6 +222,9 @@ function NewExperimentContent() {
       }
     } catch (err) {
       console.error("Failed to load planner resources:", err);
+      setProjects(DEFAULT_SEED_PROJECTS);
+      setDatasets(DEFAULT_SEED_DATASETS);
+      setProjectId(DEFAULT_SEED_PROJECTS[0].id);
     } finally {
       setLoading(false);
     }
@@ -304,20 +393,62 @@ function NewExperimentContent() {
 
           <div style={{ display: "grid", gridTemplateColumns: "1.2fr 1fr", gap: 16 }}>
             <div>
-              <label style={{ display: "block", font: "600 10px var(--mono)", color: "#68766D", marginBottom: 6 }}>
-                RESEARCH PROJECT (DEDUPLICATED)
-              </label>
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 6 }}>
+                <label style={{ font: "600 10px var(--mono)", color: "#176B4D" }}>
+                  RESEARCH PROJECT (DEDUPLICATED)
+                </label>
+                <span style={{ font: "500 10px var(--mono)", color: "#68766D" }}>
+                  {projects.length} AVAILABLE
+                </span>
+              </div>
               <select
                 value={projectId}
                 onChange={(e) => setProjectId(e.target.value)}
-                style={{ width: "100%", padding: "10px 12px", background: "#FFFFFF", border: "1px solid #DFE5DC", borderRadius: 6, color: "#26352D", font: "400 12px var(--mono)", outline: "none" }}
+                style={{
+                  width: "100%",
+                  padding: "10px 14px",
+                  background: "#FFFFFF",
+                  border: "1px solid #DFE5DC",
+                  borderRadius: 6,
+                  color: "#26352D",
+                  font: "500 12px var(--mono)",
+                  outline: "none",
+                  cursor: "pointer",
+                  boxShadow: "0 1px 3px rgba(0,0,0,0.02)"
+                }}
               >
                 {projects.map((p) => (
-                  <option key={p.id} value={p.id}>
+                  <option key={p.id} value={p.id} style={{ background: "#FFFFFF", color: "#26352D", padding: "8px" }}>
                     [{p.domain || "General AI"}] {p.name}
                   </option>
                 ))}
               </select>
+
+              {/* Quick Select Project Pills */}
+              <div style={{ display: "flex", flexWrap: "wrap", gap: 6, marginTop: 10 }}>
+                {projects.slice(0, 4).map((p) => {
+                  const isSelected = projectId === p.id;
+                  return (
+                    <button
+                      key={p.id}
+                      type="button"
+                      onClick={() => setProjectId(p.id)}
+                      style={{
+                        padding: "4px 8px",
+                        borderRadius: 4,
+                        font: "500 10px var(--mono)",
+                        border: isSelected ? "1px solid #176B4D" : "1px solid #DFE5DC",
+                        background: isSelected ? "#E6F0E9" : "#FFFFFF",
+                        color: isSelected ? "#176B4D" : "#68766D",
+                        cursor: "pointer",
+                        transition: "all 0.15s ease"
+                      }}
+                    >
+                      {isSelected ? "✓ " : ""}{p.name.length > 28 ? p.name.slice(0, 26) + "..." : p.name}
+                    </button>
+                  );
+                })}
+              </div>
             </div>
 
             <div>
@@ -330,7 +461,17 @@ function NewExperimentContent() {
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 placeholder="e.g. LLM Reasoning Fine-Tuning Benchmark"
-                style={{ width: "100%", padding: "10px 12px", background: "#FFFFFF", border: "1px solid #DFE5DC", borderRadius: 6, color: "#26352D", font: "400 12px var(--mono)", outline: "none" }}
+                style={{
+                  width: "100%",
+                  padding: "10px 12px",
+                  background: "#FFFFFF",
+                  border: "1px solid #DFE5DC",
+                  borderRadius: 6,
+                  color: "#26352D",
+                  font: "400 12px var(--mono)",
+                  outline: "none",
+                  boxShadow: "0 1px 3px rgba(0,0,0,0.02)"
+                }}
               />
             </div>
           </div>

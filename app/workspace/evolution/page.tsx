@@ -16,6 +16,7 @@ import {
   Sparkles,
   Play,
   Check,
+  Bot,
 } from "lucide-react";
 
 export default function EvolutionTimelinePage() {
@@ -71,6 +72,14 @@ export default function EvolutionTimelinePage() {
         </div>
 
         <div className="flex items-center gap-3">
+          <Link
+            href="/workspace/orchestration"
+            className="px-3.5 py-2 rounded-[8px] bg-[#E6F0E9] border border-[#176B4D] text-[#176B4D] font-mono text-[12px] font-semibold hover:bg-[#176B4D] hover:text-[#FFFFFF] transition-all flex items-center gap-2"
+          >
+            <Bot size={14} />
+            <span>Multi-Agent Hub</span>
+          </Link>
+
           <Link
             href="/workspace/experiments/new"
             className="px-4 py-2 rounded-[8px] bg-[#176B4D] text-[#FFFFFF] font-mono text-[12px] font-semibold hover:bg-[#12543C] transition-all flex items-center gap-2 shadow-[0_2px_8px_rgba(23,107,77,0.25)]"

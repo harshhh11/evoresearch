@@ -2022,62 +2022,55 @@ def get_experiment_orchestration(experiment_id: str, db: Session = Depends(get_d
     """Returns real-time 12-agent orchestration state, stage pipeline, and execution traces."""
     exp = get_or_create_experiment(db, experiment_id)
     traces = orchestrator.get_agent_traces(db, experiment_id)
+
+    latest_traces_by_agent = {}
+    for t in traces:
+        latest_traces_by_agent[t["agent_name"]] = t
+
+    roles_def = [
+        {"name": "ResearchPlannerAgent", "stage": "PLANNING", "label": "Research Planning", "description": "Parse research question, establish hypothesis, target metrics, and experiment workflow."},
+        {"name": "PaperAnalysisAgent", "stage": "ANALYZING", "label": "Paper Analysis", "description": "Extract methodology, hyperparameters, target dataset, and baseline metrics from reference paper."},
+        {"name": "DatasetAgent", "stage": "PREPARING_DATA", "label": "Data Preparation", "description": "Inspect schema, validate missing values, perform target alignment, and split train/val/test partitions."},
+        {"name": "MethodCodeAgent", "stage": "PREPARING_ENV", "label": "Method & Code Adaptation", "description": "Synthesize executable multi-file python script pipeline for data loading, model, and training."},
+        {"name": "EnvironmentAgent", "stage": "PREPARING_ENV", "label": "Environment Validation", "description": "Verify Python runtime environment, dependency manifests, CPU/GPU limits, and container sandbox."},
+        {"name": "ComputePlannerAgent", "stage": "QUEUED", "label": "Compute Routing", "description": "Route compute budget (seconds/memory), set random seeds, and configure hardware accelerator threads."},
+        {"name": "ExecutionAgent", "stage": "EXECUTING", "label": "Experiment Execution", "description": "Execute synthesized training code, capture stdout/stderr stream, monitor memory, and measure runtime."},
+        {"name": "EvaluationAgent", "stage": "EVALUATING", "label": "Scientific Evaluation", "description": "Load model artifacts, compute classification/regression metrics, and compare against baseline model."},
+        {"name": "FailureAutopsyAgent", "stage": "RECOVERING", "label": "Failure Autopsy", "description": "Diagnose exceptions, stacktraces, NaN loss, zero variance, or out-of-memory errors if failure occurs."},
+        {"name": "RecoveryAgent", "stage": "RECOVERING", "label": "Adaptive Recovery", "description": "Apply automatic bug fixes, hyperparameter adjustments, or alternative model selection upon failure."},
+        {"name": "ResearchMemoryAgent", "stage": "PLANNING", "label": "Knowledge Memory", "description": "Persist verified metrics, code revisions, and lessons learned into vector knowledge base."},
+        {"name": "ScientificReportingAgent", "stage": "EVALUATING", "label": "Reporting & Artifacts", "description": "Generate structured LaTeX/markdown research summary, model performance plots, and reproducible report."}
+    ]
+
+    agent_roles_result = []
+    for r in roles_def:
+        t = latest_traces_by_agent.get(r["name"])
+        if t:
+            status = t["status"]
+        else:
+            if exp.execution_stage == r["stage"] and exp.status == "RUNNING":
+                status = "RUNNING"
+            elif r["name"] in ["FailureAutopsyAgent", "RecoveryAgent"]:
+                status = "PASSED (NO FAULT)" if exp.status == "COMPLETED" else "STANDBY"
+            else:
+                status = "STANDBY"
+        
+        agent_roles_result.append({
+            "name": r["name"],
+            "stage": r["stage"],
+            "label": r["label"],
+            "description": r["description"],
+            "status": status,
+            "trace": t
+        })
+
     return {
         "experiment_id": exp.id,
         "name": exp.name,
         "domain": exp.domain,
         "execution_stage": exp.execution_stage or "SUBMITTED",
         "status": exp.status,
-        "agent_roles": [
-            {
-                "name": "ResearchPlannerAgent", "stage": "PLANNING", "label": "Research Planning",
-                "status": "COMPLETED" if traces else "PENDING"
-            },
-            {
-                "name": "PaperAnalysisAgent", "stage": "ANALYZING", "label": "Paper Analysis",
-                "status": "COMPLETED" if traces else "PENDING"
-            },
-            {
-                "name": "DatasetAgent", "stage": "PREPARING_DATA", "label": "Data Preparation",
-                "status": "COMPLETED" if traces else "PENDING"
-            },
-            {
-                "name": "MethodCodeAgent", "stage": "PREPARING_ENV", "label": "Method & Code Adaptation",
-                "status": "COMPLETED" if traces else "PENDING"
-            },
-            {
-                "name": "EnvironmentAgent", "stage": "PREPARING_ENV", "label": "Environment Validation",
-                "status": "COMPLETED" if traces else "PENDING"
-            },
-            {
-                "name": "ComputePlannerAgent", "stage": "QUEUED", "label": "Compute Routing",
-                "status": "COMPLETED" if traces else "PENDING"
-            },
-            {
-                "name": "ExecutionAgent", "stage": "EXECUTING", "label": "Experiment Execution",
-                "status": "COMPLETED" if exp.status in ["COMPLETED", "EVALUATING"] else "RUNNING" if exp.status == "RUNNING" else "PENDING"
-            },
-            {
-                "name": "EvaluationAgent", "stage": "EVALUATING", "label": "Scientific Evaluation",
-                "status": "COMPLETED" if exp.status == "COMPLETED" else "PENDING"
-            },
-            {
-                "name": "FailureAutopsyAgent", "stage": "RECOVERING", "label": "Failure Autopsy",
-                "status": "SKIPPED"
-            },
-            {
-                "name": "RecoveryAgent", "stage": "RECOVERING", "label": "Adaptive Recovery",
-                "status": "SKIPPED"
-            },
-            {
-                "name": "ResearchMemoryAgent", "stage": "PLANNING", "label": "Research Memory",
-                "status": "COMPLETED" if traces else "PENDING"
-            },
-            {
-                "name": "ScientificReportingAgent", "stage": "EVALUATING", "label": "Scientific Report",
-                "status": "COMPLETED" if exp.status == "COMPLETED" else "PENDING"
-            }
-        ],
+        "agent_roles": agent_roles_result,
         "traces": traces
     }
 
@@ -2085,7 +2078,19 @@ def get_experiment_orchestration(experiment_id: str, db: Session = Depends(get_d
 def get_experiment_events(experiment_id: str, db: Session = Depends(get_db)):
     """Returns chronological live event stream of agent actions and tool calls."""
     traces = orchestrator.get_agent_traces(db, experiment_id)
-    return {"experiment_id": experiment_id, "events": traces}
+    events = []
+    for t in traces:
+        t_copy = dict(t)
+        try:
+            t_copy["output_parsed"] = json.loads(t.get("output_summary") or "{}")
+        except Exception:
+            t_copy["output_parsed"] = {}
+        try:
+            t_copy["input_parsed"] = json.loads(t.get("input_summary") or "{}")
+        except Exception:
+            t_copy["input_parsed"] = {}
+        events.append(t_copy)
+    return {"experiment_id": experiment_id, "events": events}
 
 @app.post("/api/experiments/{experiment_id}/inject-failure")
 def inject_controlled_failure(experiment_id: str, db: Session = Depends(get_db)):

@@ -12,8 +12,8 @@ from .compute_router import compute_router
 from .supermemory_service import supermemory_service
 from .recovery_engine import classify_error, query_recovery_memory, propose_repair
 from .models_db import (
-    Experiment, Run, AuditEvent, AgentTrace, PredictionRecord,
-    ExperimentMetric, FailureRecord, utc_now
+    Project, Dataset, Experiment, Run, AuditEvent, AgentTrace, PredictionRecord,
+    ExperimentMetric, FailureRecord, RecoveryMemory, utc_now
 )
 from .scientific_eval import evaluate_task_metrics
 from .code_generator import code_generator
@@ -33,10 +33,10 @@ VALID_STATE_TRANSITIONS = {
     "EXECUTING": ["EVALUATING", "RECOVERING", "FAILED", "TIMED_OUT", "CANCELLED"],
     "EVALUATING": ["COMPLETED", "RECOVERING", "FAILED", "CANCELLED"],
     "RECOVERING": ["EXECUTING", "EVALUATING", "FAILED", "TIMED_OUT", "CANCELLED"],
-    "COMPLETED": [],
-    "FAILED": [],
-    "CANCELLED": [],
-    "TIMED_OUT": []
+    "COMPLETED": ["SUBMITTED", "PLANNING", "ANALYZING", "QUEUED"],
+    "FAILED": ["SUBMITTED", "PLANNING", "RECOVERING", "ANALYZING"],
+    "CANCELLED": ["SUBMITTED", "PLANNING"],
+    "TIMED_OUT": ["SUBMITTED", "PLANNING", "RECOVERING"]
 }
 
 AGENT_ROLES = [
@@ -166,6 +166,13 @@ class ResearchOrchestrator:
             db.commit()
             db.refresh(exp)
 
+        # Clean up prior traces for fresh deterministic cycle run
+        try:
+            db.query(AgentTrace).filter(AgentTrace.experiment_id == exp.id).delete()
+            db.commit()
+        except Exception:
+            db.rollback()
+
         # Initialize State Machine
         self.transition_experiment_state(db, exp, "SUBMITTED", "Orchestration lifecycle initialized")
         agent_logs: List[Dict[str, Any]] = []
@@ -187,6 +194,7 @@ class ResearchOrchestrator:
 
         # 1. Paper Analysis Agent
         self.transition_experiment_state(db, exp, "ANALYZING", "Extracting paper specs")
+        time.sleep(0.15)
         t0 = time.time()
         paper_spec = {}
         if paper_text or exp.paper_reference:
@@ -205,6 +213,7 @@ class ResearchOrchestrator:
 
         # 2. Research Planner Agent & Memory Retrieval
         self.transition_experiment_state(db, exp, "PLANNING", "Formulating structured experiment plan")
+        time.sleep(0.15)
         t0 = time.time()
         prior_memories = supermemory_service.retrieve_context_memories(db, query=exp.model_family, model_family=exp.model_family)
         log_step("ResearchMemoryAgent", "PLANNING", "Retrieve Historical Context", {"query": exp.model_family}, {"found_memories": len(prior_memories)}, duration=0.08)
@@ -230,6 +239,7 @@ class ResearchOrchestrator:
 
         # 3. Dataset Agent
         self.transition_experiment_state(db, exp, "PREPARING_DATA", "Validating dataset schema and targets")
+        time.sleep(0.15)
         t0 = time.time()
         dataset_spec = {
             "dataset_id": exp.dataset_id,
@@ -242,6 +252,7 @@ class ResearchOrchestrator:
 
         # 4. Method Code & Environment Agents (Code Generation)
         self.transition_experiment_state(db, exp, "PREPARING_ENV", "Synthesizing reproducible code and validating runtime")
+        time.sleep(0.15)
         t0 = time.time()
         
         # Generate & Persist Code Revisions into DB and Disk
@@ -276,6 +287,7 @@ class ResearchOrchestrator:
 
         # 5. Compute Planner Agent
         self.transition_experiment_state(db, exp, "QUEUED", "Evaluating compute feasibility and routing job")
+        time.sleep(0.15)
         t0 = time.time()
         compute_route = compute_router.evaluate_route(
             domain=exp.task_type,
@@ -288,6 +300,7 @@ class ResearchOrchestrator:
 
         # 6. Execution Agent with Failure & Budget Recovery Integration
         self.transition_experiment_state(db, exp, "EXECUTING", "Running experiment training & optimization")
+        time.sleep(0.15)
         t0 = time.time()
 
         # Handle Simulated or Injected Controlled Failure for Testing
@@ -295,7 +308,21 @@ class ResearchOrchestrator:
         if force_failure_stage == "EXECUTING":
             log_step("ExecutionAgent", "EXECUTING", "Execute Pipeline Fit", {"model": exp.model_family}, {}, status="FAILED", duration=0.2, err="SimulatedControlledError: Out of memory / Invalid Hyperparameter in model fit")
 
+            # Persist failure record into DB for UI autopsy tab
+            fail_rec = FailureRecord(
+                experiment_id=exp.id,
+                stage="EXECUTING",
+                error_category="Hyperparameter / OutOfMemory",
+                error_signature="SimulatedControlledError",
+                error_message="SimulatedControlledError: Out of memory / Invalid Hyperparameter in model fit",
+                diagnosis="Root cause confirmed: Unbounded memory allocation during grid search",
+                traceback_snippet="Traceback (most recent call last):\n  File 'train.py', line 42, in fit\n  MemoryError: Unable to allocate array with shape (2400, 2400) and data type float64"
+            )
+            db.add(fail_rec)
+            db.commit()
+
             self.transition_experiment_state(db, exp, "RECOVERING", "Diagnosing failure and attempting recovery within remaining budget")
+            time.sleep(0.15)
             t_rec = time.time()
             autopsy = {
                 "error_category": "Hyperparameter / OutOfMemory",
@@ -315,7 +342,19 @@ class ResearchOrchestrator:
                 }
                 log_step("RecoveryAgent", "RECOVERING", "Apply Corrective Patch", {"remaining_budget": remaining_budget}, repair, duration=time.time()-t_rec)
                 recovered_from_failure = True
+
+                # Persist recovery memory into DB
+                rec_mem = RecoveryMemory(
+                    category="Hyperparameter / OutOfMemory",
+                    error_signature="SimulatedControlledError",
+                    resolution="Reduced grid search batch size and switched to robust solver with bounded memory allocation.",
+                    verified=True
+                )
+                db.add(rec_mem)
+                db.commit()
+
                 self.transition_experiment_state(db, exp, "EXECUTING", "Retrying execution stage with applied patch")
+                time.sleep(0.15)
             else:
                 log_step("RecoveryAgent", "RECOVERING", "Budget Exhausted", {"remaining_budget": remaining_budget}, {"status": "RECOVERY_FAILED_BUDGET_EXHAUSTED"}, status="FAILED", duration=0.05)
                 self.transition_experiment_state(db, exp, "FAILED", "Execution failed and budget exhausted")

@@ -15,6 +15,7 @@ import {
   Zap,
   Clock,
   ShieldCheck,
+  Bot,
 } from "lucide-react";
 
 export default function SystemStatusPage() {
@@ -60,6 +61,14 @@ export default function SystemStatusPage() {
         </div>
 
         <div className="flex items-center gap-3">
+          <Link
+            href="/workspace/orchestration"
+            className="px-3.5 py-1.5 rounded-[8px] bg-[#E6F0E9] border border-[#176B4D] text-[12px] font-mono text-[#176B4D] inline-flex items-center gap-2 hover:bg-[#176B4D] hover:text-[#FFFFFF] transition-all"
+          >
+            <Bot size={13} />
+            <span>Agent Orchestration Hub</span>
+          </Link>
+
           <button
             type="button"
             onClick={handleRefresh}

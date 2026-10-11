@@ -350,6 +350,25 @@ export default function ExperimentDetailPage({
               <RotateCcw size={13} />
               <span>RETRY FAILED STAGE</span>
             </button>
+
+            <Link
+              href={`/workspace/orchestration`}
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                gap: 6,
+                padding: "9px 14px",
+                background: "#E6F0E9",
+                border: "1px solid #176B4D",
+                color: "#176B4D",
+                font: "600 11px var(--mono)",
+                borderRadius: 6,
+                textDecoration: "none"
+              }}
+            >
+              <Bot size={13} />
+              <span>ORCHESTRATION HUB</span>
+            </Link>
           </div>
         </div>
       </div>

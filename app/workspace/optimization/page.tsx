@@ -2,6 +2,7 @@
 
 import { Suspense, useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
+import Link from "next/link";
 
 import { api, Experiment, OptimizationStudy, OptimizationTrial } from "@/lib/api";
 import {
@@ -14,6 +15,7 @@ import {
   ArrowRight,
   Sparkles,
   Sliders,
+  Bot
 } from "lucide-react";
 
 function OptimizationContent() {
@@ -86,16 +88,37 @@ function OptimizationContent() {
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
       {/* Header */}
-      <div style={{ borderBottom: "1px solid #DFE5DC", paddingBottom: 16 }}>
-        <div style={{ font: "500 10px/1 var(--mono)", color: "#176B4D", letterSpacing: "0.14em", marginBottom: 6, textTransform: "uppercase" }}>
-          HYPERPARAMETER SEARCH // 006
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", borderBottom: "1px solid #DFE5DC", paddingBottom: 16 }}>
+        <div>
+          <div style={{ font: "500 10px/1 var(--mono)", color: "#176B4D", letterSpacing: "0.14em", marginBottom: 6, textTransform: "uppercase" }}>
+            HYPERPARAMETER SEARCH // 006
+          </div>
+          <h1 style={{ margin: 0, font: "600 24px/1.2 var(--font-primary), serif", color: "#26352D" }}>
+            Budget-Aware Optuna Optimizer
+          </h1>
+          <p style={{ margin: "6px 0 0", font: "400 13px/1.5 var(--body)", color: "#68766D" }}>
+            Bayesian search space exploration with strict CPU-time caps, per-trial timeout pruning, and latency profiling.
+          </p>
         </div>
-        <h1 style={{ margin: 0, font: "600 24px/1.2 var(--font-primary), serif", color: "#26352D" }}>
-          Budget-Aware Optuna Optimizer
-        </h1>
-        <p style={{ margin: "6px 0 0", font: "400 13px/1.5 var(--body)", color: "#68766D" }}>
-          Bayesian search space exploration with strict CPU-time caps, per-trial timeout pruning, and latency profiling.
-        </p>
+        <Link
+          href="/workspace/orchestration"
+          style={{
+            display: "inline-flex",
+            alignItems: "center",
+            gap: 6,
+            padding: "8px 14px",
+            background: "#E6F0E9",
+            border: "1px solid #176B4D",
+            borderRadius: 6,
+            color: "#176B4D",
+            font: "600 11px var(--mono)",
+            textDecoration: "none"
+          }}
+        >
+          <Bot size={13} />
+          <span>MULTI-AGENT ORCHESTRATION</span>
+          <ArrowRight size={12} />
+        </Link>
       </div>
 
       {/* Control Card */}

@@ -27,6 +27,7 @@ import {
   Activity,
   Code2,
   Atom,
+  Bot,
 } from "lucide-react";
 
 interface ChatMessage {
@@ -287,6 +288,16 @@ Zero leakage rule: Scalers fitted strictly on training splits. Ground all assert
                 ))}
               </select>
             </div>
+
+            {/* Multi-Agent Orchestrator Trigger */}
+            <Link
+              href="/workspace/orchestration"
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-[8px] bg-[#E6F0E9] border border-[#176B4D] text-[#176B4D] hover:bg-[#176B4D] hover:text-[#FFFFFF] text-[11px] font-mono font-semibold transition-all shadow-xs"
+              title="Open 12-Agent Multi-Agent Orchestration Hub"
+            >
+              <Bot size={13} />
+              <span>ORCHESTRATOR</span>
+            </Link>
 
             {/* Clear Button */}
             <button

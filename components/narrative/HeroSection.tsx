@@ -67,7 +67,20 @@ export function HeroSection() {
         <div style={{ background: "#FFFFFF", border: "1px solid #DFE5DC", borderRadius: 12, padding: 24, boxShadow: "0 4px 16px rgba(38, 53, 45, 0.05)" }}>
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", borderBottom: "1px solid #DFE5DC", paddingBottom: 10, marginBottom: 16 }}>
             <span style={{ font: "600 10px var(--mono)", color: "#176B4D" }}>LIVE ORCHESTRATION PREVIEW</span>
-            <span style={{ font: "400 10px var(--mono)", color: "#68766D" }}>12 AGENTS ACTIVE</span>
+            <a
+              href="/workspace/orchestration"
+              style={{
+                font: "600 10px var(--mono)",
+                color: "#176B4D",
+                textDecoration: "none",
+                display: "inline-flex",
+                alignItems: "center",
+                gap: 4
+              }}
+            >
+              <span>LAUNCH HUB</span>
+              <span aria-hidden="true">↗</span>
+            </a>
           </div>
 
           <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 10, marginBottom: 16 }}>
@@ -86,9 +99,24 @@ export function HeroSection() {
             ))}
           </div>
 
-          <div style={{ background: "#F8F6EF", border: "1px solid #DFE5DC", borderRadius: 6, padding: 12, font: "400 11px var(--mono)", color: "#26352D" }}>
-            <div style={{ color: "#176B4D", fontWeight: 600, marginBottom: 4 }}>[Execution Log] Running Random Forest classifier...</div>
-            <div>Dataset: 2,400 samples // Target: label // Metric: 0.942 Accuracy</div>
+          <div style={{ background: "#F8F6EF", border: "1px solid #DFE5DC", borderRadius: 6, padding: 12, font: "400 11px var(--mono)", color: "#26352D", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+            <div>
+              <div style={{ color: "#176B4D", fontWeight: 600, marginBottom: 4 }}>[12 Agents Active] Multi-Agent Pipeline Online</div>
+              <div>Dataset: 2,400 samples // Target: label // Metric: 0.942 Accuracy</div>
+            </div>
+            <a
+              href="/workspace/orchestration"
+              style={{
+                padding: "6px 12px",
+                borderRadius: 6,
+                background: "#176B4D",
+                color: "#FFFFFF",
+                font: "600 10px var(--mono)",
+                textDecoration: "none"
+              }}
+            >
+              RUN CYCLE
+            </a>
           </div>
         </div>
       </div>

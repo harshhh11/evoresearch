@@ -376,6 +376,15 @@ export default function WorkspaceOverviewPage() {
           {/* Action Toolbar Buttons */}
           <div className="flex flex-wrap items-center gap-2.5 pt-0.5">
             <Link
+              href="/workspace/orchestration"
+              className="px-3.5 py-1.5 rounded-[8px] text-[12px] font-sans font-semibold text-[#FFFFFF] bg-[#176B4D] hover:bg-[#12543C] inline-flex items-center gap-2 border border-[#176B4D] transition-all shadow-sm"
+            >
+              <Bot size={14} className="text-[#FFFFFF]" />
+              <span>Agent Orchestrator</span>
+              <span className="px-1.5 py-0.5 bg-[#FFFFFF]/25 text-[9px] font-mono rounded font-bold">12 AGENTS</span>
+            </Link>
+
+            <Link
               href="/workspace/evolution"
               className="px-3.5 py-1.5 rounded-[8px] text-[12px] font-sans font-medium text-[#26352D] hover:text-[#176B4D] inline-flex items-center gap-2 border border-[#DFE5DC] bg-[#FFFFFF] hover:bg-[#E6F0E9] transition-all"
             >

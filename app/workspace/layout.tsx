@@ -25,6 +25,7 @@ import {
   PanelLeftClose,
   PanelLeftOpen,
   Menu,
+  Bot
 } from "lucide-react";
 import { ReactNode, useState, useEffect } from "react";
 import { api } from "@/lib/api";
@@ -34,6 +35,7 @@ const navigationGroups = [
     group: "EXPERIMENTS & DATA",
     items: [
       { name: "Overview Canvas", href: "/workspace", icon: LayoutDashboard },
+      { name: "Agent Orchestration", href: "/workspace/orchestration", icon: Bot },
       { name: "Evolution Timeline", href: "/workspace/evolution", icon: Terminal },
       { name: "Run Experiment", href: "/workspace/experiments/new", icon: FlaskConical },
       { name: "Analytics & Trends", href: "/workspace/analytics", icon: BarChart3 },
@@ -93,22 +95,29 @@ export default function WorkspaceLayout({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     let mounted = true;
-    api.getHealth()
-      .then((h) => {
-        if (mounted) setEngineStatus(h.status === "ok" ? "online" : "offline");
-      })
-      .catch(() => {
-        if (mounted) setEngineStatus("offline");
-      });
 
-    api.getAIStatus()
-      .then((st) => {
-        if (mounted && st) setAiStatus(st);
-      })
-      .catch(() => {});
+    const checkHealth = () => {
+      api.getHealth()
+        .then((h) => {
+          if (mounted) setEngineStatus(h.status === "ok" ? "online" : "offline");
+        })
+        .catch(() => {
+          if (mounted) setEngineStatus("offline");
+        });
+
+      api.getAIStatus()
+        .then((st) => {
+          if (mounted && st) setAiStatus(st);
+        })
+        .catch(() => {});
+    };
+
+    checkHealth();
+    const interval = setInterval(checkHealth, 3000);
 
     return () => {
       mounted = false;
+      clearInterval(interval);
     };
   }, []);
 
