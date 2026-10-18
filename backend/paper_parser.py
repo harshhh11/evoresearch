@@ -34,7 +34,16 @@ class PaperParser:
         domain_key = "machine_learning"
         domain_name = "Machine Learning & Statistical Modeling"
 
-        if any(w in text_lower for w in ["transformer", "llm", "bert", "gpt", "attention", "token", "prompt", "perplexity"]):
+        if any(w in text_lower for w in ["quantiz", "edge", "mcu", "int8", "mobilenet", "pruning", "tinyml"]):
+            domain_key = "edge_ml"
+            domain_name = "Edge & Efficient ML"
+        elif any(w in text_lower for w in ["kan", "kolmogorov-arnold", "cpu-based", "cpu ml"]):
+            domain_key = "cpu_ml"
+            domain_name = "CPU-Based Machine Learning"
+        elif any(w in text_lower for w in ["pointnet", "point cloud", "3d mesh", "3d reconstruction"]):
+            domain_key = "threed_ml"
+            domain_name = "3D Machine Learning & Geometry"
+        elif any(w in text_lower for w in ["transformer", "llm", "bert", "gpt", "attention", "token", "prompt", "perplexity"]):
             domain_key = "transformers_llm"
             domain_name = "Transformer Architectures & LLM Research"
         elif any(w in text_lower for w in ["nlp", "sentiment", "text classification", "corpus", "tokenization", "word2vec"]):

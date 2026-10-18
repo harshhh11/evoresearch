@@ -55,6 +55,10 @@ add_col_if_missing("experiments", "split_strategy", "VARCHAR(64) DEFAULT 'holdou
 add_col_if_missing("experiments", "started_at", "DATETIME")
 add_col_if_missing("experiments", "completed_at", "DATETIME")
 
+# Failure Records columns
+add_col_if_missing("failure_records", "stage", "VARCHAR(64) DEFAULT 'EXECUTING'")
+add_col_if_missing("failure_records", "traceback_snippet", "TEXT DEFAULT ''")
+
 conn.commit()
 conn.close()
 

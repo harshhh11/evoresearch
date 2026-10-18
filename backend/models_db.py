@@ -308,10 +308,12 @@ class FailureRecord(Base, SerializerMixin):
     id = Column(String(36), primary_key=True, default=gen_uuid)
     run_id = Column(String(36), ForeignKey("runs.id"), nullable=True)
     experiment_id = Column(String(36), ForeignKey("experiments.id"), nullable=False)
+    stage = Column(String(64), default="EXECUTING")
     error_category = Column(String(128), nullable=False)
     error_signature = Column(String(255), nullable=False)
     error_message = Column(Text, default="")
     traceback = Column(Text, default="")
+    traceback_snippet = Column(Text, default="")
     diagnosis = Column(Text, default="")
     proposed_repair = Column(Text, default="{}")
     applied_repair = Column(Text, default="{}")
@@ -354,6 +356,26 @@ class RecoveryMemory(Base, SerializerMixin):
     evidence_reference = Column(Text, default="")
     created_at = Column(DateTime, default=utc_now)
     updated_at = Column(DateTime, default=utc_now, onupdate=utc_now)
+
+    def __init__(self, **kwargs):
+        if "category" in kwargs:
+            kwargs["error_category"] = kwargs.pop("category")
+        if "resolution" in kwargs:
+            kwargs["diagnosis"] = kwargs.pop("resolution")
+        if "verified" in kwargs:
+            is_v = kwargs.pop("verified")
+            kwargs["state"] = "VALIDATED" if is_v else "UNVERIFIED"
+        if "task_type" not in kwargs:
+            kwargs["task_type"] = "tabular_regression"
+        if "model_family" not in kwargs:
+            kwargs["model_family"] = "General"
+        if "error_category" not in kwargs:
+            kwargs["error_category"] = "GeneralError"
+        if "error_signature" not in kwargs:
+            kwargs["error_signature"] = "UnknownError"
+        if "diagnosis" not in kwargs:
+            kwargs["diagnosis"] = "Automated recovery diagnostic"
+        super().__init__(**kwargs)
 
 class RecoveryAttempt(Base, SerializerMixin):
     __tablename__ = "recovery_attempts"

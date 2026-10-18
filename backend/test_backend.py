@@ -1,3 +1,4 @@
+import os
 import pytest
 import json
 import pandas as pd
@@ -33,7 +34,8 @@ def test_sample_datasets_generated():
 def test_real_ml_execution():
     from backend.adapters.nomad_adapter import NomadDatasetAdapter
     adapter = NomadDatasetAdapter()
-    res_proc = adapter.process("backend/data/materials/nomad2018_train.csv")
+    nomad_csv = os.path.join(os.path.dirname(__file__), "data", "materials", "nomad2018_train.csv")
+    res_proc = adapter.process(nomad_csv)
     cleaned_df = res_proc["df"]
     assert len(cleaned_df) == 2400
     assert "bandgap_energy_ev" in cleaned_df.columns

@@ -105,6 +105,30 @@ class DomainRegistry:
                 "adapter_class": "GeneralDomainAdapter"
             },
             {
+                "key": "edge_ml",
+                "name": "Edge & Efficient ML",
+                "description": "Quantization (INT8), pruning, latency-constrained edge deployment, MCU/mobile inference.",
+                "adapter_class": "EdgeMlAdapter"
+            },
+            {
+                "key": "cpu_ml",
+                "name": "CPU-Based Machine Learning",
+                "description": "Fast CPU-bounded ML pipelines, linear models, tree-based models, Optuna hyperparameter tuning.",
+                "adapter_class": "CpuMlAdapter"
+            },
+            {
+                "key": "threed_ml",
+                "name": "3D Machine Learning & Geometry",
+                "description": "Point clouds, 3D meshes, CAD representations, spatial invariant feature learning.",
+                "adapter_class": "ThreeDAdapter"
+            },
+            {
+                "key": "general_research",
+                "name": "General Scientific Research",
+                "description": "General machine learning and multi-disciplinary data science research.",
+                "adapter_class": "GeneralDomainAdapter"
+            },
+            {
                 "key": "custom",
                 "name": "Custom / Open-Ended Scientific Research",
                 "description": "Custom research objectives, novel hypotheses, flexible evaluation protocols.",
