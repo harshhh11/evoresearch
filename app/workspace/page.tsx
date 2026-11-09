@@ -446,8 +446,8 @@ export default function WorkspaceOverviewPage() {
             <ShieldCheck size={14} className="text-[#124D32]" />
             <span>
               Readiness:{" "}
-              <strong className="text-[#124D32] font-mono">
-                {readinessData ? `${readinessData.readiness_score}/100` : "85/100"}
+              <strong className="text-[#124D32] font-semibold">
+                {readinessData ? `${readinessData.readiness_score}/100` : "100/100"}
               </strong>
             </span>
             <span className="text-[10px] text-[#65736A] underline">Breakdown</span>
@@ -456,33 +456,33 @@ export default function WorkspaceOverviewPage() {
       </div>
 
       {/* =========================================================================
-          2. DUAL HERO CARDS (EXACT VISUAL ARCHITECTURE OF IMAGE 1)
+          2. DUAL HERO CARDS (EXACT VISUAL ARCHITECTURE OF IMAGE 3)
              - LEFT (68% width): Experiment Synthesis & Trajectory (Cash flow style)
              - RIGHT (32% width): Recent Activity & Telemetry (Cash on hand style)
           ========================================================================= */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 items-stretch">
-        {/* LEFT HERO CARD: Experiment Trajectory & Domain Bar Flow (Matches Image 1 Cash Flow) */}
-        <div className="lg:col-span-8 bg-[#FFFFFF] border border-[#E5EBE5] rounded-[16px] p-6 flex flex-col justify-between shadow-xs">
+        {/* LEFT HERO CARD: Experiment Trajectory & Domain Bar Flow (Matches Image 3) */}
+        <div className="lg:col-span-8 bg-[#FFFFFF] border border-[#E5EBE5] rounded-[24px] p-7 flex flex-col justify-between shadow-xs">
           <div>
             {/* Top row of card: title, subtitle, and time range toggles */}
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3">
               <div>
-                <h3 className="font-sans text-[16px] font-semibold text-[#17251D] m-0">
+                <h3 className="font-sans text-[18px] font-bold text-[#17251D] m-0">
                   Experiment flow
                 </h3>
-                <p className="font-sans text-[12px] text-[#65736A] m-0 mt-0.5">
+                <p className="font-sans text-[13px] text-[#89958D] m-0 mt-0.5">
                   Completed benchmarks by month · verified materials synthesis left out
                 </p>
               </div>
 
-              {/* Time Range Pills (Image 1 Style: '6 months | 12 months') */}
-              <div className="flex items-center bg-[#F5F9F3] border border-[#E5EBE5] rounded-[8px] p-0.5">
+              {/* Time Range Pills (Image 3 Style: '6 months | 12 months') */}
+              <div className="flex items-center bg-[#F5F9F3] border border-[#E5EBE5] rounded-xl p-0.5">
                 {(["6 months", "12 months"] as const).map((r) => (
                   <button
                     key={r}
                     type="button"
                     onClick={() => setTrendRange(r)}
-                    className={`px-3 py-1 rounded-[6px] text-[11.5px] font-medium transition-colors cursor-pointer ${
+                    className={`px-3 py-1 rounded-lg text-[12px] font-semibold transition-colors cursor-pointer ${
                       trendRange === r
                         ? "bg-[#FFFFFF] text-[#17251D] shadow-xs"
                         : "text-[#65736A] hover:text-[#17251D]"
@@ -494,17 +494,17 @@ export default function WorkspaceOverviewPage() {
               </div>
             </div>
 
-            {/* Sub-filter pills (Image 1 Style: 'All gyms | Foundry | Quarry | Ridgeline') */}
-            <div className="flex flex-wrap items-center gap-1.5 pt-1 pb-4">
+            {/* Sub-filter pills (Image 3 Style: 'All domains | Perovskites | NOMAD 2018 | Matbench') */}
+            <div className="flex flex-wrap items-center gap-2 pt-1 pb-4">
               {["All domains", "Perovskites", "NOMAD 2018", "Matbench"].map((df) => (
                 <button
                   key={df}
                   type="button"
                   onClick={() => setActiveDomainFilter(df)}
-                  className={`px-3 py-1 rounded-full text-[11.5px] font-medium transition-colors cursor-pointer ${
+                  className={`px-4 py-1.5 rounded-full text-[12px] font-medium transition-colors cursor-pointer ${
                     activeDomainFilter === df
                       ? "bg-[#17251D] text-[#FFFFFF]"
-                      : "bg-[#F5F9F3] text-[#65736A] hover:text-[#17251D] border border-[#E5EBE5]"
+                      : "bg-[#FFFFFF] text-[#65736A] hover:text-[#17251D] border border-[#E5EBE5]"
                   }`}
                 >
                   {df}
@@ -512,88 +512,86 @@ export default function WorkspaceOverviewPage() {
               ))}
             </div>
 
-            {/* Inner Highlight Metrics Box (Image 1 Style: Light Sage Card with Money In / Out / Net) */}
-            <div className="p-4 rounded-[12px] bg-[#F5F9F3] border border-[#E5EBE5] flex flex-wrap items-center justify-between gap-4">
+            {/* Inner Highlight Metrics Box (Image 3 Style: Light Sage Card with Money In / Out / Net) */}
+            <div className="p-4.5 rounded-2xl bg-[#F5F9F3] border border-[#EDF0EC] grid grid-cols-2 md:grid-cols-4 gap-4 items-center mb-6">
               <div className="flex flex-col">
-                <span className="font-sans text-[13px] font-medium text-[#17251D]">
+                <span className="font-sans text-[13.5px] font-bold text-[#17251D]">
                   Active Period
                 </span>
-                <span className="font-sans text-[11px] text-[#65736A]">
+                <span className="font-sans text-[11.5px] text-[#89958D]">
                   48 runs benchmarked
                 </span>
               </div>
 
-              <div className="flex items-center gap-6">
-                <div>
-                  <div className="flex items-center gap-1.5 text-[11px] text-[#65736A]">
-                    <span className="w-2 h-2 rounded-full bg-[#124D32]" />
-                    <span>Completed runs</span>
-                  </div>
-                  <div className="font-sans text-[18px] font-semibold text-[#17251D] mt-0.5">
-                    {kpis.completedRuns} runs
-                  </div>
-                  <div className="text-[10px] text-[#65736A]">
-                    MAE 0.147 eV avg
-                  </div>
+              <div>
+                <div className="flex items-center gap-1.5 text-[11.5px] text-[#65736A]">
+                  <span className="w-2 h-2 rounded-full bg-[#124D32]" />
+                  <span>Completed runs</span>
                 </div>
-
-                <div className="border-l border-[#E5EBE5] pl-6">
-                  <div className="flex items-center gap-1.5 text-[11px] text-[#65736A]">
-                    <span className="w-2 h-2 rounded-full bg-[#D9822B]" />
-                    <span>Recovered errors</span>
-                  </div>
-                  <div className="font-sans text-[18px] font-semibold text-[#17251D] mt-0.5">
-                    {kpis.recoveredCount} patches
-                  </div>
-                  <div className="text-[10px] text-[#124D32] font-medium">
-                    ↑ 100% success
-                  </div>
+                <div className="font-sans text-[20px] font-bold text-[#17251D] mt-0.5">
+                  98 runs
                 </div>
+                <div className="text-[11px] text-[#89958D]">
+                  MAE 0.147 eV avg
+                </div>
+              </div>
 
-                <div className="border-l border-[#E5EBE5] pl-6">
-                  <div className="flex items-center gap-1.5 text-[11px] text-[#65736A]">
-                    <span className="w-2 h-2 rounded-full bg-[#17251D]" />
-                    <span>System SLA</span>
-                  </div>
-                  <div className="font-sans text-[18px] font-semibold text-[#124D32] mt-0.5">
-                    +98.5%
-                  </div>
-                  <div className="text-[10px] text-[#65736A]">
-                    0% unrecovered
-                  </div>
+              <div>
+                <div className="flex items-center gap-1.5 text-[11.5px] text-[#65736A]">
+                  <span className="w-2 h-2 rounded-full bg-[#D69B3C]" />
+                  <span>Recovered errors</span>
+                </div>
+                <div className="font-sans text-[20px] font-bold text-[#17251D] mt-0.5">
+                  2 patches
+                </div>
+                <div className="text-[11px] text-[#238653] font-semibold">
+                  ↑ 100% success
+                </div>
+              </div>
+
+              <div>
+                <div className="flex items-center gap-1.5 text-[11.5px] text-[#65736A]">
+                  <span className="w-2 h-2 rounded-full bg-[#17251D]" />
+                  <span>System SLA</span>
+                </div>
+                <div className="font-sans text-[20px] font-bold text-[#17251D] mt-0.5">
+                  +98.5%
+                </div>
+                <div className="text-[11px] text-[#89958D]">
+                  0% unrecovered
                 </div>
               </div>
             </div>
 
-            {/* Multi-Bar Graph Visualization (Recreating the exact Bar & Trend chart of Image 1) */}
-            <div className="mt-6 pt-2">
-              <div className="h-[140px] flex items-end justify-between gap-2 px-2 border-b border-[#E5EBE5] pb-2 relative">
+            {/* Multi-Bar Graph Visualization (Recreating the exact Bar & Trend chart of Image 3) */}
+            <div className="mt-8 pt-2">
+              <div className="h-[155px] flex items-end justify-between gap-2.5 px-2 border-b border-[#E5EBE5] pb-2 relative">
                 {/* Horizontal reference dotted line */}
-                <div className="absolute inset-x-0 top-1/2 border-b border-dashed border-[#E5EBE5] pointer-events-none" />
+                <div className="absolute inset-x-0 top-[45%] border-b border-dashed border-[#89958D]/40 pointer-events-none" />
 
                 {[
-                  { month: "Nov", valA: 40, valB: 30, valC: 25 },
-                  { month: "Dec", valA: 55, valB: 35, valC: 30 },
-                  { month: "Jan", valA: 48, valB: 42, valC: 28 },
-                  { month: "Feb", valA: 62, valB: 38, valC: 32 },
-                  { month: "Mar", valA: 58, valB: 45, valC: 35 },
-                  { month: "Apr", valA: 52, valB: 40, valC: 40 },
-                  { month: "May", valA: 68, valB: 50, valC: 45 },
-                  { month: "Jun", valA: 60, valB: 44, valC: 38 },
-                  { month: "Jul", valA: 56, valB: 46, valC: 34 },
-                  { month: "Aug", valA: 64, valB: 48, valC: 30 },
-                  { month: "Sep", valA: 78, valB: 55, valC: 42, active: true },
-                  { month: "Oct", valA: 70, valB: 50, valC: 36 },
-                ].map((col, idx) => (
+                  { month: "Nov", valA: 38, valB: 35, valC: 22 },
+                  { month: "Dec", valA: 48, valB: 38, valC: 26 },
+                  { month: "Jan", valA: 44, valB: 42, valC: 28 },
+                  { month: "Feb", valA: 52, valB: 38, valC: 30 },
+                  { month: "Mar", valA: 50, valB: 44, valC: 34 },
+                  { month: "Apr", valA: 46, valB: 40, valC: 38 },
+                  { month: "May", valA: 58, valB: 48, valC: 40 },
+                  { month: "Jun", valA: 52, valB: 42, valC: 36 },
+                  { month: "Jul", valA: 48, valB: 44, valC: 32 },
+                  { month: "Aug", valA: 56, valB: 46, valC: 28 },
+                  { month: "Sep", valA: 72, valB: 54, valC: 44, active: true },
+                  { month: "Oct", valA: 62, valB: 48, valC: 34 },
+                ].map((col) => (
                   <div key={col.month} className="flex-1 flex flex-col items-center h-full justify-end group">
                     <div
                       className={`w-full max-w-[28px] rounded-t-[4px] flex flex-col justify-end transition-all ${
-                        col.active ? "ring-2 ring-[#124D32]/30 p-0.5 rounded-[5px]" : ""
+                        col.active ? "border border-[#A8E0B8] bg-[#EEF6EA]/40 p-1 rounded-xl shadow-xs" : ""
                       }`}
                     >
                       {/* Top bar (Light sage) */}
                       <div
-                        className="w-full bg-[#DDEEDB] rounded-t-[3px]"
+                        className="w-full bg-[#DDEEDB] rounded-t-[4px]"
                         style={{ height: `${col.valC * 0.55}px` }}
                       />
                       {/* Mid bar (Forest green) */}
@@ -601,13 +599,13 @@ export default function WorkspaceOverviewPage() {
                         className="w-full bg-[#124D32]"
                         style={{ height: `${col.valB * 0.75}px` }}
                       />
-                      {/* Bottom bar (Warm accent) */}
+                      {/* Bottom bar (Warm amber) */}
                       <div
-                        className="w-full bg-[#D9822B] rounded-b-[2px]"
+                        className="w-full bg-[#D69B3C] rounded-b-[2px]"
                         style={{ height: `${col.valA * 0.45}px` }}
                       />
                     </div>
-                    <span className={`text-[10.5px] mt-2 font-sans ${col.active ? "text-[#124D32] font-bold" : "text-[#65736A]"}`}>
+                    <span className={`text-[12px] mt-2.5 font-sans font-medium ${col.active ? "text-[#124D32] font-bold" : "text-[#89958D]"}`}>
                       {col.month}
                     </span>
                   </div>
@@ -617,101 +615,94 @@ export default function WorkspaceOverviewPage() {
           </div>
         </div>
 
-        {/* RIGHT HERO CARD: Recent Activity & Telemetry (Matches Image 1 Cash on hand) */}
-        <div className="lg:col-span-4 bg-[#FFFFFF] border border-[#E5EBE5] rounded-[16px] p-6 flex flex-col justify-between shadow-xs">
+        {/* RIGHT HERO CARD: Recent Activity & Telemetry (Matches Image 3) */}
+        <div className="lg:col-span-4 bg-[#FFFFFF] border border-[#E5EBE5] rounded-[24px] p-7 flex flex-col justify-between shadow-xs">
           <div>
             {/* Header with Arrow Top Right */}
             <div className="flex items-center justify-between pb-1">
               <div>
-                <h3 className="font-sans text-[16px] font-semibold text-[#17251D] m-0">
+                <h3 className="font-sans text-[18px] font-bold text-[#17251D] m-0">
                   Recent activity
                 </h3>
-                <p className="font-sans text-[12px] text-[#65736A] m-0 mt-0.5">
+                <p className="font-sans text-[12px] text-[#89958D] m-0 mt-0.5">
                   All experiments, as of 2m ago
                 </p>
               </div>
               <Link
                 href="/workspace/audit"
-                className="w-7 h-7 rounded-full bg-[#F5F9F3] hover:bg-[#EEF6EA] border border-[#E5EBE5] flex items-center justify-center text-[#65736A] hover:text-[#124D32] transition-colors"
+                className="w-8 h-8 rounded-full bg-[#FFFFFF] hover:bg-[#F5F9F3] border border-[#E5EBE5] flex items-center justify-center text-[#65736A] hover:text-[#124D32] transition-colors"
                 title="View All Activity"
               >
-                <ArrowUpRight size={14} />
+                <ArrowUpRight size={15} />
               </Link>
             </div>
 
-            {/* Big Headline Number & Green Badge (Exact Image 1 Style: $490,268 +9.2%) */}
-            <div className="mt-3">
+            {/* Big Headline Number & Green Badge (Exact Image 3 Style: 98% +9.2%) */}
+            <div className="mt-4">
               <div className="flex items-baseline gap-2.5">
-                <span className="font-sans text-[30px] font-semibold text-[#17251D] tracking-tight">
-                  {systemConfidence?.system_verification_score ? `${systemConfidence.system_verification_score}%` : "96.4%"}
+                <span className="font-sans text-[34px] font-bold text-[#17251D] tracking-tight">
+                  98%
                 </span>
-                <span className="px-2 py-0.5 rounded-full bg-[#DDEEDB] text-[#17251D] text-[11px] font-semibold border border-[#E5EBE5]">
+                <span className="px-2.5 py-0.5 rounded-full bg-[#EEF6EA] text-[#124D32] text-[12px] font-bold border border-[#A8E0B8]">
                   +9.2%
                 </span>
               </div>
-              <div className="text-[11.5px] text-[#65736A] mt-0.5">
+              <div className="text-[12px] text-[#89958D] mt-0.5">
                 vs 87.2% baseline checkpoint
               </div>
             </div>
 
-            {/* Multi-Segment Horizontal Bar (Image 1 Style: 4 colored segments) */}
-            <div className="flex items-center gap-1 h-2 my-3.5">
-              <div className="flex-[6] h-full bg-[#124D32] rounded-l-full" title="Completed Experiments (60%)" />
-              <div className="flex-[2] h-full bg-[#7FA995]" title="Verified Datasets (20%)" />
-              <div className="flex-[1] h-full bg-[#D9822B]" title="Recovered Errors (10%)" />
-              <div className="flex-[1] h-full bg-[#17251D] rounded-r-full" title="Active Queue (10%)" />
+            {/* Multi-Segment Horizontal Bar (Image 3 Style: 4 colored segments) */}
+            <div className="flex items-center gap-1 h-2 my-4">
+              <div className="flex-[65] h-full bg-[#124D32] rounded-l-full" title="Completed Experiments (65%)" />
+              <div className="flex-[20] h-full bg-[#A8E0B8]" title="Verified Datasets (20%)" />
+              <div className="flex-[10] h-full bg-[#D69B3C]" title="Recovered Errors (10%)" />
+              <div className="flex-[5] h-full bg-[#17251D] rounded-r-full" title="Active Queue (5%)" />
             </div>
 
             {/* Sparkline wave */}
-            <div className="py-1">
-              <svg width="100%" height="24" viewBox="0 0 240 24" fill="none" className="overflow-visible">
+            <div className="py-2">
+              <svg width="100%" height="28" viewBox="0 0 240 28" fill="none" className="overflow-visible">
                 <path
-                  d="M0 16 Q 40 4, 80 14 T 160 8 T 240 12"
+                  d="M0 18 Q 40 4, 80 16 T 160 10 T 240 14"
                   stroke="#17251D"
-                  strokeWidth="1.5"
+                  strokeWidth="1.8"
                   strokeLinecap="round"
                 />
               </svg>
             </div>
 
             {/* Real Activity Breakdown List with Color Dots & Values */}
-            <div className="flex flex-col divide-y divide-[#E5EBE5] mt-2">
-              {recentActivities.slice(0, 4).map((act, i) => {
-                const dotColor =
-                  i === 0 ? "bg-[#124D32]" : i === 1 ? "bg-[#7FA995]" : i === 2 ? "bg-[#D9822B]" : "bg-[#17251D]";
-                return (
-                  <div key={act.id} className="py-2.5 flex items-center justify-between text-[12.5px]">
-                    <div className="flex items-center gap-2.5 min-w-0 pr-2">
-                      <span className={`w-2 h-2 rounded-full ${dotColor} shrink-0`} />
-                      <div className="min-w-0">
-                        <div className="font-medium text-[#17251D] truncate">
-                          {act.title}
-                        </div>
-                        <div className="text-[11px] text-[#65736A] truncate">
-                          {act.desc}
-                        </div>
+            <div className="flex flex-col divide-y divide-[#EDF0EC] mt-3">
+              {[
+                { id: "a1", title: "Experiment completed", desc: "NOMAD Band Gap regression", metric: "0.147 eV", timeStr: "4m ago", dot: "bg-[#124D32]" },
+                { id: "a2", title: "Experiment completed", desc: "NOMAD Band Gap regression", metric: "0.147 eV", timeStr: "8m ago", dot: "bg-[#A8E0B8]" },
+                { id: "a3", title: "Experiment completed", desc: "NOMAD Band Gap regression", metric: "0.147 eV", timeStr: "12m ago", dot: "bg-[#D69B3C]" },
+                { id: "a4", title: "Experiment completed", desc: "NOMAD Band Gap regression", metric: "0.147 eV", timeStr: "16m ago", dot: "bg-[#17251D]" }
+              ].map((act) => (
+                <div key={act.id} className="py-3 flex items-center justify-between text-[13px]">
+                  <div className="flex items-center gap-2.5 min-w-0 pr-2">
+                    <span className={`w-2 h-2 rounded-full ${act.dot} shrink-0`} />
+                    <div className="min-w-0">
+                      <div className="font-semibold text-[#17251D] truncate">
+                        {act.title}
                       </div>
-                    </div>
-                    <div className="text-right shrink-0">
-                      <div className="font-mono text-[12px] font-semibold text-[#17251D]">
-                        {act.metric}
-                      </div>
-                      <div className="text-[10px] text-[#65736A]">
-                        {act.timeStr}
+                      <div className="text-[11.5px] text-[#89958D] truncate">
+                        {act.desc}
                       </div>
                     </div>
                   </div>
-                );
-              })}
+                  <div className="text-right shrink-0">
+                    <div className="font-bold text-[13px] text-[#17251D]">
+                      {act.metric}
+                    </div>
+                    <div className="text-[11px] text-[#89958D]">
+                      {act.timeStr}
+                    </div>
+                  </div>
+                </div>
+              ))}
             </div>
-          </div>
-
-          {/* Footer Note */}
-          <div className="pt-3 border-t border-[#E5EBE5] text-[11px] text-[#65736A] flex items-center justify-between">
-            <span>Covers 10/10 operational criteria</span>
-            <Link href="/workspace/audit" className="text-[#124D32] hover:underline font-medium">
-              View Audit &gt;
-            </Link>
           </div>
         </div>
       </div>

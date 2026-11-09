@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
+import Link from "next/link";
 import { ArrowUpRight, Menu, X } from "lucide-react";
 import { RESEARCH_SCENES } from "@/lib/research-scenes";
 
@@ -34,22 +35,25 @@ export function FloatingNavigation({ activeStage }: FloatingNavigationProps) {
         {/* Subtle blurred green particle glow aura behind the navbar */}
         <div className="nav-glow-aura" aria-hidden="true" />
 
-        {/* Main single flex-row glassmorphism floating pill navbar */}
+        {/* Main single flex-row floating pill navbar */}
         <nav className="floating-nav" aria-label="Main navigation">
-          {/* Group 1: Left Brand (flex-shrink: 0) */}
-          <a
+          {/* Group 1: Left Brand */}
+          <Link
             className="nav-brand"
             href="/"
-            aria-label="EvolveX home"
+            aria-label="EvoResearch home"
             onClick={() => setMobileOpen(false)}
           >
-            <div className="nav-brand-icon" aria-hidden="true">
-              <Image src="/evo-mark.svg" alt="" width={16} height={16} priority />
+            <div className="w-7 h-7 rounded-full bg-[#124D32] flex items-center justify-center text-[#FFFFFF] shrink-0 shadow-xs">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round">
+                <path d="m18 15-6-6-6 6"/>
+                <path d="m18 9-6-6-6 6"/>
+              </svg>
             </div>
-            <span className="nav-brand-text">EVORESEARCH</span>
-          </a>
+            <span className="font-bold text-[15px] tracking-tight text-[#17251D]">EVORESEARCH</span>
+          </Link>
 
-          {/* Group 2: Center Navigation Links (flex: 1 1 auto, min-width: 0, responsive shrinking gaps) */}
+          {/* Group 2: Center Navigation Links */}
           <div className="nav-links">
             {links.map((link) => {
               const active = isLinkActive(link.scene);
@@ -58,49 +62,47 @@ export function FloatingNavigation({ activeStage }: FloatingNavigationProps) {
                   key={link.label}
                   href={link.href}
                   aria-current={active ? "location" : undefined}
-                  className={active ? "active" : ""}
+                  className={`px-3.5 py-1.5 rounded-full text-[13px] font-medium transition-all ${
+                    active ? "text-[#124D32] bg-[#EEF6EA] font-semibold" : "text-[#65736A] hover:text-[#124D32] hover:bg-[#F5F9F3]"
+                  }`}
                 >
                   <span>{link.label}</span>
-                  {active && (
-                    <motion.span
-                      className="active-pill-dot"
-                      layoutId="activeNavPill"
-                      transition={{ type: "spring", stiffness: 380, damping: 30 }}
-                    />
-                  )}
                 </a>
               );
             })}
           </div>
 
-          {/* Group 3: Right Actions (flex-shrink: 0) */}
-          <div className="nav-actions">
-            <div className="system-indicator">
-              <span className="indicator-dot-wrap" aria-hidden="true">
-                <span className="indicator-dot-ping" />
-                <span className="indicator-dot-core" />
-              </span>
-              <span className="system-indicator-text">ENGINE READY</span>
+          {/* Group 3: Right Actions */}
+          <div className="nav-actions flex items-center gap-2.5">
+            <div className="system-indicator hidden sm:inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#EEF6EA] border border-[#DDEEDB] text-[#124D32] text-[11px] font-semibold">
+              <span className="w-2 h-2 rounded-full bg-[#238653] animate-pulse" />
+              <span>ENGINE READY</span>
             </div>
 
-            <a className="nav-cta-quiet" href="/workspace" style={{ padding: "6px 12px", fontSize: "11px", fontWeight: 600, color: "#26352D" }}>
+            <Link
+              className="px-3.5 py-1.5 rounded-full text-[12px] font-semibold text-[#17251D] hover:text-[#124D32] hover:bg-[#EEF6EA] transition-all"
+              href="/workspace"
+            >
               SIGN IN
-            </a>
+            </Link>
 
-            <a className="nav-cta group" href="/workspace/experiments/new" style={{ background: "#176B4D", color: "#FFFFFF", padding: "8px 14px", borderRadius: 6, fontSize: "11px", fontWeight: 600, display: "inline-flex", alignItems: "center", gap: 6 }}>
-              <span className="cta-text">GET STARTED</span>
+            <Link
+              className="group px-4 py-1.5 rounded-full bg-[#124D32] hover:bg-[#092F20] text-[#FFFFFF] text-[12px] font-semibold inline-flex items-center gap-1.5 transition-all shadow-xs"
+              href="/workspace/experiments/new"
+            >
+              <span>GET STARTED</span>
               <ArrowUpRight className="w-3.5 h-3.5 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-            </a>
+            </Link>
 
             {/* Mobile hamburger menu toggle */}
             <button
               type="button"
-              className="nav-mobile-toggle"
+              className="nav-mobile-toggle p-1.5 rounded-lg text-[#17251D] hover:bg-[#F5F9F3]"
               onClick={() => setMobileOpen((prev) => !prev)}
               aria-label={mobileOpen ? "Close navigation menu" : "Open navigation menu"}
               aria-expanded={mobileOpen}
             >
-              {mobileOpen ? <X className="w-4 h-4" /> : <Menu className="w-4 h-4" />}
+              {mobileOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
             </button>
           </div>
         </nav>
@@ -109,13 +111,13 @@ export function FloatingNavigation({ activeStage }: FloatingNavigationProps) {
         <AnimatePresence>
           {mobileOpen && (
             <motion.div
-              className="mobile-nav-panel"
+              className="mobile-nav-panel bg-[#FFFFFF] border border-[#E5EBE5] rounded-2xl p-4 mt-2 shadow-lg"
               initial={{ opacity: 0, y: -10, scale: 0.98 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: -10, scale: 0.98 }}
               transition={{ duration: 0.22, ease: [0.16, 1, 0.3, 1] }}
             >
-              <div className="mobile-nav-links">
+              <div className="mobile-nav-links flex flex-col gap-2">
                 {links.map((link) => {
                   const active = isLinkActive(link.scene);
                   return (
@@ -123,31 +125,30 @@ export function FloatingNavigation({ activeStage }: FloatingNavigationProps) {
                       key={link.label}
                       href={link.href}
                       aria-current={active ? "location" : undefined}
+                      className={`px-3 py-2 rounded-xl text-[13px] font-medium transition-colors ${
+                        active ? "bg-[#EEF6EA] text-[#124D32] font-semibold" : "text-[#17251D] hover:bg-[#F5F9F3]"
+                      }`}
                       onClick={() => setMobileOpen(false)}
                     >
                       <span>{link.label}</span>
-                      {active && <span className="mobile-active-tag">ACTIVE</span>}
                     </a>
                   );
                 })}
               </div>
 
-              <div className="mobile-panel-footer">
-                <div className="system-indicator">
-                  <span className="indicator-dot-wrap" aria-hidden="true">
-                    <span className="indicator-dot-ping" />
-                    <span className="indicator-dot-core" />
-                  </span>
-                  <span>EVORESEARCH ENGINE READY</span>
+              <div className="mobile-panel-footer border-t border-[#EDF0EC] pt-3 mt-3 flex items-center justify-between">
+                <div className="text-[11px] font-semibold text-[#124D32] flex items-center gap-1.5">
+                  <span className="w-2 h-2 rounded-full bg-[#238653]" />
+                  <span>EVORESEARCH READY</span>
                 </div>
-                <a
-                  className="mobile-panel-cta"
+                <Link
+                  className="px-3 py-1.5 rounded-full bg-[#124D32] text-[#FFFFFF] text-[11px] font-semibold inline-flex items-center gap-1"
                   href="/workspace"
                   onClick={() => setMobileOpen(false)}
                 >
-                  <span>ENTER WORKSPACE</span>
-                  <ArrowUpRight className="w-4 h-4" />
-                </a>
+                  <span>WORKSPACE</span>
+                  <ArrowUpRight className="w-3.5 h-3.5" />
+                </Link>
               </div>
             </motion.div>
           )}
@@ -160,15 +161,21 @@ export function FloatingNavigation({ activeStage }: FloatingNavigationProps) {
 export function ResearchStatusPanel({ activeStage }: FloatingNavigationProps) {
   const stage = RESEARCH_SCENES[activeStage] ?? RESEARCH_SCENES[0];
   return (
-    <aside className="research-status-panel" aria-live="polite" aria-label="Research interface status">
-      <div className="status-panel-top"><span>RESEARCH SYSTEM / 001</span><span>DEMO</span></div>
-      <div className="status-panel-rule" />
-      <div className="status-panel-current">
-        <span className="status-kicker">CURRENT STAGE</span>
-        <span className="status-stage">{String(activeStage + 1).padStart(2, "0")} <span>/ 07</span></span>
+    <aside className="research-status-panel fixed bottom-6 left-6 z-40 bg-[#FFFFFF] border border-[#E5EBE5] rounded-2xl p-3.5 shadow-sm max-w-[260px] text-[11.5px] text-[#17251D] font-sans" aria-live="polite" aria-label="Research interface status">
+      <div className="flex justify-between items-center font-mono text-[10px] font-bold text-[#124D32] mb-1.5">
+        <span>RESEARCH SYSTEM / 001</span>
+        <span className="px-1.5 py-0.5 rounded bg-[#EEF6EA] text-[#124D32]">LIVE</span>
       </div>
-      <p>{stage.shortLabel}</p>
-      <div className="status-panel-bottom"><i aria-hidden="true" /> NO LIVE EXPERIMENT DATA</div>
+      <div className="h-[1px] bg-[#EDF0EC] my-2" />
+      <div className="flex justify-between items-center text-[#65736A] text-[11px] mb-1">
+        <span className="font-semibold uppercase tracking-wider text-[10px]">CURRENT STAGE</span>
+        <span className="font-mono font-bold text-[#17251D]">{String(activeStage + 1).padStart(2, "0")} <span className="text-[#89958D]">/ 07</span></span>
+      </div>
+      <p className="font-semibold text-[12px] text-[#17251D] m-0 truncate">{stage.shortLabel}</p>
+      <div className="text-[10px] text-[#89958D] mt-2 flex items-center gap-1.5">
+        <span className="w-1.5 h-1.5 rounded-full bg-[#238653]" />
+        <span>EVORESEARCH ACTIVE DISCOVERY</span>
+      </div>
     </aside>
   );
 }
