@@ -4,23 +4,17 @@ import { useEffect, useState, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { api, Project, Dataset } from "@/lib/api";
 import {
-  FlaskConical,
   Sparkles,
-  Settings,
-  Database,
-  Cpu,
-  Zap,
   ArrowRight,
-  ShieldCheck,
-  CheckCircle2,
-  Atom,
-  Clock,
-  RotateCcw,
+  Layers,
+  BarChart3,
+  Users,
+  FileText,
+  GitBranch,
   Plus,
   X,
-  Code,
-  Layers,
-  Bot
+  Check,
+  ChevronDown
 } from "lucide-react";
 
 // Task-Aware Categorized Model Catalog
@@ -55,11 +49,10 @@ const CATEGORIZED_MODEL_CATALOG: Record<string, Array<{ id: string; name: string
   ]
 };
 
-// Default seed projects & datasets if backend is cold-starting or empty
 const DEFAULT_SEED_PROJECTS: Project[] = [
   {
     id: "368af2a4-6ffb-4647-8995-07f26ce5f6a0",
-    name: "Materials Science ML & Transparent Conductors Benchmark",
+    name: "Materials Science Benchmark Project",
     domain: "general_ai",
     description: "Controlled benchmark investigating verified failure-and-recovery memory under strict CPU-time constraints on materials-science regression benchmarks.",
     research_question: "Can evidence-validated failure-and-recovery memory improve the optimization efficiency of materials models?",
@@ -106,7 +99,7 @@ const DEFAULT_SEED_PROJECTS: Project[] = [
 const DEFAULT_SEED_DATASETS: Dataset[] = [
   {
     id: "ds-materials-nomad",
-    name: "NOMAD 2018 Band-Gap Benchmark",
+    name: "Matbench — Experimental Band Gap (matbench_expt_gap)",
     description: "NOMAD 2018 transparent conductors dataset with measured and computed bandgap targets.",
     file_path: "data/nomad.csv",
     feature_names: "[]",
@@ -133,11 +126,36 @@ const DEFAULT_SEED_DATASETS: Dataset[] = [
 ];
 
 const EXECUTION_APPROACHES = [
-  { id: "single_model", name: "Single Model Experiment", desc: "Execute bounded hyperparameter tuning on a single chosen architecture." },
-  { id: "comparative_model", name: "Comparative Model Benchmark", desc: "Run side-by-side evaluation across baseline and candidate models." },
-  { id: "ai_agent_orchestrated", name: "AI-Agent-Orchestrated Research", desc: "Coordinates 12 specialized AI agents for paper ingestion, planning, data prep, compute routing, execution, autopsy, and evidence reporting." },
-  { id: "paper_reproduction", name: "Research Paper Reproduction", desc: "Extracts published methodologies and baselines to verify reproducibility against measured runs." },
-  { id: "custom_workflow", name: "Custom Research Workflow", desc: "Custom objective-driven experiment pipeline with custom evaluation metrics." }
+  {
+    id: "single_model",
+    name: "Single Model Experiment",
+    desc: "Execute bounded hyperparameter tuning on a single chosen architecture.",
+    icon: Layers
+  },
+  {
+    id: "comparative_model",
+    name: "Comparative Model Benchmark",
+    desc: "Run side-by-side evaluation across baseline and candidate models.",
+    icon: BarChart3
+  },
+  {
+    id: "ai_agent_orchestrated",
+    name: "AI-Agent-Orchestrated Research",
+    desc: "Coordinates 12 specialized AI agents for paper ingestion, planning, data prep, compute routing, execution, autopsy, and evidence reporting.",
+    icon: Users
+  },
+  {
+    id: "paper_reproduction",
+    name: "Research Paper Reproduction",
+    desc: "Extracts published methodologies and baselines to verify reproducibility against measured runs.",
+    icon: FileText
+  },
+  {
+    id: "custom_workflow",
+    name: "Custom Research Workflow",
+    desc: "Custom objective-driven experiment pipeline with custom evaluation metrics.",
+    icon: GitBranch
+  }
 ];
 
 function NewExperimentContent() {
@@ -153,7 +171,7 @@ function NewExperimentContent() {
 
   // Form State
   const [projectId, setProjectId] = useState(initialProjectId || DEFAULT_SEED_PROJECTS[0].id);
-  const [name, setName] = useState("Experiment on NOMAD 2018 Band-Gap Benchmark");
+  const [name, setName] = useState("Experiment on Matbench — Experimental Band Gap (matbench_expt_gap)");
   const [domain, setDomain] = useState("Machine Learning");
   const [executionApproach, setExecutionApproach] = useState("ai_agent_orchestrated");
   const [taskType, setTaskType] = useState("regression");
@@ -185,7 +203,6 @@ function NewExperimentContent() {
         api.getDatasets().catch(() => [])
       ]);
       
-      // Deduplicate projects by ID, fallback to seed projects if empty
       const rawList = (pList && pList.length > 0) ? pList : DEFAULT_SEED_PROJECTS;
       const uniqueProjects: Project[] = [];
       const seenIds = new Set<string>();
@@ -217,8 +234,7 @@ function NewExperimentContent() {
       if (targetDs) {
         setDatasetId(targetDs.id);
         setTaskType(targetDs.task_type || "regression");
-        setTargetColumn(targetDs.target_col || "target");
-        setName(`Experiment on ${targetDs.name}`);
+        setTargetColumn(targetDs.target_col || "formation_energy_ev_natom");
       }
     } catch (err) {
       console.error("Failed to load planner resources:", err);
@@ -239,8 +255,8 @@ function NewExperimentContent() {
     const selected = datasets.find((d) => d.id === id);
     if (selected) {
       setTaskType(selected.task_type || "regression");
-      setTargetColumn(selected.target_col || "target");
-      setName(`Multi-Agent Run: ${selected.name}`);
+      setTargetColumn(selected.target_col || "formation_energy_ev_natom");
+      setName(`Experiment on ${selected.name}`);
     }
   };
 
@@ -322,7 +338,6 @@ function NewExperimentContent() {
         random_seed: randomSeed
       });
 
-      // Launch multi-agent orchestration if approach selected
       if (executionApproach === "ai_agent_orchestrated") {
         await api.runOrchestration({ experiment_id: exp.id, execution_strategy: "Hybrid" });
       }
@@ -336,8 +351,8 @@ function NewExperimentContent() {
 
   if (loading) {
     return (
-      <div style={{ padding: "60px 0", textAlign: "center", font: "400 12px var(--mono)", color: "#68766D" }}>
-        LOADING UNIVERSAL EXPERIMENT PLANNER...
+      <div className="py-24 text-center text-[#89958D] text-[13px] font-medium">
+        Loading Universal Experiment Planner...
       </div>
     );
   }
@@ -345,166 +360,251 @@ function NewExperimentContent() {
   const currentDataset = datasets.find((d) => d.id === datasetId);
   const supportedTargets = currentDataset?.target_columns && currentDataset.target_columns.length > 0
     ? currentDataset.target_columns
-    : [currentDataset?.target_col || "target"];
+    : [currentDataset?.target_col || "formation_energy_ev_natom"];
 
   return (
-    <div style={{ display: "flex", flexDirection: "column", gap: 24, maxWidth: 1040, margin: "0 auto", color: "#26352D" }}>
-      {/* Page Header */}
-      <div style={{ borderBottom: "1px solid #DFE5DC", paddingBottom: 16 }}>
-        <div style={{ font: "600 10px/1 var(--mono)", color: "#176B4D", letterSpacing: "0.14em", marginBottom: 6 }}>
-          UNIVERSAL AI EXPERIMENTATION PLANNER // DOMAIN-GENERAL WORKSPACE
+    <div className="flex flex-col gap-6 w-full mx-auto text-[#17251D] pb-16">
+      {/* =========================================================================
+          1. HERO HEADER (STRICT REFERENCE REPRODUCTION WITH 100% WHITE CONTRAST)
+          ========================================================================= */}
+      <div
+        className="hero-banner relative rounded-3xl overflow-hidden p-8 sm:p-10 shadow-sm border border-[#124D32]"
+        style={{
+          background: "linear-gradient(135deg, #092F20 0%, #124D32 55%, #176B3A 100%)",
+          color: "#FFFFFF"
+        }}
+      >
+        {/* Crisp World Map Dot Matrix Graphic (Right Side) */}
+        <div className="absolute right-0 top-0 bottom-0 w-[55%] pointer-events-none opacity-40 overflow-hidden">
+          <svg className="w-full h-full" viewBox="0 0 600 300" fill="none">
+            {/* World Landmass Dots Representation */}
+            <g fill="#DDEEDB" opacity="0.65">
+              {/* North America */}
+              <circle cx="80" cy="70" r="2.5" /><circle cx="100" cy="65" r="2.5" /><circle cx="120" cy="75" r="2.5" />
+              <circle cx="90" cy="85" r="2.5" /><circle cx="110" cy="85" r="2.5" /><circle cx="130" cy="90" r="2.5" />
+              <circle cx="100" cy="105" r="2.5" /><circle cx="115" cy="115" r="2.5" />
+              {/* South America */}
+              <circle cx="140" cy="160" r="2.5" /><circle cx="150" cy="180" r="2.5" /><circle cx="160" cy="200" r="2.5" />
+              <circle cx="155" cy="220" r="2.5" /><circle cx="145" cy="240" r="2.5" />
+              {/* Europe */}
+              <circle cx="280" cy="65" r="2.5" /><circle cx="300" cy="60" r="2.5" /><circle cx="320" cy="70" r="2.5" />
+              <circle cx="290" cy="80" r="2.5" /><circle cx="310" cy="85" r="2.5" />
+              {/* Africa */}
+              <circle cx="290" cy="130" r="2.5" /><circle cx="310" cy="135" r="2.5" /><circle cx="330" cy="140" r="2.5" />
+              <circle cx="300" cy="160" r="2.5" /><circle cx="320" cy="170" r="2.5" /><circle cx="315" cy="195" r="2.5" />
+              <circle cx="310" cy="215" r="2.5" />
+              {/* Asia */}
+              <circle cx="360" cy="60" r="2.5" /><circle cx="390" cy="55" r="2.5" /><circle cx="420" cy="65" r="2.5" />
+              <circle cx="450" cy="60" r="2.5" /><circle cx="480" cy="70" r="2.5" />
+              <circle cx="380" cy="85" r="2.5" /><circle cx="410" cy="85" r="2.5" /><circle cx="440" cy="95" r="2.5" />
+              <circle cx="470" cy="100" r="2.5" /><circle cx="430" cy="120" r="2.5" />
+              {/* Australia */}
+              <circle cx="470" cy="200" r="2.5" /><circle cx="490" cy="205" r="2.5" /><circle cx="510" cy="215" r="2.5" />
+              <circle cx="480" cy="225" r="2.5" />
+            </g>
+          </svg>
         </div>
-        <h1 style={{ margin: 0, font: "600 24px/1.2 var(--font-primary), serif", color: "#26352D" }}>
-          Configure General AI Research Experiment
-        </h1>
-        <p style={{ margin: "6px 0 0", font: "400 13px/1.5 var(--font-primary), serif", color: "#68766D" }}>
-          Select a research project, dataset, execution approach, model catalog, and execution budget across Machine Learning, NLP, Computer Vision, Time-Series, and Custom Research domains.
-        </p>
+
+        {/* Luminous Glowing Emerald & Sage Wave-Line Illustration (Right Side) */}
+        <div className="absolute right-0 top-0 bottom-0 w-[55%] pointer-events-none overflow-hidden">
+          <svg className="w-full h-full" viewBox="0 0 600 300" preserveAspectRatio="none" fill="none">
+            {/* Smooth sweeping bezier curves matching Reference Image 1 */}
+            <path
+              d="M-20,300 C150,260 320,150 600,45"
+              stroke="#238653"
+              strokeWidth="4"
+              strokeOpacity="0.85"
+            />
+            <path
+              d="M10,310 C180,250 350,130 600,25"
+              stroke="#DDEEDB"
+              strokeWidth="2.5"
+              strokeOpacity="0.65"
+            />
+            <path
+              d="M50,320 C220,230 400,100 600,10"
+              stroke="#A8E0B8"
+              strokeWidth="2"
+              strokeOpacity="0.5"
+            />
+            <path
+              d="M90,330 C260,210 440,75 600,-5"
+              stroke="#FFFFFF"
+              strokeWidth="1.2"
+              strokeOpacity="0.4"
+            />
+          </svg>
+        </div>
+
+        {/* Hero Content (Guaranteed Pure White and Sage Text) */}
+        <div className="relative z-10 max-w-3xl">
+          <div
+            className="hero-eyebrow text-[11px] font-bold uppercase mb-2.5"
+            style={{ color: "#DDEEDB", letterSpacing: "2px" }}
+          >
+            UNIVERSAL AI EXPERIMENTATION PLANNER
+          </div>
+          <h1
+            className="hero-title text-[32px] sm:text-[36px] font-bold leading-tight tracking-tight mb-3"
+            style={{ color: "#FFFFFF", fontWeight: 700 }}
+          >
+            Configure General AI Research Experiment
+          </h1>
+          <p
+            className="hero-desc text-[14px] sm:text-[14.5px] leading-relaxed font-normal"
+            style={{ color: "rgba(255, 255, 255, 0.90)", maxWidth: "780px" }}
+          >
+            Select a research project, dataset, execution approach, model catalog, and execution budget across Machine Learning, NLP, Computer Vision, Time-Series, and Custom Research domains.
+          </p>
+        </div>
       </div>
 
-      <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: 20 }}>
-        {/* Section 1: Research Context & Deduplicated Project Selector */}
-        <div style={{ background: "#FFFFFF", border: "1px solid #DFE5DC", borderRadius: 12, padding: 20, boxShadow: "0 1px 3px rgba(0,0,0,0.03)" }}>
-          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 16 }}>
-            <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-              <span style={{ width: 22, height: 22, borderRadius: "50%", background: "#E6F0E9", color: "#176B4D", display: "grid", placeContent: "center", font: "600 11px var(--mono)", border: "1px solid #DFE5DC" }}>1</span>
-              <span style={{ font: "600 12px var(--mono)", color: "#26352D", letterSpacing: "0.06em" }}>RESEARCH PROJECT & CONTEXT</span>
+      <form onSubmit={handleSubmit} className="flex flex-col gap-6">
+        {/* =========================================================================
+            SECTION 1: RESEARCH PROJECT & CONTEXT (WHITE ROUNDED CARD)
+            ========================================================================= */}
+        <div className="bg-white border border-[#E5EBE5] rounded-3xl p-7 sm:p-8 shadow-xs">
+          {/* Card Header */}
+          <div className="flex items-center justify-between mb-6">
+            <div className="flex items-center gap-3.5">
+              <span className="w-8 h-8 rounded-full bg-[#DDEEDB] text-[#124D32] flex items-center justify-center font-bold text-[14px] shrink-0">
+                1
+              </span>
+              <h2 className="font-bold text-[20px] text-[#17251D] tracking-tight">
+                Research Project & Context
+              </h2>
             </div>
+
             <button
               type="button"
               onClick={() => setNewProjectModal(true)}
-              style={{
-                display: "inline-flex",
-                alignItems: "center",
-                gap: 6,
-                padding: "6px 12px",
-                background: "#FFFFFF",
-                border: "1px solid #DFE5DC",
-                color: "#176B4D",
-                font: "600 10px var(--mono)",
-                borderRadius: 6,
-                cursor: "pointer"
-              }}
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-white border border-[#E5EBE5] text-[13px] font-semibold text-[#17251D] hover:bg-[#F5F9F3] hover:border-[#124D32] transition-colors cursor-pointer shadow-xs"
             >
-              <Plus size={12} />
-              <span>CREATE NEW PROJECT</span>
+              <Plus size={15} strokeWidth={2.5} />
+              <span>Create New Project</span>
             </button>
           </div>
 
-          <div style={{ display: "grid", gridTemplateColumns: "1.2fr 1fr", gap: 16 }}>
-            <div>
-              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 6 }}>
-                <label style={{ font: "600 10px var(--mono)", color: "#176B4D" }}>
-                  RESEARCH PROJECT (DEDUPLICATED)
+          {/* Desktop Two-Column Layout */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-4">
+            {/* Left: Project Selector */}
+            <div className="flex flex-col gap-2">
+              <div className="flex items-center justify-between">
+                <label className="text-[12px] font-bold text-[#17251D]">
+                  Research Project (Deduplicated)
                 </label>
-                <span style={{ font: "500 10px var(--mono)", color: "#68766D" }}>
-                  {projects.length} AVAILABLE
+                <span className="text-[11px] font-semibold text-[#124D32] bg-[#DDEEDB] px-2.5 py-0.5 rounded-full">
+                  {projects.length} Available
                 </span>
               </div>
-              <select
-                value={projectId}
-                onChange={(e) => setProjectId(e.target.value)}
-                style={{
-                  width: "100%",
-                  padding: "10px 14px",
-                  background: "#FFFFFF",
-                  border: "1px solid #DFE5DC",
-                  borderRadius: 6,
-                  color: "#26352D",
-                  font: "500 12px var(--mono)",
-                  outline: "none",
-                  cursor: "pointer",
-                  boxShadow: "0 1px 3px rgba(0,0,0,0.02)"
-                }}
-              >
-                {projects.map((p) => (
-                  <option key={p.id} value={p.id} style={{ background: "#FFFFFF", color: "#26352D", padding: "8px" }}>
-                    [{p.domain || "General AI"}] {p.name}
-                  </option>
-                ))}
-              </select>
-
-              {/* Quick Select Project Pills */}
-              <div style={{ display: "flex", flexWrap: "wrap", gap: 6, marginTop: 10 }}>
-                {projects.slice(0, 4).map((p) => {
-                  const isSelected = projectId === p.id;
-                  return (
-                    <button
-                      key={p.id}
-                      type="button"
-                      onClick={() => setProjectId(p.id)}
-                      style={{
-                        padding: "4px 8px",
-                        borderRadius: 4,
-                        font: "500 10px var(--mono)",
-                        border: isSelected ? "1px solid #176B4D" : "1px solid #DFE5DC",
-                        background: isSelected ? "#E6F0E9" : "#FFFFFF",
-                        color: isSelected ? "#176B4D" : "#68766D",
-                        cursor: "pointer",
-                        transition: "all 0.15s ease"
-                      }}
-                    >
-                      {isSelected ? "✓ " : ""}{p.name.length > 28 ? p.name.slice(0, 26) + "..." : p.name}
-                    </button>
-                  );
-                })}
+              <div className="relative">
+                <select
+                  value={projectId}
+                  onChange={(e) => setProjectId(e.target.value)}
+                  className="w-full h-[46px] px-4 pr-10 rounded-xl bg-[#FFFFFF] border border-[#E5EBE5] text-[13.5px] font-medium text-[#17251D] focus:outline-none focus:border-[#124D32] shadow-xs cursor-pointer appearance-none transition-colors"
+                >
+                  {projects.map((p) => (
+                    <option key={p.id} value={p.id}>
+                      [{p.domain || "general_ai"}] {p.name}
+                    </option>
+                  ))}
+                </select>
+                <ChevronDown size={16} className="absolute right-4 top-1/2 -translate-y-1/2 text-[#89958D] pointer-events-none" />
               </div>
             </div>
 
-            <div>
-              <label style={{ display: "block", font: "600 10px var(--mono)", color: "#68766D", marginBottom: 6 }}>
-                EXPERIMENT TITLE
+            {/* Right: Experiment Title */}
+            <div className="flex flex-col gap-2">
+              <label className="text-[12px] font-bold text-[#17251D]">
+                Experiment Title
               </label>
               <input
                 type="text"
                 required
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                placeholder="e.g. LLM Reasoning Fine-Tuning Benchmark"
-                style={{
-                  width: "100%",
-                  padding: "10px 12px",
-                  background: "#FFFFFF",
-                  border: "1px solid #DFE5DC",
-                  borderRadius: 6,
-                  color: "#26352D",
-                  font: "400 12px var(--mono)",
-                  outline: "none",
-                  boxShadow: "0 1px 3px rgba(0,0,0,0.02)"
-                }}
+                placeholder="Experiment on Matbench — Experimental Band Gap (matbench_expt_gap)"
+                className="w-full h-[46px] px-4 rounded-xl bg-[#FFFFFF] border border-[#E5EBE5] text-[13.5px] font-medium text-[#17251D] focus:outline-none focus:border-[#124D32] shadow-xs transition-colors"
               />
             </div>
           </div>
+
+          {/* Project Selection Chips (Matching Reference Image) */}
+          <div className="flex flex-wrap items-center gap-2 pt-2">
+            {projects.slice(0, 4).map((p, idx) => {
+              const isSelected = projectId === p.id;
+              const displayName = p.name.length > 25 ? p.name.slice(0, 24) + "..." : p.name;
+              return (
+                <button
+                  key={p.id}
+                  type="button"
+                  onClick={() => setProjectId(p.id)}
+                  className={`px-4 py-1.5 rounded-full text-[12px] font-medium flex items-center gap-1.5 transition-all cursor-pointer ${
+                    isSelected
+                      ? "bg-[#124D32] text-white shadow-xs"
+                      : "bg-[#FFFFFF] border border-[#E5EBE5] text-[#65736A] hover:bg-[#F5F9F3] hover:text-[#17251D]"
+                  }`}
+                >
+                  {isSelected && <Check size={14} strokeWidth={2.5} />}
+                  <span>{displayName}</span>
+                </button>
+              );
+            })}
+          </div>
         </div>
 
-        {/* Section 2: Execution Approach Selection */}
-        <div style={{ background: "#FFFFFF", border: "1px solid #DFE5DC", borderRadius: 12, padding: 20, boxShadow: "0 1px 3px rgba(0,0,0,0.03)" }}>
-          <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 16 }}>
-            <span style={{ width: 22, height: 22, borderRadius: "50%", background: "#E6F0E9", color: "#176B4D", display: "grid", placeContent: "center", font: "600 11px var(--mono)", border: "1px solid #DFE5DC" }}>2</span>
-            <span style={{ font: "600 12px var(--mono)", color: "#26352D", letterSpacing: "0.06em" }}>EXECUTION APPROACH</span>
+        {/* =========================================================================
+            SECTION 2: EXECUTION APPROACH (EXACT 5 EQUAL CARDS IN ONE ROW ON DESKTOP)
+            ========================================================================= */}
+        <div className="bg-white border border-[#E5EBE5] rounded-3xl p-7 sm:p-8 shadow-xs">
+          {/* Card Header */}
+          <div className="flex items-center gap-3.5 mb-6">
+            <span className="w-8 h-8 rounded-full bg-[#DDEEDB] text-[#124D32] flex items-center justify-center font-bold text-[14px] shrink-0">
+              2
+            </span>
+            <h2 className="font-bold text-[20px] text-[#17251D] tracking-tight">
+              Execution Approach
+            </h2>
           </div>
 
-          <div style={{ display: "grid", gridTemplateColumns: "repeat( auto-fit, minmax(180px, 1fr) )", gap: 12 }}>
+          {/* 5 Cards Grid in One Horizontal Row on Desktop */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
             {EXECUTION_APPROACHES.map((appr) => {
               const isSelected = executionApproach === appr.id;
+              const Icon = appr.icon;
+
               return (
                 <div
                   key={appr.id}
                   onClick={() => setExecutionApproach(appr.id)}
-                  style={{
-                    padding: 14,
-                    borderRadius: 8,
-                    border: isSelected ? "1.5px solid #176B4D" : "1px solid #DFE5DC",
-                    background: isSelected ? "#E6F0E9" : "#FFFFFF",
-                    cursor: "pointer",
-                    transition: "all 0.2s ease"
-                  }}
+                  className={`relative rounded-2xl p-5 flex flex-col justify-between transition-all cursor-pointer select-none min-h-[175px] ${
+                    isSelected
+                      ? "bg-[#EEF6EA] border-[1.5px] border-[#124D32] shadow-xs"
+                      : "bg-white border border-[#E5EBE5] hover:border-[#DDEEDB] hover:bg-[#F5F9F3]/60"
+                  }`}
                 >
-                  <div style={{ font: "600 11px var(--mono)", color: isSelected ? "#176B4D" : "#26352D", marginBottom: 4 }}>
-                    {appr.name}
-                  </div>
-                  <div style={{ font: "400 11px/1.3 var(--font-primary), serif", color: "#68766D" }}>
-                    {appr.desc}
+                  {/* Top Right Selected Check Badge */}
+                  {isSelected && (
+                    <div className="w-5 h-5 rounded-full bg-[#124D32] text-white flex items-center justify-center absolute top-3.5 right-3.5 shadow-xs">
+                      <Check size={12} strokeWidth={3} />
+                    </div>
+                  )}
+
+                  <div>
+                    {/* Sage Circular Icon Container */}
+                    <div className="w-10 h-10 rounded-full bg-[#DDEEDB] flex items-center justify-center mb-4">
+                      <Icon size={19} className="text-[#124D32]" strokeWidth={2} />
+                    </div>
+
+                    {/* Card Title */}
+                    <h3 className={`font-bold text-[14px] leading-snug mb-2 ${isSelected ? "text-[#124D32]" : "text-[#17251D]"}`}>
+                      {appr.name}
+                    </h3>
+
+                    {/* Description */}
+                    <p className="text-[12px] text-[#65736A] leading-relaxed">
+                      {appr.desc}
+                    </p>
                   </div>
                 </div>
               );
@@ -512,65 +612,63 @@ function NewExperimentContent() {
           </div>
         </div>
 
-        {/* Section 3: Task-Aware Categorized Model Catalog */}
-        <div style={{ background: "#FFFFFF", border: "1px solid #DFE5DC", borderRadius: 12, padding: 20, boxShadow: "0 1px 3px rgba(0,0,0,0.03)" }}>
-          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 16 }}>
-            <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-              <span style={{ width: 22, height: 22, borderRadius: "50%", background: "#E6F0E9", color: "#176B4D", display: "grid", placeContent: "center", font: "600 11px var(--mono)", border: "1px solid #DFE5DC" }}>3</span>
-              <span style={{ font: "600 12px var(--mono)", color: "#26352D", letterSpacing: "0.06em" }}>MODEL CATALOG & ARCHITECTURE</span>
+        {/* =========================================================================
+            SECTION 3: MODEL CATALOG & ARCHITECTURE
+            ========================================================================= */}
+        <div className="bg-white border border-[#E5EBE5] rounded-3xl p-7 sm:p-8 shadow-xs">
+          {/* Card Header */}
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+            <div className="flex items-center gap-3.5">
+              <span className="w-8 h-8 rounded-full bg-[#DDEEDB] text-[#124D32] flex items-center justify-center font-bold text-[14px] shrink-0">
+                3
+              </span>
+              <h2 className="font-bold text-[20px] text-[#17251D] tracking-tight">
+                Model Catalog & Architecture
+              </h2>
             </div>
 
             <button
               type="button"
               onClick={handleAIRecommend}
               disabled={aiRecommending}
-              style={{
-                display: "inline-flex",
-                alignItems: "center",
-                gap: 6,
-                padding: "7px 14px",
-                background: "#176B4D",
-                border: "none",
-                color: "#FFFFFF",
-                font: "600 10px var(--mono)",
-                borderRadius: 6,
-                cursor: "pointer"
-              }}
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-[#124D32] hover:bg-[#092F20] text-white text-[13px] font-semibold shadow-xs transition-colors cursor-pointer self-start sm:self-auto"
             >
-              <Sparkles size={12} />
-              <span>{aiRecommending ? "RECOMMENDING..." : "AI RECOMMEND MODEL"}</span>
+              <Sparkles size={15} />
+              <span>{aiRecommending ? "Analyzing Benchmarks..." : "AI Recommend Model"}</span>
             </button>
           </div>
 
+          {/* AI Recommendation Alert */}
           {aiRecommendation && (
-            <div style={{ padding: 12, borderRadius: 6, background: "#E6F0E9", border: "1px solid #176B4D", font: "400 11px var(--mono)", color: "#176B4D", marginBottom: 16 }}>
-              🤖 <strong>AI RECOMMENDATION:</strong> {aiRecommendation}
+            <div className="p-4 rounded-2xl bg-[#EEF6EA] border border-[#124D32] text-[12.5px] text-[#124D32] font-medium flex items-center gap-2.5 mb-5 shadow-xs">
+              <Sparkles size={16} className="shrink-0" />
+              <span>{aiRecommendation}</span>
             </div>
           )}
 
-          {/* Category Tabs */}
-          <div style={{ display: "flex", gap: 12, borderBottom: "1px solid #DFE5DC", paddingBottom: 10, marginBottom: 14 }}>
-            {Object.keys(CATEGORIZED_MODEL_CATALOG).map((cat) => (
-              <button
-                key={cat}
-                type="button"
-                onClick={() => setSelectedCategory(cat)}
-                style={{
-                  background: "none",
-                  border: "none",
-                  font: selectedCategory === cat ? "600 11px var(--mono)" : "400 11px var(--mono)",
-                  color: selectedCategory === cat ? "#176B4D" : "#68766D",
-                  borderBottom: selectedCategory === cat ? "2px solid #176B4D" : "2px solid transparent",
-                  cursor: "pointer"
-                }}
-              >
-                {cat.toUpperCase()}
-              </button>
-            ))}
+          {/* Category Tabs (Exact Reference Style Pills) */}
+          <div className="flex flex-wrap items-center gap-2 mb-6">
+            {Object.keys(CATEGORIZED_MODEL_CATALOG).map((cat) => {
+              const isSelected = selectedCategory === cat;
+              return (
+                <button
+                  key={cat}
+                  type="button"
+                  onClick={() => setSelectedCategory(cat)}
+                  className={`px-5 py-2 rounded-full text-[13px] font-semibold transition-all cursor-pointer ${
+                    isSelected
+                      ? "bg-[#124D32] text-white shadow-xs"
+                      : "bg-white border border-[#E5EBE5] text-[#17251D] hover:bg-[#F5F9F3]"
+                  }`}
+                >
+                  {cat}
+                </button>
+              );
+            })}
           </div>
 
-          {/* Models Grid */}
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))", gap: 12 }}>
+          {/* Model Selection Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3.5">
             {CATEGORIZED_MODEL_CATALOG[selectedCategory]?.map((m) => {
               const isSelected = baselineModel === m.id || candidateModels.includes(m.id);
               return (
@@ -578,127 +676,222 @@ function NewExperimentContent() {
                   key={m.id}
                   onClick={() => {
                     setBaselineModel(m.id);
-                    if (!candidateModels.includes(m.id)) setCandidateModels([...candidateModels, m.id]);
+                    if (!candidateModels.includes(m.id)) {
+                      setCandidateModels([...candidateModels, m.id]);
+                    }
                   }}
-                  style={{
-                    padding: 14,
-                    borderRadius: 8,
-                    border: isSelected ? "1.5px solid #176B4D" : "1px solid #DFE5DC",
-                    background: isSelected ? "#E6F0E9" : "#FFFFFF",
-                    cursor: "pointer"
-                  }}
+                  className={`p-4 rounded-2xl border transition-all cursor-pointer ${
+                    isSelected
+                      ? "bg-[#EEF6EA] border-[#124D32] shadow-xs"
+                      : "bg-white border-[#E5EBE5] hover:border-[#DDEEDB] hover:bg-[#F5F9F3]"
+                  }`}
                 >
-                  <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 4 }}>
-                    <div style={{ font: "600 11px var(--mono)", color: isSelected ? "#176B4D" : "#26352D" }}>{m.name}</div>
-                    <span style={{ font: "600 9px var(--mono)", background: "#FFFFFF", padding: "2px 6px", borderRadius: 4, border: "1px solid #DFE5DC", color: "#68766D" }}>{m.tag}</span>
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="font-semibold text-[13.5px] text-[#17251D]">
+                      {m.name}
+                    </span>
+                    <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-white border border-[#E5EBE5] text-[#124D32]">
+                      {m.tag}
+                    </span>
                   </div>
-                  <div style={{ font: "400 10px var(--font-primary), serif", color: "#68766D" }}>{m.description}</div>
+                  <p className="text-[12px] text-[#65736A] leading-relaxed">
+                    {m.description}
+                  </p>
                 </div>
               );
             })}
           </div>
         </div>
 
-        {/* Section 4: Dataset & Target Column Selection */}
-        <div style={{ background: "#FFFFFF", border: "1px solid #DFE5DC", borderRadius: 12, padding: 20, boxShadow: "0 1px 3px rgba(0,0,0,0.03)" }}>
-          <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 16 }}>
-            <span style={{ width: 22, height: 22, borderRadius: "50%", background: "#E6F0E9", color: "#176B4D", display: "grid", placeContent: "center", font: "600 11px var(--mono)", border: "1px solid #DFE5DC" }}>4</span>
-            <span style={{ font: "600 12px var(--mono)", color: "#26352D", letterSpacing: "0.06em" }}>DATASET & PREDICTION TARGET</span>
+        {/* =========================================================================
+            SECTION 4: DATASET & PREDICTION TARGET
+            ========================================================================= */}
+        <div className="bg-white border border-[#E5EBE5] rounded-3xl p-7 sm:p-8 shadow-xs">
+          <div className="flex items-center gap-3.5 mb-6">
+            <span className="w-8 h-8 rounded-full bg-[#DDEEDB] text-[#124D32] flex items-center justify-center font-bold text-[14px] shrink-0">
+              4
+            </span>
+            <h2 className="font-bold text-[20px] text-[#17251D] tracking-tight">
+              Dataset & Prediction Target
+            </h2>
           </div>
 
-          <div style={{ display: "grid", gridTemplateColumns: "1.4fr 1fr", gap: 16 }}>
-            <div>
-              <label style={{ display: "block", font: "600 10px var(--mono)", color: "#68766D", marginBottom: 6 }}>DATASET</label>
-              <select
-                value={datasetId}
-                onChange={(e) => handleDatasetChange(e.target.value)}
-                style={{ width: "100%", padding: "10px 12px", background: "#FFFFFF", border: "1px solid #DFE5DC", borderRadius: 6, color: "#26352D", font: "400 12px var(--mono)", outline: "none" }}
-              >
-                {datasets.map((d) => (
-                  <option key={d.id} value={d.id}>
-                    {d.name} ({d.row_count} samples) [{d.task_type.toUpperCase()}]
-                  </option>
-                ))}
-              </select>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="flex flex-col gap-2">
+              <label className="text-[12px] font-bold text-[#17251D]">
+                Select Research Dataset
+              </label>
+              <div className="relative">
+                <select
+                  value={datasetId}
+                  onChange={(e) => handleDatasetChange(e.target.value)}
+                  className="w-full h-[46px] px-4 pr-10 rounded-xl bg-[#FFFFFF] border border-[#E5EBE5] text-[13.5px] font-medium text-[#17251D] focus:outline-none focus:border-[#124D32] shadow-xs appearance-none cursor-pointer"
+                >
+                  {datasets.map((d) => (
+                    <option key={d.id} value={d.id}>
+                      {d.name} ({d.row_count} rows) [{d.task_type.toUpperCase()}]
+                    </option>
+                  ))}
+                </select>
+                <ChevronDown size={16} className="absolute right-4 top-1/2 -translate-y-1/2 text-[#89958D] pointer-events-none" />
+              </div>
             </div>
 
-            <div>
-              <label style={{ display: "block", font: "600 10px var(--mono)", color: "#68766D", marginBottom: 6 }}>TARGET COLUMN</label>
-              <select
-                value={targetColumn}
-                onChange={(e) => setTargetColumn(e.target.value)}
-                style={{ width: "100%", padding: "10px 12px", background: "#FFFFFF", border: "1px solid #DFE5DC", borderRadius: 6, color: "#26352D", font: "400 12px var(--mono)", outline: "none" }}
-              >
-                {supportedTargets.map((t: string) => (
-                  <option key={t} value={t}>{t}</option>
-                ))}
-              </select>
+            <div className="flex flex-col gap-2">
+              <label className="text-[12px] font-bold text-[#17251D]">
+                Target Prediction Column
+              </label>
+              <div className="relative">
+                <select
+                  value={targetColumn}
+                  onChange={(e) => setTargetColumn(e.target.value)}
+                  className="w-full h-[46px] px-4 pr-10 rounded-xl bg-[#FFFFFF] border border-[#E5EBE5] text-[13.5px] font-medium text-[#17251D] focus:outline-none focus:border-[#124D32] shadow-xs appearance-none cursor-pointer"
+                >
+                  {supportedTargets.map((t: string) => (
+                    <option key={t} value={t}>{t}</option>
+                  ))}
+                </select>
+                <ChevronDown size={16} className="absolute right-4 top-1/2 -translate-y-1/2 text-[#89958D] pointer-events-none" />
+              </div>
             </div>
           </div>
         </div>
 
-        {/* Submit Buttons */}
-        <div style={{ display: "flex", justifyContent: "flex-end", gap: 12 }}>
+        {/* =========================================================================
+            SECTION 5: EXECUTION BUDGET & SCIENTIFIC CONTROLS
+            ========================================================================= */}
+        <div className="bg-white border border-[#E5EBE5] rounded-3xl p-7 sm:p-8 shadow-xs">
+          <div className="flex items-center gap-3.5 mb-6">
+            <span className="w-8 h-8 rounded-full bg-[#DDEEDB] text-[#124D32] flex items-center justify-center font-bold text-[14px] shrink-0">
+              5
+            </span>
+            <h2 className="font-bold text-[20px] text-[#17251D] tracking-tight">
+              Execution Budget & Scientific Controls
+            </h2>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {/* CPU Budget */}
+            <div className="flex flex-col gap-2">
+              <div className="flex justify-between items-center text-[12.5px] font-semibold text-[#17251D]">
+                <span>CPU Wall-Clock Budget</span>
+                <span className="text-[#124D32] font-bold">{cpuBudget}s</span>
+              </div>
+              <input
+                type="range"
+                min="30"
+                max="600"
+                step="30"
+                value={cpuBudget}
+                onChange={(e) => setCpuBudget(parseFloat(e.target.value))}
+                className="accent-[#124D32] cursor-pointer w-full mt-2"
+              />
+              <span className="text-[11px] text-[#89958D]">Bounded execution limit per model run</span>
+            </div>
+
+            {/* Trial Budget */}
+            <div className="flex flex-col gap-2">
+              <div className="flex justify-between items-center text-[12.5px] font-semibold text-[#17251D]">
+                <span>Hyperparameter Trials</span>
+                <span className="text-[#124D32] font-bold">{trialBudget}</span>
+              </div>
+              <input
+                type="range"
+                min="5"
+                max="50"
+                step="5"
+                value={trialBudget}
+                onChange={(e) => setTrialBudget(parseInt(e.target.value))}
+                className="accent-[#124D32] cursor-pointer w-full mt-2"
+              />
+              <span className="text-[11px] text-[#89958D]">Number of Bayesian/Optuna search trials</span>
+            </div>
+
+            {/* Failure Memory Mode */}
+            <div className="flex flex-col gap-2">
+              <label className="text-[12px] font-bold text-[#17251D]">
+                Scientific Memory Mode
+              </label>
+              <div className="relative">
+                <select
+                  value={memoryMode}
+                  onChange={(e) => setMemoryMode(e.target.value as any)}
+                  className="w-full h-[46px] px-4 pr-10 rounded-xl bg-[#FFFFFF] border border-[#E5EBE5] text-[13.5px] font-medium text-[#17251D] focus:outline-none focus:border-[#124D32] shadow-xs appearance-none cursor-pointer"
+                >
+                  <option value="failure_recovery">Verified Failure & Recovery Memory</option>
+                  <option value="success_only">Success-Only Memory</option>
+                  <option value="baseline">Standard Baseline (No Memory)</option>
+                </select>
+                <ChevronDown size={16} className="absolute right-4 top-1/2 -translate-y-1/2 text-[#89958D] pointer-events-none" />
+              </div>
+              <span className="text-[11px] text-[#89958D]">Structured error signature reuse</span>
+            </div>
+          </div>
+        </div>
+
+        {/* =========================================================================
+            BOTTOM ACTION BAR
+            ========================================================================= */}
+        <div className="flex items-center justify-end gap-3.5 pt-2">
           <button
             type="button"
             onClick={() => router.back()}
-            style={{ padding: "10px 20px", background: "#FFFFFF", border: "1px solid #DFE5DC", color: "#68766D", font: "600 11px var(--mono)", borderRadius: 6, cursor: "pointer" }}
+            className="px-6 py-2.5 rounded-full bg-white border border-[#E5EBE5] text-[13.5px] font-semibold text-[#65736A] hover:bg-[#F5F9F3] hover:text-[#17251D] transition-colors cursor-pointer"
           >
-            CANCEL
+            Cancel
           </button>
+
           <button
             type="submit"
             disabled={submitting}
-            style={{
-              display: "inline-flex",
-              alignItems: "center",
-              gap: 8,
-              padding: "10px 26px",
-              background: "#176B4D",
-              border: "none",
-              color: "#FFFFFF",
-              font: "600 11px var(--mono)",
-              borderRadius: 6,
-              cursor: "pointer",
-              boxShadow: "0 2px 4px rgba(23, 107, 77, 0.2)"
-            }}
+            className="inline-flex items-center gap-2.5 px-8 py-2.5 rounded-full bg-[#124D32] hover:bg-[#092F20] text-white text-[14px] font-semibold shadow-sm hover:shadow transition-all cursor-pointer"
           >
-            <span>{submitting ? "INITIALIZING EXPERIMENT..." : "CREATE & LAUNCH EXPERIMENT"}</span>
-            <ArrowRight size={14} />
+            <span>{submitting ? "Initializing Experiment..." : "Create & Launch Experiment"}</span>
+            <ArrowRight size={16} />
           </button>
         </div>
       </form>
 
-      {/* Inline Modal: Create New Research Project */}
+      {/* CREATE NEW PROJECT MODAL */}
       {newProjectModal && (
-        <div style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.4)", display: "grid", placeContent: "center", zIndex: 100 }}>
-          <div style={{ background: "#FFFFFF", border: "1px solid #DFE5DC", borderRadius: 12, padding: 24, width: 440, boxShadow: "0 4px 12px rgba(0,0,0,0.15)" }}>
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 16 }}>
-              <div style={{ font: "600 14px var(--font-primary), serif", color: "#26352D" }}>Create New Research Project</div>
-              <button onClick={() => setNewProjectModal(false)} style={{ background: "none", border: "none", color: "#68766D", cursor: "pointer" }}>
-                <X size={16} />
+        <div className="fixed inset-0 bg-[#092F20]/40 backdrop-blur-xs flex items-center justify-center z-50 p-4">
+          <div className="bg-white border border-[#E5EBE5] rounded-3xl p-7 w-full max-w-lg shadow-xl">
+            <div className="flex items-center justify-between mb-5">
+              <h3 className="text-[18px] font-bold text-[#17251D]">
+                Create New Research Project
+              </h3>
+              <button
+                type="button"
+                onClick={() => setNewProjectModal(false)}
+                className="w-8 h-8 rounded-full hover:bg-[#F5F9F3] flex items-center justify-center text-[#89958D] hover:text-[#17251D] cursor-pointer"
+              >
+                <X size={18} />
               </button>
             </div>
 
-            <form onSubmit={handleCreateProject} style={{ display: "flex", flexDirection: "column", gap: 14 }}>
-              <div>
-                <label style={{ display: "block", font: "600 10px var(--mono)", color: "#68766D", marginBottom: 4 }}>PROJECT NAME</label>
+            <form onSubmit={handleCreateProject} className="flex flex-col gap-4">
+              <div className="flex flex-col gap-1.5">
+                <label className="text-[12px] font-semibold text-[#17251D]">
+                  Project Name
+                </label>
                 <input
                   type="text"
                   required
                   value={newProjName}
                   onChange={(e) => setNewProjName(e.target.value)}
-                  placeholder="e.g. LLM Reasoning Benchmark"
-                  style={{ width: "100%", padding: "8px 10px", background: "#FFFFFF", border: "1px solid #DFE5DC", borderRadius: 6, font: "400 12px var(--mono)", color: "#26352D" }}
+                  placeholder="e.g. Molecular Property Prediction Benchmark"
+                  className="w-full h-[42px] px-3.5 rounded-xl border border-[#E5EBE5] text-[13px] font-medium text-[#17251D] focus:outline-none focus:border-[#124D32]"
                 />
               </div>
 
-              <div>
-                <label style={{ display: "block", font: "600 10px var(--mono)", color: "#68766D", marginBottom: 4 }}>RESEARCH DOMAIN</label>
+              <div className="flex flex-col gap-1.5">
+                <label className="text-[12px] font-semibold text-[#17251D]">
+                  Research Domain
+                </label>
                 <select
                   value={newProjDomain}
                   onChange={(e) => setNewProjDomain(e.target.value)}
-                  style={{ width: "100%", padding: "8px 10px", background: "#FFFFFF", border: "1px solid #DFE5DC", borderRadius: 6, font: "400 12px var(--mono)", color: "#26352D" }}
+                  className="w-full h-[42px] px-3.5 rounded-xl border border-[#E5EBE5] text-[13px] font-medium text-[#17251D] focus:outline-none focus:border-[#124D32]"
                 >
                   <option value="Machine Learning">Machine Learning</option>
                   <option value="NLP & Transformers">NLP & Transformers</option>
@@ -710,31 +903,33 @@ function NewExperimentContent() {
                 </select>
               </div>
 
-              <div>
-                <label style={{ display: "block", font: "600 10px var(--mono)", color: "#68766D", marginBottom: 4 }}>DESCRIPTION</label>
+              <div className="flex flex-col gap-1.5">
+                <label className="text-[12px] font-semibold text-[#17251D]">
+                  Description
+                </label>
                 <textarea
+                  rows={3}
                   value={newProjDesc}
                   onChange={(e) => setNewProjDesc(e.target.value)}
-                  placeholder="Brief objective statement..."
-                  rows={3}
-                  style={{ width: "100%", padding: "8px 10px", background: "#FFFFFF", border: "1px solid #DFE5DC", borderRadius: 6, font: "400 12px var(--font-primary), serif", color: "#26352D" }}
+                  placeholder="Objective statement and hypotheses..."
+                  className="w-full p-3 rounded-xl border border-[#E5EBE5] text-[13px] font-medium text-[#17251D] focus:outline-none focus:border-[#124D32]"
                 />
               </div>
 
-              <div style={{ display: "flex", justifyContent: "flex-end", gap: 10, marginTop: 8 }}>
+              <div className="flex items-center justify-end gap-3 mt-4">
                 <button
                   type="button"
                   onClick={() => setNewProjectModal(false)}
-                  style={{ padding: "8px 14px", background: "#FFFFFF", border: "1px solid #DFE5DC", color: "#68766D", font: "600 10px var(--mono)", borderRadius: 6, cursor: "pointer" }}
+                  className="px-5 py-2.5 rounded-full border border-[#E5EBE5] text-[13px] font-semibold text-[#65736A] hover:bg-[#F5F9F3]"
                 >
-                  CANCEL
+                  Cancel
                 </button>
                 <button
                   type="submit"
                   disabled={creatingProject}
-                  style={{ padding: "8px 18px", background: "#176B4D", border: "none", color: "#FFFFFF", font: "600 10px var(--mono)", borderRadius: 6, cursor: "pointer" }}
+                  className="px-6 py-2.5 rounded-full bg-[#124D32] hover:bg-[#092F20] text-white text-[13px] font-semibold transition-colors"
                 >
-                  {creatingProject ? "CREATING..." : "SAVE PROJECT"}
+                  {creatingProject ? "Creating..." : "Save Project"}
                 </button>
               </div>
             </form>
@@ -747,7 +942,7 @@ function NewExperimentContent() {
 
 export default function NewExperimentPage() {
   return (
-    <Suspense fallback={<div style={{ padding: 40, font: "400 12px var(--mono)", color: "#68766D" }}>LOADING PLANNER...</div>}>
+    <Suspense fallback={<div className="py-24 text-center text-[#89958D] text-[13px] font-medium">Loading Planner...</div>}>
       <NewExperimentContent />
     </Suspense>
   );

@@ -45,17 +45,17 @@ export default function SystemStatusPage() {
   };
 
   return (
-    <div className="flex flex-col gap-6 w-full max-w-[1500px] mx-auto text-[#26352D] pb-16">
+    <div className="flex flex-col gap-6 w-full max-w-[1500px] mx-auto text-[#17251D] pb-16">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-[#DFE5DC]">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-[#E5EBE5]">
         <div>
-          <div className="font-mono text-[10.5px] text-[#176B4D] uppercase tracking-[0.14em] font-semibold mb-1">
+          <div className="font-mono text-[10.5px] text-[#124D32] uppercase tracking-[0.14em] font-semibold mb-1">
             TECHNICAL OBSERVABILITY & HEALTH
           </div>
-          <h1 className="font-serif text-[28px] sm:text-[32px] font-bold text-[#26352D] tracking-[-0.01em] m-0">
+          <h1 className="font-serif text-[28px] sm:text-[32px] font-bold text-[#17251D] tracking-[-0.01em] m-0">
             System Status & Telemetry
           </h1>
-          <p className="font-sans text-[13.5px] text-[#68766D] mt-1 m-0 max-w-[720px]">
+          <p className="font-sans text-[13.5px] text-[#65736A] mt-1 m-0 max-w-[720px]">
             Live telemetry for FastAPI backend, relational database, Scikit-learn ML engine, ARINA Elevate AI Gateway, and memory store.
           </p>
         </div>
@@ -63,7 +63,7 @@ export default function SystemStatusPage() {
         <div className="flex items-center gap-3">
           <Link
             href="/workspace/orchestration"
-            className="px-3.5 py-1.5 rounded-[8px] bg-[#E6F0E9] border border-[#176B4D] text-[12px] font-mono text-[#176B4D] inline-flex items-center gap-2 hover:bg-[#176B4D] hover:text-[#FFFFFF] transition-all"
+            className="px-3.5 py-1.5 rounded-[8px] bg-[#EEF6EA] border border-[#124D32] text-[12px] font-mono text-[#124D32] inline-flex items-center gap-2 hover:bg-[#124D32] hover:text-[#FFFFFF] transition-all"
           >
             <Bot size={13} />
             <span>Agent Orchestration Hub</span>
@@ -73,9 +73,9 @@ export default function SystemStatusPage() {
             type="button"
             onClick={handleRefresh}
             disabled={refreshing}
-            className="px-3.5 py-1.5 rounded-[8px] bg-[#FFFFFF] border border-[#DFE5DC] text-[12px] font-mono text-[#26352D] inline-flex items-center gap-2 hover:bg-[#E6F0E9] hover:border-[#176B4D] transition-all cursor-pointer"
+            className="px-3.5 py-1.5 rounded-[8px] bg-[#FFFFFF] border border-[#E5EBE5] text-[12px] font-mono text-[#17251D] inline-flex items-center gap-2 hover:bg-[#EEF6EA] hover:border-[#124D32] transition-all cursor-pointer"
           >
-            <RefreshCw size={13} className={refreshing ? "animate-spin text-[#176B4D]" : "text-[#176B4D]"} />
+            <RefreshCw size={13} className={refreshing ? "animate-spin text-[#124D32]" : "text-[#124D32]"} />
             <span>Refresh Telemetry</span>
           </button>
         </div>
@@ -84,74 +84,74 @@ export default function SystemStatusPage() {
       {/* Hardware & Gateway KPI Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {/* System Health */}
-        <div className="p-4 rounded-[12px] bg-[#FFFFFF] border border-[#DFE5DC] flex flex-col gap-1.5">
-          <div className="flex items-center justify-between text-[11px] font-mono text-[#68766D] font-semibold">
+        <div className="p-4 rounded-[12px] bg-[#FFFFFF] border border-[#E5EBE5] flex flex-col gap-1.5">
+          <div className="flex items-center justify-between text-[11px] font-mono text-[#65736A] font-semibold">
             <span>OVERALL HEALTH</span>
-            <Activity size={14} className="text-[#176B4D]" />
+            <Activity size={14} className="text-[#124D32]" />
           </div>
-          <div className="text-[20px] font-bold font-mono text-[#176B4D]">
+          <div className="text-[20px] font-bold font-mono text-[#124D32]">
             {telemetry?.overall_status || "HEALTHY"}
           </div>
-          <div className="text-[11.5px] text-[#68766D] font-mono">
+          <div className="text-[11.5px] text-[#65736A] font-mono">
             {telemetry?.services?.length || 5} Verified Subsystems
           </div>
         </div>
 
         {/* AI Gateway Tokens */}
-        <div className="p-4 rounded-[12px] bg-[#FFFFFF] border border-[#DFE5DC] flex flex-col gap-1.5">
-          <div className="flex items-center justify-between text-[11px] font-mono text-[#176B4D] font-semibold">
+        <div className="p-4 rounded-[12px] bg-[#FFFFFF] border border-[#E5EBE5] flex flex-col gap-1.5">
+          <div className="flex items-center justify-between text-[11px] font-mono text-[#124D32] font-semibold">
             <span>ELEVATE AI QUOTA</span>
-            <Zap size={14} className="text-[#176B4D]" />
+            <Zap size={14} className="text-[#124D32]" />
           </div>
-          <div className="text-[20px] font-bold font-mono text-[#26352D]">
+          <div className="text-[20px] font-bold font-mono text-[#17251D]">
             {telemetry?.token_quota?.used_today || 0}{" "}
-            <span className="text-[12px] font-normal text-[#68766D]">/ 800,000</span>
+            <span className="text-[12px] font-normal text-[#65736A]">/ 800,000</span>
           </div>
-          <div className="text-[11.5px] text-[#176B4D] font-mono font-medium">
+          <div className="text-[11.5px] text-[#124D32] font-mono font-medium">
             Model: {telemetry?.token_quota?.active_model || "gpt-5.6-luna"}
           </div>
         </div>
 
         {/* Database Latency */}
-        <div className="p-4 rounded-[12px] bg-[#FFFFFF] border border-[#DFE5DC] flex flex-col gap-1.5">
-          <div className="flex items-center justify-between text-[11px] font-mono text-[#68766D] font-semibold">
+        <div className="p-4 rounded-[12px] bg-[#FFFFFF] border border-[#E5EBE5] flex flex-col gap-1.5">
+          <div className="flex items-center justify-between text-[11px] font-mono text-[#65736A] font-semibold">
             <span>DB LATENCY</span>
-            <Database size={14} className="text-[#176B4D]" />
+            <Database size={14} className="text-[#124D32]" />
           </div>
-          <div className="text-[20px] font-bold font-mono text-[#26352D]">
+          <div className="text-[20px] font-bold font-mono text-[#17251D]">
             {telemetry?.services?.find((s: any) => s.id === "srv-db")?.latency_ms ?? 0.8} ms
           </div>
-          <div className="text-[11.5px] text-[#176B4D] font-mono font-medium">
+          <div className="text-[11.5px] text-[#124D32] font-mono font-medium">
             SQLite / Supabase Active
           </div>
         </div>
 
         {/* CPU & Memory */}
-        <div className="p-4 rounded-[12px] bg-[#FFFFFF] border border-[#DFE5DC] flex flex-col gap-1.5">
-          <div className="flex items-center justify-between text-[11px] font-mono text-[#68766D] font-semibold">
+        <div className="p-4 rounded-[12px] bg-[#FFFFFF] border border-[#E5EBE5] flex flex-col gap-1.5">
+          <div className="flex items-center justify-between text-[11px] font-mono text-[#65736A] font-semibold">
             <span>HOST RUNTIME</span>
-            <Cpu size={14} className="text-[#176B4D]" />
+            <Cpu size={14} className="text-[#124D32]" />
           </div>
-          <div className="text-[20px] font-bold font-mono text-[#176B4D]">
+          <div className="text-[20px] font-bold font-mono text-[#124D32]">
             {telemetry?.host_telemetry?.cpu_pct ?? 14}% CPU
           </div>
-          <div className="text-[11.5px] text-[#68766D] font-mono">
+          <div className="text-[11.5px] text-[#65736A] font-mono">
             RAM: {telemetry?.host_telemetry?.ram_mb ?? 450} MB Used
           </div>
         </div>
       </div>
 
       {/* Services Breakdown Table */}
-      <div className="p-5 rounded-[12px] bg-[#FFFFFF] border border-[#DFE5DC] flex flex-col gap-4">
-        <h2 className="font-serif text-[17px] font-bold text-[#26352D] flex items-center gap-2 m-0">
-          <Server size={18} className="text-[#176B4D]" />
+      <div className="p-5 rounded-[12px] bg-[#FFFFFF] border border-[#E5EBE5] flex flex-col gap-4">
+        <h2 className="font-serif text-[17px] font-bold text-[#17251D] flex items-center gap-2 m-0">
+          <Server size={18} className="text-[#124D32]" />
           Active Subsystem Health Checks
         </h2>
 
         <div className="overflow-x-auto">
           <table className="w-full text-left border-collapse text-[12.5px]">
             <thead>
-              <tr className="border-b border-[#DFE5DC] text-[#68766D] font-mono text-[10.5px]">
+              <tr className="border-b border-[#E5EBE5] text-[#65736A] font-mono text-[10.5px]">
                 <th className="pb-2.5 font-semibold">SUBSYSTEM</th>
                 <th className="pb-2.5 font-semibold">ENDPOINT / IDENTIFIER</th>
                 <th className="pb-2.5 font-semibold">STATUS</th>
@@ -159,7 +159,7 @@ export default function SystemStatusPage() {
                 <th className="pb-2.5 font-semibold">DETAILS</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-[#DFE5DC] font-sans">
+            <tbody className="divide-y divide-[#E5EBE5] font-sans">
               {(telemetry?.services || [
                 {
                   id: "srv-api",
@@ -227,15 +227,15 @@ export default function SystemStatusPage() {
                 }
               ]).map((svc: any) => (
                 <tr key={svc.id} className="hover:bg-[#F8F6EF] transition-colors">
-                  <td className="py-3 font-semibold text-[#26352D]">{svc.name}</td>
-                  <td className="py-3 font-mono text-[11px] text-[#68766D]">{svc.endpoint}</td>
+                  <td className="py-3 font-semibold text-[#17251D]">{svc.name}</td>
+                  <td className="py-3 font-mono text-[11px] text-[#65736A]">{svc.endpoint}</td>
                   <td className="py-3">
-                    <span className="font-mono text-[10.5px] px-2 py-0.5 rounded font-semibold bg-[#E8F5EC] text-[#176B4D] border border-[rgba(23,107,77,0.3)]">
+                    <span className="font-mono text-[10.5px] px-2 py-0.5 rounded font-semibold bg-[#E8F5EC] text-[#124D32] border border-[rgba(23,107,77,0.3)]">
                       {svc.status}
                     </span>
                   </td>
-                  <td className="py-3 font-mono text-[#176B4D] font-bold">{svc.latency_ms} ms</td>
-                  <td className="py-3 text-[#68766D] text-[12.5px]">{svc.details}</td>
+                  <td className="py-3 font-mono text-[#124D32] font-bold">{svc.latency_ms} ms</td>
+                  <td className="py-3 text-[#65736A] text-[12.5px]">{svc.details}</td>
                 </tr>
               ))}
             </tbody>

@@ -302,18 +302,18 @@ export default function AnalyticsPage() {
   }, [timeBuckets]);
 
   return (
-    <div className="flex flex-col gap-6 p-6 max-w-[1400px] mx-auto text-[#26352D]">
+    <div className="flex flex-col gap-6 p-6 max-w-[1400px] mx-auto text-[#17251D]">
       {/* 1. Executive Analytics Header */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-4 border-b border-[#DFE5DC]">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-4 border-b border-[#E5EBE5]">
         <div>
-          <div className="flex items-center gap-2 text-[#176B4D] font-mono text-[10px] uppercase tracking-[0.14em] font-semibold">
+          <div className="flex items-center gap-2 text-[#124D32] font-mono text-[10px] uppercase tracking-[0.14em] font-semibold">
             <BarChart3 size={13} />
             <span>MATERIALS SCIENCE OBSERVABILITY // LONGITUDINAL ANALYTICS</span>
           </div>
-          <h1 className="text-[24px] font-semibold tracking-[-0.01em] text-[#26352D] mt-1 m-0 font-serif">
+          <h1 className="text-[24px] font-semibold tracking-[-0.01em] text-[#17251D] mt-1 m-0 font-serif">
             Experiment Lab & Telemetry Trends
           </h1>
-          <p className="text-[12.5px] text-[#68766D] mt-0.5 m-0">
+          <p className="text-[12.5px] text-[#65736A] mt-0.5 m-0">
             Real time-bucketed convergence metrics, latency scaling, and failure healing across {currentKpis.total} measured runs.
           </p>
         </div>
@@ -321,24 +321,24 @@ export default function AnalyticsPage() {
         {/* Filter Controls Ribbon */}
         <div className="flex flex-wrap items-center gap-2.5">
           {/* Model Family Filter */}
-          <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-[8px] bg-[#FFFFFF] border border-[#DFE5DC] text-[11px] font-mono text-[#26352D] shadow-xs">
-            <Filter size={11} className="text-[#176B4D]" />
-            <span className="text-[#68766D]">MODEL:</span>
+          <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-[8px] bg-[#FFFFFF] border border-[#E5EBE5] text-[11px] font-mono text-[#17251D] shadow-xs">
+            <Filter size={11} className="text-[#124D32]" />
+            <span className="text-[#65736A]">MODEL:</span>
             <select
               value={selectedFamily}
               onChange={(e) => setSelectedFamily(e.target.value)}
-              className="bg-transparent text-[#26352D] focus:outline-none cursor-pointer font-semibold"
+              className="bg-transparent text-[#17251D] focus:outline-none cursor-pointer font-semibold"
             >
-              <option value="all" className="bg-[#FFFFFF] text-[#26352D]">ALL FAMILIES</option>
-              <option value="RandomForest" className="bg-[#FFFFFF] text-[#26352D]">RANDOM FOREST</option>
-              <option value="Ridge" className="bg-[#FFFFFF] text-[#26352D]">RIDGE</option>
-              <option value="Dummy" className="bg-[#FFFFFF] text-[#26352D]">DUMMY REGRESSOR</option>
-              <option value="DecisionTree" className="bg-[#FFFFFF] text-[#26352D]">DECISION TREE</option>
+              <option value="all" className="bg-[#FFFFFF] text-[#17251D]">ALL FAMILIES</option>
+              <option value="RandomForest" className="bg-[#FFFFFF] text-[#17251D]">RANDOM FOREST</option>
+              <option value="Ridge" className="bg-[#FFFFFF] text-[#17251D]">RIDGE</option>
+              <option value="Dummy" className="bg-[#FFFFFF] text-[#17251D]">DUMMY REGRESSOR</option>
+              <option value="DecisionTree" className="bg-[#FFFFFF] text-[#17251D]">DECISION TREE</option>
             </select>
           </div>
 
           {/* Time Filter Pills: Hourly, Daily, Weekly, Monthly, Yearly */}
-          <div className="flex items-center rounded-[8px] bg-[#FFFFFF] border border-[#DFE5DC] p-0.5 font-mono text-[11px] shadow-xs">
+          <div className="flex items-center rounded-[8px] bg-[#FFFFFF] border border-[#E5EBE5] p-0.5 font-mono text-[11px] shadow-xs">
             {(["hourly", "daily", "weekly", "monthly", "yearly"] as TimeRange[]).map((r) => (
               <button
                 key={r}
@@ -346,8 +346,8 @@ export default function AnalyticsPage() {
                 onClick={() => setTimeRange(r)}
                 className={`px-3 py-1.5 rounded-[6px] capitalize transition-all cursor-pointer ${
                   timeRange === r
-                    ? "bg-[#176B4D] text-[#FFFFFF] font-semibold shadow-xs"
-                    : "text-[#68766D] hover:text-[#26352D] hover:bg-[#F8F6EF]"
+                    ? "bg-[#124D32] text-[#FFFFFF] font-semibold shadow-xs"
+                    : "text-[#65736A] hover:text-[#17251D] hover:bg-[#F8F6EF]"
                 }`}
               >
                 {r}
@@ -359,84 +359,84 @@ export default function AnalyticsPage() {
           <button
             type="button"
             onClick={handleReset}
-            className="p-2.5 rounded-[8px] bg-[#FFFFFF] border border-[#DFE5DC] hover:border-[#176B4D] text-[#176B4D] hover:bg-[#E6F0E9] transition-all cursor-pointer shadow-xs"
+            className="p-2.5 rounded-[8px] bg-[#FFFFFF] border border-[#E5EBE5] hover:border-[#124D32] text-[#124D32] hover:bg-[#EEF6EA] transition-all cursor-pointer shadow-xs"
             title="Reset Filters & Re-fetch Telemetry"
           >
-            <RotateCcw size={14} className={isResetting || loading ? "animate-spin text-[#176B4D]" : "text-[#176B4D]"} />
+            <RotateCcw size={14} className={isResetting || loading ? "animate-spin text-[#124D32]" : "text-[#124D32]"} />
           </button>
         </div>
       </div>
 
       {/* 2. Primary KPI Strip (Bound strictly to active Time & Model Filter) */}
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
-        <div className="p-3.5 rounded-[10px] bg-[#FFFFFF] border border-[#DFE5DC] flex flex-col justify-between shadow-xs">
-          <div className="font-mono text-[9px] text-[#68766D] uppercase tracking-[0.08em] font-semibold">
+        <div className="p-3.5 rounded-[10px] bg-[#FFFFFF] border border-[#E5EBE5] flex flex-col justify-between shadow-xs">
+          <div className="font-mono text-[9px] text-[#65736A] uppercase tracking-[0.08em] font-semibold">
             TOTAL RUNS IN SCOPE
           </div>
-          <div className="font-mono text-[22px] font-semibold text-[#26352D] my-1">
+          <div className="font-mono text-[22px] font-semibold text-[#17251D] my-1">
             {currentKpis.total}
           </div>
-          <div className="font-mono text-[10px] text-[#68766D]">
+          <div className="font-mono text-[10px] text-[#65736A]">
             {timeBuckets.length} {timeRange} bucket{timeBuckets.length !== 1 ? "s" : ""}
           </div>
         </div>
 
-        <div className="p-3.5 rounded-[10px] bg-[#FFFFFF] border border-[#DFE5DC] flex flex-col justify-between shadow-xs">
-          <div className="font-mono text-[9px] text-[#68766D] uppercase tracking-[0.08em] font-semibold">
+        <div className="p-3.5 rounded-[10px] bg-[#FFFFFF] border border-[#E5EBE5] flex flex-col justify-between shadow-xs">
+          <div className="font-mono text-[9px] text-[#65736A] uppercase tracking-[0.08em] font-semibold">
             COMPLETION RATE
           </div>
-          <div className="font-mono text-[22px] font-semibold text-[#176B4D] my-1">
+          <div className="font-mono text-[22px] font-semibold text-[#124D32] my-1">
             {currentKpis.successRate.toFixed(1)}%
           </div>
-          <div className="font-mono text-[10px] text-[#68766D]">
+          <div className="font-mono text-[10px] text-[#65736A]">
             {currentKpis.completed} passed • {currentKpis.failed} failed
           </div>
         </div>
 
-        <div className="p-3.5 rounded-[10px] bg-[#FFFFFF] border border-[#DFE5DC] flex flex-col justify-between shadow-xs">
-          <div className="font-mono text-[9px] text-[#68766D] uppercase tracking-[0.08em] font-semibold">
+        <div className="p-3.5 rounded-[10px] bg-[#FFFFFF] border border-[#E5EBE5] flex flex-col justify-between shadow-xs">
+          <div className="font-mono text-[9px] text-[#65736A] uppercase tracking-[0.08em] font-semibold">
             BEST BAND GAP MAE
           </div>
-          <div className="font-mono text-[22px] font-semibold text-[#176B4D] my-1">
+          <div className="font-mono text-[22px] font-semibold text-[#124D32] my-1">
             {currentKpis.bestMae ? `${currentKpis.bestMae.toFixed(4)}` : "—"}
           </div>
-          <div className="font-mono text-[10px] text-[#68766D]">
+          <div className="font-mono text-[10px] text-[#65736A]">
             eV (lower is better)
           </div>
         </div>
 
-        <div className="p-3.5 rounded-[10px] bg-[#FFFFFF] border border-[#DFE5DC] flex flex-col justify-between shadow-xs">
-          <div className="font-mono text-[9px] text-[#68766D] uppercase tracking-[0.08em] font-semibold">
+        <div className="p-3.5 rounded-[10px] bg-[#FFFFFF] border border-[#E5EBE5] flex flex-col justify-between shadow-xs">
+          <div className="font-mono text-[9px] text-[#65736A] uppercase tracking-[0.08em] font-semibold">
             BEST BAND GAP RMSE
           </div>
-          <div className="font-mono text-[22px] font-semibold text-[#26352D] my-1">
+          <div className="font-mono text-[22px] font-semibold text-[#17251D] my-1">
             {currentKpis.bestRmse ? `${currentKpis.bestRmse.toFixed(4)}` : "—"}
           </div>
-          <div className="font-mono text-[10px] text-[#68766D]">
+          <div className="font-mono text-[10px] text-[#65736A]">
             eV holdout residual
           </div>
         </div>
 
-        <div className="p-3.5 rounded-[10px] bg-[#FFFFFF] border border-[#DFE5DC] flex flex-col justify-between shadow-xs">
-          <div className="font-mono text-[9px] text-[#68766D] uppercase tracking-[0.08em] font-semibold">
+        <div className="p-3.5 rounded-[10px] bg-[#FFFFFF] border border-[#E5EBE5] flex flex-col justify-between shadow-xs">
+          <div className="font-mono text-[9px] text-[#65736A] uppercase tracking-[0.08em] font-semibold">
             AVG LATENCY
           </div>
-          <div className="font-mono text-[22px] font-semibold text-[#26352D] my-1">
+          <div className="font-mono text-[22px] font-semibold text-[#17251D] my-1">
             {currentKpis.avgLatency > 0 ? `${currentKpis.avgLatency}` : "—"}
           </div>
-          <div className="font-mono text-[10px] text-[#68766D]">
+          <div className="font-mono text-[10px] text-[#65736A]">
             μs per sample inference
           </div>
         </div>
 
-        <div className="p-3.5 rounded-[10px] bg-[#FFFFFF] border border-[#DFE5DC] flex flex-col justify-between shadow-xs">
-          <div className="font-mono text-[9px] text-[#68766D] uppercase tracking-[0.08em] font-semibold">
+        <div className="p-3.5 rounded-[10px] bg-[#FFFFFF] border border-[#E5EBE5] flex flex-col justify-between shadow-xs">
+          <div className="font-mono text-[9px] text-[#65736A] uppercase tracking-[0.08em] font-semibold">
             SELF-HEALING RECOVERY
           </div>
-          <div className="font-mono text-[22px] font-semibold text-[#176B4D] my-1">
+          <div className="font-mono text-[22px] font-semibold text-[#124D32] my-1">
             {currentKpis.recoveryRate.toFixed(0)}%
           </div>
-          <div className="font-mono text-[10px] text-[#176B4D]">
+          <div className="font-mono text-[10px] text-[#124D32]">
             {memories.length} verified patches
           </div>
         </div>
@@ -445,21 +445,21 @@ export default function AnalyticsPage() {
       {/* 3. Primary Charts Section (Charts 1, 2, 3) */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-5">
         {/* Chart 1: Experiment Volume & Completion Stacked Bar Chart */}
-        <div className="lg:col-span-6 p-5 rounded-[10px] bg-[#FFFFFF] border border-[#DFE5DC] flex flex-col justify-between shadow-xs">
-          <div className="flex items-center justify-between pb-3 border-b border-[#DFE5DC]">
+        <div className="lg:col-span-6 p-5 rounded-[10px] bg-[#FFFFFF] border border-[#E5EBE5] flex flex-col justify-between shadow-xs">
+          <div className="flex items-center justify-between pb-3 border-b border-[#E5EBE5]">
             <div>
-              <div className="font-mono text-[9px] text-[#68766D] uppercase tracking-[0.1em] font-semibold">
+              <div className="font-mono text-[9px] text-[#65736A] uppercase tracking-[0.1em] font-semibold">
                 CHART 01 // TEMPORAL VOLUME
               </div>
-              <h3 className="text-[16px] font-semibold text-[#26352D] mt-0.5 m-0 font-serif">
+              <h3 className="text-[16px] font-semibold text-[#17251D] mt-0.5 m-0 font-serif">
                 Run Volume & Completion Ratio ({timeRange.toUpperCase()})
               </h3>
             </div>
             <div className="flex items-center gap-3 font-mono text-[10px]">
-              <span className="flex items-center gap-1.5 text-[#68766D]">
-                <span className="w-2.5 h-2.5 rounded-sm bg-[#176B4D]" /> Passed
+              <span className="flex items-center gap-1.5 text-[#65736A]">
+                <span className="w-2.5 h-2.5 rounded-sm bg-[#124D32]" /> Passed
               </span>
-              <span className="flex items-center gap-1.5 text-[#68766D]">
+              <span className="flex items-center gap-1.5 text-[#65736A]">
                 <span className="w-2.5 h-2.5 rounded-sm bg-[#B54747]" /> Failed
               </span>
             </div>
@@ -477,13 +477,13 @@ export default function AnalyticsPage() {
                       y1={150 - frac * 120}
                       x2="520"
                       y2={150 - frac * 120}
-                      stroke="#DFE5DC"
+                      stroke="#E5EBE5"
                       strokeWidth="1"
                     />
                     <text
                       x="32"
                       y={153 - frac * 120}
-                      fill="#68766D"
+                      fill="#65736A"
                       fontSize="8"
                       fontFamily="var(--mono)"
                       textAnchor="end"
@@ -514,7 +514,7 @@ export default function AnalyticsPage() {
                         y={150 - totalH}
                         width={barWidth}
                         height={completedH}
-                        fill="#176B4D"
+                        fill="#124D32"
                         rx="2"
                         className="transition-all hover:opacity-90"
                       />
@@ -535,7 +535,7 @@ export default function AnalyticsPage() {
                       <text
                         x={x + barWidth / 2}
                         y="166"
-                        fill="#68766D"
+                        fill="#65736A"
                         fontSize="8.5"
                         fontFamily="var(--mono)"
                         textAnchor="middle"
@@ -547,32 +547,32 @@ export default function AnalyticsPage() {
                 })}
               </svg>
             ) : (
-              <div className="text-center font-mono text-[11px] text-[#68766D]">
+              <div className="text-center font-mono text-[11px] text-[#65736A]">
                 No recorded runs in selected {timeRange} window.
               </div>
             )}
           </div>
 
-          <div className="flex items-center justify-between pt-3 border-t border-[#DFE5DC] text-[10.5px] font-mono text-[#68766D]">
+          <div className="flex items-center justify-between pt-3 border-t border-[#E5EBE5] text-[10.5px] font-mono text-[#65736A]">
             <span>Active Filter: {timeRange.toUpperCase()}</span>
             <span>Total Measured: {currentKpis.total} runs</span>
           </div>
         </div>
 
         {/* Chart 2: MAE & RMSE Accuracy Convergence Over Period */}
-        <div className="lg:col-span-6 p-5 rounded-[10px] bg-[#FFFFFF] border border-[#DFE5DC] flex flex-col justify-between shadow-xs">
-          <div className="flex items-center justify-between pb-3 border-b border-[#DFE5DC]">
+        <div className="lg:col-span-6 p-5 rounded-[10px] bg-[#FFFFFF] border border-[#E5EBE5] flex flex-col justify-between shadow-xs">
+          <div className="flex items-center justify-between pb-3 border-b border-[#E5EBE5]">
             <div>
-              <div className="font-mono text-[9px] text-[#68766D] uppercase tracking-[0.1em] font-semibold">
+              <div className="font-mono text-[9px] text-[#65736A] uppercase tracking-[0.1em] font-semibold">
                 CHART 02 // ERROR CONVERGENCE
               </div>
-              <h3 className="text-[16px] font-semibold text-[#26352D] mt-0.5 m-0 font-serif">
+              <h3 className="text-[16px] font-semibold text-[#17251D] mt-0.5 m-0 font-serif">
                 Regression Error Trends (MAE & RMSE in eV)
               </h3>
             </div>
             <div className="flex items-center gap-3 font-mono text-[10px]">
-              <span className="flex items-center gap-1.5 text-[#176B4D]">
-                <span className="w-2.5 h-0.5 bg-[#176B4D]" /> Mean Abs Error (MAE)
+              <span className="flex items-center gap-1.5 text-[#124D32]">
+                <span className="w-2.5 h-0.5 bg-[#124D32]" /> Mean Abs Error (MAE)
               </span>
               <span className="flex items-center gap-1.5 text-[#A66B22]">
                 <span className="w-2.5 h-0.5 bg-[#A66B22]" /> Root Mean Sq (RMSE)
@@ -592,13 +592,13 @@ export default function AnalyticsPage() {
                       y1={150 - frac * 120}
                       x2="520"
                       y2={150 - frac * 120}
-                      stroke="#DFE5DC"
+                      stroke="#E5EBE5"
                       strokeWidth="1"
                     />
                     <text
                       x="38"
                       y={153 - frac * 120}
-                      fill="#68766D"
+                      fill="#65736A"
                       fontSize="8"
                       fontFamily="var(--mono)"
                       textAnchor="end"
@@ -621,18 +621,18 @@ export default function AnalyticsPage() {
 
                   if (validMaePts.length < 2) {
                     return validMaePts.map((pt: any) => (
-                      <circle key={pt.b.key} cx={pt.x} cy={pt.y} r="4" fill="#176B4D" />
+                      <circle key={pt.b.key} cx={pt.x} cy={pt.y} r="4" fill="#124D32" />
                     ));
                   }
 
                   const ptsStr = validMaePts.map((p: any) => `${p.x},${p.y}`).join(" ");
                   return (
                     <>
-                      <polyline points={ptsStr} fill="none" stroke="#176B4D" strokeWidth="2" />
+                      <polyline points={ptsStr} fill="none" stroke="#124D32" strokeWidth="2" />
                       {validMaePts.map((pt: any) => (
                         <g key={pt.b.key}>
-                          <circle cx={pt.x} cy={pt.y} r="3.5" fill="#FFFFFF" stroke="#176B4D" strokeWidth="1.5" />
-                          <text x={pt.x} y={pt.y - 7} fill="#176B4D" fontSize="7.5" fontFamily="var(--mono)" textAnchor="middle" fontWeight="bold">
+                          <circle cx={pt.x} cy={pt.y} r="3.5" fill="#FFFFFF" stroke="#124D32" strokeWidth="1.5" />
+                          <text x={pt.x} y={pt.y - 7} fill="#124D32" fontSize="7.5" fontFamily="var(--mono)" textAnchor="middle" fontWeight="bold">
                             {pt.b.avgMae}
                           </text>
                         </g>
@@ -670,22 +670,22 @@ export default function AnalyticsPage() {
                 {timeBuckets.map((b, i) => {
                   const x = 55 + i * (440 / Math.max(1, timeBuckets.length - 1 || 1));
                   return (
-                    <text key={b.key} x={x} y="166" fill="#68766D" fontSize="8.5" fontFamily="var(--mono)" textAnchor="middle">
+                    <text key={b.key} x={x} y="166" fill="#65736A" fontSize="8.5" fontFamily="var(--mono)" textAnchor="middle">
                       {b.label}
                     </text>
                   );
                 })}
               </svg>
             ) : (
-              <div className="text-center font-mono text-[11px] text-[#68766D]">
+              <div className="text-center font-mono text-[11px] text-[#65736A]">
                 Insufficient data points to compute convergence curves.
               </div>
             )}
           </div>
 
-          <div className="flex items-center justify-between pt-3 border-t border-[#DFE5DC] text-[10.5px] font-mono text-[#68766D]">
+          <div className="flex items-center justify-between pt-3 border-t border-[#E5EBE5] text-[10.5px] font-mono text-[#65736A]">
             <span>Target: bandgap_energy_ev / gap expt</span>
-            <span className="text-[#176B4D] font-semibold">Unit: Electron-Volts (eV)</span>
+            <span className="text-[#124D32] font-semibold">Unit: Electron-Volts (eV)</span>
           </div>
         </div>
       </div>
@@ -693,17 +693,17 @@ export default function AnalyticsPage() {
       {/* 4. Secondary Row: Hardware Profiling & Model Family Comparison */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-5">
         {/* Chart 3: Inference Latency vs CPU Training Duration */}
-        <div className="lg:col-span-6 p-5 rounded-[10px] bg-[#FFFFFF] border border-[#DFE5DC] flex flex-col justify-between shadow-xs">
-          <div className="flex items-center justify-between pb-3 border-b border-[#DFE5DC]">
+        <div className="lg:col-span-6 p-5 rounded-[10px] bg-[#FFFFFF] border border-[#E5EBE5] flex flex-col justify-between shadow-xs">
+          <div className="flex items-center justify-between pb-3 border-b border-[#E5EBE5]">
             <div>
-              <div className="font-mono text-[9px] text-[#68766D] uppercase tracking-[0.1em] font-semibold">
+              <div className="font-mono text-[9px] text-[#65736A] uppercase tracking-[0.1em] font-semibold">
                 CHART 03 // HARDWARE COMPUTATIONAL FOOTPRINT
               </div>
-              <h3 className="text-[16px] font-semibold text-[#26352D] mt-0.5 m-0 font-serif">
+              <h3 className="text-[16px] font-semibold text-[#17251D] mt-0.5 m-0 font-serif">
                 Inference Latency (μs) vs. Train Time (ms)
               </h3>
             </div>
-            <span className="font-mono text-[10px] text-[#176B4D] font-semibold">
+            <span className="font-mono text-[10px] text-[#124D32] font-semibold">
               Measured Benchmarks
             </span>
           </div>
@@ -712,7 +712,7 @@ export default function AnalyticsPage() {
           <div className="overflow-x-auto my-3">
             <table className="w-full text-left font-mono text-[11px]">
               <thead>
-                <tr className="border-b border-[#DFE5DC] text-[#68766D]">
+                <tr className="border-b border-[#E5EBE5] text-[#65736A]">
                   <th className="py-2 px-2.5">PERIOD</th>
                   <th className="py-2 px-2.5">RUNS</th>
                   <th className="py-2 px-2.5 text-right">AVG LATENCY (μs)</th>
@@ -720,18 +720,18 @@ export default function AnalyticsPage() {
                   <th className="py-2 px-2.5 text-right">AVG MAE (eV)</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-[#DFE5DC]">
+              <tbody className="divide-y divide-[#E5EBE5]">
                 {timeBuckets.map((b) => (
                   <tr key={b.key} className="hover:bg-[#F8F6EF] transition-colors">
-                    <td className="py-2 px-2.5 text-[#26352D] font-medium">{b.label}</td>
-                    <td className="py-2 px-2.5 text-[#68766D]">{b.total}</td>
-                    <td className="py-2 px-2.5 text-right text-[#176B4D] font-semibold">
+                    <td className="py-2 px-2.5 text-[#17251D] font-medium">{b.label}</td>
+                    <td className="py-2 px-2.5 text-[#65736A]">{b.total}</td>
+                    <td className="py-2 px-2.5 text-right text-[#124D32] font-semibold">
                       {b.avgLatency > 0 ? `${b.avgLatency} μs` : "—"}
                     </td>
-                    <td className="py-2 px-2.5 text-right text-[#26352D]">
+                    <td className="py-2 px-2.5 text-right text-[#17251D]">
                       {b.avgTrainTime > 0 ? `${b.avgTrainTime} ms` : "—"}
                     </td>
-                    <td className="py-2 px-2.5 text-right text-[#176B4D]">
+                    <td className="py-2 px-2.5 text-right text-[#124D32]">
                       {b.avgMae !== null ? `${b.avgMae} eV` : "—"}
                     </td>
                   </tr>
@@ -740,38 +740,38 @@ export default function AnalyticsPage() {
             </table>
           </div>
 
-          <div className="pt-2 border-t border-[#DFE5DC] font-mono text-[10px] text-[#68766D] flex justify-between">
+          <div className="pt-2 border-t border-[#E5EBE5] font-mono text-[10px] text-[#65736A] flex justify-between">
             <span>Latency benchmarked over 25 warm iterations</span>
             <span>Sub-50ms CPU training bound enforced</span>
           </div>
         </div>
 
         {/* Chart 4: Model Family Empirical Leaderboard */}
-        <div className="lg:col-span-6 p-5 rounded-[10px] bg-[#FFFFFF] border border-[#DFE5DC] flex flex-col justify-between shadow-xs">
-          <div className="flex items-center justify-between pb-3 border-b border-[#DFE5DC]">
+        <div className="lg:col-span-6 p-5 rounded-[10px] bg-[#FFFFFF] border border-[#E5EBE5] flex flex-col justify-between shadow-xs">
+          <div className="flex items-center justify-between pb-3 border-b border-[#E5EBE5]">
             <div>
-              <div className="font-mono text-[9px] text-[#68766D] uppercase tracking-[0.1em] font-semibold">
+              <div className="font-mono text-[9px] text-[#65736A] uppercase tracking-[0.1em] font-semibold">
                 CHART 04 // ARCHITECTURE COMPARISON
               </div>
-              <h3 className="text-[16px] font-semibold text-[#26352D] mt-0.5 m-0 font-serif">
+              <h3 className="text-[16px] font-semibold text-[#17251D] mt-0.5 m-0 font-serif">
                 Model Family Stability & Best Accuracy
               </h3>
             </div>
-            <span className="font-mono text-[10px] text-[#68766D]">
+            <span className="font-mono text-[10px] text-[#65736A]">
               {familyComparisons.length} Architectures
             </span>
           </div>
 
           <div className="flex flex-col gap-3 my-3">
             {familyComparisons.map((fam) => (
-              <div key={fam.name} className="p-3 rounded-[8px] bg-[#F8F6EF] border border-[#DFE5DC]">
+              <div key={fam.name} className="p-3 rounded-[8px] bg-[#F8F6EF] border border-[#E5EBE5]">
                 <div className="flex items-center justify-between font-mono text-[12px] mb-1">
-                  <span className="text-[#26352D] font-semibold">{fam.name}</span>
-                  <span className="text-[#176B4D] font-semibold">
+                  <span className="text-[#17251D] font-semibold">{fam.name}</span>
+                  <span className="text-[#124D32] font-semibold">
                     {fam.bestMae !== null ? `Best MAE: ${fam.bestMae} eV` : "No valid regression"}
                   </span>
                 </div>
-                <div className="flex items-center justify-between font-mono text-[10px] text-[#68766D]">
+                <div className="flex items-center justify-between font-mono text-[10px] text-[#65736A]">
                   <span>Total: {fam.total} runs ({fam.completed} passed, {fam.failed} failed)</span>
                   <span>Latency: {fam.avgLatency > 0 ? `${fam.avgLatency} μs` : "—"}</span>
                 </div>
@@ -779,7 +779,7 @@ export default function AnalyticsPage() {
             ))}
           </div>
 
-          <div className="pt-2 border-t border-[#DFE5DC] font-mono text-[10px] text-[#68766D] flex justify-between">
+          <div className="pt-2 border-t border-[#E5EBE5] font-mono text-[10px] text-[#65736A] flex justify-between">
             <span>Evaluated against same random seed (seed=42)</span>
             <span>Zero cross-target data leakage</span>
           </div>

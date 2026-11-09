@@ -1,77 +1,77 @@
 @import "tailwindcss";
 
-/* 1. Define @font-face for 'The Seasons' font family */
-@font-face {
-  font-family: 'The Seasons';
-  src: local('The Seasons'), local('TheSeasons-Regular'), local('The Seasons Regular'), local('TheSeasons'),
-       url('/fonts/TheSeasons-Regular.woff2') format('woff2'),
-       url('/fonts/TheSeasons-Regular.ttf') format('truetype');
-  font-weight: 400;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'The Seasons';
-  src: local('The Seasons Bold'), local('TheSeasons-Bold'), local('The Seasons-Bold'),
-       url('/fonts/TheSeasons-Bold.woff2') format('woff2'),
-       url('/fonts/TheSeasons-Bold.ttf') format('truetype');
-  font-weight: 700;
-  font-style: normal;
-  font-display: swap;
-}
-
 @theme inline {
-  --font-evo-display: "The Seasons", Georgia, "Times New Roman", serif;
-  --font-evo-serif: "The Seasons", Georgia, "Times New Roman", serif;
-  --font-evo-body: "The Seasons", Georgia, "Times New Roman", serif;
-  --font-evo-mono: "The Seasons", Georgia, "Times New Roman", serif;
+  --font-evo-display: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-evo-serif: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-evo-body: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-evo-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
   
-  --color-research-ink: #26352D;
-  --color-research-paper: #F8F6EF;
-  --color-research-green: #176B4D;
-  --color-accent-teal: #176B4D;
-  --color-accent-warning: #A66B22;
-  --color-accent-error: #B54747;
+  --color-primary-forest: #124D32;
+  --color-deep-forest: #092F20;
+  --color-secondary-green: #237A49;
+  --color-active-green: #176B3A;
+  --color-sage-green: #DDEEDB;
+  --color-light-sage: #EEF6EA;
+  --color-pale-green: #F5F9F3;
+  --color-pure-white: #FFFFFF;
+  --color-card-white: #FEFEFC;
+  --color-primary-text: #17251D;
+  --color-secondary-text: #65736A;
+  --color-muted-text: #89958D;
+  --color-border: #E5EBE5;
+  --color-subtle-divider: #EDF0EC;
+  --color-success: #238653;
+  --color-warning: #D69B3C;
+  --color-error: #C94B4B;
 }
 
 :root {
   color-scheme: light;
   
-  /* Single Global Primary Font Token */
-  --font-primary: "The Seasons", Georgia, "Times New Roman", serif;
-  --font-seasons: var(--font-primary);
-  --font-serif: var(--font-primary);
+  /* Primary SaaS Typography - Inter (Clean, Modern, Enterprise) */
+  --font-primary: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   --font-sans: var(--font-primary);
-  --font-mono: var(--font-primary);
-  
-  --display: var(--font-primary);
-  --body: var(--font-primary);
-  --mono: var(--font-primary);
+  --font-serif: var(--font-primary);
+  --font-display: var(--font-primary);
+  --font-body: var(--font-primary);
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  --mono: var(--font-mono);
 
-  /* EvolveX Premium Cream & Forest Green Palette Tokens */
-  --bg-main: #F8F6EF;
+  /* Exact Color System from Design Reference (EvoResearch Master System) */
+  --primary-forest: #124D32;
+  --deep-forest: #092F20;
+  --secondary-green: #237A49;
+  --active-green: #176B3A;
+  --sage-green: #DDEEDB;
+  --light-sage: #EEF6EA;
+  --pale-green: #F5F9F3;
+  --pure-white: #FFFFFF;
+  --card-white: #FEFEFC;
+  --primary-text: #17251D;
+  --secondary-text: #65736A;
+  --muted-text: #89958D;
+  --border-color: #E5EBE5;
+  --subtle-divider: #EDF0EC;
+  --success: #238653;
+  --warning: #D69B3C;
+  --error: #C94B4B;
+
+  --bg-main: #F5F9F3;
   --bg-sidebar: #FFFFFF;
   --bg-top-nav: #FFFFFF;
   --bg-card: #FFFFFF;
-  --bg-surface: #FFFFFF;
+  --bg-surface: #F5F9F3;
   --bg-input: #FFFFFF;
-  --bg-active-green: #E6F0E9;
-  --bg-success-subtle: #E8F5EC;
+  --bg-active-green: #124D32;
+  --bg-sage: #DDEEDB;
   
-  --text-main: #26352D;
-  --text-primary: #26352D;
-  --text-secondary: #68766D;
-  --text-muted: #68766D;
+  --text-main: #17251D;
+  --text-primary: #17251D;
+  --text-secondary: #65736A;
+  --text-muted: #89958D;
   
-  --border-color: #DFE5DC;
-  --border-subtle: #DFE5DC;
-  --border-strong: #C4D0C0;
-  
-  --primary-forest: #176B4D;
-  --accent-green-hover: #12543C;
-  --error-color: #B54747;
-  --warning-color: #A66B22;
+  --border-subtle: #EDF0EC;
+  --border-strong: #D5DDD5;
 
   background: var(--bg-main);
   color: var(--text-main);
@@ -91,158 +91,170 @@
 
 html { 
   scroll-behavior: smooth; 
-  background: #F8F6EF; 
+  background: #F5F9F3; 
 }
 
-/* Universal Rule: Enforce 'The Seasons' (with Georgia fallback) on EVERY visible text element */
-*, ::before, ::after, html, body, h1, h2, h3, h4, h5, h6, p, span, div, a, button, input, select, textarea, label, table, th, td, pre, code, kbd, legend, option, svg text, .font-serif, .font-sans, .font-mono, .font-display { 
-  font-family: "The Seasons", Georgia, "Times New Roman", serif !important; 
-  color: inherit;
+/* Universal Rule: Enforce Inter clean typography throughout */
+*, ::before, ::after, html, body, h1, h2, h3, h4, h5, h6, p, span, div, a, button, input, select, textarea, label, table, th, td, legend, option { 
+  font-family: var(--font-primary) !important; 
   -webkit-font-smoothing: antialiased; 
   -moz-osx-font-smoothing: grayscale;
+}
+
+pre, code, kbd, .font-mono {
+  font-family: var(--font-mono) !important;
 }
 
 body { 
   margin: 0; 
   min-width: 320px; 
   overflow-x: hidden; 
-  background: #F8F6EF; 
-  color: #26352D; 
+  background: #F5F9F3; 
+  color: #17251D; 
 }
 
 button, a, input, select, textarea { 
   -webkit-tap-highlight-color: transparent; 
-  font-family: "The Seasons", Georgia, "Times New Roman", serif !important; 
+  font-family: var(--font-primary) !important; 
 }
 
-a { color: inherit; text-decoration: none; }
-button { color: inherit; }
-::selection { background: #E6F0E9; color: #176B4D; }
+a { text-decoration: none; }
+::selection { background: #DDEEDB; color: #124D32; }
 
-/* Cream & Forest Green Premium Surfaces */
+/* Premium Enterprise Surfaces */
 .workspace-shell {
-  background: #F8F6EF !important;
-  color: #26352D !important;
-  font-family: "The Seasons", Georgia, serif !important;
+  background: #F5F9F3 !important;
+  color: #17251D !important;
+  font-family: var(--font-primary) !important;
 }
 
 .workspace-content {
-  background: #F8F6EF !important;
-  padding: 24px;
-  font-family: "The Seasons", Georgia, serif !important;
+  background: #F5F9F3 !important;
+  padding: 0 32px 64px !important;
+  font-family: var(--font-primary) !important;
+}
+
+/* Dedicated Hero Banner with Guaranteed Contrast */
+.hero-banner {
+  background: linear-gradient(135deg, #092F20 0%, #124D32 55%, #176B3A 100%) !important;
+  color: #FFFFFF !important;
+}
+
+.hero-banner h1,
+.hero-banner .hero-title {
+  color: #FFFFFF !important;
+  font-weight: 700 !important;
+}
+
+.hero-banner p,
+.hero-banner .hero-desc {
+  color: rgba(255, 255, 255, 0.9) !important;
+}
+
+.hero-banner .hero-eyebrow {
+  color: #DDEEDB !important;
+  letter-spacing: 0.18em !important;
+  font-weight: 700 !important;
 }
 
 .glass-panel, .research-card {
   background: #FFFFFF !important;
-  border: 1px solid #DFE5DC !important;
-  box-shadow: 0 1px 3px rgba(38, 53, 45, 0.04) !important;
-  color: #26352D !important;
-  border-radius: 12px;
-  font-family: "The Seasons", Georgia, serif !important;
+  border: 1px solid #E5EBE5 !important;
+  box-shadow: 0 1px 4px rgba(18, 77, 50, 0.03) !important;
+  color: #17251D !important;
+  border-radius: 20px;
+  font-family: var(--font-primary) !important;
 }
 
 .glass-panel-elevated {
   background: #FFFFFF !important;
-  border: 1px solid #DFE5DC !important;
-  box-shadow: 0 4px 16px rgba(38, 53, 45, 0.06) !important;
-  color: #26352D !important;
-  border-radius: 12px;
-  font-family: "The Seasons", Georgia, serif !important;
+  border: 1px solid #E5EBE5 !important;
+  box-shadow: 0 4px 20px rgba(18, 77, 50, 0.05) !important;
+  color: #17251D !important;
+  border-radius: 24px;
+  font-family: var(--font-primary) !important;
 }
 
 .glass-pill {
   background: #FFFFFF !important;
-  border: 1px solid #DFE5DC !important;
-  color: #26352D !important;
-  font-family: "The Seasons", Georgia, serif !important;
+  border: 1px solid #E5EBE5 !important;
+  color: #17251D !important;
+  font-family: var(--font-primary) !important;
 }
 
 .glass-pill:hover {
-  background: #E6F0E9 !important;
-  border-color: #176B4D !important;
-  color: #176B4D !important;
-}
-
-/* Header & Sidebar Overrides */
-.floating-nav {
-  background: #FFFFFF !important;
-  border-bottom: 1px solid #DFE5DC !important;
-  color: #26352D !important;
-}
-
-.nav-brand-text { 
-  color: #176B4D !important; 
-  font-family: "The Seasons", Georgia, serif !important; 
-  font-weight: 700 !important; 
+  background: #F5F9F3 !important;
+  border-color: #124D32 !important;
+  color: #124D32 !important;
 }
 
 /* Buttons & Interactive Elements */
 .btn-forest, .button--primary {
-  background: #176B4D !important;
+  background: #124D32 !important;
   color: #FFFFFF !important;
-  border: 1px solid #176B4D !important;
+  border: 1px solid #124D32 !important;
   font-weight: 600;
-  border-radius: 8px;
-  font-family: "The Seasons", Georgia, serif !important;
+  border-radius: 9999px;
+  font-family: var(--font-primary) !important;
   transition: all 150ms ease;
 }
 
 .btn-forest:hover, .button--primary:hover {
-  background: #12543C !important;
-  border-color: #12543C !important;
-  box-shadow: 0 2px 8px rgba(23, 107, 77, 0.2) !important;
+  background: #092F20 !important;
+  border-color: #092F20 !important;
+  box-shadow: 0 4px 14px rgba(18, 77, 50, 0.25) !important;
 }
 
 .btn-cream, .button--quiet {
   background: #FFFFFF !important;
-  color: #26352D !important;
-  border: 1px solid #DFE5DC !important;
-  border-radius: 8px;
-  font-family: "The Seasons", Georgia, serif !important;
+  color: #17251D !important;
+  border: 1px solid #E5EBE5 !important;
+  border-radius: 9999px;
+  font-family: var(--font-primary) !important;
   transition: all 150ms ease;
 }
 
 .btn-cream:hover, .button--quiet:hover {
-  background: #E6F0E9 !important;
-  border-color: #176B4D !important;
-  color: #176B4D !important;
+  background: #F5F9F3 !important;
+  border-color: #DDEEDB !important;
+  color: #124D32 !important;
 }
 
 /* Status Badges */
 .badge-forest {
-  background: #E8F5EC !important;
-  color: #176B4D !important;
-  border: 1px solid rgba(23, 107, 77, 0.25) !important;
-  font-family: "The Seasons", Georgia, serif !important;
+  background: #DDEEDB !important;
+  color: #124D32 !important;
+  border: 1px solid rgba(18, 77, 50, 0.15) !important;
+  font-family: var(--font-primary) !important;
 }
 
 .badge-sage {
-  background: #E6F0E9 !important;
-  color: #176B4D !important;
-  border: 1px solid #DFE5DC !important;
-  font-family: "The Seasons", Georgia, serif !important;
+  background: #EEF6EA !important;
+  color: #124D32 !important;
+  border: 1px solid #E5EBE5 !important;
+  font-family: var(--font-primary) !important;
 }
 
 .badge-error {
-  background: rgba(181, 71, 71, 0.08) !important;
-  color: #B54747 !important;
-  border: 1px solid rgba(181, 71, 71, 0.25) !important;
-  font-family: "The Seasons", Georgia, serif !important;
+  background: rgba(201, 75, 75, 0.08) !important;
+  color: #C94B4B !important;
+  border: 1px solid rgba(201, 75, 75, 0.25) !important;
+  font-family: var(--font-primary) !important;
 }
 
 .badge-warning {
-  background: rgba(166, 107, 34, 0.08) !important;
-  color: #A66B22 !important;
-  border: 1px solid rgba(166, 107, 34, 0.25) !important;
-  font-family: "The Seasons", Georgia, serif !important;
+  background: rgba(214, 155, 60, 0.08) !important;
+  color: #D69B3C !important;
+  border: 1px solid rgba(214, 155, 60, 0.25) !important;
+  font-family: var(--font-primary) !important;
 }
 
 /* 3D Background Canvas Positioning */
 .site-environment {
   position: relative;
   min-height: 100vh;
-  background: #F8F6EF;
-  color: #26352D;
+  background: #F5F9F3;
+  color: #17251D;
 }
 
 .cinematic-canvas {
@@ -278,20 +290,20 @@ button { color: inherit; }
   justify-content: space-between !important;
   width: 100% !important;
   background: #FFFFFF !important;
-  border: 1px solid #DFE5DC !important;
-  border-radius: 12px !important;
-  padding: 10px 20px !important;
-  box-shadow: 0 4px 20px rgba(38, 53, 45, 0.06) !important;
+  border: 1px solid #E5EBE5 !important;
+  border-radius: 9999px !important;
+  padding: 10px 24px !important;
+  box-shadow: 0 2px 14px rgba(18, 77, 50, 0.04) !important;
   gap: 16px !important;
 }
 
 .nav-brand {
   display: flex !important;
   align-items: center !important;
-  gap: 8px !important;
+  gap: 10px !important;
   font-weight: 700 !important;
-  color: #176B4D !important;
-  font-size: 14px !important;
+  color: #17251D !important;
+  font-size: 15px !important;
   text-decoration: none !important;
   flex-shrink: 0 !important;
 }
@@ -299,27 +311,27 @@ button { color: inherit; }
 .nav-links {
   display: flex !important;
   align-items: center !important;
-  gap: 20px !important;
-  font-size: 12px !important;
-  font-weight: 600 !important;
-  font-family: "The Seasons", Georgia, serif !important;
+  gap: 16px !important;
+  font-size: 13px !important;
+  font-weight: 500 !important;
+  font-family: var(--font-primary) !important;
 }
 
 .nav-links a {
-  color: #68766D !important;
+  color: #65736A !important;
   text-decoration: none !important;
-  padding: 6px 12px !important;
-  border-radius: 6px !important;
+  padding: 8px 14px !important;
+  border-radius: 9999px !important;
   transition: all 0.15s ease !important;
   display: inline-flex !important;
   align-items: center !important;
-  gap: 4px !important;
+  gap: 6px !important;
   white-space: nowrap !important;
 }
 
 .nav-links a:hover, .nav-links a.active {
-  color: #176B4D !important;
-  background: #E6F0E9 !important;
+  color: #124D32 !important;
+  background: #EEF6EA !important;
 }
 
 .nav-actions {
@@ -333,21 +345,21 @@ button { color: inherit; }
   display: inline-flex !important;
   align-items: center !important;
   gap: 6px !important;
-  font-size: 10px !important;
+  font-size: 11px !important;
   font-weight: 600 !important;
-  color: #176B4D !important;
-  background: #E6F0E9 !important;
-  border: 1px solid #DFE5DC !important;
-  padding: 4px 10px !important;
-  border-radius: 6px !important;
-  font-family: var(--font-primary), serif !important;
+  color: #124D32 !important;
+  background: #DDEEDB !important;
+  border: 1px solid rgba(18, 77, 50, 0.2) !important;
+  padding: 5px 12px !important;
+  border-radius: 9999px !important;
+  font-family: var(--font-primary) !important;
 }
 
 .indicator-dot-wrap {
   position: relative;
   display: flex;
-  width: 6px;
-  height: 6px;
+  width: 7px;
+  height: 7px;
 }
 
 .indicator-dot-ping {
@@ -355,16 +367,16 @@ button { color: inherit; }
   width: 100%;
   height: 100%;
   border-radius: 50%;
-  background: #176B4D;
+  background: #238653;
   opacity: 0.75;
   animation: ping 1.5s cubic-bezier(0, 0, 0.2, 1) infinite;
 }
 
 .indicator-dot-core {
-  width: 6px;
-  height: 6px;
+  width: 7px;
+  height: 7px;
   border-radius: 50%;
-  background: #176B4D;
+  background: #238653;
 }
 
 .nav-mobile-toggle {
@@ -372,50 +384,7 @@ button { color: inherit; }
   background: none;
   border: none;
   cursor: pointer;
-  color: #26352D;
-}
-
-/* Floating Status Widget (Bottom Left) */
-.research-status-panel {
-  position: fixed !important;
-  bottom: 24px !important;
-  left: 24px !important;
-  z-index: 40 !important;
-  background: #FFFFFF !important;
-  border: 1px solid #DFE5DC !important;
-  border-radius: 10px !important;
-  padding: 12px 16px !important;
-  box-shadow: 0 4px 16px rgba(38, 53, 45, 0.06) !important;
-  max-width: 240px !important;
-  font-size: 11px !important;
-  color: #26352D !important;
-}
-
-.status-panel-top {
-  display: flex;
-  justify-content: space-between;
-  font-weight: 600;
-  color: #176B4D;
-  margin-bottom: 4px;
-}
-
-.status-panel-rule {
-  height: 1px;
-  background: #DFE5DC;
-  margin: 6px 0;
-}
-
-.status-panel-current {
-  display: flex;
-  justify-content: space-between;
-  color: #68766D;
-  margin-bottom: 4px;
-}
-
-.status-panel-bottom {
-  font-size: 10px;
-  color: #68766D;
-  margin-top: 6px;
+  color: #17251D;
 }
 
 @media (max-width: 900px) {
@@ -425,194 +394,4 @@ button { color: inherit; }
   .nav-mobile-toggle {
     display: flex !important;
   }
-  .research-status-panel {
-    display: none !important;
-  }
 }
-
-/* Light Mode 7-Scene Narrative Section Styles */
-.scene-stage {
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  padding: 100px 32px 60px;
-  position: relative;
-  max-width: 1240px;
-  margin: 0 auto;
-  color: #26352D;
-  background: transparent;
-}
-
-.scene-copy {
-  max-width: 720px;
-  z-index: 10;
-  position: relative;
-}
-
-.scene-eyebrow {
-  font-family: var(--mono);
-  font-size: 11px;
-  font-weight: 600;
-  color: #176B4D;
-  letter-spacing: 0.12em;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-bottom: 16px;
-}
-
-.scene-headline {
-  font-family: "The Seasons", Georgia, serif !important;
-  font-size: 56px;
-  line-height: 1.05;
-  font-weight: 700;
-  color: #26352D !important;
-  margin: 0 0 20px 0;
-  letter-spacing: -0.01em;
-  text-transform: uppercase;
-}
-
-.scene-headline span {
-  display: block;
-}
-
-.scene-description {
-  font-family: "The Seasons", Georgia, serif !important;
-  font-size: 18px;
-  line-height: 1.6;
-  color: #68766D !important;
-  max-width: 600px;
-  margin-bottom: 28px;
-}
-
-.scene-labels {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  margin-top: 24px;
-}
-
-.scene-labels span {
-  font-family: var(--mono);
-  font-size: 10px;
-  font-weight: 600;
-  color: #176B4D;
-  background: #FFFFFF;
-  border: 1px solid #DFE5DC;
-  padding: 6px 12px;
-  border-radius: 6px;
-  box-shadow: 0 1px 3px rgba(38, 53, 45, 0.04);
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-}
-
-.scene-labels span i {
-  color: #68766D;
-  font-style: normal;
-}
-
-.scene-index-ghost {
-  font-family: var(--mono);
-  font-size: 180px;
-  font-weight: 800;
-  color: rgba(23, 107, 77, 0.04);
-  position: absolute;
-  right: 24px;
-  bottom: 20px;
-  pointer-events: none;
-  user-select: none;
-}
-
-/* Light Mode Interactive Scene Detail Visuals */
-.process-rail, .record-stack, .recovery-example, .candidate-list, .collaboration-note {
-  background: #FFFFFF !important;
-  border: 1px solid #DFE5DC !important;
-  border-radius: 12px;
-  padding: 20px;
-  margin: 20px 0;
-  box-shadow: 0 4px 16px rgba(38, 53, 45, 0.05);
-  color: #26352D;
-}
-
-.process-rail {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-}
-
-.process-step {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-family: var(--mono);
-  font-size: 12px;
-  font-weight: 600;
-  color: #176B4D;
-}
-
-.process-index {
-  color: #68766D;
-}
-
-.record-heading, .recovery-title, .candidate-heading {
-  display: flex;
-  justify-content: space-between;
-  font-family: var(--mono);
-  font-size: 10px;
-  font-weight: 600;
-  color: #176B4D;
-  margin-bottom: 12px;
-  border-bottom: 1px solid #DFE5DC;
-  padding-bottom: 8px;
-}
-
-.record-id {
-  font-family: var(--mono);
-  font-size: 14px;
-  font-weight: 700;
-  color: #26352D;
-  margin-bottom: 12px;
-}
-
-.record-row, .recovery-flow div {
-  display: flex;
-  justify-content: space-between;
-  font-family: var(--mono);
-  font-size: 11px;
-  color: #68766D;
-  padding: 4px 0;
-}
-
-.record-row b {
-  color: #176B4D;
-}
-
-.candidate-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  font-family: var(--mono);
-  font-size: 11px;
-  color: #26352D;
-  padding: 6px 0;
-}
-
-.candidate-track {
-  flex: 1;
-  height: 6px;
-  background: #E6F0E9;
-  border-radius: 3px;
-  overflow: hidden;
-}
-
-.candidate-track i {
-  display: block;
-  height: 100%;
-  background: #176B4D;
-  width: 70%;
-}
-
-

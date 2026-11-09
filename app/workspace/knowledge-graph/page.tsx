@@ -74,7 +74,7 @@ const CATEGORY_COLORS: Record<string, { bg: string; border: string; text: string
   Paper: { bg: "#EFF6FF", border: "#3B82F6", text: "#1E40AF", dot: "#2563EB", threeHex: 0x2563eb, shape: "Octahedron" },
   Method: { bg: "#FEF3C7", border: "#F59E0B", text: "#92400E", dot: "#D97706", threeHex: 0xd97706, shape: "Dodecahedron" },
   Material: { bg: "#FEF3C7", border: "#F59E0B", text: "#92400E", dot: "#D97706", threeHex: 0xd97706, shape: "Lattice Cube" },
-  Dataset: { bg: "#E8F5EC", border: "#176B4D", text: "#176B4D", dot: "#176B4D", threeHex: 0x176b4d, shape: "Cylinder" },
+  Dataset: { bg: "#E8F5EC", border: "#124D32", text: "#124D32", dot: "#124D32", threeHex: 0x176b4d, shape: "Cylinder" },
   Model: { bg: "#F3E8FF", border: "#A855F7", text: "#6B21A8", dot: "#9333EA", threeHex: 0x9333ea, shape: "Torus" },
   Experiment: { bg: "#FFE4E6", border: "#F43F5E", text: "#9F1239", dot: "#E11D48", threeHex: 0xe11d48, shape: "Sphere" },
   Metric: { bg: "#CCFBF1", border: "#14B8A6", text: "#115E59", dot: "#0D9488", threeHex: 0x0d9488, shape: "Tetrahedron" },
@@ -909,29 +909,29 @@ export default function ResearchKnowledgeGraphPage() {
   };
 
   return (
-    <div className="flex flex-col h-[calc(100vh-68px)] bg-[#F8F6EF] text-[#26352D] font-sans overflow-hidden">
+    <div className="flex flex-col h-[calc(100vh-68px)] bg-[#F8F6EF] text-[#17251D] font-sans overflow-hidden">
       {/* 1. Header Toolbar */}
-      <div className="p-[14px_24px] bg-[#FFFFFF] border-b border-[#DFE5DC] flex flex-wrap items-center justify-between gap-4 shrink-0 shadow-xs">
+      <div className="p-[14px_24px] bg-[#FFFFFF] border-b border-[#E5EBE5] flex flex-wrap items-center justify-between gap-4 shrink-0 shadow-xs">
         <div>
-          <div className="font-mono text-[10px] text-[#176B4D] tracking-[0.16em] uppercase font-semibold flex items-center gap-2">
+          <div className="font-mono text-[10px] text-[#124D32] tracking-[0.16em] uppercase font-semibold flex items-center gap-2">
             <span>KNOWLEDGE GRAPH / 001</span>
             <span>•</span>
-            <span className="text-[#176B4D]">
+            <span className="text-[#124D32]">
               {sourceMode === "default" ? "DEMO GRAPH" : sourceMode.toUpperCase()}
             </span>
             {sourceMode === "default" && (
-              <span className="px-1.5 py-0.5 rounded-[4px] bg-[#E8F5EC] text-[#176B4D] text-[9px] font-mono border border-[#176B4D]/30 font-semibold">
+              <span className="px-1.5 py-0.5 rounded-[4px] bg-[#E8F5EC] text-[#124D32] text-[9px] font-mono border border-[#124D32]/30 font-semibold">
                 VERIFIED PERSISTENT BENCHMARK
               </span>
             )}
           </div>
-          <h1 className="text-[19px] font-semibold tracking-tight text-[#26352D] mt-0.5 flex items-center gap-2 font-serif">
+          <h1 className="text-[19px] font-semibold tracking-tight text-[#17251D] mt-0.5 flex items-center gap-2 font-serif">
             <span>Materials Science Research Knowledge Graph</span>
-            <span className="px-2 py-0.5 rounded-full text-[10px] font-mono bg-[#E6F0E9] text-[#176B4D] border border-[#176B4D]/30">
+            <span className="px-2 py-0.5 rounded-full text-[10px] font-mono bg-[#EEF6EA] text-[#124D32] border border-[#124D32]/30">
               {viewMode === "3d" ? "3D WebGL Active" : "2D Accessible View"}
             </span>
           </h1>
-          <p className="text-[12px] text-[#68766D] mt-0.5">
+          <p className="text-[12px] text-[#65736A] mt-0.5">
             Interactive structural ontology linking papers, materials compositions, benchmark datasets, model runs, and failure recoveries.
           </p>
         </div>
@@ -939,14 +939,14 @@ export default function ResearchKnowledgeGraphPage() {
         {/* Source Mode Selector & Action Buttons */}
         <div className="flex items-center gap-2.5">
           {/* View Mode 3D <-> 2D Toggle */}
-          <div className="flex items-center p-0.5 bg-[#F8F6EF] border border-[#DFE5DC] rounded-[8px]">
+          <div className="flex items-center p-0.5 bg-[#F8F6EF] border border-[#E5EBE5] rounded-[8px]">
             <button
               type="button"
               onClick={() => setViewMode("3d")}
               className={`px-3 py-1.5 rounded-[6px] text-[11px] font-mono transition-all flex items-center gap-1 cursor-pointer ${
                 viewMode === "3d"
-                  ? "bg-[#176B4D] text-[#FFFFFF] font-semibold shadow-xs"
-                  : "text-[#68766D] hover:text-[#26352D]"
+                  ? "bg-[#124D32] text-[#FFFFFF] font-semibold shadow-xs"
+                  : "text-[#65736A] hover:text-[#17251D]"
               }`}
             >
               <Box size={13} />
@@ -957,8 +957,8 @@ export default function ResearchKnowledgeGraphPage() {
               onClick={() => setViewMode("2d")}
               className={`px-3 py-1.5 rounded-[6px] text-[11px] font-mono transition-all flex items-center gap-1 cursor-pointer ${
                 viewMode === "2d"
-                  ? "bg-[#176B4D] text-[#FFFFFF] font-semibold shadow-xs"
-                  : "text-[#68766D] hover:text-[#26352D]"
+                  ? "bg-[#124D32] text-[#FFFFFF] font-semibold shadow-xs"
+                  : "text-[#65736A] hover:text-[#17251D]"
               }`}
             >
               <List size={13} />
@@ -966,14 +966,14 @@ export default function ResearchKnowledgeGraphPage() {
             </button>
           </div>
 
-          <div className="flex items-center p-0.5 bg-[#F8F6EF] border border-[#DFE5DC] rounded-[8px]">
+          <div className="flex items-center p-0.5 bg-[#F8F6EF] border border-[#E5EBE5] rounded-[8px]">
             <button
               type="button"
               onClick={() => setSourceMode("default")}
               className={`px-3 py-1.5 rounded-[6px] text-[12px] font-mono transition-all ${
                 sourceMode === "default"
-                  ? "bg-[#176B4D] text-[#FFFFFF] font-semibold shadow-xs"
-                  : "text-[#68766D] hover:text-[#26352D]"
+                  ? "bg-[#124D32] text-[#FFFFFF] font-semibold shadow-xs"
+                  : "text-[#65736A] hover:text-[#17251D]"
               }`}
             >
               Demo Graph
@@ -983,13 +983,13 @@ export default function ResearchKnowledgeGraphPage() {
               onClick={() => setSourceMode("uploaded")}
               className={`px-3 py-1.5 rounded-[6px] text-[12px] font-mono transition-all ${
                 sourceMode === "uploaded"
-                  ? "bg-[#176B4D] text-[#FFFFFF] font-semibold shadow-xs"
-                  : "text-[#68766D] hover:text-[#26352D]"
+                  ? "bg-[#124D32] text-[#FFFFFF] font-semibold shadow-xs"
+                  : "text-[#65736A] hover:text-[#17251D]"
               }`}
             >
               Uploaded Sources
               {uploadedNodes.length > 0 && (
-                <span className="ml-1.5 px-1 py-0.2 bg-[#FFFFFF] text-[#176B4D] font-bold rounded-full text-[9px]">
+                <span className="ml-1.5 px-1 py-0.2 bg-[#FFFFFF] text-[#124D32] font-bold rounded-full text-[9px]">
                   {uploadedNodes.length}
                 </span>
               )}
@@ -999,8 +999,8 @@ export default function ResearchKnowledgeGraphPage() {
               onClick={() => setSourceMode("workspace")}
               className={`px-3 py-1.5 rounded-[6px] text-[12px] font-mono transition-all ${
                 sourceMode === "workspace"
-                  ? "bg-[#176B4D] text-[#FFFFFF] font-semibold shadow-xs"
-                  : "text-[#68766D] hover:text-[#26352D]"
+                  ? "bg-[#124D32] text-[#FFFFFF] font-semibold shadow-xs"
+                  : "text-[#65736A] hover:text-[#17251D]"
               }`}
             >
               Research Workspace
@@ -1011,7 +1011,7 @@ export default function ResearchKnowledgeGraphPage() {
           <button
             type="button"
             onClick={() => setUploadModalOpen(true)}
-            className="h-[34px] px-3.5 rounded-[8px] bg-[#176B4D] hover:bg-[#12543c] text-[#FFFFFF] text-[12px] font-semibold transition-all inline-flex items-center gap-1.5 shadow-xs cursor-pointer"
+            className="h-[34px] px-3.5 rounded-[8px] bg-[#124D32] hover:bg-[#12543c] text-[#FFFFFF] text-[12px] font-semibold transition-all inline-flex items-center gap-1.5 shadow-xs cursor-pointer"
           >
             <Plus size={14} className="stroke-[2.5]" />
             <span>ADD RESEARCH SOURCES</span>
@@ -1020,17 +1020,17 @@ export default function ResearchKnowledgeGraphPage() {
       </div>
 
       {/* 2. Secondary Filter & Search Ribbon */}
-      <div className="p-[10px_24px] bg-[#FFFFFF]/90 backdrop-blur-md border-b border-[#DFE5DC] flex flex-wrap items-center justify-between gap-3 shrink-0">
+      <div className="p-[10px_24px] bg-[#FFFFFF]/90 backdrop-blur-md border-b border-[#E5EBE5] flex flex-wrap items-center justify-between gap-3 shrink-0">
         <div className="flex flex-wrap items-center gap-2">
           {/* Search Box */}
           <div className="relative w-64">
-            <Search size={13} className="absolute left-2.5 top-1/2 -translate-y-1/2 text-[#68766D]" />
+            <Search size={13} className="absolute left-2.5 top-1/2 -translate-y-1/2 text-[#65736A]" />
             <input
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search concepts, materials, models..."
-              className="w-full h-8 pl-8 pr-3 bg-[#F8F6EF] border border-[#DFE5DC] rounded-[6px] text-[12px] text-[#26352D] placeholder-[#68766D] focus:outline-none focus:border-[#176B4D]"
+              className="w-full h-8 pl-8 pr-3 bg-[#F8F6EF] border border-[#E5EBE5] rounded-[6px] text-[12px] text-[#17251D] placeholder-[#65736A] focus:outline-none focus:border-[#124D32]"
             />
           </div>
 
@@ -1043,8 +1043,8 @@ export default function ResearchKnowledgeGraphPage() {
                 onClick={() => setSelectedCategory(cat)}
                 className={`px-2.5 py-1 rounded-[5px] border transition-colors cursor-pointer ${
                   selectedCategory === cat
-                    ? "bg-[#176B4D] text-[#FFFFFF] border-[#176B4D] font-bold"
-                    : "bg-[#F8F6EF] text-[#68766D] border-[#DFE5DC] hover:border-[#176B4D]/40 hover:text-[#26352D]"
+                    ? "bg-[#124D32] text-[#FFFFFF] border-[#124D32] font-bold"
+                    : "bg-[#F8F6EF] text-[#65736A] border-[#E5EBE5] hover:border-[#124D32]/40 hover:text-[#17251D]"
                 }`}
               >
                 {cat}
@@ -1054,8 +1054,8 @@ export default function ResearchKnowledgeGraphPage() {
         </div>
 
         {/* 3D View Controls & Statistics */}
-        <div className="flex items-center gap-2 font-mono text-[11px] text-[#68766D]">
-          <span className="mr-1 text-[#26352D]">
+        <div className="flex items-center gap-2 font-mono text-[11px] text-[#65736A]">
+          <span className="mr-1 text-[#17251D]">
             {filteredNodes.length} Nodes • {activeEdges.length} Edges
           </span>
 
@@ -1064,8 +1064,8 @@ export default function ResearchKnowledgeGraphPage() {
             onClick={() => setIsolateNeighbors((prev) => !prev)}
             className={`px-2.5 py-1 rounded-[5px] border text-[11px] font-mono transition-all flex items-center gap-1.5 cursor-pointer ${
               isolateNeighbors
-                ? "bg-[#176B4D] text-[#FFFFFF] border-[#176B4D] font-semibold"
-                : "bg-[#F8F6EF] text-[#68766D] border-[#DFE5DC] hover:border-[#176B4D]/40"
+                ? "bg-[#124D32] text-[#FFFFFF] border-[#124D32] font-semibold"
+                : "bg-[#F8F6EF] text-[#65736A] border-[#E5EBE5] hover:border-[#124D32]/40"
             }`}
             title="Isolate branch connected to selected node"
           >
@@ -1082,7 +1082,7 @@ export default function ResearchKnowledgeGraphPage() {
                     cameraRef.current.position.multiplyScalar(0.85);
                   }
                 }}
-                className="w-7 h-7 rounded-[5px] border border-[#DFE5DC] bg-[#FFFFFF] flex items-center justify-center hover:bg-[#F8F6EF] text-[#26352D] cursor-pointer"
+                className="w-7 h-7 rounded-[5px] border border-[#E5EBE5] bg-[#FFFFFF] flex items-center justify-center hover:bg-[#F8F6EF] text-[#17251D] cursor-pointer"
                 title="Zoom In"
               >
                 <ZoomIn size={13} />
@@ -1094,7 +1094,7 @@ export default function ResearchKnowledgeGraphPage() {
                     cameraRef.current.position.multiplyScalar(1.15);
                   }
                 }}
-                className="w-7 h-7 rounded-[5px] border border-[#DFE5DC] bg-[#FFFFFF] flex items-center justify-center hover:bg-[#F8F6EF] text-[#26352D] cursor-pointer"
+                className="w-7 h-7 rounded-[5px] border border-[#E5EBE5] bg-[#FFFFFF] flex items-center justify-center hover:bg-[#F8F6EF] text-[#17251D] cursor-pointer"
                 title="Zoom Out"
               >
                 <ZoomOut size={13} />
@@ -1102,7 +1102,7 @@ export default function ResearchKnowledgeGraphPage() {
               <button
                 type="button"
                 onClick={handleResetCamera}
-                className="w-7 h-7 rounded-[5px] border border-[#DFE5DC] bg-[#FFFFFF] flex items-center justify-center hover:bg-[#F8F6EF] text-[#26352D] cursor-pointer"
+                className="w-7 h-7 rounded-[5px] border border-[#E5EBE5] bg-[#FFFFFF] flex items-center justify-center hover:bg-[#F8F6EF] text-[#17251D] cursor-pointer"
                 title="Reset 3D Camera View"
               >
                 <RotateCcw size={13} />
@@ -1116,8 +1116,8 @@ export default function ResearchKnowledgeGraphPage() {
             onClick={() => setIsLibraryOpen((prev) => !prev)}
             className={`px-2 py-1 rounded-[5px] border text-[10px] font-mono transition-all flex items-center gap-1 cursor-pointer ${
               isLibraryOpen
-                ? "bg-[#E6F0E9] text-[#176B4D] border-[#176B4D] font-semibold"
-                : "bg-[#FFFFFF] text-[#68766D] border-[#DFE5DC] hover:border-[#176B4D]/40"
+                ? "bg-[#EEF6EA] text-[#124D32] border-[#124D32] font-semibold"
+                : "bg-[#FFFFFF] text-[#65736A] border-[#E5EBE5] hover:border-[#124D32]/40"
             }`}
             title={isLibraryOpen ? "Hide Ontology Library" : "Show Ontology Library"}
           >
@@ -1129,7 +1129,7 @@ export default function ResearchKnowledgeGraphPage() {
           <button
             type="button"
             onClick={() => setIsInspectorOpen((prev) => !prev)}
-            className="px-2 py-1 rounded-[5px] border border-[#DFE5DC] bg-[#FFFFFF] flex items-center gap-1 text-[#26352D] hover:bg-[#F8F6EF] cursor-pointer"
+            className="px-2 py-1 rounded-[5px] border border-[#E5EBE5] bg-[#FFFFFF] flex items-center gap-1 text-[#17251D] hover:bg-[#F8F6EF] cursor-pointer"
             title={isInspectorOpen ? "Collapse Inspector" : "Expand Inspector"}
           >
             {isInspectorOpen ? <ChevronRight size={14} /> : <ChevronLeft size={14} />}
@@ -1142,7 +1142,7 @@ export default function ResearchKnowledgeGraphPage() {
       <div className="flex-1 flex overflow-hidden relative p-3">
         {viewMode === "3d" ? (
           /* Dominant 3D WebGL Canvas Area in Framed Box with Border */
-          <div className="flex-1 relative overflow-hidden bg-[#FFFFFF] border border-[#DFE5DC] rounded-[12px] shadow-xs select-none flex flex-col">
+          <div className="flex-1 relative overflow-hidden bg-[#FFFFFF] border border-[#E5EBE5] rounded-[12px] shadow-xs select-none flex flex-col">
             <div ref={canvasContainerRef} className="w-full h-full cursor-grab active:cursor-grabbing" />
 
             {/* Projected 2D HTML Labels floating over 3D nodes */}
@@ -1173,17 +1173,17 @@ export default function ResearchKnowledgeGraphPage() {
                       className="flex flex-col items-center px-2 py-0.5 rounded-[5px] border backdrop-blur-md shadow-xs"
                       style={{
                         backgroundColor: isSelected ? "#FFFFFFee" : "#FFFFFFcc",
-                        borderColor: isSelected ? "#176B4D" : catConfig.border + "88",
+                        borderColor: isSelected ? "#124D32" : catConfig.border + "88",
                       }}
                     >
                       <span
                         className="text-[9px] font-mono uppercase tracking-wider font-bold flex items-center gap-1"
-                        style={{ color: isSelected ? "#176B4D" : catConfig.text }}
+                        style={{ color: isSelected ? "#124D32" : catConfig.text }}
                       >
                         <span>{lbl.category}</span>
                         <span className="opacity-60">({catConfig.shape})</span>
                       </span>
-                      <span className="text-[11px] font-medium text-[#26352D] max-w-[140px] truncate text-center leading-tight font-sans">
+                      <span className="text-[11px] font-medium text-[#17251D] max-w-[140px] truncate text-center leading-tight font-sans">
                         {lbl.name}
                       </span>
                     </div>
@@ -1194,16 +1194,16 @@ export default function ResearchKnowledgeGraphPage() {
 
             {/* Openable / Closable Floating Ontology Legend Panel (Lower Left Corner) */}
             {isLibraryOpen ? (
-              <div className="absolute bottom-4 left-4 p-3.5 rounded-[10px] bg-[#FFFFFF]/95 backdrop-blur-md border border-[#DFE5DC] shadow-md text-[11px] font-mono z-20 max-w-sm transition-all animate-in fade-in slide-in-from-bottom-2 duration-200">
-                <div className="text-[10px] text-[#68766D] tracking-wider uppercase font-bold mb-2.5 flex items-center justify-between gap-4 border-b border-[#DFE5DC] pb-1.5">
+              <div className="absolute bottom-4 left-4 p-3.5 rounded-[10px] bg-[#FFFFFF]/95 backdrop-blur-md border border-[#E5EBE5] shadow-md text-[11px] font-mono z-20 max-w-sm transition-all animate-in fade-in slide-in-from-bottom-2 duration-200">
+                <div className="text-[10px] text-[#65736A] tracking-wider uppercase font-bold mb-2.5 flex items-center justify-between gap-4 border-b border-[#E5EBE5] pb-1.5">
                   <div className="flex items-center gap-1.5">
-                    <Layers size={13} className="text-[#176B4D]" />
+                    <Layers size={13} className="text-[#124D32]" />
                     <span>3D GEOMETRY ONTOLOGY LIBRARY</span>
                   </div>
                   <button
                     type="button"
                     onClick={() => setIsLibraryOpen(false)}
-                    className="p-0.5 rounded hover:bg-[#F8F6EF] text-[#68766D] hover:text-[#26352D] cursor-pointer transition-colors"
+                    className="p-0.5 rounded hover:bg-[#F8F6EF] text-[#65736A] hover:text-[#17251D] cursor-pointer transition-colors"
                     title="Close Library Legend"
                   >
                     <X size={13} />
@@ -1218,9 +1218,9 @@ export default function ResearchKnowledgeGraphPage() {
                     >
                       <div className="flex items-center gap-2">
                         <span className="w-2.5 h-2.5 rounded-full shrink-0" style={{ backgroundColor: cfg.dot }} />
-                        <span className="text-[#26352D] font-medium">{cat}</span>
+                        <span className="text-[#17251D] font-medium">{cat}</span>
                       </div>
-                      <span className="text-[9.5px] text-[#68766D] font-mono">[{cfg.shape}]</span>
+                      <span className="text-[9.5px] text-[#65736A] font-mono">[{cfg.shape}]</span>
                     </div>
                   ))}
                 </div>
@@ -1229,34 +1229,34 @@ export default function ResearchKnowledgeGraphPage() {
               <button
                 type="button"
                 onClick={() => setIsLibraryOpen(true)}
-                className="absolute bottom-4 left-4 px-3 py-1.5 rounded-[8px] bg-[#FFFFFF]/95 backdrop-blur-md border border-[#DFE5DC] hover:border-[#176B4D] text-[#26352D] hover:bg-[#E6F0E9] shadow-md text-[11px] font-mono font-semibold flex items-center gap-2 cursor-pointer z-20 transition-all"
+                className="absolute bottom-4 left-4 px-3 py-1.5 rounded-[8px] bg-[#FFFFFF]/95 backdrop-blur-md border border-[#E5EBE5] hover:border-[#124D32] text-[#17251D] hover:bg-[#EEF6EA] shadow-md text-[11px] font-mono font-semibold flex items-center gap-2 cursor-pointer z-20 transition-all"
                 title="Expand 3D Geometry Ontology Library"
               >
-                <Layers size={13} className="text-[#176B4D]" />
+                <Layers size={13} className="text-[#124D32]" />
                 <span>Ontology Library (8 Shapes)</span>
-                <ChevronLeft size={13} className="rotate-90 text-[#68766D]" />
+                <ChevronLeft size={13} className="rotate-90 text-[#65736A]" />
               </button>
             )}
 
             {/* 3D Interaction Guide Pill */}
-            <div className="absolute top-4 left-4 px-3 py-1.5 rounded-full bg-[#FFFFFF]/90 backdrop-blur-md border border-[#DFE5DC] text-[10px] font-mono text-[#68766D] flex items-center gap-2 pointer-events-none z-10 shadow-xs">
-              <Compass size={12} className="text-[#176B4D]" />
+            <div className="absolute top-4 left-4 px-3 py-1.5 rounded-full bg-[#FFFFFF]/90 backdrop-blur-md border border-[#E5EBE5] text-[10px] font-mono text-[#65736A] flex items-center gap-2 pointer-events-none z-10 shadow-xs">
+              <Compass size={12} className="text-[#124D32]" />
               <span>Left-drag: Orbit • Right-drag: Pan • Scroll: Zoom • Double click: Focus Node</span>
             </div>
           </div>
         ) : (
           /* 2D Accessible List Fallback View */
           <div className="flex-1 p-6 overflow-y-auto bg-[#F8F6EF]">
-            <div className="flex items-center justify-between mb-4 border-b border-[#DFE5DC] pb-3">
+            <div className="flex items-center justify-between mb-4 border-b border-[#E5EBE5] pb-3">
               <div>
-                <h3 className="font-serif text-[17px] font-bold text-[#26352D] m-0">
+                <h3 className="font-serif text-[17px] font-bold text-[#17251D] m-0">
                   2D Accessible Ontology Entity Table
                 </h3>
-                <p className="text-[12px] text-[#68766D] m-0 font-sans">
+                <p className="text-[12px] text-[#65736A] m-0 font-sans">
                   Structured list fallback for keyboard accessibility, screen readers, and low-power hardware.
                 </p>
               </div>
-              <span className="font-mono text-[11px] text-[#176B4D] font-semibold">
+              <span className="font-mono text-[11px] text-[#124D32] font-semibold">
                 {filteredNodes.length} Entities Discovered
               </span>
             </div>
@@ -1271,8 +1271,8 @@ export default function ResearchKnowledgeGraphPage() {
                     onClick={() => setSelectedNodeId(n.id)}
                     className={`p-4 rounded-[10px] bg-[#FFFFFF] border transition-all cursor-pointer ${
                       isSelected
-                        ? "border-[#176B4D] ring-2 ring-[#E6F0E9] shadow-sm"
-                        : "border-[#DFE5DC] hover:border-[#176B4D]/50"
+                        ? "border-[#124D32] ring-2 ring-[#EEF6EA] shadow-sm"
+                        : "border-[#E5EBE5] hover:border-[#124D32]/50"
                     }`}
                   >
                     <div className="flex items-center justify-between mb-1.5 font-mono text-[11px]">
@@ -1282,19 +1282,19 @@ export default function ResearchKnowledgeGraphPage() {
                       >
                         {n.category} ({catCfg.shape})
                       </span>
-                      <span className="text-[#68766D]">CONF: {(n.confidence * 100).toFixed(0)}%</span>
+                      <span className="text-[#65736A]">CONF: {(n.confidence * 100).toFixed(0)}%</span>
                     </div>
 
-                    <h4 className="font-serif text-[15px] font-semibold text-[#26352D] m-0 leading-tight">
+                    <h4 className="font-serif text-[15px] font-semibold text-[#17251D] m-0 leading-tight">
                       {n.name}
                     </h4>
-                    <p className="font-sans text-[12px] text-[#68766D] mt-1.5 m-0 leading-relaxed">
+                    <p className="font-sans text-[12px] text-[#65736A] mt-1.5 m-0 leading-relaxed">
                       {n.description}
                     </p>
 
-                    <div className="mt-3 pt-2 border-t border-[#DFE5DC] flex items-center justify-between font-mono text-[10px] text-[#68766D]">
+                    <div className="mt-3 pt-2 border-t border-[#E5EBE5] flex items-center justify-between font-mono text-[10px] text-[#65736A]">
                       <span>Provenance: {n.provenance}</span>
-                      <span className="text-[#176B4D] font-bold">Select Entity →</span>
+                      <span className="text-[#124D32] font-bold">Select Entity →</span>
                     </div>
                   </div>
                 );
@@ -1305,7 +1305,7 @@ export default function ResearchKnowledgeGraphPage() {
 
         {/* Balanced Right-Side Evidence & Entity Inspector */}
         {isInspectorOpen && (
-          <div className="w-[380px] bg-[#FFFFFF] border-l border-[#DFE5DC] flex flex-col shrink-0 overflow-y-auto shadow-xs z-20">
+          <div className="w-[380px] bg-[#FFFFFF] border-l border-[#E5EBE5] flex flex-col shrink-0 overflow-y-auto shadow-xs z-20">
             {selectedNode ? (
               <div className="p-5 flex flex-col gap-4 font-sans">
                 {/* Node Category & Confidence Badge */}
@@ -1314,48 +1314,48 @@ export default function ResearchKnowledgeGraphPage() {
                     className="inline-flex items-center gap-1.5 px-2.5 py-0.8 rounded-[5px] border text-[11px] font-mono font-bold"
                     style={{
                       backgroundColor: CATEGORY_COLORS[selectedNode.category]?.bg || "#E8F5EC",
-                      borderColor: CATEGORY_COLORS[selectedNode.category]?.border || "#DFE5DC",
-                      color: CATEGORY_COLORS[selectedNode.category]?.text || "#176B4D",
+                      borderColor: CATEGORY_COLORS[selectedNode.category]?.border || "#E5EBE5",
+                      color: CATEGORY_COLORS[selectedNode.category]?.text || "#124D32",
                     }}
                   >
                     <span
                       className="w-1.5 h-1.5 rounded-full"
-                      style={{ backgroundColor: CATEGORY_COLORS[selectedNode.category]?.dot || "#176B4D" }}
+                      style={{ backgroundColor: CATEGORY_COLORS[selectedNode.category]?.dot || "#124D32" }}
                     />
                     <span>{selectedNode.category.toUpperCase()}</span>
                     <span className="opacity-75">({CATEGORY_COLORS[selectedNode.category]?.shape})</span>
                   </div>
 
-                  <span className="font-mono text-[11px] text-[#68766D]">
+                  <span className="font-mono text-[11px] text-[#65736A]">
                     CONF: {(selectedNode.confidence * 100).toFixed(0)}%
                   </span>
                 </div>
 
                 {/* Node Title & Description */}
                 <div>
-                  <h2 className="text-[17px] font-semibold text-[#26352D] leading-snug font-serif">
+                  <h2 className="text-[17px] font-semibold text-[#17251D] leading-snug font-serif">
                     {selectedNode.name}
                   </h2>
-                  <div className="font-mono text-[10px] text-[#68766D] mt-0.5">
+                  <div className="font-mono text-[10px] text-[#65736A] mt-0.5">
                     NODE ID: {selectedNode.id}
                   </div>
-                  <p className="text-[12px] text-[#68766D] mt-2 leading-relaxed">
+                  <p className="text-[12px] text-[#65736A] mt-2 leading-relaxed">
                     {selectedNode.description}
                   </p>
                 </div>
 
                 {/* Extracted Scientific Evidence Box */}
                 {selectedNode.evidence_snippet && (
-                  <div className="p-3.5 rounded-[8px] bg-[#F8F6EF] border border-[#DFE5DC] flex flex-col gap-1.5">
-                    <div className="font-mono text-[10px] text-[#176B4D] tracking-wider uppercase font-semibold flex items-center gap-1.5">
+                  <div className="p-3.5 rounded-[8px] bg-[#F8F6EF] border border-[#E5EBE5] flex flex-col gap-1.5">
+                    <div className="font-mono text-[10px] text-[#124D32] tracking-wider uppercase font-semibold flex items-center gap-1.5">
                       <Sparkles size={12} />
                       <span>EXTRACTED SCIENTIFIC EVIDENCE</span>
                     </div>
-                    <blockquote className="text-[12px] italic text-[#26352D] border-l-2 border-[#176B4D] pl-2.5 my-0.5 font-serif">
+                    <blockquote className="text-[12px] italic text-[#17251D] border-l-2 border-[#124D32] pl-2.5 my-0.5 font-serif">
                       “{selectedNode.evidence_snippet}”
                     </blockquote>
                     {selectedNode.source_file && (
-                      <div className="font-mono text-[10px] text-[#68766D] flex items-center gap-1 mt-1">
+                      <div className="font-mono text-[10px] text-[#65736A] flex items-center gap-1 mt-1">
                         <FileText size={11} />
                         <span>Source: {selectedNode.source_file}</span>
                       </div>
@@ -1365,21 +1365,21 @@ export default function ResearchKnowledgeGraphPage() {
 
                 {/* Provenance & Source Metadata */}
                 <div className="space-y-2 text-[11px] font-mono">
-                  <div className="flex justify-between items-center py-1.5 border-b border-[#DFE5DC]">
-                    <span className="text-[#68766D]">PROVENANCE</span>
-                    <span className="text-[#26352D] font-medium text-right max-w-[200px] truncate">
+                  <div className="flex justify-between items-center py-1.5 border-b border-[#E5EBE5]">
+                    <span className="text-[#65736A]">PROVENANCE</span>
+                    <span className="text-[#17251D] font-medium text-right max-w-[200px] truncate">
                       {selectedNode.provenance}
                     </span>
                   </div>
-                  <div className="flex justify-between items-center py-1.5 border-b border-[#DFE5DC]">
-                    <span className="text-[#68766D]">SOURCE ARTIFACT</span>
-                    <span className="text-[#176B4D] font-medium">
+                  <div className="flex justify-between items-center py-1.5 border-b border-[#E5EBE5]">
+                    <span className="text-[#65736A]">SOURCE ARTIFACT</span>
+                    <span className="text-[#124D32] font-medium">
                       {selectedNode.source_file || "system_records.db"}
                     </span>
                   </div>
-                  <div className="flex justify-between items-center py-1.5 border-b border-[#DFE5DC]">
-                    <span className="text-[#68766D]">SPATIAL 3D VECTOR</span>
-                    <span className="text-[#68766D]">
+                  <div className="flex justify-between items-center py-1.5 border-b border-[#E5EBE5]">
+                    <span className="text-[#65736A]">SPATIAL 3D VECTOR</span>
+                    <span className="text-[#65736A]">
                       [{selectedNode.x.toFixed(0)}, {selectedNode.y.toFixed(0)}, {selectedNode.z.toFixed(0)}]
                     </span>
                   </div>
@@ -1387,13 +1387,13 @@ export default function ResearchKnowledgeGraphPage() {
 
                 {/* Connected Relationships List */}
                 <div>
-                  <div className="font-mono text-[10px] text-[#68766D] tracking-wider uppercase font-semibold mb-2 flex items-center justify-between">
+                  <div className="font-mono text-[10px] text-[#65736A] tracking-wider uppercase font-semibold mb-2 flex items-center justify-between">
                     <span>CONNECTED ONTOLOGY RELATIONSHIPS</span>
-                    <span className="text-[#176B4D]">{connectedEdges.length} LINKS</span>
+                    <span className="text-[#124D32]">{connectedEdges.length} LINKS</span>
                   </div>
 
                   {connectedEdges.length === 0 ? (
-                    <div className="p-3 text-center text-[11px] text-[#68766D] bg-[#F8F6EF] rounded-[6px] border border-[#DFE5DC]">
+                    <div className="p-3 text-center text-[11px] text-[#65736A] bg-[#F8F6EF] rounded-[6px] border border-[#E5EBE5]">
                       No direct relationships discovered for this entity.
                     </div>
                   ) : (
@@ -1409,27 +1409,27 @@ export default function ResearchKnowledgeGraphPage() {
                             onClick={() => {
                               if (otherNode) handleFocusNode(otherNode);
                             }}
-                            className="p-2.5 rounded-[6px] bg-[#F8F6EF] border border-[#DFE5DC] hover:border-[#176B4D] cursor-pointer transition-all flex items-center justify-between gap-2 group"
+                            className="p-2.5 rounded-[6px] bg-[#F8F6EF] border border-[#E5EBE5] hover:border-[#124D32] cursor-pointer transition-all flex items-center justify-between gap-2 group"
                           >
                             <div className="flex items-center gap-2 overflow-hidden">
                               <span
                                 className="w-2 h-2 rounded-full shrink-0"
                                 style={{
                                   backgroundColor:
-                                    CATEGORY_COLORS[otherNode?.category || "Dataset"]?.dot || "#176B4D",
+                                    CATEGORY_COLORS[otherNode?.category || "Dataset"]?.dot || "#124D32",
                                 }}
                               />
                               <div className="truncate">
-                                <div className="text-[11px] font-medium text-[#26352D] group-hover:text-[#176B4D] transition-colors truncate">
+                                <div className="text-[11px] font-medium text-[#17251D] group-hover:text-[#124D32] transition-colors truncate">
                                   {otherNode?.name || otherNodeId}
                                 </div>
-                                <div className="text-[10px] font-mono text-[#68766D] flex items-center gap-1">
+                                <div className="text-[10px] font-mono text-[#65736A] flex items-center gap-1">
                                   <span>{isOutgoing ? "→" : "←"}</span>
                                   <span>{edge.label}</span>
                                 </div>
                               </div>
                             </div>
-                            <ChevronRight size={13} className="text-[#68766D] group-hover:text-[#176B4D] shrink-0" />
+                            <ChevronRight size={13} className="text-[#65736A] group-hover:text-[#124D32] shrink-0" />
                           </div>
                         );
                       })}
@@ -1442,7 +1442,7 @@ export default function ResearchKnowledgeGraphPage() {
                   <button
                     type="button"
                     onClick={() => handleFocusNode(selectedNode)}
-                    className="w-full h-8 rounded-[6px] bg-[#E6F0E9] hover:bg-[#176B4D] hover:text-[#FFFFFF] text-[#176B4D] text-[11px] font-mono font-semibold transition-all flex items-center justify-center gap-1.5 border border-[#176B4D]/30 cursor-pointer"
+                    className="w-full h-8 rounded-[6px] bg-[#EEF6EA] hover:bg-[#124D32] hover:text-[#FFFFFF] text-[#124D32] text-[11px] font-mono font-semibold transition-all flex items-center justify-center gap-1.5 border border-[#124D32]/30 cursor-pointer"
                   >
                     <Eye size={12} />
                     <span>Focus 3D Camera on Entity</span>
@@ -1450,8 +1450,8 @@ export default function ResearchKnowledgeGraphPage() {
                 </div>
               </div>
             ) : (
-              <div className="p-8 text-center text-[#68766D] text-[12px] flex flex-col items-center justify-center h-full">
-                <Info size={24} className="mb-2 text-[#68766D]" />
+              <div className="p-8 text-center text-[#65736A] text-[12px] flex flex-col items-center justify-center h-full">
+                <Info size={24} className="mb-2 text-[#65736A]" />
                 <p>Click any 3D node in the knowledge graph to inspect its scientific evidence and provenance.</p>
               </div>
             )}
@@ -1462,26 +1462,26 @@ export default function ResearchKnowledgeGraphPage() {
       {/* 4. Multi-File Ingestion Modal */}
       {uploadModalOpen && (
         <div className="fixed inset-0 z-50 bg-[#000000]/40 backdrop-blur-sm flex items-center justify-center p-4">
-          <div className="bg-[#FFFFFF] border border-[#DFE5DC] rounded-[12px] max-w-lg w-full p-6 shadow-2xl">
-            <div className="flex items-center justify-between pb-3 border-b border-[#DFE5DC]">
+          <div className="bg-[#FFFFFF] border border-[#E5EBE5] rounded-[12px] max-w-lg w-full p-6 shadow-2xl">
+            <div className="flex items-center justify-between pb-3 border-b border-[#E5EBE5]">
               <div className="flex items-center gap-2">
-                <UploadCloud size={18} className="text-[#176B4D]" />
-                <h3 className="text-[16px] font-semibold text-[#26352D] font-serif">Add Research Sources</h3>
+                <UploadCloud size={18} className="text-[#124D32]" />
+                <h3 className="text-[16px] font-semibold text-[#17251D] font-serif">Add Research Sources</h3>
               </div>
               <button
                 type="button"
                 onClick={() => setUploadModalOpen(false)}
-                className="text-[#68766D] hover:text-[#26352D]"
+                className="text-[#65736A] hover:text-[#17251D]"
               >
                 <X size={16} />
               </button>
             </div>
 
-            <p className="text-[12px] text-[#68766D] mt-3">
+            <p className="text-[12px] text-[#65736A] mt-3">
               Upload research papers (.pdf), materials dataset manifests (.csv, .xlsx), or computational DFT outputs (.json) to automatically populate 3D ontology nodes and evidence links.
             </p>
 
-            <div className="mt-4 border-2 border-dashed border-[#DFE5DC] hover:border-[#176B4D] rounded-[8px] p-6 text-center cursor-pointer transition-colors bg-[#F8F6EF]">
+            <div className="mt-4 border-2 border-dashed border-[#E5EBE5] hover:border-[#124D32] rounded-[8px] p-6 text-center cursor-pointer transition-colors bg-[#F8F6EF]">
               <input
                 type="file"
                 multiple
@@ -1491,11 +1491,11 @@ export default function ResearchKnowledgeGraphPage() {
                 id="file-upload-input"
               />
               <label htmlFor="file-upload-input" className="cursor-pointer flex flex-col items-center">
-                <FileSpreadsheet size={28} className="text-[#176B4D] mb-2" />
-                <span className="text-[12px] font-semibold text-[#26352D]">
+                <FileSpreadsheet size={28} className="text-[#124D32] mb-2" />
+                <span className="text-[12px] font-semibold text-[#17251D]">
                   Click to select research files
                 </span>
-                <span className="text-[11px] font-mono text-[#68766D] mt-1">
+                <span className="text-[11px] font-mono text-[#65736A] mt-1">
                   Supported: NOMAD/Matbench CSVs, arXiv PDFs, DFT JSON manifests
                 </span>
               </label>
@@ -1504,17 +1504,17 @@ export default function ResearchKnowledgeGraphPage() {
             {selectedFiles.length > 0 && (
               <div className="mt-4 max-h-32 overflow-y-auto space-y-1.5 font-mono text-[11px]">
                 {selectedFiles.map((f, i) => (
-                  <div key={i} className="flex justify-between items-center p-2 rounded-[4px] bg-[#F8F6EF] border border-[#DFE5DC] text-[#26352D]">
+                  <div key={i} className="flex justify-between items-center p-2 rounded-[4px] bg-[#F8F6EF] border border-[#E5EBE5] text-[#17251D]">
                     <span className="truncate max-w-[280px]">{f.name}</span>
-                    <span className="text-[#68766D]">{(f.size / 1024).toFixed(1)} KB</span>
+                    <span className="text-[#65736A]">{(f.size / 1024).toFixed(1)} KB</span>
                   </div>
                 ))}
               </div>
             )}
 
             {uploadProgress && (
-              <div className="mt-4 p-2.5 rounded-[6px] bg-[#E8F5EC] border border-[#176B4D]/40 text-[#176B4D] text-[11px] font-mono flex items-center gap-2">
-                <Sparkles size={14} className="animate-spin text-[#176B4D]" />
+              <div className="mt-4 p-2.5 rounded-[6px] bg-[#E8F5EC] border border-[#124D32]/40 text-[#124D32] text-[11px] font-mono flex items-center gap-2">
+                <Sparkles size={14} className="animate-spin text-[#124D32]" />
                 <span>{uploadProgress}</span>
               </div>
             )}
@@ -1523,7 +1523,7 @@ export default function ResearchKnowledgeGraphPage() {
               <button
                 type="button"
                 onClick={() => setUploadModalOpen(false)}
-                className="px-3 py-1.5 rounded-[6px] text-[12px] font-mono text-[#68766D] hover:text-[#26352D] bg-[#F8F6EF] border border-[#DFE5DC]"
+                className="px-3 py-1.5 rounded-[6px] text-[12px] font-mono text-[#65736A] hover:text-[#17251D] bg-[#F8F6EF] border border-[#E5EBE5]"
               >
                 Cancel
               </button>
@@ -1531,7 +1531,7 @@ export default function ResearchKnowledgeGraphPage() {
                 type="button"
                 onClick={processUploadedFiles}
                 disabled={selectedFiles.length === 0 || isUploading}
-                className="px-4 py-1.5 rounded-[6px] bg-[#176B4D] hover:bg-[#12543c] disabled:opacity-50 text-[#FFFFFF] text-[12px] font-semibold font-mono flex items-center gap-1.5 shadow-sm cursor-pointer"
+                className="px-4 py-1.5 rounded-[6px] bg-[#124D32] hover:bg-[#12543c] disabled:opacity-50 text-[#FFFFFF] text-[12px] font-semibold font-mono flex items-center gap-1.5 shadow-sm cursor-pointer"
               >
                 {isUploading ? "Extracting..." : "Process and Map to 3D Graph"}
               </button>

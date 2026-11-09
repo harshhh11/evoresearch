@@ -237,19 +237,19 @@ Zero leakage rule: Scalers fitted strictly on training splits. Ground all assert
   const currentModelMeta = MODEL_OPTIONS.find((m) => m.id === selectedModel) || MODEL_OPTIONS[0];
 
   return (
-    <div className="flex flex-col h-[calc(100vh-68px)] max-w-[1300px] mx-auto p-4 md:p-6 bg-[#F8F6EF] text-[#26352D] font-serif">
+    <div className="flex flex-col h-[calc(100vh-68px)] max-w-[1300px] mx-auto p-4 md:p-6 bg-[#F8F6EF] text-[#17251D] font-serif">
       {/* 1. Header Toolbar */}
-      <div className="flex flex-col gap-3 pb-4 border-b border-[#DFE5DC] shrink-0">
+      <div className="flex flex-col gap-3 pb-4 border-b border-[#E5EBE5] shrink-0">
         <div className="flex flex-wrap items-center justify-between gap-4">
           <div>
-            <div className="flex items-center gap-2 font-mono text-[10px] text-[#176B4D] uppercase tracking-[0.14em] font-semibold">
+            <div className="flex items-center gap-2 font-mono text-[10px] text-[#124D32] uppercase tracking-[0.14em] font-semibold">
               <Sparkles size={13} />
               <span>ARINA AI // ELEVATE MULTI-MODEL GATEWAY</span>
             </div>
-            <h1 className="text-[22px] font-semibold text-[#26352D] m-0 tracking-[-0.01em] mt-0.5 font-serif">
+            <h1 className="text-[22px] font-semibold text-[#17251D] m-0 tracking-[-0.01em] mt-0.5 font-serif">
               ARINA Materials Science Assistant
             </h1>
-            <p className="text-[12px] text-[#68766D] mt-0.5 m-0 font-sans">
+            <p className="text-[12px] text-[#65736A] mt-0.5 m-0 font-sans">
               Autonomous reasoning across crystal lattices, band gaps, failure recovery, and multi-objective Pareto trade-offs.
             </p>
           </div>
@@ -257,15 +257,15 @@ Zero leakage rule: Scalers fitted strictly on training splits. Ground all assert
           {/* Model Selector & Live Controls */}
           <div className="flex flex-wrap items-center gap-2.5">
             {/* Model Selector Dropdown */}
-            <div className="flex items-center gap-2 px-3 py-1.5 rounded-[8px] bg-[#FFFFFF] border border-[#DFE5DC] text-[11px] font-mono shadow-xs">
-              <span className="text-[#176B4D] font-semibold">MODEL:</span>
+            <div className="flex items-center gap-2 px-3 py-1.5 rounded-[8px] bg-[#FFFFFF] border border-[#E5EBE5] text-[11px] font-mono shadow-xs">
+              <span className="text-[#124D32] font-semibold">MODEL:</span>
               <select
                 value={selectedModel}
                 onChange={(e) => handleModelChange(e.target.value)}
-                className="bg-transparent text-[#26352D] focus:outline-none cursor-pointer font-medium"
+                className="bg-transparent text-[#17251D] focus:outline-none cursor-pointer font-medium"
               >
                 {MODEL_OPTIONS.map((m) => (
-                  <option key={m.id} value={m.id} className="bg-[#FFFFFF] text-[#26352D]">
+                  <option key={m.id} value={m.id} className="bg-[#FFFFFF] text-[#17251D]">
                     {m.label} ({m.badge})
                   </option>
                 ))}
@@ -273,16 +273,16 @@ Zero leakage rule: Scalers fitted strictly on training splits. Ground all assert
             </div>
 
             {/* Grounding Dataset Select */}
-            <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-[8px] bg-[#FFFFFF] border border-[#DFE5DC] text-[11px] font-mono shadow-xs">
-              <Database size={11} className="text-[#176B4D]" />
-              <span className="text-[#68766D]">DATASET:</span>
+            <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-[8px] bg-[#FFFFFF] border border-[#E5EBE5] text-[11px] font-mono shadow-xs">
+              <Database size={11} className="text-[#124D32]" />
+              <span className="text-[#65736A]">DATASET:</span>
               <select
                 value={selectedDatasetId}
                 onChange={(e) => setSelectedDatasetId(e.target.value)}
-                className="bg-transparent text-[#26352D] focus:outline-none cursor-pointer max-w-[160px] truncate"
+                className="bg-transparent text-[#17251D] focus:outline-none cursor-pointer max-w-[160px] truncate"
               >
                 {datasets.map((d) => (
-                  <option key={d.id} value={d.id} className="bg-[#FFFFFF] text-[#26352D]">
+                  <option key={d.id} value={d.id} className="bg-[#FFFFFF] text-[#17251D]">
                     {d.name}
                   </option>
                 ))}
@@ -292,7 +292,7 @@ Zero leakage rule: Scalers fitted strictly on training splits. Ground all assert
             {/* Multi-Agent Orchestrator Trigger */}
             <Link
               href="/workspace/orchestration"
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-[8px] bg-[#E6F0E9] border border-[#176B4D] text-[#176B4D] hover:bg-[#176B4D] hover:text-[#FFFFFF] text-[11px] font-mono font-semibold transition-all shadow-xs"
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-[8px] bg-[#EEF6EA] border border-[#124D32] text-[#124D32] hover:bg-[#124D32] hover:text-[#FFFFFF] text-[11px] font-mono font-semibold transition-all shadow-xs"
               title="Open 12-Agent Multi-Agent Orchestration Hub"
             >
               <Bot size={13} />
@@ -314,7 +314,7 @@ Zero leakage rule: Scalers fitted strictly on training splits. Ground all assert
                   },
                 ])
               }
-              className="p-2 rounded-[8px] bg-[#FFFFFF] border border-[#DFE5DC] hover:border-[#176B4D] text-[#68766D] hover:text-[#176B4D] transition-colors shadow-xs cursor-pointer"
+              className="p-2 rounded-[8px] bg-[#FFFFFF] border border-[#E5EBE5] hover:border-[#124D32] text-[#65736A] hover:text-[#124D32] transition-colors shadow-xs cursor-pointer"
               title="Clear Chat History"
             >
               <RotateCcw size={13} />
@@ -323,31 +323,31 @@ Zero leakage rule: Scalers fitted strictly on training splits. Ground all assert
         </div>
 
         {/* Live Token Usage & Model Metadata Bar */}
-        <div className="flex flex-wrap items-center justify-between gap-3 px-3 py-2 rounded-[8px] bg-[#FFFFFF] border border-[#DFE5DC] text-[11px] font-mono shadow-xs">
+        <div className="flex flex-wrap items-center justify-between gap-3 px-3 py-2 rounded-[8px] bg-[#FFFFFF] border border-[#E5EBE5] text-[11px] font-mono shadow-xs">
           <div className="flex items-center gap-3">
-            <div className="flex items-center gap-1.5 text-[#68766D]">
-              <currentModelMeta.icon size={13} className="text-[#176B4D]" />
-              <span className="font-semibold text-[#26352D]">{currentModelMeta.label}:</span>
-              <span className="text-[#176B4D]">{currentModelMeta.subtitle}</span>
+            <div className="flex items-center gap-1.5 text-[#65736A]">
+              <currentModelMeta.icon size={13} className="text-[#124D32]" />
+              <span className="font-semibold text-[#17251D]">{currentModelMeta.label}:</span>
+              <span className="text-[#124D32]">{currentModelMeta.subtitle}</span>
             </div>
           </div>
 
           {/* Daily Elevate Quota Tracker */}
           <div className="flex items-center gap-3">
             <div className="flex items-center gap-2">
-              <Activity size={12} className="text-[#176B4D]" />
-              <span className="text-[#68766D]">DAILY TOKEN QUOTA:</span>
-              <span className="text-[#26352D] font-semibold">
+              <Activity size={12} className="text-[#124D32]" />
+              <span className="text-[#65736A]">DAILY TOKEN QUOTA:</span>
+              <span className="text-[#17251D] font-semibold">
                 {(aiStatus?.tokens_used_today || 0).toLocaleString()} / 800,000
               </span>
-              <div className="w-16 h-1.5 bg-[#E6F0E9] rounded-full overflow-hidden">
+              <div className="w-16 h-1.5 bg-[#EEF6EA] rounded-full overflow-hidden">
                 <div
-                  className="h-full bg-[#176B4D] rounded-full transition-all duration-300"
+                  className="h-full bg-[#124D32] rounded-full transition-all duration-300"
                   style={{ width: `${Math.min(100, Math.max(2, aiStatus?.percentage_used || 0))}%` }}
                 />
               </div>
             </div>
-            <span className="text-[10px] text-[#68766D] border-l border-[#DFE5DC] pl-2.5">
+            <span className="text-[10px] text-[#65736A] border-l border-[#E5EBE5] pl-2.5">
               Reset 05:30 AM IST
             </span>
           </div>
@@ -366,14 +366,14 @@ Zero leakage rule: Scalers fitted strictly on training splits. Ground all assert
               }`}
             >
               {/* Sender Name & Meta */}
-              <div className="flex items-center gap-2 mb-1 px-1 font-mono text-[10px] text-[#68766D]">
+              <div className="flex items-center gap-2 mb-1 px-1 font-mono text-[10px] text-[#65736A]">
                 <span>{isUser ? "YOU" : "ARINA AGENT"}</span>
                 <span>•</span>
                 <span>{msg.timestamp}</span>
                 {msg.model && (
                   <>
                     <span>•</span>
-                    <span className="text-[#176B4D] font-semibold">
+                    <span className="text-[#124D32] font-semibold">
                       {msg.model}
                     </span>
                   </>
@@ -381,13 +381,13 @@ Zero leakage rule: Scalers fitted strictly on training splits. Ground all assert
                 {msg.tokens_used !== undefined && (
                   <>
                     <span>•</span>
-                    <span className="text-[#176B4D]">
+                    <span className="text-[#124D32]">
                       {msg.tokens_used} tokens
                     </span>
                   </>
                 )}
                 {msg.cached && (
-                  <span className="px-1 py-0.2 rounded bg-[#E8F5EC] text-[#176B4D] text-[9px] font-semibold border border-[#176B4D]/30">
+                  <span className="px-1 py-0.2 rounded bg-[#E8F5EC] text-[#124D32] text-[9px] font-semibold border border-[#124D32]/30">
                     CACHED
                   </span>
                 )}
@@ -397,8 +397,8 @@ Zero leakage rule: Scalers fitted strictly on training splits. Ground all assert
               <div
                 className={`p-4 rounded-[10px] text-[13.5px] leading-relaxed relative group font-sans ${
                   isUser
-                    ? "bg-[#176B4D] text-[#FFFFFF] border border-[#176B4D] rounded-tr-none shadow-xs"
-                    : "bg-[#FFFFFF] text-[#26352D] border border-[#DFE5DC] rounded-tl-none shadow-xs"
+                    ? "bg-[#124D32] text-[#FFFFFF] border border-[#124D32] rounded-tr-none shadow-xs"
+                    : "bg-[#FFFFFF] text-[#17251D] border border-[#E5EBE5] rounded-tl-none shadow-xs"
                 }`}
               >
                 <div className="whitespace-pre-wrap">{msg.content}</div>
@@ -410,11 +410,11 @@ Zero leakage rule: Scalers fitted strictly on training splits. Ground all assert
                   className={`absolute right-2 top-2 p-1 rounded opacity-0 group-hover:opacity-100 transition-opacity ${
                     isUser
                       ? "bg-[#12543c] text-[#FFFFFF]"
-                      : "bg-[#F8F6EF] text-[#68766D] hover:text-[#26352D]"
+                      : "bg-[#F8F6EF] text-[#65736A] hover:text-[#17251D]"
                   }`}
                   title="Copy message"
                 >
-                  {copiedId === msg.id ? <Check size={11} className="text-[#176B4D]" /> : <Copy size={11} />}
+                  {copiedId === msg.id ? <Check size={11} className="text-[#124D32]" /> : <Copy size={11} />}
                 </button>
               </div>
             </div>
@@ -424,13 +424,13 @@ Zero leakage rule: Scalers fitted strictly on training splits. Ground all assert
         {/* Thinking Indicator */}
         {isThinking && (
           <div className="flex flex-col mr-auto max-w-[80%] items-start">
-            <div className="flex items-center gap-2 mb-1 px-1 font-mono text-[10px] text-[#68766D]">
+            <div className="flex items-center gap-2 mb-1 px-1 font-mono text-[10px] text-[#65736A]">
               <span>ARINA AGENT</span>
               <span>•</span>
-              <span className="text-[#176B4D]">REASONING WITH {selectedModel.toUpperCase()}</span>
+              <span className="text-[#124D32]">REASONING WITH {selectedModel.toUpperCase()}</span>
             </div>
-            <div className="p-3.5 rounded-[10px] bg-[#FFFFFF] border border-[#DFE5DC] rounded-tl-none flex items-center gap-2.5 text-[12px] text-[#68766D] shadow-xs font-sans">
-              <RefreshCw size={13} className="animate-spin text-[#176B4D]" />
+            <div className="p-3.5 rounded-[10px] bg-[#FFFFFF] border border-[#E5EBE5] rounded-tl-none flex items-center gap-2.5 text-[12px] text-[#65736A] shadow-xs font-sans">
+              <RefreshCw size={13} className="animate-spin text-[#124D32]" />
               <span>Querying Elevate AI gateway & formulating grounded materials science response...</span>
             </div>
           </div>
@@ -460,7 +460,7 @@ Zero leakage rule: Scalers fitted strictly on training splits. Ground all assert
 
       {/* 3. Quick Suggestions Pill Bar */}
       <div className="flex items-center gap-1.5 overflow-x-auto pb-2 shrink-0 no-scrollbar">
-        <span className="font-mono text-[9px] text-[#68766D] uppercase tracking-[0.1em] shrink-0 mr-1 font-semibold">
+        <span className="font-mono text-[9px] text-[#65736A] uppercase tracking-[0.1em] shrink-0 mr-1 font-semibold">
           SUGGESTIONS ({currentModelMeta.badge}):
         </span>
         {currentSuggestions.map((s, idx) => (
@@ -469,7 +469,7 @@ Zero leakage rule: Scalers fitted strictly on training splits. Ground all assert
             type="button"
             onClick={() => handleSendMessage(s)}
             disabled={isThinking}
-            className="px-2.5 py-1 rounded-[6px] bg-[#FFFFFF] hover:bg-[#E6F0E9] border border-[#DFE5DC] hover:border-[#176B4D] text-[11px] text-[#68766D] hover:text-[#176B4D] transition-colors whitespace-nowrap shrink-0 disabled:opacity-50 font-sans cursor-pointer shadow-xs"
+            className="px-2.5 py-1 rounded-[6px] bg-[#FFFFFF] hover:bg-[#EEF6EA] border border-[#E5EBE5] hover:border-[#124D32] text-[11px] text-[#65736A] hover:text-[#124D32] transition-colors whitespace-nowrap shrink-0 disabled:opacity-50 font-sans cursor-pointer shadow-xs"
           >
             {s}
           </button>
@@ -491,18 +491,18 @@ Zero leakage rule: Scalers fitted strictly on training splits. Ground all assert
             onChange={(e) => setInputQuery(e.target.value)}
             disabled={isThinking}
             placeholder={`Ask ARINA (${currentModelMeta.label}) about band gaps, singular matrix repair, or latency budgets...`}
-            className="w-full h-[46px] pl-4 pr-24 bg-[#FFFFFF] border border-[#DFE5DC] rounded-[10px] text-[13px] text-[#26352D] placeholder-[#68766D] focus:outline-none focus:border-[#176B4D] transition-colors font-sans shadow-xs disabled:opacity-50"
+            className="w-full h-[46px] pl-4 pr-24 bg-[#FFFFFF] border border-[#E5EBE5] rounded-[10px] text-[13px] text-[#17251D] placeholder-[#65736A] focus:outline-none focus:border-[#124D32] transition-colors font-sans shadow-xs disabled:opacity-50"
           />
           <button
             type="submit"
             disabled={!inputQuery.trim() || isThinking}
-            className="absolute right-2 top-1/2 -translate-y-1/2 h-[34px] px-3.5 rounded-[7px] bg-[#176B4D] text-[#FFFFFF] font-sans text-[12px] font-semibold hover:bg-[#12543c] transition-colors flex items-center gap-1.5 disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer shadow-xs"
+            className="absolute right-2 top-1/2 -translate-y-1/2 h-[34px] px-3.5 rounded-[7px] bg-[#124D32] text-[#FFFFFF] font-sans text-[12px] font-semibold hover:bg-[#12543c] transition-colors flex items-center gap-1.5 disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer shadow-xs"
           >
             <span>SEND</span>
             <Send size={12} />
           </button>
         </div>
-        <div className="flex items-center justify-between px-1 mt-1 font-mono text-[9.5px] text-[#68766D]">
+        <div className="flex items-center justify-between px-1 mt-1 font-mono text-[9.5px] text-[#65736A]">
           <span>Grounded in active SQLite and Supabase experiment runs.</span>
           <span>Elevate Gateway token budget: 800,000 tokens/day reset at 05:30 AM IST.</span>
         </div>

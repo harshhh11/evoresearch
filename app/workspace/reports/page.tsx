@@ -130,40 +130,40 @@ export default function ReportsPage() {
 
   if (loading) {
     return (
-      <div className="py-16 text-center font-mono text-[12px] text-[#68766D]">
+      <div className="py-16 text-center font-mono text-[12px] text-[#65736A]">
         COMPILING RESEARCH EVIDENCE CORPUS...
       </div>
     );
   }
 
   return (
-    <div className="flex flex-col gap-7 text-[#26352D]">
+    <div className="flex flex-col gap-7 text-[#17251D]">
       {/* Header */}
-      <div className="flex items-end justify-between border-b border-[#DFE5DC] pb-5">
+      <div className="flex items-end justify-between border-b border-[#E5EBE5] pb-5">
         <div>
-          <div className="font-mono text-[10px] text-[#176B4D] uppercase tracking-[0.14em] font-semibold mb-2">
+          <div className="font-mono text-[10px] text-[#124D32] uppercase tracking-[0.14em] font-semibold mb-2">
             EVIDENCE AUDIT // 009
           </div>
-          <h1 className="m-0 font-serif text-[24px] font-semibold text-[#26352D]">
+          <h1 className="m-0 font-serif text-[24px] font-semibold text-[#17251D]">
             Evidence-Linked Report Generator
           </h1>
-          <p className="m-0 mt-1.5 text-[12px] text-[#68766D]">
+          <p className="m-0 mt-1.5 text-[12px] text-[#65736A]">
             Automated research reports grounding every empirical claim directly to stored execution run IDs and metric records.
           </p>
         </div>
       </div>
 
       {/* Generator Control Card */}
-      <div className="p-5 rounded-[10px] bg-[#FFFFFF] border border-[#DFE5DC] shadow-xs">
+      <div className="p-5 rounded-[10px] bg-[#FFFFFF] border border-[#E5EBE5] shadow-xs">
         <form onSubmit={handleGenerate} className="grid grid-cols-1 md:grid-cols-[1.2fr_2fr_auto] gap-3.5 items-end">
           <div>
-            <label className="block font-mono text-[9px] font-semibold text-[#68766D] mb-1.5 uppercase">
+            <label className="block font-mono text-[9px] font-semibold text-[#65736A] mb-1.5 uppercase">
               TARGET PROJECT
             </label>
             <select
               value={selectedProjectId}
               onChange={(e) => setSelectedProjectId(e.target.value)}
-              className="w-full px-3 py-2 bg-[#F8F6EF] border border-[#DFE5DC] rounded-[6px] text-[#26352D] font-mono text-[11px] focus:outline-none focus:border-[#176B4D]"
+              className="w-full px-3 py-2 bg-[#F8F6EF] border border-[#E5EBE5] rounded-[6px] text-[#17251D] font-mono text-[11px] focus:outline-none focus:border-[#124D32]"
             >
               {projects.map((p) => (
                 <option key={p.id} value={p.id}>
@@ -174,7 +174,7 @@ export default function ReportsPage() {
           </div>
 
           <div>
-            <label className="block font-mono text-[9px] font-semibold text-[#68766D] mb-1.5 uppercase">
+            <label className="block font-mono text-[9px] font-semibold text-[#65736A] mb-1.5 uppercase">
               REPORT TITLE (OPTIONAL)
             </label>
             <input
@@ -182,7 +182,7 @@ export default function ReportsPage() {
               placeholder="e.g. Empirical Validation of Failure Recovery in Edge ML"
               value={reportTitle}
               onChange={(e) => setReportTitle(e.target.value)}
-              className="w-full px-3 py-2 bg-[#F8F6EF] border border-[#DFE5DC] rounded-[6px] text-[#26352D] font-mono text-[11px] focus:outline-none focus:border-[#176B4D]"
+              className="w-full px-3 py-2 bg-[#F8F6EF] border border-[#E5EBE5] rounded-[6px] text-[#17251D] font-mono text-[11px] focus:outline-none focus:border-[#124D32]"
             />
           </div>
 
@@ -191,8 +191,8 @@ export default function ReportsPage() {
             disabled={generating}
             className={`px-5 py-2 rounded-[6px] font-mono text-[10px] font-semibold tracking-[0.08em] transition-colors cursor-pointer ${
               generating
-                ? "bg-[#68766D] text-[#FFFFFF] cursor-not-allowed"
-                : "bg-[#176B4D] hover:bg-[#12543c] text-[#FFFFFF] shadow-xs"
+                ? "bg-[#65736A] text-[#FFFFFF] cursor-not-allowed"
+                : "bg-[#124D32] hover:bg-[#12543c] text-[#FFFFFF] shadow-xs"
             }`}
           >
             {generating ? "SYNTHESIZING EVIDENCE..." : "+ GENERATE REPORT"}
@@ -202,15 +202,15 @@ export default function ReportsPage() {
 
       {/* EvolveX Judge Agent Cross-Evaluation Panel */}
       {reports.length >= 2 && (
-        <div className="p-5 rounded-[10px] bg-[#E6F0E9]/30 border border-[#176B4D]/30 shadow-xs">
+        <div className="p-5 rounded-[10px] bg-[#EEF6EA]/30 border border-[#124D32]/30 shadow-xs">
           <div className="flex items-center justify-between mb-3.5">
             <div className="flex items-center gap-2.5">
-              <ShieldCheck size={18} className="text-[#176B4D]" />
+              <ShieldCheck size={18} className="text-[#124D32]" />
               <div>
-                <div className="font-serif font-semibold text-[13px] text-[#26352D]">
+                <div className="font-serif font-semibold text-[13px] text-[#17251D]">
                   EvolveX Judge Agent — Multi-Report Cross-Examination
                 </div>
-                <div className="text-[11px] text-[#68766D]">
+                <div className="text-[11px] text-[#65736A]">
                   Autonomous scientific audit comparing methodologies, extracting contradictions, and verifying evidence rigor without hallucinations.
                 </div>
               </div>
@@ -231,22 +231,22 @@ export default function ReportsPage() {
                   alert(e.message || "Judge Agent evaluation failed.");
                 }
               }}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-[#FFFFFF] border border-[#176B4D]/40 text-[#176B4D] hover:bg-[#176B4D] hover:text-[#FFFFFF] rounded-[6px] font-mono text-[10px] font-semibold transition-colors cursor-pointer"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-[#FFFFFF] border border-[#124D32]/40 text-[#124D32] hover:bg-[#124D32] hover:text-[#FFFFFF] rounded-[6px] font-mono text-[10px] font-semibold transition-colors cursor-pointer"
             >
-              <Sparkles size={13} className="text-[#176B4D]" />
+              <Sparkles size={13} className="text-[#124D32]" />
               CROSS-EXAMINE LATEST 2 REPORTS
             </button>
           </div>
 
-          <div className="grid grid-cols-3 gap-3 font-mono text-[10px] text-[#68766D]">
-            <div className="bg-[#FFFFFF] p-2.5 rounded-[6px] border border-[#DFE5DC]">
-              <span className="text-[#26352D] font-semibold">METHODOLOGY AUDIT:</span> Training-split quarantine & feature leakage isolation verified.
+          <div className="grid grid-cols-3 gap-3 font-mono text-[10px] text-[#65736A]">
+            <div className="bg-[#FFFFFF] p-2.5 rounded-[6px] border border-[#E5EBE5]">
+              <span className="text-[#17251D] font-semibold">METHODOLOGY AUDIT:</span> Training-split quarantine & feature leakage isolation verified.
             </div>
-            <div className="bg-[#FFFFFF] p-2.5 rounded-[6px] border border-[#DFE5DC]">
-              <span className="text-[#26352D] font-semibold">EVIDENCE TRACEABILITY:</span> Claims must link to immutable Run IDs & metric keys.
+            <div className="bg-[#FFFFFF] p-2.5 rounded-[6px] border border-[#E5EBE5]">
+              <span className="text-[#17251D] font-semibold">EVIDENCE TRACEABILITY:</span> Claims must link to immutable Run IDs & metric keys.
             </div>
-            <div className="bg-[#FFFFFF] p-2.5 rounded-[6px] border border-[#DFE5DC]">
-              <span className="text-[#26352D] font-semibold">UNRESOLVED HANDLING:</span> Discrepancies flagged explicitly without fabricated confidence.
+            <div className="bg-[#FFFFFF] p-2.5 rounded-[6px] border border-[#E5EBE5]">
+              <span className="text-[#17251D] font-semibold">UNRESOLVED HANDLING:</span> Discrepancies flagged explicitly without fabricated confidence.
             </div>
           </div>
         </div>
@@ -256,7 +256,7 @@ export default function ReportsPage() {
       <div className="grid grid-cols-[320px_1fr] gap-6">
         {/* Reports List */}
         <div className="flex flex-col gap-2.5">
-          <div className="font-mono text-[10px] font-semibold text-[#68766D] tracking-[0.08em]">
+          <div className="font-mono text-[10px] font-semibold text-[#65736A] tracking-[0.08em]">
             STORED REPORTS ({reports.length})
           </div>
 
@@ -268,15 +268,15 @@ export default function ReportsPage() {
                 onClick={() => loadReportDetail(r.id)}
                 className={`p-4 rounded-[8px] border cursor-pointer transition-all ${
                   isSelected
-                    ? "bg-[#E6F0E9] border-[#176B4D] shadow-xs"
-                    : "bg-[#FFFFFF] border-[#DFE5DC] hover:border-[#176B4D]/40"
+                    ? "bg-[#EEF6EA] border-[#124D32] shadow-xs"
+                    : "bg-[#FFFFFF] border-[#E5EBE5] hover:border-[#124D32]/40"
                 }`}
               >
-                <div className="font-serif font-semibold text-[12px] text-[#26352D] mb-1.5">
+                <div className="font-serif font-semibold text-[12px] text-[#17251D] mb-1.5">
                   {r.title}
                 </div>
-                <div className="font-mono text-[9px] text-[#68766D]">
-                  STATUS: <strong className="text-[#176B4D]">{r.status}</strong>
+                <div className="font-mono text-[9px] text-[#65736A]">
+                  STATUS: <strong className="text-[#124D32]">{r.status}</strong>
                 </div>
               </div>
             );
@@ -285,17 +285,17 @@ export default function ReportsPage() {
 
         {/* Selected Report Document Viewer */}
         {selectedReport ? (
-          <div className="p-5 rounded-[10px] bg-[#FFFFFF] border border-[#DFE5DC] shadow-xs flex flex-col gap-5">
-            <div className="flex justify-between items-start border-b border-[#DFE5DC] pb-4">
+          <div className="p-5 rounded-[10px] bg-[#FFFFFF] border border-[#E5EBE5] shadow-xs flex flex-col gap-5">
+            <div className="flex justify-between items-start border-b border-[#E5EBE5] pb-4">
               <div>
-                <div className="font-mono text-[10px] font-semibold text-[#176B4D] mb-1.5">
+                <div className="font-mono text-[10px] font-semibold text-[#124D32] mb-1.5">
                   RESEARCH REPORT ENTITY
                 </div>
-                <h2 className="m-0 font-serif text-[20px] font-semibold text-[#26352D] mb-2.5">
+                <h2 className="m-0 font-serif text-[20px] font-semibold text-[#17251D] mb-2.5">
                   {selectedReport.report.title}
                 </h2>
-                <div className="font-mono text-[11px] text-[#68766D]">
-                  QUESTION: <span className="text-[#26352D]">{selectedReport.report.research_question}</span>
+                <div className="font-mono text-[11px] text-[#65736A]">
+                  QUESTION: <span className="text-[#17251D]">{selectedReport.report.research_question}</span>
                 </div>
               </div>
 
@@ -303,16 +303,16 @@ export default function ReportsPage() {
                 <button
                   type="button"
                   onClick={() => setEmailModalOpen(true)}
-                  className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-[#FFFFFF] border border-[#DFE5DC] text-[#26352D] hover:bg-[#F8F6EF] rounded-[6px] font-mono text-[10px] font-semibold cursor-pointer transition-colors"
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-[#FFFFFF] border border-[#E5EBE5] text-[#17251D] hover:bg-[#F8F6EF] rounded-[6px] font-mono text-[10px] font-semibold cursor-pointer transition-colors"
                 >
-                  <Mail size={13} className="text-[#176B4D]" />
+                  <Mail size={13} className="text-[#124D32]" />
                   EMAIL REPORT
                 </button>
                 <a
                   href={`http://127.0.0.1:8000/api/reports/${selectedReport.report.id}/export?format=pdf`}
                   target="_blank"
                   rel="noreferrer"
-                  className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-[#176B4D] text-[#FFFFFF] rounded-[6px] font-mono text-[10px] font-semibold hover:bg-[#12543c] transition-colors"
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-[#124D32] text-[#FFFFFF] rounded-[6px] font-mono text-[10px] font-semibold hover:bg-[#12543c] transition-colors"
                 >
                   <Download size={13} />
                   PDF REPORT
@@ -321,7 +321,7 @@ export default function ReportsPage() {
                   href={`http://127.0.0.1:8000/api/reports/${selectedReport.report.id}/export?format=csv`}
                   target="_blank"
                   rel="noreferrer"
-                  className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-[#FFFFFF] border border-[#DFE5DC] text-[#26352D] hover:bg-[#F8F6EF] rounded-[6px] font-mono text-[10px] font-semibold transition-colors"
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-[#FFFFFF] border border-[#E5EBE5] text-[#17251D] hover:bg-[#F8F6EF] rounded-[6px] font-mono text-[10px] font-semibold transition-colors"
                 >
                   <Download size={13} />
                   CSV
@@ -330,7 +330,7 @@ export default function ReportsPage() {
                   href={`http://127.0.0.1:8000/api/reports/${selectedReport.report.id}/export?format=json`}
                   target="_blank"
                   rel="noreferrer"
-                  className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-[#FFFFFF] border border-[#DFE5DC] text-[#26352D] hover:bg-[#F8F6EF] rounded-[6px] font-mono text-[10px] font-semibold transition-colors"
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-[#FFFFFF] border border-[#E5EBE5] text-[#17251D] hover:bg-[#F8F6EF] rounded-[6px] font-mono text-[10px] font-semibold transition-colors"
                 >
                   <Download size={13} />
                   JSON
@@ -339,9 +339,9 @@ export default function ReportsPage() {
             </div>
 
             {/* ARINA AI Executive Synthesis Card */}
-            <div className="p-4 bg-[#F8F6EF] border border-[#DFE5DC] rounded-[8px]">
+            <div className="p-4 bg-[#F8F6EF] border border-[#E5EBE5] rounded-[8px]">
               <div className="flex justify-between items-center mb-2">
-                <div className="flex items-center gap-1.5 font-mono text-[11px] font-semibold text-[#176B4D]">
+                <div className="flex items-center gap-1.5 font-mono text-[11px] font-semibold text-[#124D32]">
                   <Sparkles size={13} />
                   <span>ARINA AI SCIENTIFIC EXECUTIVE SYNTHESIS</span>
                 </div>
@@ -349,7 +349,7 @@ export default function ReportsPage() {
                   <select
                     value={synthesisModel}
                     onChange={(e) => setSynthesisModel(e.target.value)}
-                    className="bg-[#FFFFFF] text-[#26352D] border border-[#DFE5DC] rounded-[4px] px-2 py-1 font-mono text-[10px] focus:outline-none"
+                    className="bg-[#FFFFFF] text-[#17251D] border border-[#E5EBE5] rounded-[4px] px-2 py-1 font-mono text-[10px] focus:outline-none"
                   >
                     <option value="gpt-5.6-luna">GPT-5.6 Luna</option>
                     <option value="deepseek-v4-pro">DeepSeek V4 Pro</option>
@@ -373,7 +373,7 @@ export default function ReportsPage() {
                         setIsSynthesizing(false);
                       }
                     }}
-                    className="inline-flex items-center gap-1.5 px-3 py-1 bg-[#176B4D] text-[#FFFFFF] rounded-[4px] font-mono text-[10px] font-semibold hover:bg-[#12543c] cursor-pointer"
+                    className="inline-flex items-center gap-1.5 px-3 py-1 bg-[#124D32] text-[#FFFFFF] rounded-[4px] font-mono text-[10px] font-semibold hover:bg-[#12543c] cursor-pointer"
                   >
                     <Sparkles size={11} />
                     <span>{isSynthesizing ? "SYNTHESIZING..." : "GENERATE AI SYNTHESIS"}</span>
@@ -381,11 +381,11 @@ export default function ReportsPage() {
                 </div>
               </div>
               {aiSynthesisText ? (
-                <div className="text-[12.5px] leading-relaxed text-[#26352D] whitespace-pre-wrap border-t border-[#DFE5DC] pt-2">
+                <div className="text-[12.5px] leading-relaxed text-[#17251D] whitespace-pre-wrap border-t border-[#E5EBE5] pt-2">
                   {aiSynthesisText}
                 </div>
               ) : (
-                <div className="font-mono text-[11px] text-[#68766D]">
+                <div className="font-mono text-[11px] text-[#65736A]">
                   Autonomous peer-review synthesis examining Pareto frontier trade-offs, leakage quarantine, and edge hardware deployment.
                 </div>
               )}
@@ -393,20 +393,20 @@ export default function ReportsPage() {
 
             {/* Abstract / Summary */}
             <div>
-              <div className="font-mono text-[11px] font-semibold text-[#176B4D] mb-1.5">
+              <div className="font-mono text-[11px] font-semibold text-[#124D32] mb-1.5">
                 EXECUTIVE SUMMARY & FINDINGS:
               </div>
-              <p className="text-[13px] leading-relaxed text-[#26352D] m-0">
+              <p className="text-[13px] leading-relaxed text-[#17251D] m-0">
                 {selectedReport.report.summary}
               </p>
             </div>
 
             {/* Methodology */}
             <div>
-              <div className="font-mono text-[11px] font-semibold text-[#176B4D] mb-1.5">
+              <div className="font-mono text-[11px] font-semibold text-[#124D32] mb-1.5">
                 EXPERIMENTAL METHODOLOGY:
               </div>
-              <p className="text-[12px] leading-relaxed text-[#68766D] m-0">
+              <p className="text-[12px] leading-relaxed text-[#65736A] m-0">
                 {selectedReport.report.methodology}
               </p>
             </div>
@@ -418,13 +418,13 @@ export default function ReportsPage() {
                 if (!rows.length) return null;
                 return (
                   <div>
-                    <div className="font-mono text-[11px] font-semibold text-[#176B4D] mb-2.5">
+                    <div className="font-mono text-[11px] font-semibold text-[#124D32] mb-2.5">
                       EMPIRICAL BENCHMARK MATRIX ({rows.length} RUNS):
                     </div>
-                    <div className="overflow-x-auto border border-[#DFE5DC] rounded-[6px] bg-[#F8F6EF]">
+                    <div className="overflow-x-auto border border-[#E5EBE5] rounded-[6px] bg-[#F8F6EF]">
                       <table className="w-full text-left border-collapse font-mono text-[11px]">
                         <thead>
-                          <tr className="border-b border-[#DFE5DC] text-[#68766D]">
+                          <tr className="border-b border-[#E5EBE5] text-[#65736A]">
                             <th className="p-2">MODEL</th>
                             <th className="p-2">STATUS</th>
                             <th className="p-2">MAE (eV)</th>
@@ -434,20 +434,20 @@ export default function ReportsPage() {
                             <th className="p-2">RECOVERED</th>
                           </tr>
                         </thead>
-                        <tbody className="divide-y divide-[#DFE5DC]">
+                        <tbody className="divide-y divide-[#E5EBE5]">
                           {rows.map((r: any, idx: number) => (
-                            <tr key={idx} className="text-[#26352D] hover:bg-[#FFFFFF]">
+                            <tr key={idx} className="text-[#17251D] hover:bg-[#FFFFFF]">
                               <td className="p-2 font-semibold">{r.model_name}</td>
                               <td className="p-2">
                                 <span className={`px-2 py-0.5 rounded text-[10px] font-semibold ${
-                                  r.status === "COMPLETED" ? "bg-[#E8F5EC] text-[#176B4D]" : "bg-[#B54747]/10 text-[#B54747]"
+                                  r.status === "COMPLETED" ? "bg-[#E8F5EC] text-[#124D32]" : "bg-[#B54747]/10 text-[#B54747]"
                                 }`}>
                                   {r.status}
                                 </span>
                               </td>
-                              <td className="p-2 text-[#176B4D] font-semibold">{r.mae ?? "-"}</td>
+                              <td className="p-2 text-[#124D32] font-semibold">{r.mae ?? "-"}</td>
                               <td className="p-2">{r.rmse ?? "-"}</td>
-                              <td className="p-2 text-[#176B4D]">{r.r2 ?? r.score ?? "-"}</td>
+                              <td className="p-2 text-[#124D32]">{r.r2 ?? r.score ?? "-"}</td>
                               <td className="p-2">{r.train_time_ms ? `${r.train_time_ms} ms` : "-"}</td>
                               <td className="p-2">{r.recovery_successful ? "YES (Verified)" : "NO"}</td>
                             </tr>
@@ -465,8 +465,8 @@ export default function ReportsPage() {
             {/* Claim Verification Layer */}
             <div>
               <div className="flex items-center gap-2 mb-3">
-                <ShieldCheck size={16} className="text-[#176B4D]" />
-                <span className="font-mono text-[11px] font-semibold text-[#26352D] tracking-[0.06em]">
+                <ShieldCheck size={16} className="text-[#124D32]" />
+                <span className="font-mono text-[11px] font-semibold text-[#17251D] tracking-[0.06em]">
                   CLAIM–EVIDENCE VERIFICATION LAYER ({selectedReport.claims.length} AUDITED CLAIMS)
                 </span>
               </div>
@@ -475,21 +475,21 @@ export default function ReportsPage() {
                 {selectedReport.claims.map((c) => (
                   <div
                     key={c.id}
-                    className="bg-[#F8F6EF] border border-[#DFE5DC] rounded-[6px] p-3.5"
+                    className="bg-[#F8F6EF] border border-[#E5EBE5] rounded-[6px] p-3.5"
                   >
                     <div className="flex items-start justify-between mb-1.5">
-                      <div className="font-serif font-semibold text-[12px] text-[#26352D]">
+                      <div className="font-serif font-semibold text-[12px] text-[#17251D]">
                         "{c.claim_text}"
                       </div>
-                      <span className="px-2 py-0.5 rounded bg-[#E8F5EC] text-[#176B4D] font-mono text-[10px] font-semibold">
+                      <span className="px-2 py-0.5 rounded bg-[#E8F5EC] text-[#124D32] font-mono text-[10px] font-semibold">
                         {c.status}
                       </span>
                     </div>
 
-                    <div className="flex items-center gap-4 font-mono text-[10px] text-[#68766D] mt-2">
-                      <span>EVIDENCE: <strong className="text-[#176B4D]">{c.evidence_type}</strong></span>
-                      <span>SOURCE: <strong className="text-[#26352D]">{c.supporting_reference_id}</strong></span>
-                      <span>METRIC: <strong className="text-[#176B4D]">{c.source_metric}</strong></span>
+                    <div className="flex items-center gap-4 font-mono text-[10px] text-[#65736A] mt-2">
+                      <span>EVIDENCE: <strong className="text-[#124D32]">{c.evidence_type}</strong></span>
+                      <span>SOURCE: <strong className="text-[#17251D]">{c.supporting_reference_id}</strong></span>
+                      <span>METRIC: <strong className="text-[#124D32]">{c.source_metric}</strong></span>
                     </div>
                   </div>
                 ))}
@@ -497,19 +497,19 @@ export default function ReportsPage() {
             </div>
 
             {/* Limitations & Reproducibility */}
-            <div className="grid grid-cols-2 gap-4 bg-[#F8F6EF] p-4 rounded-[6px] border border-[#DFE5DC]">
+            <div className="grid grid-cols-2 gap-4 bg-[#F8F6EF] p-4 rounded-[6px] border border-[#E5EBE5]">
               <div>
-                <div className="font-mono text-[10px] font-semibold text-[#68766D] mb-1.5">REPRODUCIBILITY SPECIFICATION:</div>
-                <div className="text-[11px] leading-relaxed text-[#68766D]">{selectedReport.report.reproducibility_notes}</div>
+                <div className="font-mono text-[10px] font-semibold text-[#65736A] mb-1.5">REPRODUCIBILITY SPECIFICATION:</div>
+                <div className="text-[11px] leading-relaxed text-[#65736A]">{selectedReport.report.reproducibility_notes}</div>
               </div>
               <div>
                 <div className="font-mono text-[10px] font-semibold text-[#B54747] mb-1.5">LIMITATIONS:</div>
-                <div className="text-[11px] leading-relaxed text-[#68766D]">{selectedReport.report.limitations}</div>
+                <div className="text-[11px] leading-relaxed text-[#65736A]">{selectedReport.report.limitations}</div>
               </div>
             </div>
           </div>
         ) : (
-          <div className="p-10 text-center font-mono text-[11px] text-[#68766D] bg-[#FFFFFF] border border-[#DFE5DC] rounded-[10px]">
+          <div className="p-10 text-center font-mono text-[11px] text-[#65736A] bg-[#FFFFFF] border border-[#E5EBE5] rounded-[10px]">
             Select a report from the list to view evidence details.
           </div>
         )}
@@ -518,18 +518,18 @@ export default function ReportsPage() {
       {/* Secure Report Email Dispatch Modal */}
       {emailModalOpen && selectedReport && (
         <div className="fixed inset-0 bg-black/40 backdrop-blur-xs flex items-center justify-center z-[9999]">
-          <div className="bg-[#FFFFFF] border border-[#DFE5DC] rounded-[10px] p-7 max-w-[500px] w-[90%] shadow-xl">
-            <div className="flex justify-between items-center border-b border-[#DFE5DC] pb-3.5 mb-4">
+          <div className="bg-[#FFFFFF] border border-[#E5EBE5] rounded-[10px] p-7 max-w-[500px] w-[90%] shadow-xl">
+            <div className="flex justify-between items-center border-b border-[#E5EBE5] pb-3.5 mb-4">
               <div className="flex items-center gap-2">
-                <Mail size={16} className="text-[#176B4D]" />
-                <h3 className="m-0 font-serif text-[16px] font-semibold text-[#26352D]">
+                <Mail size={16} className="text-[#124D32]" />
+                <h3 className="m-0 font-serif text-[16px] font-semibold text-[#17251D]">
                   Dispatch Scientific Report via Email
                 </h3>
               </div>
               <button
                 type="button"
                 onClick={() => setEmailModalOpen(false)}
-                className="bg-transparent border-none text-[#68766D] hover:text-[#26352D] cursor-pointer"
+                className="bg-transparent border-none text-[#65736A] hover:text-[#17251D] cursor-pointer"
               >
                 <X size={16} />
               </button>
@@ -537,7 +537,7 @@ export default function ReportsPage() {
 
             <form onSubmit={handleSendEmail} className="flex flex-col gap-3.5">
               <div>
-                <label className="block font-mono text-[9px] font-semibold text-[#68766D] mb-1.5 uppercase">
+                <label className="block font-mono text-[9px] font-semibold text-[#65736A] mb-1.5 uppercase">
                   RECIPIENT EMAIL ADDRESS
                 </label>
                 <input
@@ -546,12 +546,12 @@ export default function ReportsPage() {
                   placeholder="collaborator@materials-lab.org"
                   value={recipientEmail}
                   onChange={(e) => setRecipientEmail(e.target.value)}
-                  className="w-full px-3 py-2 bg-[#F8F6EF] border border-[#DFE5DC] rounded-[6px] text-[#26352D] font-mono text-[12px] focus:outline-none focus:border-[#176B4D]"
+                  className="w-full px-3 py-2 bg-[#F8F6EF] border border-[#E5EBE5] rounded-[6px] text-[#17251D] font-mono text-[12px] focus:outline-none focus:border-[#124D32]"
                 />
               </div>
 
               <div>
-                <label className="block font-mono text-[9px] font-semibold text-[#68766D] mb-1.5 uppercase">
+                <label className="block font-mono text-[9px] font-semibold text-[#65736A] mb-1.5 uppercase">
                   EMAIL SUBJECT (OPTIONAL)
                 </label>
                 <input
@@ -559,12 +559,12 @@ export default function ReportsPage() {
                   placeholder={`[EvolveX Verified Report] ${selectedReport.report.title}`}
                   value={emailSubject}
                   onChange={(e) => setEmailSubject(e.target.value)}
-                  className="w-full px-3 py-2 bg-[#F8F6EF] border border-[#DFE5DC] rounded-[6px] text-[#26352D] font-mono text-[12px] focus:outline-none focus:border-[#176B4D]"
+                  className="w-full px-3 py-2 bg-[#F8F6EF] border border-[#E5EBE5] rounded-[6px] text-[#17251D] font-mono text-[12px] focus:outline-none focus:border-[#124D32]"
                 />
               </div>
 
               <div>
-                <label className="block font-mono text-[9px] font-semibold text-[#68766D] mb-1.5 uppercase">
+                <label className="block font-mono text-[9px] font-semibold text-[#65736A] mb-1.5 uppercase">
                   OPTIONAL NOTES
                 </label>
                 <textarea
@@ -572,20 +572,20 @@ export default function ReportsPage() {
                   placeholder="Additional peer-review notes or provenance annotations..."
                   value={emailNotes}
                   onChange={(e) => setEmailNotes(e.target.value)}
-                  className="w-full px-3 py-2 bg-[#F8F6EF] border border-[#DFE5DC] rounded-[6px] text-[#26352D] font-mono text-[12px] focus:outline-none focus:border-[#176B4D]"
+                  className="w-full px-3 py-2 bg-[#F8F6EF] border border-[#E5EBE5] rounded-[6px] text-[#17251D] font-mono text-[12px] focus:outline-none focus:border-[#124D32]"
                 />
               </div>
 
-              <div className="bg-[#F8F6EF] border border-[#DFE5DC] rounded-[6px] p-3 flex items-start gap-2.5">
+              <div className="bg-[#F8F6EF] border border-[#E5EBE5] rounded-[6px] p-3 flex items-start gap-2.5">
                 <input
                   type="checkbox"
                   id="authConfirm"
                   required
                   checked={emailAuthorized}
                   onChange={(e) => setEmailAuthorized(e.target.checked)}
-                  className="mt-0.5 accent-[#176B4D] cursor-pointer"
+                  className="mt-0.5 accent-[#124D32] cursor-pointer"
                 />
-                <label htmlFor="authConfirm" className="font-mono text-[10.5px] text-[#68766D] cursor-pointer">
+                <label htmlFor="authConfirm" className="font-mono text-[10.5px] text-[#65736A] cursor-pointer">
                   I confirm authorization to transmit this synthesized evidence report and associated empirical metric claims to the designated external recipient.
                 </label>
               </div>
@@ -596,7 +596,7 @@ export default function ReportsPage() {
                 </div>
               )}
               {emailSuccess && (
-                <div className="font-mono text-[11px] text-[#176B4D] p-2 bg-[#E8F5EC] rounded-[4px]">
+                <div className="font-mono text-[11px] text-[#124D32] p-2 bg-[#E8F5EC] rounded-[4px]">
                   {emailSuccess}
                 </div>
               )}
@@ -605,14 +605,14 @@ export default function ReportsPage() {
                 <button
                   type="button"
                   onClick={() => setEmailModalOpen(false)}
-                  className="px-4 py-2 bg-transparent border border-[#DFE5DC] text-[#68766D] font-mono text-[11px] font-semibold rounded-[6px] cursor-pointer"
+                  className="px-4 py-2 bg-transparent border border-[#E5EBE5] text-[#65736A] font-mono text-[11px] font-semibold rounded-[6px] cursor-pointer"
                 >
                   CANCEL
                 </button>
                 <button
                   type="submit"
                   disabled={sendingEmail || !emailAuthorized}
-                  className={`px-5 py-2 bg-[#176B4D] hover:bg-[#12543c] text-[#FFFFFF] font-mono text-[11px] font-semibold tracking-[0.06em] rounded-[6px] cursor-pointer ${
+                  className={`px-5 py-2 bg-[#124D32] hover:bg-[#12543c] text-[#FFFFFF] font-mono text-[11px] font-semibold tracking-[0.06em] rounded-[6px] cursor-pointer ${
                     sendingEmail || !emailAuthorized ? "opacity-50 cursor-not-allowed" : ""
                   }`}
                 >

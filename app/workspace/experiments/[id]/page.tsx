@@ -204,7 +204,7 @@ export default function ExperimentDetailPage({
 
   if (loading) {
     return (
-      <div style={{ padding: "60px 0", textAlign: "center", font: "400 12px var(--mono)", color: "#68766D" }}>
+      <div style={{ padding: "60px 0", textAlign: "center", font: "400 12px var(--mono)", color: "#65736A" }}>
         LOADING EXPERIMENT SPECIFICATION // ID: {expId.substring(0, 8)}...
       </div>
     );
@@ -224,9 +224,9 @@ export default function ExperimentDetailPage({
   const traces = orchestrationData?.traces || [];
 
   return (
-    <div style={{ display: "flex", flexDirection: "column", gap: 24, maxWidth: 1400, margin: "0 auto", color: "#26352D" }}>
+    <div style={{ display: "flex", flexDirection: "column", gap: 24, maxWidth: 1400, margin: "0 auto", color: "#17251D" }}>
       {/* Navigation Breadcrumb */}
-      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", borderBottom: "1px solid #DFE5DC", paddingBottom: 12 }}>
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", borderBottom: "1px solid #E5EBE5", paddingBottom: 12 }}>
         <Link
           href="/workspace"
           style={{
@@ -234,11 +234,11 @@ export default function ExperimentDetailPage({
             alignItems: "center",
             gap: 8,
             font: "600 10px/1 var(--mono)",
-            color: "#68766D",
+            color: "#65736A",
             textDecoration: "none"
           }}
         >
-          <ArrowLeft size={12} className="text-[#176B4D]" />
+          <ArrowLeft size={12} className="text-[#124D32]" />
           <span>BACK TO DASHBOARD</span>
         </Link>
 
@@ -250,41 +250,41 @@ export default function ExperimentDetailPage({
               fontSize: 10,
               fontFamily: "var(--mono)",
               fontWeight: 600,
-              background: exp.status === "COMPLETED" ? "#E6F0E9" : exp.status === "RUNNING" ? "#EFF6FF" : exp.status === "FAILED" ? "#FEE2E2" : "#F8F6EF",
-              color: exp.status === "COMPLETED" ? "#176B4D" : exp.status === "RUNNING" ? "#2563EB" : exp.status === "FAILED" ? "#991B1B" : "#26352D",
-              border: `1px solid ${exp.status === "COMPLETED" ? "#176B4D" : exp.status === "FAILED" ? "#EF4444" : "#DFE5DC"}`
+              background: exp.status === "COMPLETED" ? "#EEF6EA" : exp.status === "RUNNING" ? "#EFF6FF" : exp.status === "FAILED" ? "#FEE2E2" : "#F8F6EF",
+              color: exp.status === "COMPLETED" ? "#124D32" : exp.status === "RUNNING" ? "#2563EB" : exp.status === "FAILED" ? "#991B1B" : "#17251D",
+              border: `1px solid ${exp.status === "COMPLETED" ? "#124D32" : exp.status === "FAILED" ? "#EF4444" : "#E5EBE5"}`
             }}
           >
             {exp.execution_stage || exp.status}
           </span>
-          <span style={{ font: "400 10px var(--mono)", color: "#68766D" }}>
+          <span style={{ font: "400 10px var(--mono)", color: "#65736A" }}>
             DOMAIN: {(exp.domain || "GENERAL_AI").toUpperCase()} // BUDGET: {exp.cpu_budget_seconds}s
           </span>
         </div>
       </div>
 
       {/* Main Header Card */}
-      <div style={{ background: "#FFFFFF", border: "1px solid #DFE5DC", borderRadius: 12, padding: 24, boxShadow: "0 1px 3px rgba(0,0,0,0.03)" }}>
+      <div style={{ background: "#FFFFFF", border: "1px solid #E5EBE5", borderRadius: 12, padding: 24, boxShadow: "0 1px 3px rgba(0,0,0,0.03)" }}>
         <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: 20 }}>
           <div>
-            <div style={{ font: "600 10px/1 var(--mono)", color: "#176B4D", letterSpacing: "0.14em", marginBottom: 6 }}>
+            <div style={{ font: "600 10px/1 var(--mono)", color: "#124D32", letterSpacing: "0.14em", marginBottom: 6 }}>
               UNIVERSAL AI RESEARCH EXPERIMENT // {exp.task_type.toUpperCase()}
             </div>
-            <h1 style={{ margin: 0, font: "600 24px/1.2 var(--font-primary), serif", color: "#26352D" }}>
+            <h1 style={{ margin: 0, font: "600 24px/1.2 var(--font-primary), serif", color: "#17251D" }}>
               {exp.name}
             </h1>
             <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", gap: 16, marginTop: 10 }}>
-              <span style={{ font: "400 11px var(--mono)", color: "#68766D" }}>
-                DATASET: <strong style={{ color: "#26352D" }}>{ds?.name || "N/A"}</strong> ({ds?.row_count || 2400} samples)
+              <span style={{ font: "400 11px var(--mono)", color: "#65736A" }}>
+                DATASET: <strong style={{ color: "#17251D" }}>{ds?.name || "N/A"}</strong> ({ds?.row_count || 2400} samples)
               </span>
-              <span style={{ font: "400 11px var(--mono)", color: "#68766D" }}>
-                TARGET: <strong style={{ color: "#176B4D" }}>{exp.target_column || ds?.target_col || "target"}</strong>
+              <span style={{ font: "400 11px var(--mono)", color: "#65736A" }}>
+                TARGET: <strong style={{ color: "#124D32" }}>{exp.target_column || ds?.target_col || "target"}</strong>
               </span>
-              <span style={{ font: "400 11px var(--mono)", color: "#68766D" }}>
-                BASELINE: <strong style={{ color: "#26352D" }}>{exp.baseline_model}</strong>
+              <span style={{ font: "400 11px var(--mono)", color: "#65736A" }}>
+                BASELINE: <strong style={{ color: "#17251D" }}>{exp.baseline_model}</strong>
               </span>
-              <span style={{ font: "400 11px var(--mono)", color: "#68766D" }}>
-                STAGE: <strong style={{ color: "#176B4D" }}>{exp.execution_stage || "SUBMITTED"}</strong>
+              <span style={{ font: "400 11px var(--mono)", color: "#65736A" }}>
+                STAGE: <strong style={{ color: "#124D32" }}>{exp.execution_stage || "SUBMITTED"}</strong>
               </span>
             </div>
           </div>
@@ -298,7 +298,7 @@ export default function ExperimentDetailPage({
                 alignItems: "center",
                 gap: 6,
                 padding: "9px 18px",
-                background: "#176B4D",
+                background: "#124D32",
                 border: "none",
                 color: "#FFFFFF",
                 font: "600 11px var(--mono)",
@@ -320,7 +320,7 @@ export default function ExperimentDetailPage({
                 gap: 6,
                 padding: "9px 14px",
                 background: "#FFFFFF",
-                border: "1px solid #DFE5DC",
+                border: "1px solid #E5EBE5",
                 color: "#A66B22",
                 font: "600 11px var(--mono)",
                 borderRadius: 6,
@@ -340,8 +340,8 @@ export default function ExperimentDetailPage({
                 gap: 6,
                 padding: "9px 14px",
                 background: "#FFFFFF",
-                border: "1px solid #DFE5DC",
-                color: "#176B4D",
+                border: "1px solid #E5EBE5",
+                color: "#124D32",
                 font: "600 11px var(--mono)",
                 borderRadius: 6,
                 cursor: "pointer"
@@ -358,9 +358,9 @@ export default function ExperimentDetailPage({
                 alignItems: "center",
                 gap: 6,
                 padding: "9px 14px",
-                background: "#E6F0E9",
-                border: "1px solid #176B4D",
-                color: "#176B4D",
+                background: "#EEF6EA",
+                border: "1px solid #124D32",
+                color: "#124D32",
                 font: "600 11px var(--mono)",
                 borderRadius: 6,
                 textDecoration: "none"
@@ -374,7 +374,7 @@ export default function ExperimentDetailPage({
       </div>
 
       {/* Tabs */}
-      <div style={{ display: "flex", gap: 24, borderBottom: "1px solid #DFE5DC", paddingBottom: 10 }}>
+      <div style={{ display: "flex", gap: 24, borderBottom: "1px solid #E5EBE5", paddingBottom: 10 }}>
         <button
           onClick={() => setActiveTab("orchestration")}
           style={{
@@ -382,8 +382,8 @@ export default function ExperimentDetailPage({
             border: "none",
             padding: "4px 8px",
             font: activeTab === "orchestration" ? "600 12px var(--mono)" : "400 12px var(--mono)",
-            color: activeTab === "orchestration" ? "#176B4D" : "#68766D",
-            borderBottom: activeTab === "orchestration" ? "2.5px solid #176B4D" : "2.5px solid transparent",
+            color: activeTab === "orchestration" ? "#124D32" : "#65736A",
+            borderBottom: activeTab === "orchestration" ? "2.5px solid #124D32" : "2.5px solid transparent",
             cursor: "pointer"
           }}
         >
@@ -397,8 +397,8 @@ export default function ExperimentDetailPage({
             border: "none",
             padding: "4px 8px",
             font: activeTab === "code" ? "600 12px var(--mono)" : "400 12px var(--mono)",
-            color: activeTab === "code" ? "#176B4D" : "#68766D",
-            borderBottom: activeTab === "code" ? "2.5px solid #176B4D" : "2.5px solid transparent",
+            color: activeTab === "code" ? "#124D32" : "#65736A",
+            borderBottom: activeTab === "code" ? "2.5px solid #124D32" : "2.5px solid transparent",
             cursor: "pointer"
           }}
         >
@@ -412,8 +412,8 @@ export default function ExperimentDetailPage({
             border: "none",
             padding: "4px 8px",
             font: activeTab === "runs" ? "600 12px var(--mono)" : "400 12px var(--mono)",
-            color: activeTab === "runs" ? "#176B4D" : "#68766D",
-            borderBottom: activeTab === "runs" ? "2.5px solid #176B4D" : "2.5px solid transparent",
+            color: activeTab === "runs" ? "#124D32" : "#65736A",
+            borderBottom: activeTab === "runs" ? "2.5px solid #124D32" : "2.5px solid transparent",
             cursor: "pointer"
           }}
         >
@@ -427,8 +427,8 @@ export default function ExperimentDetailPage({
             border: "none",
             padding: "4px 8px",
             font: activeTab === "predictions" ? "600 12px var(--mono)" : "400 12px var(--mono)",
-            color: activeTab === "predictions" ? "#176B4D" : "#68766D",
-            borderBottom: activeTab === "predictions" ? "2.5px solid #176B4D" : "2.5px solid transparent",
+            color: activeTab === "predictions" ? "#124D32" : "#65736A",
+            borderBottom: activeTab === "predictions" ? "2.5px solid #124D32" : "2.5px solid transparent",
             cursor: "pointer"
           }}
         >
@@ -442,8 +442,8 @@ export default function ExperimentDetailPage({
             border: "none",
             padding: "4px 8px",
             font: activeTab === "failures" ? "600 12px var(--mono)" : "400 12px var(--mono)",
-            color: activeTab === "failures" ? "#176B4D" : "#68766D",
-            borderBottom: activeTab === "failures" ? "2.5px solid #176B4D" : "2.5px solid transparent",
+            color: activeTab === "failures" ? "#124D32" : "#65736A",
+            borderBottom: activeTab === "failures" ? "2.5px solid #124D32" : "2.5px solid transparent",
             cursor: "pointer"
           }}
         >
@@ -455,8 +455,8 @@ export default function ExperimentDetailPage({
       {activeTab === "orchestration" && (
         <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
           {/* Directed 12-Stage Pipeline Header */}
-          <div style={{ background: "#FFFFFF", border: "1px solid #DFE5DC", borderRadius: 12, padding: 20, boxShadow: "0 1px 3px rgba(0,0,0,0.03)" }}>
-            <div style={{ font: "600 11px var(--mono)", color: "#176B4D", letterSpacing: "0.08em", marginBottom: 12 }}>
+          <div style={{ background: "#FFFFFF", border: "1px solid #E5EBE5", borderRadius: 12, padding: 20, boxShadow: "0 1px 3px rgba(0,0,0,0.03)" }}>
+            <div style={{ font: "600 11px var(--mono)", color: "#124D32", letterSpacing: "0.08em", marginBottom: 12 }}>
               PERSISTED MULTI-AGENT DIRECTED PIPELINE // REAL BACKEND EVENT STATE
             </div>
 
@@ -473,16 +473,16 @@ export default function ExperimentDetailPage({
                       style={{
                         padding: "8px 12px",
                         borderRadius: 6,
-                        border: `1px solid ${isCompleted ? "#176B4D" : isFailed ? "#EF4444" : "#DFE5DC"}`,
-                        background: isCompleted ? "#E6F0E9" : isRunning ? "#EFF6FF" : isFailed ? "#FEE2E2" : "#FFFFFF",
+                        border: `1px solid ${isCompleted ? "#124D32" : isFailed ? "#EF4444" : "#E5EBE5"}`,
+                        background: isCompleted ? "#EEF6EA" : isRunning ? "#EFF6FF" : isFailed ? "#FEE2E2" : "#FFFFFF",
                         cursor: "pointer",
                         display: "flex",
                         alignItems: "center",
                         gap: 6
                       }}
                     >
-                      {isCompleted ? <CheckCircle2 size={13} className="text-[#176B4D]" /> : isFailed ? <AlertTriangle size={13} className="text-[#991B1B]" /> : <Bot size={13} className="text-[#68766D]" />}
-                      <span style={{ font: "600 11px var(--mono)", color: isCompleted ? "#176B4D" : "#26352D" }}>
+                      {isCompleted ? <CheckCircle2 size={13} className="text-[#124D32]" /> : isFailed ? <AlertTriangle size={13} className="text-[#991B1B]" /> : <Bot size={13} className="text-[#65736A]" />}
+                      <span style={{ font: "600 11px var(--mono)", color: isCompleted ? "#124D32" : "#17251D" }}>
                         {role.label}
                       </span>
                     </div>
@@ -495,8 +495,8 @@ export default function ExperimentDetailPage({
 
           {/* Grid: Agent Cards & Live Event Stream */}
           <div style={{ display: "grid", gridTemplateColumns: "1.4fr 1fr", gap: 20 }}>
-            <div style={{ background: "#FFFFFF", border: "1px solid #DFE5DC", borderRadius: 12, padding: 20, boxShadow: "0 1px 3px rgba(0,0,0,0.03)" }}>
-              <div style={{ font: "600 11px var(--mono)", color: "#26352D", marginBottom: 14 }}>
+            <div style={{ background: "#FFFFFF", border: "1px solid #E5EBE5", borderRadius: 12, padding: 20, boxShadow: "0 1px 3px rgba(0,0,0,0.03)" }}>
+              <div style={{ font: "600 11px var(--mono)", color: "#17251D", marginBottom: 14 }}>
                 AGENT RESPONSIBILITIES & EXECUTED TRACES
               </div>
 
@@ -510,20 +510,20 @@ export default function ExperimentDetailPage({
                       style={{
                         padding: 14,
                         borderRadius: 8,
-                        border: "1px solid #DFE5DC",
+                        border: "1px solid #E5EBE5",
                         background: trace ? "#F8F6EF" : "#FFFFFF",
                         cursor: "pointer",
                         transition: "all 0.2s ease"
                       }}
                     >
                       <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 6 }}>
-                        <div style={{ font: "600 11px var(--mono)", color: "#176B4D" }}>{role.name}</div>
-                        <span style={{ font: "400 9px var(--mono)", color: "#68766D" }}>{trace ? `${trace.duration_s}s` : "PENDING"}</span>
+                        <div style={{ font: "600 11px var(--mono)", color: "#124D32" }}>{role.name}</div>
+                        <span style={{ font: "400 9px var(--mono)", color: "#65736A" }}>{trace ? `${trace.duration_s}s` : "PENDING"}</span>
                       </div>
-                      <div style={{ font: "400 11px/1.4 var(--font-primary), serif", color: "#68766D", height: 32, overflow: "hidden" }}>
+                      <div style={{ font: "400 11px/1.4 var(--font-primary), serif", color: "#65736A", height: 32, overflow: "hidden" }}>
                         {role.description || DEFAULT_AGENT_ROLES.find((d) => d.name === role.name)?.description || role.label}
                       </div>
-                      <div style={{ marginTop: 8, font: "600 9px var(--mono)", color: trace?.status === "COMPLETED" ? "#176B4D" : "#68766D" }}>
+                      <div style={{ marginTop: 8, font: "600 9px var(--mono)", color: trace?.status === "COMPLETED" ? "#124D32" : "#65736A" }}>
                         STATUS: {trace?.status || "STANDBY"}
                       </div>
                     </div>
@@ -533,27 +533,27 @@ export default function ExperimentDetailPage({
             </div>
 
             {/* Live Backend Event Stream */}
-            <div style={{ background: "#FFFFFF", border: "1px solid #DFE5DC", borderRadius: 12, padding: 20, boxShadow: "0 1px 3px rgba(0,0,0,0.03)" }}>
+            <div style={{ background: "#FFFFFF", border: "1px solid #E5EBE5", borderRadius: 12, padding: 20, boxShadow: "0 1px 3px rgba(0,0,0,0.03)" }}>
               <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 14 }}>
-                <div style={{ font: "600 11px var(--mono)", color: "#26352D" }}>LIVE AGENT EVENT STREAM</div>
-                <button onClick={loadExperiment} style={{ background: "none", border: "none", color: "#176B4D", cursor: "pointer" }}>
+                <div style={{ font: "600 11px var(--mono)", color: "#17251D" }}>LIVE AGENT EVENT STREAM</div>
+                <button onClick={loadExperiment} style={{ background: "none", border: "none", color: "#124D32", cursor: "pointer" }}>
                   <RefreshCw size={12} />
                 </button>
               </div>
 
               <div style={{ display: "flex", flexDirection: "column", gap: 10, maxHeight: 420, overflowY: "auto" }}>
                 {events.length === 0 ? (
-                  <div style={{ font: "400 11px var(--mono)", color: "#68766D", padding: "20px 0", textAlign: "center" }}>
+                  <div style={{ font: "400 11px var(--mono)", color: "#65736A", padding: "20px 0", textAlign: "center" }}>
                     No events recorded yet. Click &quot;START MULTI-AGENT CYCLE&quot; to execute.
                   </div>
                 ) : (
                   events.map((evt: any, i: number) => (
-                    <div key={i} style={{ padding: 10, background: "#F8F6EF", borderRadius: 6, border: "1px solid #DFE5DC" }}>
-                      <div style={{ display: "flex", justifyContent: "space-between", font: "600 10px var(--mono)", color: "#176B4D", marginBottom: 2 }}>
+                    <div key={i} style={{ padding: 10, background: "#F8F6EF", borderRadius: 6, border: "1px solid #E5EBE5" }}>
+                      <div style={{ display: "flex", justifyContent: "space-between", font: "600 10px var(--mono)", color: "#124D32", marginBottom: 2 }}>
                         <span>[{evt.agent_name}] {evt.action}</span>
                         <span>{evt.duration_s}s</span>
                       </div>
-                      <div style={{ font: "400 10px var(--mono)", color: "#68766D" }}>
+                      <div style={{ font: "400 10px var(--mono)", color: "#65736A" }}>
                         {evt.output_summary}
                       </div>
                     </div>
@@ -567,11 +567,11 @@ export default function ExperimentDetailPage({
 
       {/* Tab 2: Generated Code & Revision Management */}
       {activeTab === "code" && (
-        <div style={{ background: "#FFFFFF", border: "1px solid #DFE5DC", borderRadius: 12, padding: 20, boxShadow: "0 1px 3px rgba(0,0,0,0.03)" }}>
+        <div style={{ background: "#FFFFFF", border: "1px solid #E5EBE5", borderRadius: 12, padding: 20, boxShadow: "0 1px 3px rgba(0,0,0,0.03)" }}>
           <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 16 }}>
             <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-              <Code size={16} className="text-[#176B4D]" />
-              <div style={{ font: "600 12px var(--mono)", color: "#26352D" }}>REPRODUCIBLE SOURCE CODE & MULTI-FILE REVISIONS</div>
+              <Code size={16} className="text-[#124D32]" />
+              <div style={{ font: "600 12px var(--mono)", color: "#17251D" }}>REPRODUCIBLE SOURCE CODE & MULTI-FILE REVISIONS</div>
             </div>
             <div style={{ display: "flex", gap: 10 }}>
               <button
@@ -583,8 +583,8 @@ export default function ExperimentDetailPage({
                   gap: 6,
                   padding: "6px 12px",
                   background: "#FFFFFF",
-                  border: "1px solid #DFE5DC",
-                  color: "#176B4D",
+                  border: "1px solid #E5EBE5",
+                  color: "#124D32",
                   font: "600 10px var(--mono)",
                   borderRadius: 6,
                   cursor: "pointer"
@@ -601,14 +601,14 @@ export default function ExperimentDetailPage({
                   gap: 6,
                   padding: "6px 12px",
                   background: "#FFFFFF",
-                  border: "1px solid #DFE5DC",
-                  color: "#26352D",
+                  border: "1px solid #E5EBE5",
+                  color: "#17251D",
                   font: "600 10px var(--mono)",
                   borderRadius: 6,
                   cursor: "pointer"
                 }}
               >
-                {copied ? <Check size={12} className="text-[#176B4D]" /> : <Copy size={12} />}
+                {copied ? <Check size={12} className="text-[#124D32]" /> : <Copy size={12} />}
                 <span>{copied ? "COPIED!" : "COPY FILE"}</span>
               </button>
               <button
@@ -619,7 +619,7 @@ export default function ExperimentDetailPage({
                   alignItems: "center",
                   gap: 6,
                   padding: "6px 14px",
-                  background: "#176B4D",
+                  background: "#124D32",
                   border: "none",
                   color: "#FFFFFF",
                   font: "600 10px var(--mono)",
@@ -635,8 +635,8 @@ export default function ExperimentDetailPage({
 
           <div style={{ display: "grid", gridTemplateColumns: "220px 1fr", gap: 16 }}>
             {/* Multi-file Project Tree */}
-            <div style={{ background: "#F8F6EF", border: "1px solid #DFE5DC", borderRadius: 8, padding: 12 }}>
-              <div style={{ display: "flex", alignItems: "center", gap: 6, font: "600 10px var(--mono)", color: "#176B4D", marginBottom: 10 }}>
+            <div style={{ background: "#F8F6EF", border: "1px solid #E5EBE5", borderRadius: 8, padding: 12 }}>
+              <div style={{ display: "flex", alignItems: "center", gap: 6, font: "600 10px var(--mono)", color: "#124D32", marginBottom: 10 }}>
                 <Folder size={13} />
                 <span>PROJECT TREE</span>
               </div>
@@ -650,9 +650,9 @@ export default function ExperimentDetailPage({
                         padding: "8px 10px",
                         borderRadius: 6,
                         font: "600 11px var(--mono)",
-                        color: selectedFile === fileName ? "#176B4D" : "#26352D",
-                        background: selectedFile === fileName ? "#E6F0E9" : "#FFFFFF",
-                        border: `1px solid ${selectedFile === fileName ? "#176B4D" : "#DFE5DC"}`,
+                        color: selectedFile === fileName ? "#124D32" : "#17251D",
+                        background: selectedFile === fileName ? "#EEF6EA" : "#FFFFFF",
+                        border: `1px solid ${selectedFile === fileName ? "#124D32" : "#E5EBE5"}`,
                         cursor: "pointer",
                         display: "flex",
                         alignItems: "center",
@@ -664,11 +664,11 @@ export default function ExperimentDetailPage({
                     </div>
                   ))
                 ) : (
-                  <div style={{ font: "400 10px var(--mono)", color: "#68766D", padding: "10px 0" }}>
+                  <div style={{ font: "400 10px var(--mono)", color: "#65736A", padding: "10px 0" }}>
                     <div>{codeLoading ? "Synthesizing code..." : "No code structure loaded."}</div>
                     <button
                       onClick={handleGenerateCode}
-                      style={{ marginTop: 8, padding: "4px 8px", background: "#176B4D", color: "#FFFFFF", border: "none", borderRadius: 4, cursor: "pointer", font: "600 9px var(--mono)" }}
+                      style={{ marginTop: 8, padding: "4px 8px", background: "#124D32", color: "#FFFFFF", border: "none", borderRadius: 4, cursor: "pointer", font: "600 9px var(--mono)" }}
                     >
                       GENERATE CODE
                     </button>
@@ -678,8 +678,8 @@ export default function ExperimentDetailPage({
             </div>
 
             {/* Code Editor Box */}
-            <div style={{ background: "#FFFFFF", border: "1px solid #DFE5DC", borderRadius: 8, overflow: "hidden" }}>
-              <div style={{ background: "#F8F6EF", borderBottom: "1px solid #DFE5DC", padding: "8px 14px", font: "600 10px var(--mono)", color: "#176B4D", display: "flex", justifyContent: "space-between" }}>
+            <div style={{ background: "#FFFFFF", border: "1px solid #E5EBE5", borderRadius: 8, overflow: "hidden" }}>
+              <div style={{ background: "#F8F6EF", borderBottom: "1px solid #E5EBE5", padding: "8px 14px", font: "600 10px var(--mono)", color: "#124D32", display: "flex", justifyContent: "space-between" }}>
                 <span>FILE: {selectedFile}</span>
                 <span>REVISION: v{codeData?.revision || 1} (Active)</span>
               </div>
@@ -692,7 +692,7 @@ export default function ExperimentDetailPage({
                   padding: 16,
                   font: "400 12px/1.5 var(--mono)",
                   background: "#FFFFFF",
-                  color: "#26352D",
+                  color: "#17251D",
                   border: "none",
                   outline: "none",
                   resize: "vertical"
@@ -705,11 +705,11 @@ export default function ExperimentDetailPage({
 
       {/* Tab 3: Measured Runs */}
       {activeTab === "runs" && (
-        <div style={{ background: "#FFFFFF", border: "1px solid #DFE5DC", borderRadius: 12, padding: 20 }}>
-          <div style={{ font: "600 11px var(--mono)", color: "#26352D", marginBottom: 14 }}>MEASURED MODEL RUNS</div>
+        <div style={{ background: "#FFFFFF", border: "1px solid #E5EBE5", borderRadius: 12, padding: 20 }}>
+          <div style={{ font: "600 11px var(--mono)", color: "#17251D", marginBottom: 14 }}>MEASURED MODEL RUNS</div>
           <table style={{ width: "100%", borderCollapse: "collapse", font: "400 12px var(--mono)" }}>
             <thead>
-              <tr style={{ borderBottom: "1px solid #DFE5DC", color: "#68766D", textAlign: "left" }}>
+              <tr style={{ borderBottom: "1px solid #E5EBE5", color: "#65736A", textAlign: "left" }}>
                 <th style={{ padding: 8 }}>MODEL</th>
                 <th style={{ padding: 8 }}>STATUS</th>
                 <th style={{ padding: 8 }}>LATENCY (µs)</th>
@@ -719,7 +719,7 @@ export default function ExperimentDetailPage({
             </thead>
             <tbody>
               {runs.map((r) => (
-                <tr key={r.id} style={{ borderBottom: "1px solid #DFE5DC" }}>
+                <tr key={r.id} style={{ borderBottom: "1px solid #E5EBE5" }}>
                   <td style={{ padding: 8, fontWeight: 600 }}>{r.model_name}</td>
                   <td style={{ padding: 8 }}>{r.status}</td>
                   <td style={{ padding: 8 }}>{r.inference_latency_us}</td>
@@ -734,16 +734,16 @@ export default function ExperimentDetailPage({
 
       {/* Tab 4: Predictions */}
       {activeTab === "predictions" && (
-        <div style={{ background: "#FFFFFF", border: "1px solid #DFE5DC", borderRadius: 12, padding: 20 }}>
-          <div style={{ font: "600 11px var(--mono)", color: "#26352D", marginBottom: 14 }}>GROUND TRUTH VS MODEL PREDICTIONS ({predictions.length} SAMPLES)</div>
+        <div style={{ background: "#FFFFFF", border: "1px solid #E5EBE5", borderRadius: 12, padding: 20 }}>
+          <div style={{ font: "600 11px var(--mono)", color: "#17251D", marginBottom: 14 }}>GROUND TRUTH VS MODEL PREDICTIONS ({predictions.length} SAMPLES)</div>
           {predictions.length === 0 ? (
-            <div style={{ font: "400 11px var(--mono)", color: "#68766D", padding: "20px 0", textAlign: "center" }}>
+            <div style={{ font: "400 11px var(--mono)", color: "#65736A", padding: "20px 0", textAlign: "center" }}>
               No predictions recorded yet. Run multi-agent orchestration to generate predictions.
             </div>
           ) : (
             <table style={{ width: "100%", borderCollapse: "collapse", font: "400 12px var(--mono)" }}>
               <thead>
-                <tr style={{ borderBottom: "1px solid #DFE5DC", color: "#68766D", textAlign: "left" }}>
+                <tr style={{ borderBottom: "1px solid #E5EBE5", color: "#65736A", textAlign: "left" }}>
                   <th style={{ padding: 8 }}>SAMPLE</th>
                   <th style={{ padding: 8 }}>SPLIT</th>
                   <th style={{ padding: 8 }}>ACTUAL VALUE</th>
@@ -754,8 +754,8 @@ export default function ExperimentDetailPage({
               </thead>
               <tbody>
                 {predictions.map((p: any, idx: number) => (
-                  <tr key={p.id || idx} style={{ borderBottom: "1px solid #DFE5DC" }}>
-                    <td style={{ padding: 8, fontWeight: 600, color: "#176B4D" }}>{p.sample_reference || `sample_${idx+1}`}</td>
+                  <tr key={p.id || idx} style={{ borderBottom: "1px solid #E5EBE5" }}>
+                    <td style={{ padding: 8, fontWeight: 600, color: "#124D32" }}>{p.sample_reference || `sample_${idx+1}`}</td>
                     <td style={{ padding: 8 }}>{p.split || "val"}</td>
                     <td style={{ padding: 8 }}>{p.actual_value}</td>
                     <td style={{ padding: 8, fontWeight: 600 }}>{p.predicted_value}</td>
@@ -771,10 +771,10 @@ export default function ExperimentDetailPage({
 
       {/* Tab 5: Failures & Autopsy */}
       {activeTab === "failures" && (
-        <div style={{ background: "#FFFFFF", border: "1px solid #DFE5DC", borderRadius: 12, padding: 20 }}>
-          <div style={{ font: "600 11px var(--mono)", color: "#26352D", marginBottom: 14 }}>FAILURE AUTOPSY & ADAPTIVE RECOVERY LOGS ({failures.length})</div>
+        <div style={{ background: "#FFFFFF", border: "1px solid #E5EBE5", borderRadius: 12, padding: 20 }}>
+          <div style={{ font: "600 11px var(--mono)", color: "#17251D", marginBottom: 14 }}>FAILURE AUTOPSY & ADAPTIVE RECOVERY LOGS ({failures.length})</div>
           {failures.length === 0 ? (
-            <div style={{ font: "400 11px var(--mono)", color: "#176B4D", padding: "20px 0", textAlign: "center", background: "#E6F0E9", borderRadius: 8, border: "1px solid #DFE5DC" }}>
+            <div style={{ font: "400 11px var(--mono)", color: "#124D32", padding: "20px 0", textAlign: "center", background: "#EEF6EA", borderRadius: 8, border: "1px solid #E5EBE5" }}>
               ✓ NO CRITICAL FAILURES RECORDED. Experiment pipeline executed cleanly without unhandled exceptions.
             </div>
           ) : (
@@ -784,10 +784,10 @@ export default function ExperimentDetailPage({
                   <div style={{ font: "600 11px var(--mono)", color: "#991B1B", marginBottom: 4 }}>
                     [{f.error_category}] {f.error_signature}
                   </div>
-                  <div style={{ font: "400 11px var(--mono)", color: "#26352D", marginBottom: 6 }}>
+                  <div style={{ font: "400 11px var(--mono)", color: "#17251D", marginBottom: 6 }}>
                     {f.error_message || "Controlled error injected for autopsy testing."}
                   </div>
-                  <div style={{ font: "400 10px var(--mono)", color: "#68766D", background: "#FFFFFF", padding: 8, borderRadius: 4 }}>
+                  <div style={{ font: "400 10px var(--mono)", color: "#65736A", background: "#FFFFFF", padding: 8, borderRadius: 4 }}>
                     DIAGNOSIS: {f.diagnosis || "Root cause identified as memory constraint."}
                   </div>
                 </div>

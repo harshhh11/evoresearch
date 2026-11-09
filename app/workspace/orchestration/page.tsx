@@ -173,19 +173,19 @@ export default function OrchestrationHubPage() {
   };
 
   return (
-    <div style={{ display: "flex", flexDirection: "column", gap: 24, maxWidth: 1240, margin: "0 auto", color: "#26352D" }}>
+    <div style={{ display: "flex", flexDirection: "column", gap: 24, maxWidth: 1240, margin: "0 auto", color: "#17251D" }}>
       {/* Top Banner Header */}
-      <div style={{ background: "#FFFFFF", border: "1px solid #DFE5DC", borderRadius: 12, padding: "24px 28px", boxShadow: "0 1px 3px rgba(0,0,0,0.03)" }}>
+      <div style={{ background: "#FFFFFF", border: "1px solid #E5EBE5", borderRadius: 12, padding: "24px 28px", boxShadow: "0 1px 3px rgba(0,0,0,0.03)" }}>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", flexWrap: "wrap", gap: 16 }}>
           <div>
-            <div style={{ display: "inline-flex", alignItems: "center", gap: 8, font: "600 10px var(--mono)", color: "#176B4D", letterSpacing: "0.14em", marginBottom: 6 }}>
+            <div style={{ display: "inline-flex", alignItems: "center", gap: 8, font: "600 10px var(--mono)", color: "#124D32", letterSpacing: "0.14em", marginBottom: 6 }}>
               <Bot size={14} />
               <span>CORE ARCHITECTURE // 12-AGENT INTELLECTUAL RESEARCH ORCHESTRATION</span>
             </div>
-            <h1 style={{ margin: "4px 0 8px 0", font: "600 26px/1.2 var(--font-primary), serif", color: "#26352D" }}>
+            <h1 style={{ margin: "4px 0 8px 0", font: "600 26px/1.2 var(--font-primary), serif", color: "#17251D" }}>
               Multi-Agent Research Orchestrator
             </h1>
-            <p style={{ margin: 0, font: "400 13px/1.5 var(--font-primary), serif", color: "#68766D", maxWidth: 840 }}>
+            <p style={{ margin: 0, font: "400 13px/1.5 var(--font-primary), serif", color: "#65736A", maxWidth: 840 }}>
               The central nervous system of EvolveX. Coordinates 12 specialized autonomous AI agents across paper parsing, data preparation, code synthesis, sandbox execution, scientific evaluation, failure autopsy, adaptive self-healing, and reproducible publication reporting.
             </p>
           </div>
@@ -199,7 +199,7 @@ export default function OrchestrationHubPage() {
                 alignItems: "center",
                 gap: 8,
                 padding: "10px 20px",
-                background: "#176B4D",
+                background: "#124D32",
                 color: "#FFFFFF",
                 border: "none",
                 borderRadius: 8,
@@ -223,7 +223,7 @@ export default function OrchestrationHubPage() {
                 padding: "10px 18px",
                 background: "#FFFFFF",
                 color: "#A66B22",
-                border: "1px solid #DFE5DC",
+                border: "1px solid #E5EBE5",
                 borderRadius: 8,
                 font: "600 12px var(--mono)",
                 cursor: executing ? "not-allowed" : "pointer",
@@ -238,14 +238,14 @@ export default function OrchestrationHubPage() {
         </div>
 
         {/* Live Status Ticker */}
-        <div style={{ marginTop: 18, padding: "10px 16px", borderRadius: 8, background: "#E6F0E9", border: "1px solid #176B4D", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-          <div style={{ display: "flex", alignItems: "center", gap: 10, font: "600 11px var(--mono)", color: "#176B4D" }}>
-            <span style={{ width: 8, height: 8, borderRadius: "50%", background: executing ? "#A66B22" : "#176B4D", display: "inline-block", animation: executing ? "pulse 1s infinite" : "none" }} />
+        <div style={{ marginTop: 18, padding: "10px 16px", borderRadius: 8, background: "#EEF6EA", border: "1px solid #124D32", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 10, font: "600 11px var(--mono)", color: "#124D32" }}>
+            <span style={{ width: 8, height: 8, borderRadius: "50%", background: executing ? "#A66B22" : "#124D32", display: "inline-block", animation: executing ? "pulse 1s infinite" : "none" }} />
             <span>{statusMessage}</span>
           </div>
 
           {orchestrationResult && (
-            <div style={{ font: "400 11px var(--mono)", color: "#26352D" }}>
+            <div style={{ font: "400 11px var(--mono)", color: "#17251D" }}>
               Total Latency: <strong>{orchestrationResult.total_duration_s || 1.19}s</strong> | Agents Invoked: <strong>12/12</strong>
             </div>
           )}
@@ -253,9 +253,9 @@ export default function OrchestrationHubPage() {
       </div>
 
       {/* Control Bar: Experiment Selector & Strategy */}
-      <div style={{ background: "#FFFFFF", border: "1px solid #DFE5DC", borderRadius: 12, padding: "16px 20px", display: "grid", gridTemplateColumns: "1.2fr 1fr auto", gap: 16, alignItems: "center" }}>
+      <div style={{ background: "#FFFFFF", border: "1px solid #E5EBE5", borderRadius: 12, padding: "16px 20px", display: "grid", gridTemplateColumns: "1.2fr 1fr auto", gap: 16, alignItems: "center" }}>
         <div>
-          <label style={{ display: "block", font: "600 10px var(--mono)", color: "#68766D", marginBottom: 6 }}>
+          <label style={{ display: "block", font: "600 10px var(--mono)", color: "#65736A", marginBottom: 6 }}>
             TARGET EXPERIMENT RUN
           </label>
           <select
@@ -264,7 +264,7 @@ export default function OrchestrationHubPage() {
               setSelectedExpId(e.target.value);
               loadOrchestrationState(e.target.value);
             }}
-            style={{ width: "100%", padding: "8px 12px", background: "#FFFFFF", border: "1px solid #DFE5DC", borderRadius: 6, color: "#26352D", font: "500 12px var(--mono)", outline: "none" }}
+            style={{ width: "100%", padding: "8px 12px", background: "#FFFFFF", border: "1px solid #E5EBE5", borderRadius: 6, color: "#17251D", font: "500 12px var(--mono)", outline: "none" }}
           >
             {experiments.map((exp) => (
               <option key={exp.id} value={exp.id}>
@@ -278,7 +278,7 @@ export default function OrchestrationHubPage() {
         </div>
 
         <div>
-          <label style={{ display: "block", font: "600 10px var(--mono)", color: "#68766D", marginBottom: 6 }}>
+          <label style={{ display: "block", font: "600 10px var(--mono)", color: "#65736A", marginBottom: 6 }}>
             EXECUTION STRATEGY
           </label>
           <div style={{ display: "flex", gap: 8 }}>
@@ -290,9 +290,9 @@ export default function OrchestrationHubPage() {
                 style={{
                   padding: "8px 14px",
                   borderRadius: 6,
-                  border: strategy === s ? "1.5px solid #176B4D" : "1px solid #DFE5DC",
-                  background: strategy === s ? "#E6F0E9" : "#FFFFFF",
-                  color: strategy === s ? "#176B4D" : "#68766D",
+                  border: strategy === s ? "1.5px solid #124D32" : "1px solid #E5EBE5",
+                  background: strategy === s ? "#EEF6EA" : "#FFFFFF",
+                  color: strategy === s ? "#124D32" : "#65736A",
                   font: "600 11px var(--mono)",
                   cursor: "pointer"
                 }}
@@ -312,9 +312,9 @@ export default function OrchestrationHubPage() {
               gap: 6,
               padding: "10px 16px",
               background: "#FFFFFF",
-              border: "1px solid #DFE5DC",
+              border: "1px solid #E5EBE5",
               borderRadius: 6,
-              color: "#176B4D",
+              color: "#124D32",
               font: "600 11px var(--mono)",
               textDecoration: "none"
             }}
@@ -325,8 +325,8 @@ export default function OrchestrationHubPage() {
       </div>
 
       {/* State Machine Stage Pipeline */}
-      <div style={{ background: "#FFFFFF", border: "1px solid #DFE5DC", borderRadius: 12, padding: 20 }}>
-        <div style={{ font: "600 10px var(--mono)", color: "#176B4D", letterSpacing: "0.08em", marginBottom: 12 }}>
+      <div style={{ background: "#FFFFFF", border: "1px solid #E5EBE5", borderRadius: 12, padding: 20 }}>
+        <div style={{ font: "600 10px var(--mono)", color: "#124D32", letterSpacing: "0.08em", marginBottom: 12 }}>
           PIPELINE STATE MACHINE EXECUTION (12 DISCRETE STAGES)
         </div>
 
@@ -340,12 +340,12 @@ export default function OrchestrationHubPage() {
                   flex: "1 0 auto",
                   padding: "8px 10px",
                   borderRadius: 6,
-                  background: isCompleted ? "#E6F0E9" : "#F8F6EF",
-                  border: isCompleted ? "1px solid #176B4D" : "1px solid #DFE5DC",
+                  background: isCompleted ? "#EEF6EA" : "#F8F6EF",
+                  border: isCompleted ? "1px solid #124D32" : "1px solid #E5EBE5",
                   textAlign: "center"
                 }}
               >
-                <div style={{ font: "600 9px var(--mono)", color: isCompleted ? "#176B4D" : "#68766D" }}>
+                <div style={{ font: "600 9px var(--mono)", color: isCompleted ? "#124D32" : "#65736A" }}>
                   {i + 1}. {stg}
                 </div>
               </div>
@@ -355,7 +355,7 @@ export default function OrchestrationHubPage() {
       </div>
 
       {/* Navigation Tabs */}
-      <div style={{ display: "flex", gap: 12, borderBottom: "1px solid #DFE5DC", paddingBottom: 10 }}>
+      <div style={{ display: "flex", gap: 12, borderBottom: "1px solid #E5EBE5", paddingBottom: 10 }}>
         {[
           { id: "agents", label: "12 SPECIALIZED AGENTS CATALOG" },
           { id: "traces", label: "LIVE EXECUTION TRACES & TOOL CALLS" },
@@ -369,8 +369,8 @@ export default function OrchestrationHubPage() {
               background: "none",
               border: "none",
               font: activeTab === tab.id ? "600 12px var(--mono)" : "400 12px var(--mono)",
-              color: activeTab === tab.id ? "#176B4D" : "#68766D",
-              borderBottom: activeTab === tab.id ? "2px solid #176B4D" : "2px solid transparent",
+              color: activeTab === tab.id ? "#124D32" : "#65736A",
+              borderBottom: activeTab === tab.id ? "2px solid #124D32" : "2px solid transparent",
               cursor: "pointer",
               paddingBottom: 4
             }}
@@ -391,7 +391,7 @@ export default function OrchestrationHubPage() {
                 key={agent.name}
                 style={{
                   background: "#FFFFFF",
-                  border: isSelfHeal ? "1.5px solid #A66B22" : "1px solid #DFE5DC",
+                  border: isSelfHeal ? "1.5px solid #A66B22" : "1px solid #E5EBE5",
                   borderRadius: 10,
                   padding: 16,
                   boxShadow: "0 1px 3px rgba(0,0,0,0.02)",
@@ -402,31 +402,31 @@ export default function OrchestrationHubPage() {
               >
                 <div>
                   <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 8 }}>
-                    <span style={{ font: "600 11px var(--mono)", color: "#176B4D" }}>{agent.label}</span>
+                    <span style={{ font: "600 11px var(--mono)", color: "#124D32" }}>{agent.label}</span>
                     <span
                       style={{
                         padding: "2px 8px",
                         borderRadius: 4,
                         font: "600 9px var(--mono)",
-                        background: status === "COMPLETED" ? "#E6F0E9" : isSelfHeal ? "#FEF3C7" : status === "ACTIVE" ? "#EFF6FF" : "#F8F6EF",
-                        color: status === "COMPLETED" ? "#176B4D" : isSelfHeal ? "#A66B22" : status === "ACTIVE" ? "#2563EB" : "#68766D",
-                        border: isSelfHeal ? "1px solid #A66B22" : "1px solid #DFE5DC"
+                        background: status === "COMPLETED" ? "#EEF6EA" : isSelfHeal ? "#FEF3C7" : status === "ACTIVE" ? "#EFF6FF" : "#F8F6EF",
+                        color: status === "COMPLETED" ? "#124D32" : isSelfHeal ? "#A66B22" : status === "ACTIVE" ? "#2563EB" : "#65736A",
+                        border: isSelfHeal ? "1px solid #A66B22" : "1px solid #E5EBE5"
                       }}
                     >
                       {status}
                     </span>
                   </div>
 
-                  <div style={{ font: "600 13px var(--font-primary), serif", color: "#26352D", marginBottom: 6 }}>
+                  <div style={{ font: "600 13px var(--font-primary), serif", color: "#17251D", marginBottom: 6 }}>
                     {agent.name}
                   </div>
 
-                  <p style={{ margin: 0, font: "400 11px/1.4 var(--font-primary), serif", color: "#68766D" }}>
+                  <p style={{ margin: 0, font: "400 11px/1.4 var(--font-primary), serif", color: "#65736A" }}>
                     {agent.description}
                   </p>
                 </div>
 
-                <div style={{ borderTop: "1px solid #DFE5DC", paddingTop: 10, marginTop: 12, display: "flex", justifyContent: "space-between", font: "400 10px var(--mono)", color: "#68766D" }}>
+                <div style={{ borderTop: "1px solid #E5EBE5", paddingTop: 10, marginTop: 12, display: "flex", justifyContent: "space-between", font: "400 10px var(--mono)", color: "#65736A" }}>
                   <span>Stage: <strong>{agent.stage}</strong></span>
                   <span>Role: <strong>{agent.role}</strong></span>
                 </div>
@@ -438,8 +438,8 @@ export default function OrchestrationHubPage() {
 
       {/* Tab 2: Execution Traces */}
       {activeTab === "traces" && (
-        <div style={{ background: "#FFFFFF", border: "1px solid #DFE5DC", borderRadius: 12, padding: 20 }}>
-          <div style={{ font: "600 12px var(--mono)", color: "#26352D", marginBottom: 14 }}>
+        <div style={{ background: "#FFFFFF", border: "1px solid #E5EBE5", borderRadius: 12, padding: 20 }}>
+          <div style={{ font: "600 12px var(--mono)", color: "#17251D", marginBottom: 14 }}>
             AGENT EXECUTION TRACES ({traces.length || 12} LOG ENTRIES)
           </div>
 
@@ -458,7 +458,7 @@ export default function OrchestrationHubPage() {
                 style={{
                   padding: 12,
                   borderRadius: 6,
-                  border: "1px solid #DFE5DC",
+                  border: "1px solid #E5EBE5",
                   background: "#F8F6EF",
                   display: "grid",
                   gridTemplateColumns: "180px 140px 1fr 100px 90px",
@@ -467,14 +467,14 @@ export default function OrchestrationHubPage() {
                   font: "400 11px var(--mono)"
                 }}
               >
-                <div style={{ fontWeight: 600, color: "#176B4D" }}>{tr.agent_name || tr.agent}</div>
-                <div style={{ color: "#68766D" }}>{tr.stage}</div>
-                <div style={{ color: "#26352D", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                <div style={{ fontWeight: 600, color: "#124D32" }}>{tr.agent_name || tr.agent}</div>
+                <div style={{ color: "#65736A" }}>{tr.stage}</div>
+                <div style={{ color: "#17251D", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
                   {tr.action || "Executed task specification"}
                 </div>
-                <div style={{ color: "#68766D" }}>{tr.duration_s || "0.10"}s</div>
+                <div style={{ color: "#65736A" }}>{tr.duration_s || "0.10"}s</div>
                 <div>
-                  <span style={{ padding: "2px 6px", borderRadius: 4, background: "#E6F0E9", color: "#176B4D", fontWeight: 600, fontSize: 10 }}>
+                  <span style={{ padding: "2px 6px", borderRadius: 4, background: "#EEF6EA", color: "#124D32", fontWeight: 600, fontSize: 10 }}>
                     {tr.status || "COMPLETED"}
                   </span>
                 </div>
@@ -487,8 +487,8 @@ export default function OrchestrationHubPage() {
       {/* Tab 3: Scientific Metrics & Evidence */}
       {activeTab === "metrics" && (
         <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 20 }}>
-          <div style={{ background: "#FFFFFF", border: "1px solid #DFE5DC", borderRadius: 12, padding: 20 }}>
-            <div style={{ font: "600 12px var(--mono)", color: "#176B4D", marginBottom: 14 }}>
+          <div style={{ background: "#FFFFFF", border: "1px solid #E5EBE5", borderRadius: 12, padding: 20 }}>
+            <div style={{ font: "600 12px var(--mono)", color: "#124D32", marginBottom: 14 }}>
               MEASURED EXPERIMENTAL OUTCOMES
             </div>
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
@@ -498,19 +498,19 @@ export default function OrchestrationHubPage() {
                 { label: "WALL-CLOCK RUNTIME", value: `${orchestrationResult?.total_duration_s || 1.19}s` },
                 { label: "SELF-HEALING RECOVERY", value: orchestrationResult?.recovered_from_failure ? "VERIFIED (100%)" : "READY" }
               ].map((m, i) => (
-                <div key={i} style={{ padding: 14, borderRadius: 8, background: "#E6F0E9", border: "1px solid #DFE5DC" }}>
-                  <div style={{ font: "500 10px var(--mono)", color: "#68766D" }}>{m.label}</div>
-                  <div style={{ font: "600 20px var(--mono)", color: "#176B4D", marginTop: 4 }}>{m.value}</div>
+                <div key={i} style={{ padding: 14, borderRadius: 8, background: "#EEF6EA", border: "1px solid #E5EBE5" }}>
+                  <div style={{ font: "500 10px var(--mono)", color: "#65736A" }}>{m.label}</div>
+                  <div style={{ font: "600 20px var(--mono)", color: "#124D32", marginTop: 4 }}>{m.value}</div>
                 </div>
               ))}
             </div>
           </div>
 
-          <div style={{ background: "#FFFFFF", border: "1px solid #DFE5DC", borderRadius: 12, padding: 20 }}>
-            <div style={{ font: "600 12px var(--mono)", color: "#26352D", marginBottom: 14 }}>
+          <div style={{ background: "#FFFFFF", border: "1px solid #E5EBE5", borderRadius: 12, padding: 20 }}>
+            <div style={{ font: "600 12px var(--mono)", color: "#17251D", marginBottom: 14 }}>
               EVIDENCE-GROUNDED REPEATABILITY
             </div>
-            <p style={{ font: "400 12px/1.6 var(--font-primary), serif", color: "#68766D", margin: "0 0 16px 0" }}>
+            <p style={{ font: "400 12px/1.6 var(--font-primary), serif", color: "#65736A", margin: "0 0 16px 0" }}>
               Every orchestration execution binds the synthesized script, dataset cryptographic checksums, hardware thread allocations, and failure recovery traces into immutable research audit logs.
             </p>
             <div style={{ display: "flex", gap: 10 }}>
@@ -521,7 +521,7 @@ export default function OrchestrationHubPage() {
                   alignItems: "center",
                   gap: 6,
                   padding: "8px 14px",
-                  background: "#176B4D",
+                  background: "#124D32",
                   color: "#FFFFFF",
                   borderRadius: 6,
                   font: "600 11px var(--mono)",
