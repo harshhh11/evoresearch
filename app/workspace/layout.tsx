@@ -20,6 +20,7 @@ import {
   Terminal,
   PanelLeftClose,
   PanelLeftOpen,
+  Menu,
   Plus
 } from "lucide-react";
 import { ReactNode, useState, useEffect, useMemo } from "react";
@@ -141,10 +142,10 @@ export default function WorkspaceLayout({ children }: { children: ReactNode }) {
             <button
               type="button"
               onClick={() => setIsCollapsed(true)}
-              className="w-7 h-7 rounded-lg hover:bg-[#F5F9F3] flex items-center justify-center text-[#89958D] hover:text-[#17251D] transition-colors cursor-pointer"
+              className="w-8 h-8 rounded-lg hover:bg-[#F5F9F3] flex items-center justify-center text-[#17251D] transition-colors cursor-pointer"
               title="Collapse Sidebar"
             >
-              <PanelLeftClose size={16} />
+              <Menu size={18} strokeWidth={2.2} />
             </button>
           )}
         </div>
@@ -209,7 +210,7 @@ export default function WorkspaceLayout({ children }: { children: ReactNode }) {
                         )}
                         {isActive && (
                           <span
-                            className="w-2 h-2 rounded-full bg-[#238653] shrink-0"
+                            className="w-2.5 h-2.5 rounded-full bg-white shrink-0"
                             aria-hidden="true"
                           />
                         )}
