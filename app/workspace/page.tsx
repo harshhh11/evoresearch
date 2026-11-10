@@ -364,50 +364,50 @@ export default function WorkspaceOverviewPage() {
   return (
     <div className="flex flex-col gap-6 w-full max-w-[1520px] mx-auto text-[#17251D] pb-16 font-sans">
       {/* =========================================================================
-          1. HEADER & ACTION ROW (IMAGE 1 SPECIFICATION)
+          1. HEADER & ACTION ROW
           ========================================================================= */}
-      <div className="flex flex-col gap-3">
+      <div className="flex flex-col gap-3.5">
         {/* Eyebrow & Main Title with Subtitle */}
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
           <div>
-            <div className="font-sans text-[11px] text-[#124D32] uppercase tracking-[0.06em] font-medium mb-1">
+            <div className="font-sans text-[11px] text-[#124D32] uppercase tracking-[0.14em] font-semibold mb-1.5">
               SCIENTIFIC INTELLIGENCE / OVERVIEW
             </div>
-            <h1 className="font-sans text-[28px] font-semibold text-[#17251D] tracking-tight m-0 leading-tight">
+            <h1 className="font-sans text-[28px] sm:text-[32px] font-extrabold text-[#17251D] tracking-[-0.03em] m-0 leading-[1.15]">
               Research Intelligence
             </h1>
-            <p className="font-sans text-[13.5px] text-[#65736A] mt-1 m-0 leading-relaxed max-w-[760px]">
+            <p className="font-sans text-[14px] font-normal text-[#65736A] mt-1.5 m-0 leading-[1.55] max-w-[760px]">
               Explore relationships between research papers, datasets, models, experiments, and scientific knowledge across computational domains.
             </p>
           </div>
 
-          {/* Quick Stats Pill or Secondary Action */}
-          <div className="hidden lg:flex items-center gap-2">
-            <span className="text-[12px] text-[#65736A] font-medium">
+          {/* Quick Stats Pill */}
+          <div className="hidden lg:flex items-center gap-2 shrink-0">
+            <span className="text-[11px] text-[#65736A] font-medium">
               Active Session:
             </span>
-            <span className="px-2.5 py-1 rounded-[6px] bg-[#EEF6EA] text-[#17251D] border border-[#E5EBE5] text-[12px] font-medium">
+            <span className="px-3 py-1 rounded-full bg-[#EEF6EA] text-[#124D32] border border-[#DDEEDB] text-[12px] font-semibold">
               Harsh Rathod • Local RTX GPU
             </span>
           </div>
         </div>
 
-        {/* Clean Action Row with Subtle Borders & Muted Green Accents */}
-        <div className="flex flex-wrap items-center gap-2 pt-1 border-b border-[#E5EBE5] pb-3.5">
+        {/* Clean Action Row */}
+        <div className="flex flex-wrap items-center gap-2 pt-1 border-b border-[#E5EBE5] pb-4">
           <Link
             href="/workspace/orchestration"
-            className="px-3 py-1.5 rounded-[8px] text-[12.5px] font-medium text-[#FFFFFF] bg-[#124D32] hover:bg-[#092F20] inline-flex items-center gap-2 shadow-xs transition-colors"
+            className="px-3.5 py-1.5 rounded-full text-[13px] font-semibold text-[#FFFFFF] bg-[#124D32] hover:bg-[#092F20] inline-flex items-center gap-2 shadow-[0_2px_6px_rgba(18,77,50,0.2)] transition-all duration-180"
           >
             <Bot size={14} className="text-[#FFFFFF]" />
             <span>Agent Orchestrator</span>
-            <span className="px-1.5 py-0.2 bg-[#FFFFFF]/25 text-[10px] font-sans rounded font-medium">
+            <span className="px-1.5 py-0.5 bg-[#FFFFFF]/20 text-[10px] font-sans rounded-full font-semibold tracking-wide">
               12 AGENTS
             </span>
           </Link>
 
           <Link
             href="/workspace/evolution"
-            className="px-3 py-1.5 rounded-[8px] text-[12.5px] font-medium text-[#17251D] hover:text-[#124D32] inline-flex items-center gap-2 border border-[#E5EBE5] bg-[#FFFFFF] hover:bg-[#F5F9F3] transition-colors"
+            className="px-3.5 py-1.5 rounded-full text-[13px] font-medium text-[#17251D] hover:text-[#124D32] inline-flex items-center gap-2 border border-[#E5EBE5] bg-[#FFFFFF] hover:bg-[#F8FAF7] hover:border-[#C8DAC8] transition-all duration-180"
           >
             <RotateCcw size={14} className="text-[#124D32]" />
             <span>Evolution Timeline</span>
@@ -415,15 +415,15 @@ export default function WorkspaceOverviewPage() {
 
           <Link
             href="/workspace/autopsy"
-            className="px-3 py-1.5 rounded-[8px] text-[12.5px] font-medium text-[#17251D] hover:text-[#124D32] inline-flex items-center gap-2 border border-[#E5EBE5] bg-[#FFFFFF] hover:bg-[#F5F9F3] transition-colors"
+            className="px-3.5 py-1.5 rounded-full text-[13px] font-medium text-[#17251D] hover:text-[#124D32] inline-flex items-center gap-2 border border-[#E5EBE5] bg-[#FFFFFF] hover:bg-[#F8FAF7] hover:border-[#C8DAC8] transition-all duration-180"
           >
-            <AlertTriangle size={14} className="text-[#D9822B]" />
+            <AlertTriangle size={14} className="text-[#D69B3C]" />
             <span>Failure Autopsy</span>
           </Link>
 
           <Link
             href="/workspace/status"
-            className="px-3 py-1.5 rounded-[8px] text-[12.5px] font-medium text-[#17251D] hover:text-[#124D32] inline-flex items-center gap-2 border border-[#E5EBE5] bg-[#FFFFFF] hover:bg-[#F5F9F3] transition-colors"
+            className="px-3.5 py-1.5 rounded-full text-[13px] font-medium text-[#17251D] hover:text-[#124D32] inline-flex items-center gap-2 border border-[#E5EBE5] bg-[#FFFFFF] hover:bg-[#F8FAF7] hover:border-[#C8DAC8] transition-all duration-180"
           >
             <Activity size={14} className="text-[#124D32]" />
             <span>System Status</span>
@@ -432,7 +432,7 @@ export default function WorkspaceOverviewPage() {
           <button
             type="button"
             onClick={() => setEmailModalOpen(true)}
-            className="px-3 py-1.5 rounded-[8px] text-[12.5px] font-medium text-[#17251D] hover:text-[#124D32] inline-flex items-center gap-2 border border-[#E5EBE5] bg-[#FFFFFF] hover:bg-[#F5F9F3] transition-colors cursor-pointer"
+            className="px-3.5 py-1.5 rounded-full text-[13px] font-medium text-[#17251D] hover:text-[#124D32] inline-flex items-center gap-2 border border-[#E5EBE5] bg-[#FFFFFF] hover:bg-[#F8FAF7] hover:border-[#C8DAC8] transition-all duration-180 cursor-pointer"
           >
             <Mail size={14} className="text-[#124D32]" />
             <span>Email Dispatch</span>
@@ -441,7 +441,7 @@ export default function WorkspaceOverviewPage() {
           <button
             type="button"
             onClick={() => setShowReadinessModal(true)}
-            className="px-3 py-1.5 rounded-[8px] text-[12.5px] font-medium text-[#17251D] inline-flex items-center gap-2 border border-[#E5EBE5] bg-[#FFFFFF] hover:bg-[#F5F9F3] transition-colors cursor-pointer"
+            className="px-3.5 py-1.5 rounded-full text-[13px] font-medium text-[#17251D] inline-flex items-center gap-2 border border-[#E5EBE5] bg-[#FFFFFF] hover:bg-[#F8FAF7] hover:border-[#C8DAC8] transition-all duration-180 cursor-pointer"
           >
             <ShieldCheck size={14} className="text-[#124D32]" />
             <span>
@@ -450,39 +450,39 @@ export default function WorkspaceOverviewPage() {
                 {readinessData ? `${readinessData.readiness_score}/100` : "100/100"}
               </strong>
             </span>
-            <span className="text-[10px] text-[#65736A] underline">Breakdown</span>
+            <span className="text-[11px] font-medium text-[#65736A] underline">Breakdown</span>
           </button>
         </div>
       </div>
 
       {/* =========================================================================
-          2. DUAL HERO CARDS (EXACT VISUAL ARCHITECTURE OF IMAGE 3)
-             - LEFT (68% width): Experiment Synthesis & Trajectory (Cash flow style)
-             - RIGHT (32% width): Recent Activity & Telemetry (Cash on hand style)
+          2. DUAL HERO CARDS
+             - LEFT (68% width): Experiment Synthesis & Trajectory
+             - RIGHT (32% width): Recent Activity & Telemetry
           ========================================================================= */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 items-stretch">
-        {/* LEFT HERO CARD: Experiment Trajectory & Domain Bar Flow (Matches Image 3) */}
-        <div className="lg:col-span-8 bg-[#FFFFFF] border border-[#E5EBE5] rounded-[24px] p-7 flex flex-col justify-between shadow-xs">
+        {/* LEFT HERO CARD */}
+        <div className="lg:col-span-8 bg-[#FFFFFF] border border-[#E5EBE5] rounded-[20px] p-6 sm:p-7 flex flex-col justify-between shadow-[0_1px_3px_rgba(18,77,50,0.03),0_4px_16px_-6px_rgba(18,77,50,0.04)] hover:shadow-[0_6px_22px_-6px_rgba(18,77,50,0.07)] hover:border-[#D5E0D5] transition-all duration-200">
           <div>
-            {/* Top row of card: title, subtitle, and time range toggles */}
+            {/* Top row of card */}
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3">
               <div>
-                <h3 className="font-sans text-[18px] font-bold text-[#17251D] m-0">
+                <h3 className="font-sans text-[16px] text-[#17251D] m-0" style={{ fontWeight: 650 }}>
                   Experiment flow
                 </h3>
-                <p className="font-sans text-[13px] text-[#89958D] m-0 mt-0.5">
+                <p className="font-sans text-[13px] font-normal text-[#65736A] m-0 mt-0.5 leading-snug">
                   Completed benchmarks by month · verified materials synthesis left out
                 </p>
               </div>
 
-              {/* Time Range Pills (Image 3 Style: '6 months | 12 months') */}
-              <div className="flex items-center bg-[#F5F9F3] border border-[#E5EBE5] rounded-xl p-0.5">
+              {/* Time Range Pills */}
+              <div className="flex items-center bg-[#F8FAF7] border border-[#E5EBE5] rounded-xl p-0.5">
                 {(["6 months", "12 months"] as const).map((r) => (
                   <button
                     key={r}
                     type="button"
                     onClick={() => setTrendRange(r)}
-                    className={`px-3 py-1 rounded-lg text-[12px] font-semibold transition-colors cursor-pointer ${
+                    className={`px-3 py-1 rounded-lg text-[12px] font-semibold transition-all duration-180 cursor-pointer ${
                       trendRange === r
                         ? "bg-[#FFFFFF] text-[#17251D] shadow-xs"
                         : "text-[#65736A] hover:text-[#17251D]"
@@ -494,17 +494,17 @@ export default function WorkspaceOverviewPage() {
               </div>
             </div>
 
-            {/* Sub-filter pills (Image 3 Style: 'All domains | Perovskites | NOMAD 2018 | Matbench') */}
+            {/* Sub-filter pills */}
             <div className="flex flex-wrap items-center gap-2 pt-1 pb-4">
               {["All domains", "Perovskites", "NOMAD 2018", "Matbench"].map((df) => (
                 <button
                   key={df}
                   type="button"
                   onClick={() => setActiveDomainFilter(df)}
-                  className={`px-4 py-1.5 rounded-full text-[12px] font-medium transition-colors cursor-pointer ${
+                  className={`px-4 py-1.5 rounded-full text-[12px] font-medium transition-all duration-180 cursor-pointer ${
                     activeDomainFilter === df
                       ? "bg-[#17251D] text-[#FFFFFF]"
-                      : "bg-[#FFFFFF] text-[#65736A] hover:text-[#17251D] border border-[#E5EBE5]"
+                      : "bg-[#FFFFFF] text-[#65736A] hover:text-[#124D32] hover:bg-[#F8FAF7] border border-[#E5EBE5]"
                   }`}
                 >
                   {df}
@@ -512,58 +512,58 @@ export default function WorkspaceOverviewPage() {
               ))}
             </div>
 
-            {/* Inner Highlight Metrics Box (Image 3 Style: Light Sage Card with Money In / Out / Net) */}
-            <div className="p-4.5 rounded-2xl bg-[#F5F9F3] border border-[#EDF0EC] grid grid-cols-2 md:grid-cols-4 gap-4 items-center mb-6">
+            {/* Inner Highlight Metrics Box */}
+            <div className="p-4 rounded-[16px] bg-[#F8FAF7] border border-[#E5EBE5] grid grid-cols-2 md:grid-cols-4 gap-4 items-center mb-6">
               <div className="flex flex-col">
-                <span className="font-sans text-[13.5px] font-bold text-[#17251D]">
+                <span className="font-sans text-[13.5px] font-semibold text-[#17251D]">
                   Active Period
                 </span>
-                <span className="font-sans text-[11.5px] text-[#89958D]">
+                <span className="font-sans text-[11px] font-medium text-[#65736A] mt-0.5">
                   48 runs benchmarked
                 </span>
               </div>
 
               <div>
-                <div className="flex items-center gap-1.5 text-[11.5px] text-[#65736A]">
+                <div className="flex items-center gap-1.5 text-[11.5px] font-medium text-[#65736A]">
                   <span className="w-2 h-2 rounded-full bg-[#124D32]" />
                   <span>Completed runs</span>
                 </div>
                 <div className="font-sans text-[20px] font-bold text-[#17251D] mt-0.5">
                   98 runs
                 </div>
-                <div className="text-[11px] text-[#89958D]">
+                <div className="text-[11px] font-medium text-[#65736A]">
                   MAE 0.147 eV avg
                 </div>
               </div>
 
               <div>
-                <div className="flex items-center gap-1.5 text-[11.5px] text-[#65736A]">
+                <div className="flex items-center gap-1.5 text-[11.5px] font-medium text-[#65736A]">
                   <span className="w-2 h-2 rounded-full bg-[#D69B3C]" />
                   <span>Recovered errors</span>
                 </div>
                 <div className="font-sans text-[20px] font-bold text-[#17251D] mt-0.5">
                   2 patches
                 </div>
-                <div className="text-[11px] text-[#238653] font-semibold">
+                <div className="text-[11px] text-[#237A49] font-semibold">
                   ↑ 100% success
                 </div>
               </div>
 
               <div>
-                <div className="flex items-center gap-1.5 text-[11.5px] text-[#65736A]">
+                <div className="flex items-center gap-1.5 text-[11.5px] font-medium text-[#65736A]">
                   <span className="w-2 h-2 rounded-full bg-[#17251D]" />
                   <span>System SLA</span>
                 </div>
                 <div className="font-sans text-[20px] font-bold text-[#17251D] mt-0.5">
                   +98.5%
                 </div>
-                <div className="text-[11px] text-[#89958D]">
+                <div className="text-[11px] font-medium text-[#65736A]">
                   0% unrecovered
                 </div>
               </div>
             </div>
 
-            {/* Multi-Bar Graph Visualization (Recreating the exact Bar & Trend chart of Image 3) */}
+            {/* Multi-Bar Graph Visualization */}
             <div className="mt-8 pt-2">
               <div className="h-[155px] flex items-end justify-between gap-2.5 px-2 border-b border-[#E5EBE5] pb-2 relative">
                 {/* Horizontal reference dotted line */}
@@ -585,8 +585,8 @@ export default function WorkspaceOverviewPage() {
                 ].map((col) => (
                   <div key={col.month} className="flex-1 flex flex-col items-center h-full justify-end group">
                     <div
-                      className={`w-full max-w-[28px] rounded-t-[4px] flex flex-col justify-end transition-all ${
-                        col.active ? "border border-[#A8E0B8] bg-[#EEF6EA]/40 p-1 rounded-xl shadow-xs" : ""
+                      className={`w-full max-w-[28px] rounded-t-[4px] flex flex-col justify-end transition-all duration-180 ${
+                        col.active ? "border border-[#237A49]/45 bg-[#EEF6EA]/70 p-1 rounded-xl shadow-xs" : ""
                       }`}
                     >
                       {/* Top bar (Light sage) */}
@@ -605,7 +605,7 @@ export default function WorkspaceOverviewPage() {
                         style={{ height: `${col.valA * 0.45}px` }}
                       />
                     </div>
-                    <span className={`text-[12px] mt-2.5 font-sans font-medium ${col.active ? "text-[#124D32] font-bold" : "text-[#89958D]"}`}>
+                    <span className={`text-[11px] mt-2.5 font-sans ${col.active ? "text-[#124D32] font-bold" : "text-[#65736A] font-medium"}`}>
                       {col.month}
                     </span>
                   </div>
@@ -615,22 +615,22 @@ export default function WorkspaceOverviewPage() {
           </div>
         </div>
 
-        {/* RIGHT HERO CARD: Recent Activity & Telemetry (Matches Image 3) */}
-        <div className="lg:col-span-4 bg-[#FFFFFF] border border-[#E5EBE5] rounded-[24px] p-7 flex flex-col justify-between shadow-xs">
+        {/* RIGHT HERO CARD: Recent Activity & Telemetry */}
+        <div className="lg:col-span-4 bg-[#FFFFFF] border border-[#E5EBE5] rounded-[20px] p-6 sm:p-7 flex flex-col justify-between shadow-[0_1px_3px_rgba(18,77,50,0.03),0_4px_16px_-6px_rgba(18,77,50,0.04)] hover:shadow-[0_6px_22px_-6px_rgba(18,77,50,0.07)] hover:border-[#D5E0D5] transition-all duration-200">
           <div>
             {/* Header with Arrow Top Right */}
             <div className="flex items-center justify-between pb-1">
               <div>
-                <h3 className="font-sans text-[18px] font-bold text-[#17251D] m-0">
+                <h3 className="font-sans text-[16px] text-[#17251D] m-0" style={{ fontWeight: 650 }}>
                   Recent activity
                 </h3>
-                <p className="font-sans text-[12px] text-[#89958D] m-0 mt-0.5">
+                <p className="font-sans text-[11px] font-medium text-[#65736A] m-0 mt-0.5">
                   All experiments, as of 2m ago
                 </p>
               </div>
               <Link
                 href="/workspace/audit"
-                className="w-8 h-8 rounded-full bg-[#FFFFFF] hover:bg-[#F5F9F3] border border-[#E5EBE5] flex items-center justify-center text-[#65736A] hover:text-[#124D32] transition-colors"
+                className="w-8 h-8 rounded-full bg-[#FFFFFF] hover:bg-[#EEF6EA] border border-[#E5EBE5] hover:border-[#124D32]/30 flex items-center justify-center text-[#65736A] hover:text-[#124D32] transition-all duration-180"
                 title="View All Activity"
               >
                 <ArrowUpRight size={15} />

@@ -1,10 +1,10 @@
 @import "tailwindcss";
 
 @theme inline {
-  --font-evo-display: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  --font-evo-serif: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  --font-evo-body: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  --font-evo-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  --font-evo-display: var(--font-inter), "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-evo-serif: var(--font-inter), "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-evo-body: var(--font-inter), "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-evo-mono: var(--font-jetbrains-mono), "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
   
   --color-primary-forest: #124D32;
   --color-deep-forest: #092F20;
@@ -12,9 +12,9 @@
   --color-active-green: #176B3A;
   --color-sage-green: #DDEEDB;
   --color-light-sage: #EEF6EA;
-  --color-pale-green: #F5F9F3;
+  --color-pale-green: #F8FAF7;
   --color-pure-white: #FFFFFF;
-  --color-card-white: #FEFEFC;
+  --color-card-white: #FFFFFF;
   --color-primary-text: #17251D;
   --color-secondary-text: #65736A;
   --color-muted-text: #89958D;
@@ -29,12 +29,12 @@
   color-scheme: light;
   
   /* Primary SaaS Typography - Inter (Clean, Modern, Enterprise) */
-  --font-primary: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-primary: var(--font-inter), "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   --font-sans: var(--font-primary);
   --font-serif: var(--font-primary);
   --font-display: var(--font-primary);
   --font-body: var(--font-primary);
-  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  --font-mono: var(--font-jetbrains-mono), "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
   --mono: var(--font-mono);
 
   /* Exact Color System from Design Reference (EvoResearch Master System) */
@@ -44,9 +44,9 @@
   --active-green: #176B3A;
   --sage-green: #DDEEDB;
   --light-sage: #EEF6EA;
-  --pale-green: #F5F9F3;
+  --pale-green: #F8FAF7;
   --pure-white: #FFFFFF;
-  --card-white: #FEFEFC;
+  --card-white: #FFFFFF;
   --primary-text: #17251D;
   --secondary-text: #65736A;
   --muted-text: #89958D;
@@ -56,11 +56,11 @@
   --warning: #D69B3C;
   --error: #C94B4B;
 
-  --bg-main: #F5F9F3;
+  --bg-main: #F8FAF7;
   --bg-sidebar: #FFFFFF;
   --bg-top-nav: #FFFFFF;
   --bg-card: #FFFFFF;
-  --bg-surface: #F5F9F3;
+  --bg-surface: #F8FAF7;
   --bg-input: #FFFFFF;
   --bg-active-green: #124D32;
   --bg-sage: #DDEEDB;
@@ -91,7 +91,7 @@
 
 html { 
   scroll-behavior: smooth; 
-  background: #F5F9F3; 
+  background: #F8FAF7; 
 }
 
 /* Universal Rule: Enforce Inter clean typography throughout */
@@ -109,7 +109,7 @@ body {
   margin: 0; 
   min-width: 320px; 
   overflow-x: hidden; 
-  background: #F5F9F3; 
+  background: #F8FAF7; 
   color: #17251D; 
 }
 
@@ -123,46 +123,52 @@ a { text-decoration: none; }
 
 /* Premium Enterprise Surfaces */
 .workspace-shell {
-  background: #F5F9F3 !important;
+  background: #F8FAF7 !important;
   color: #17251D !important;
   font-family: var(--font-primary) !important;
 }
 
 .workspace-content {
-  background: #F5F9F3 !important;
+  background: #F8FAF7 !important;
   padding: 0 32px 64px !important;
   font-family: var(--font-primary) !important;
 }
 
-/* Dedicated Hero Banner with Guaranteed Contrast */
+/* Dedicated Hero Banner with Guaranteed Contrast & Restrained Inner Lighting */
 .hero-banner {
-  background: linear-gradient(135deg, #092F20 0%, #124D32 55%, #176B3A 100%) !important;
+  background: linear-gradient(125deg, #07271A 0%, #092F20 34%, #124D32 76%, #175C3B 100%) !important;
   color: #FFFFFF !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12), 0 12px 28px -12px rgba(9, 47, 32, 0.25) !important;
 }
 
 .hero-banner h1,
 .hero-banner .hero-title {
   color: #FFFFFF !important;
-  font-weight: 700 !important;
+  font-weight: 800 !important;
+  letter-spacing: -1.2px !important;
+  line-height: 1.12 !important;
 }
 
 .hero-banner p,
 .hero-banner .hero-desc {
-  color: rgba(255, 255, 255, 0.9) !important;
+  color: rgba(255, 255, 255, 0.88) !important;
+  font-weight: 400 !important;
+  line-height: 1.55 !important;
 }
 
 .hero-banner .hero-eyebrow {
   color: #DDEEDB !important;
   letter-spacing: 0.18em !important;
-  font-weight: 700 !important;
+  font-weight: 600 !important;
 }
 
 .glass-panel, .research-card {
   background: #FFFFFF !important;
   border: 1px solid #E5EBE5 !important;
-  box-shadow: 0 1px 4px rgba(18, 77, 50, 0.03) !important;
+  box-shadow: 0 1px 3px rgba(18, 77, 50, 0.03), 0 4px 14px -4px rgba(18, 77, 50, 0.03) !important;
   color: #17251D !important;
   border-radius: 20px;
+  transition: box-shadow 180ms cubic-bezier(0.2, 0, 0, 1), border-color 180ms cubic-bezier(0.2, 0, 0, 1), transform 180ms cubic-bezier(0.2, 0, 0, 1);
   font-family: var(--font-primary) !important;
 }
 

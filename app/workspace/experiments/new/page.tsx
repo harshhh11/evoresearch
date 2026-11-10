@@ -129,7 +129,7 @@ const EXECUTION_APPROACHES = [
   {
     id: "single_model",
     name: "Single Model Experiment",
-    desc: "Execute bounded hyperparameter tuning on a single chosen architecture.",
+    desc: "Execute bounded hyperparameter tuning on one chosen architecture.",
     icon: Layers
   },
   {
@@ -141,19 +141,19 @@ const EXECUTION_APPROACHES = [
   {
     id: "ai_agent_orchestrated",
     name: "AI-Agent-Orchestrated Research",
-    desc: "Coordinates 12 specialized AI agents for paper ingestion, planning, data prep, compute routing, execution, autopsy, and evidence reporting.",
+    desc: "Coordinate 12 specialized agents across planning, execution, autopsy, and reporting.",
     icon: Users
   },
   {
     id: "paper_reproduction",
     name: "Research Paper Reproduction",
-    desc: "Extracts published methodologies and baselines to verify reproducibility against measured runs.",
+    desc: "Extract published methodologies to verify reproducibility against measured runs.",
     icon: FileText
   },
   {
     id: "custom_workflow",
     name: "Custom Research Workflow",
-    desc: "Custom objective-driven experiment pipeline with custom evaluation metrics.",
+    desc: "Build an objective-driven experiment pipeline with custom evaluation metrics.",
     icon: GitBranch
   }
 ];
@@ -365,132 +365,122 @@ function NewExperimentContent() {
   return (
     <div className="flex flex-col gap-6 w-full mx-auto text-[#17251D] pb-16">
       {/* =========================================================================
-          1. HERO HEADER (STRICT REFERENCE REPRODUCTION WITH 100% WHITE CONTRAST)
+          1. CINEMATIC HERO SECTION (~242px HEIGHT ON DESKTOP, NO TEXT OVERLAP)
           ========================================================================= */}
       <div
-        className="hero-banner relative rounded-[26px] overflow-hidden p-8 sm:p-9 shadow-sm border border-[#124D32]"
+        className="hero-banner relative rounded-[22px] overflow-hidden px-8 sm:px-10 py-8 min-h-[224px] lg:h-[242px] flex items-center border border-[#124D32]/80"
         style={{
-          background: "linear-gradient(135deg, #092F20 0%, #124D32 55%, #176B3A 100%)",
+          background: "linear-gradient(125deg, #07271A 0%, #092F20 34%, #124D32 76%, #175C3B 100%)",
           color: "#FFFFFF"
         }}
       >
-        {/* Crisp World Map Dot Matrix Graphic (Right Side) */}
-        <div className="absolute right-0 top-0 bottom-0 w-[58%] pointer-events-none opacity-50 overflow-hidden">
-          <svg className="w-full h-full" viewBox="0 0 720 320" fill="none">
-            {/* World Landmass Dots Grid */}
-            <g fill="#DDEEDB" opacity="0.8">
-              {/* Dense Scandinavia & Western/Eastern Europe */}
-              <circle cx="280" cy="50" r="2.2" /><circle cx="295" cy="45" r="2.2" /><circle cx="310" cy="48" r="2.2" />
-              <circle cx="270" cy="65" r="2.2" /><circle cx="285" cy="62" r="2.2" /><circle cx="300" cy="68" r="2.2" /><circle cx="315" cy="72" r="2.2" />
-              <circle cx="265" cy="80" r="2.2" /><circle cx="280" cy="82" r="2.2" /><circle cx="295" cy="85" r="2.2" /><circle cx="310" cy="88" r="2.2" /><circle cx="325" cy="82" r="2.2" />
-              <circle cx="275" cy="98" r="2.2" /><circle cx="290" cy="100" r="2.2" /><circle cx="305" cy="102" r="2.2" /><circle cx="320" cy="100" r="2.2" />
-              
-              {/* Mediterranean & North/Central Africa */}
-              <circle cx="270" cy="120" r="2.2" /><circle cx="285" cy="122" r="2.2" /><circle cx="300" cy="125" r="2.2" /><circle cx="315" cy="126" r="2.2" /><circle cx="330" cy="128" r="2.2" />
-              <circle cx="280" cy="142" r="2.2" /><circle cx="295" cy="145" r="2.2" /><circle cx="310" cy="148" r="2.2" /><circle cx="325" cy="150" r="2.2" /><circle cx="340" cy="152" r="2.2" />
-              <circle cx="290" cy="168" r="2.2" /><circle cx="305" cy="170" r="2.2" /><circle cx="320" cy="172" r="2.2" /><circle cx="335" cy="174" r="2.2" />
-              <circle cx="300" cy="192" r="2.2" /><circle cx="315" cy="195" r="2.2" /><circle cx="330" cy="198" r="2.2" />
-              <circle cx="308" cy="218" r="2.2" /><circle cx="322" cy="220" r="2.2" /><circle cx="326" cy="242" r="2.2" />
+        {/* Subtle Soft Inner Lighting Behind Right Graphics (Restrained, Non-Neon) */}
+        <div
+          className="absolute inset-0 pointer-events-none"
+          style={{
+            background: "radial-gradient(ellipse 52% 88% at 86% 48%, rgba(35, 122, 73, 0.34) 0%, rgba(18, 77, 50, 0.12) 48%, transparent 74%)"
+          }}
+        />
 
-              {/* Northern Asia / Siberia */}
-              <circle cx="340" cy="45" r="2.2" /><circle cx="360" cy="40" r="2.2" /><circle cx="380" cy="38" r="2.2" /><circle cx="400" cy="42" r="2.2" /><circle cx="420" cy="40" r="2.2" /><circle cx="440" cy="44" r="2.2" /><circle cx="460" cy="46" r="2.2" /><circle cx="480" cy="48" r="2.2" /><circle cx="500" cy="52" r="2.2" /><circle cx="520" cy="56" r="2.2" />
-              <circle cx="350" cy="62" r="2.2" /><circle cx="370" cy="60" r="2.2" /><circle cx="390" cy="58" r="2.2" /><circle cx="410" cy="60" r="2.2" /><circle cx="430" cy="62" r="2.2" /><circle cx="450" cy="64" r="2.2" /><circle cx="470" cy="66" r="2.2" /><circle cx="490" cy="68" r="2.2" /><circle cx="510" cy="72" r="2.2" /><circle cx="530" cy="74" r="2.2" />
-              <circle cx="360" cy="80" r="2.2" /><circle cx="380" cy="78" r="2.2" /><circle cx="400" cy="76" r="2.2" /><circle cx="420" cy="78" r="2.2" /><circle cx="440" cy="80" r="2.2" /><circle cx="460" cy="82" r="2.2" /><circle cx="480" cy="84" r="2.2" /><circle cx="500" cy="88" r="2.2" /><circle cx="520" cy="90" r="2.2" />
-
-              {/* Middle East, India, China, East Asia */}
-              <circle cx="345" cy="100" r="2.2" /><circle cx="365" cy="102" r="2.2" /><circle cx="385" cy="100" r="2.2" /><circle cx="405" cy="98" r="2.2" /><circle cx="425" cy="96" r="2.2" /><circle cx="445" cy="98" r="2.2" /><circle cx="465" cy="102" r="2.2" /><circle cx="485" cy="104" r="2.2" /><circle cx="505" cy="108" r="2.2" />
-              <circle cx="360" cy="120" r="2.2" /><circle cx="375" cy="124" r="2.2" /><circle cx="395" cy="122" r="2.2" /><circle cx="415" cy="118" r="2.2" /><circle cx="435" cy="116" r="2.2" /><circle cx="455" cy="118" r="2.2" /><circle cx="475" cy="122" r="2.2" /><circle cx="495" cy="124" r="2.2" />
-              <circle cx="380" cy="142" r="2.2" /><circle cx="392" cy="150" r="2.2" /><circle cx="405" cy="162" r="2.2" /><circle cx="430" cy="138" r="2.2" /><circle cx="450" cy="136" r="2.2" /><circle cx="470" cy="140" r="2.2" /><circle cx="490" cy="142" r="2.2" /><circle cx="510" cy="135" r="2.2" />
-              <circle cx="395" cy="178" r="2.2" /><circle cx="445" cy="156" r="2.2" /><circle cx="465" cy="158" r="2.2" /><circle cx="480" cy="160" r="2.2" /><circle cx="500" cy="155" r="2.2" />
-
-              {/* SE Asia & Australia */}
-              <circle cx="460" cy="178" r="2.2" /><circle cx="475" cy="182" r="2.2" /><circle cx="490" cy="186" r="2.2" />
-              <circle cx="480" cy="208" r="2.2" /><circle cx="495" cy="212" r="2.2" /><circle cx="510" cy="216" r="2.2" /><circle cx="530" cy="214" r="2.2" /><circle cx="545" cy="218" r="2.2" />
-              <circle cx="490" cy="230" r="2.2" /><circle cx="505" cy="234" r="2.2" /><circle cx="525" cy="236" r="2.2" /><circle cx="540" cy="238" r="2.2" />
-              <circle cx="500" cy="252" r="2.2" /><circle cx="520" cy="255" r="2.2" /><circle cx="535" cy="258" r="2.2" />
-
-              {/* North & Central America (Left Segment) */}
-              <circle cx="70" cy="55" r="2.2" /><circle cx="90" cy="50" r="2.2" /><circle cx="110" cy="48" r="2.2" /><circle cx="130" cy="54" r="2.2" />
-              <circle cx="80" cy="72" r="2.2" /><circle cx="100" cy="70" r="2.2" /><circle cx="120" cy="68" r="2.2" /><circle cx="140" cy="72" r="2.2" /><circle cx="160" cy="76" r="2.2" />
-              <circle cx="90" cy="90" r="2.2" /><circle cx="110" cy="88" r="2.2" /><circle cx="130" cy="86" r="2.2" /><circle cx="150" cy="92" r="2.2" /><circle cx="170" cy="95" r="2.2" />
-              <circle cx="100" cy="108" r="2.2" /><circle cx="120" cy="106" r="2.2" /><circle cx="140" cy="110" r="2.2" /><circle cx="155" cy="115" r="2.2" />
-              <circle cx="115" cy="126" r="2.2" /><circle cx="130" cy="130" r="2.2" /><circle cx="142" cy="142" r="2.2" />
+        {/* Crisp Dotted World Map + Restrained Flowing Wave (Isolated to Right 48% Decorative Zone) */}
+        <div
+          className="absolute right-0 top-0 bottom-0 w-[52%] lg:w-[48%] pointer-events-none overflow-hidden"
+          style={{
+            WebkitMaskImage: "linear-gradient(to right, transparent 0%, rgba(0,0,0,0.45) 20%, rgba(0,0,0,1) 46%)",
+            maskImage: "linear-gradient(to right, transparent 0%, rgba(0,0,0,0.45) 20%, rgba(0,0,0,1) 46%)"
+          }}
+        >
+          {/* Dotted World Map Matrix */}
+          <svg className="w-full h-full opacity-55" viewBox="0 0 640 260" preserveAspectRatio="xMaxYMid slice" fill="none">
+            <g fill="#DDEEDB" opacity="0.78">
+              {/* North & Central America */}
+              <circle cx="95" cy="48" r="2.1" /><circle cx="112" cy="44" r="2.1" /><circle cx="130" cy="42" r="2.1" /><circle cx="148" cy="46" r="2.1" />
+              <circle cx="105" cy="64" r="2.1" /><circle cx="122" cy="60" r="2.1" /><circle cx="140" cy="58" r="2.1" /><circle cx="158" cy="62" r="2.1" /><circle cx="174" cy="66" r="2.1" />
+              <circle cx="116" cy="80" r="2.1" /><circle cx="134" cy="78" r="2.1" /><circle cx="152" cy="76" r="2.1" /><circle cx="168" cy="82" r="2.1" />
+              <circle cx="128" cy="96" r="2.1" /><circle cx="144" cy="94" r="2.1" /><circle cx="158" cy="98" r="2.1" />
+              <circle cx="140" cy="112" r="2.1" /><circle cx="152" cy="118" r="2.1" />
               {/* South America */}
-              <circle cx="155" cy="165" r="2.2" /><circle cx="170" cy="170" r="2.2" /><circle cx="185" cy="178" r="2.2" />
-              <circle cx="160" cy="188" r="2.2" /><circle cx="175" cy="194" r="2.2" /><circle cx="190" cy="202" r="2.2" />
-              <circle cx="165" cy="212" r="2.2" /><circle cx="178" cy="220" r="2.2" /><circle cx="185" cy="235" r="2.2" />
-              <circle cx="170" cy="250" r="2.2" /><circle cx="175" cy="268" r="2.2" />
+              <circle cx="168" cy="138" r="2.1" /><circle cx="184" cy="144" r="2.1" /><circle cx="198" cy="150" r="2.1" />
+              <circle cx="174" cy="158" r="2.1" /><circle cx="188" cy="164" r="2.1" /><circle cx="202" cy="172" r="2.1" />
+              <circle cx="178" cy="180" r="2.1" /><circle cx="190" cy="188" r="2.1" /><circle cx="194" cy="202" r="2.1" />
+              <circle cx="182" cy="216" r="2.1" /><circle cx="186" cy="230" r="2.1" />
+
+              {/* Europe */}
+              <circle cx="272" cy="46" r="2.1" /><circle cx="288" cy="42" r="2.1" /><circle cx="304" cy="44" r="2.1" />
+              <circle cx="264" cy="60" r="2.1" /><circle cx="280" cy="58" r="2.1" /><circle cx="296" cy="62" r="2.1" /><circle cx="312" cy="66" r="2.1" />
+              <circle cx="268" cy="76" r="2.1" /><circle cx="284" cy="78" r="2.1" /><circle cx="300" cy="80" r="2.1" /><circle cx="316" cy="76" r="2.1" />
+              <circle cx="276" cy="92" r="2.1" /><circle cx="292" cy="94" r="2.1" /><circle cx="308" cy="92" r="2.1" />
+
+              {/* Africa */}
+              <circle cx="274" cy="110" r="2.1" /><circle cx="290" cy="112" r="2.1" /><circle cx="306" cy="114" r="2.1" /><circle cx="322" cy="116" r="2.1" />
+              <circle cx="284" cy="128" r="2.1" /><circle cx="300" cy="130" r="2.1" /><circle cx="316" cy="132" r="2.1" /><circle cx="332" cy="134" r="2.1" />
+              <circle cx="294" cy="148" r="2.1" /><circle cx="310" cy="150" r="2.1" /><circle cx="326" cy="152" r="2.1" />
+              <circle cx="302" cy="168" r="2.1" /><circle cx="318" cy="170" r="2.1" />
+              <circle cx="308" cy="188" r="2.1" /><circle cx="320" cy="192" r="2.1" /><circle cx="314" cy="208" r="2.1" />
+
+              {/* Northern Asia & Eurasia */}
+              <circle cx="334" cy="42" r="2.1" /><circle cx="354" cy="38" r="2.1" /><circle cx="374" cy="36" r="2.1" /><circle cx="394" cy="38" r="2.1" /><circle cx="414" cy="36" r="2.1" /><circle cx="434" cy="40" r="2.1" /><circle cx="454" cy="42" r="2.1" /><circle cx="474" cy="44" r="2.1" /><circle cx="494" cy="48" r="2.1" />
+              <circle cx="344" cy="58" r="2.1" /><circle cx="364" cy="56" r="2.1" /><circle cx="384" cy="54" r="2.1" /><circle cx="404" cy="56" r="2.1" /><circle cx="424" cy="58" r="2.1" /><circle cx="444" cy="60" r="2.1" /><circle cx="464" cy="62" r="2.1" /><circle cx="484" cy="64" r="2.1" /><circle cx="504" cy="68" r="2.1" />
+              <circle cx="354" cy="74" r="2.1" /><circle cx="374" cy="72" r="2.1" /><circle cx="394" cy="70" r="2.1" /><circle cx="414" cy="72" r="2.1" /><circle cx="434" cy="74" r="2.1" /><circle cx="454" cy="76" r="2.1" /><circle cx="474" cy="80" r="2.1" /><circle cx="494" cy="82" r="2.1" />
+
+              {/* South & East Asia */}
+              <circle cx="342" cy="92" r="2.1" /><circle cx="362" cy="94" r="2.1" /><circle cx="382" cy="92" r="2.1" /><circle cx="402" cy="90" r="2.1" /><circle cx="422" cy="90" r="2.1" /><circle cx="442" cy="92" r="2.1" /><circle cx="462" cy="96" r="2.1" /><circle cx="482" cy="98" r="2.1" />
+              <circle cx="356" cy="110" r="2.1" /><circle cx="374" cy="114" r="2.1" /><circle cx="394" cy="112" r="2.1" /><circle cx="414" cy="108" r="2.1" /><circle cx="434" cy="108" r="2.1" /><circle cx="454" cy="110" r="2.1" /><circle cx="474" cy="114" r="2.1" />
+              <circle cx="378" cy="130" r="2.1" /><circle cx="392" cy="138" r="2.1" /><circle cx="402" cy="148" r="2.1" /><circle cx="428" cy="126" r="2.1" /><circle cx="448" cy="126" r="2.1" /><circle cx="466" cy="130" r="2.1" /><circle cx="486" cy="126" r="2.1" />
+
+              {/* Oceania & Australia */}
+              <circle cx="452" cy="156" r="2.1" /><circle cx="468" cy="160" r="2.1" /><circle cx="484" cy="164" r="2.1" />
+              <circle cx="472" cy="184" r="2.1" /><circle cx="488" cy="188" r="2.1" /><circle cx="504" cy="190" r="2.1" /><circle cx="520" cy="188" r="2.1" />
+              <circle cx="482" cy="204" r="2.1" /><circle cx="498" cy="208" r="2.1" /><circle cx="516" cy="208" r="2.1" />
+              <circle cx="494" cy="222" r="2.1" /><circle cx="512" cy="224" r="2.1" />
             </g>
           </svg>
-        </div>
 
-        {/* Luminous Glowing Emerald & Sage Wave-Line Illustration */}
-        <div className="absolute right-0 top-0 bottom-0 w-[58%] pointer-events-none overflow-hidden">
-          <svg className="w-full h-full" viewBox="0 0 720 320" preserveAspectRatio="none" fill="none">
-            <defs>
-              <filter id="emeraldGlow" x="-20%" y="-20%" width="140%" height="140%">
-                <feGaussianBlur stdDeviation="8" result="blur" />
-                <feMerge>
-                  <feMergeNode in="blur" />
-                  <feMergeNode in="SourceGraphic" />
-                </feMerge>
-              </filter>
-            </defs>
-            {/* Soft Ambient Glow Underlay */}
+          {/* Restrained Multi-Strand Flowing Green Wave Lines */}
+          <svg className="absolute inset-0 w-full h-full" viewBox="0 0 640 260" preserveAspectRatio="none" fill="none">
             <path
-              d="M-40,320 C180,270 380,140 720,40"
-              stroke="#238653"
-              strokeWidth="14"
-              strokeOpacity="0.35"
-              filter="url(#emeraldGlow)"
+              d="M20,248 C185,205 360,118 640,34"
+              stroke="#237A49"
+              strokeWidth="2.4"
+              strokeOpacity="0.65"
             />
-            {/* Primary Vivid Emerald Wave */}
             <path
-              d="M-20,315 C190,265 390,135 720,35"
-              stroke="#238653"
-              strokeWidth="4"
-              strokeOpacity="0.95"
+              d="M55,254 C215,198 395,102 640,22"
+              stroke="#7BC496"
+              strokeWidth="1.6"
+              strokeOpacity="0.5"
             />
-            {/* Bright Sage Crest Line */}
             <path
-              d="M10,320 C220,250 420,115 720,20"
+              d="M95,258 C250,188 430,86 640,12"
               stroke="#DDEEDB"
-              strokeWidth="2.5"
-              strokeOpacity="0.8"
-            />
-            {/* High-Luminance Thin Wave Detail */}
-            <path
-              d="M50,325 C260,230 460,95 720,8"
-              stroke="#A8E0B8"
-              strokeWidth="1.8"
-              strokeOpacity="0.7"
-            />
-            <path
-              d="M90,330 C300,210 500,75 720,-2"
-              stroke="#FFFFFF"
-              strokeWidth="1.2"
-              strokeOpacity="0.55"
+              strokeWidth="1.15"
+              strokeOpacity="0.38"
             />
           </svg>
         </div>
 
-        {/* Hero Content (Guaranteed Pure White and Sage Text) */}
-        <div className="relative z-10 max-w-3xl">
+        {/* Hero Typography Content (Strict Left Column Isolation) */}
+        <div className="relative z-10 max-w-[600px]">
           <div
-            className="hero-eyebrow text-[11px] font-bold uppercase mb-2.5"
+            className="hero-eyebrow text-[11px] font-semibold uppercase mb-3"
             style={{ color: "#DDEEDB", letterSpacing: "2px" }}
           >
             UNIVERSAL AI EXPERIMENTATION PLANNER
           </div>
           <h1
-            className="hero-title text-[32px] sm:text-[36px] font-bold leading-tight tracking-tight mb-3"
-            style={{ color: "#FFFFFF", fontWeight: 700 }}
+            className="hero-title text-[30px] sm:text-[34px] lg:text-[38px] mb-3.5"
+            style={{
+              color: "#FFFFFF",
+              fontWeight: 800,
+              letterSpacing: "-1.2px",
+              lineHeight: 1.12
+            }}
           >
             Configure General AI Research Experiment
           </h1>
           <p
-            className="hero-desc text-[14px] sm:text-[14.5px] leading-relaxed font-normal"
-            style={{ color: "rgba(255, 255, 255, 0.90)", maxWidth: "780px" }}
+            className="hero-desc text-[14px] font-normal leading-[1.55]"
+            style={{ color: "rgba(255, 255, 255, 0.88)", maxWidth: "560px" }}
           >
             Select a research project, dataset, execution approach, model catalog, and execution budget across Machine Learning, NLP, Computer Vision, Time-Series, and Custom Research domains.
           </p>
@@ -499,26 +489,26 @@ function NewExperimentContent() {
 
       <form onSubmit={handleSubmit} className="flex flex-col gap-6">
         {/* =========================================================================
-            SECTION 1: RESEARCH PROJECT & CONTEXT (WHITE ROUNDED CARD)
+            SECTION 1: RESEARCH PROJECT & CONTEXT (PREMIUM WHITE CARD)
             ========================================================================= */}
-        <div className="bg-white border border-[#E5EBE5] rounded-3xl p-7 sm:p-8 shadow-xs">
+        <div className="bg-white border border-[#E5EBE5] rounded-[20px] p-6 sm:p-7 shadow-[0_1px_3px_rgba(18,77,50,0.03),0_4px_16px_-6px_rgba(18,77,50,0.04)] hover:shadow-[0_6px_22px_-6px_rgba(18,77,50,0.07)] hover:border-[#D5E0D5] transition-all duration-200">
           {/* Card Header */}
-          <div className="flex items-center justify-between mb-6">
+          <div className="flex flex-wrap items-center justify-between gap-4 mb-6">
             <div className="flex items-center gap-3.5">
-              <span className="w-8 h-8 rounded-full bg-[#DDEEDB] text-[#124D32] flex items-center justify-center font-bold text-[14px] shrink-0">
+              <span className="w-8 h-8 rounded-full bg-[#DDEEDB] text-[#124D32] flex items-center justify-center font-bold text-[13px] shrink-0">
                 1
               </span>
-              <h2 className="font-bold text-[20px] text-[#17251D] tracking-tight">
-                Research Project & Context
+              <h2 className="text-[20px] sm:text-[23px] font-bold text-[#17251D] tracking-[-0.02em] leading-snug">
+                Research Project &amp; Context
               </h2>
             </div>
 
             <button
               type="button"
               onClick={() => setNewProjectModal(true)}
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-white border border-[#E5EBE5] text-[13px] font-semibold text-[#17251D] hover:bg-[#F5F9F3] hover:border-[#124D32] transition-colors cursor-pointer shadow-xs"
+              className="inline-flex items-center gap-2 h-[38px] px-4.5 rounded-full bg-white border border-[#E5EBE5] text-[13px] font-medium text-[#17251D] hover:bg-[#F8FAF7] hover:border-[#124D32] hover:text-[#124D32] active:scale-[0.98] transition-all duration-180 cursor-pointer shadow-[0_1px_2px_rgba(18,77,50,0.03)]"
             >
-              <Plus size={15} strokeWidth={2.5} />
+              <Plus size={15} strokeWidth={2.2} />
               <span>Create New Project</span>
             </button>
           </div>
@@ -528,10 +518,10 @@ function NewExperimentContent() {
             {/* Left: Project Selector */}
             <div className="flex flex-col gap-2">
               <div className="flex items-center justify-between">
-                <label className="text-[12px] font-bold text-[#17251D]">
+                <label className="text-[12px] font-semibold text-[#17251D]">
                   Research Project (Deduplicated)
                 </label>
-                <span className="text-[11px] font-semibold text-[#124D32] bg-[#DDEEDB] px-2.5 py-0.5 rounded-full">
+                <span className="text-[11px] font-medium text-[#124D32] bg-[#EEF6EA] border border-[#DDEEDB] px-2.5 py-0.5 rounded-full">
                   {projects.length} Available
                 </span>
               </div>
@@ -539,7 +529,7 @@ function NewExperimentContent() {
                 <select
                   value={projectId}
                   onChange={(e) => setProjectId(e.target.value)}
-                  className="w-full h-[46px] px-4 pr-10 rounded-xl bg-[#FFFFFF] border border-[#E5EBE5] text-[13.5px] font-medium text-[#17251D] focus:outline-none focus:border-[#124D32] shadow-xs cursor-pointer appearance-none transition-colors"
+                  className="w-full h-[44px] px-4 pr-10 rounded-[12px] bg-[#FFFFFF] border border-[#E5EBE5] hover:border-[#C8D6C8] text-[14px] font-normal text-[#17251D] focus:outline-none focus:border-[#124D32] focus:ring-3 focus:ring-[#124D32]/10 shadow-[0_1px_2px_rgba(18,77,50,0.02)] cursor-pointer appearance-none transition-all duration-180"
                 >
                   {projects.map((p) => (
                     <option key={p.id} value={p.id}>
@@ -547,13 +537,13 @@ function NewExperimentContent() {
                     </option>
                   ))}
                 </select>
-                <ChevronDown size={16} className="absolute right-4 top-1/2 -translate-y-1/2 text-[#89958D] pointer-events-none" />
+                <ChevronDown size={16} className="absolute right-3.5 top-1/2 -translate-y-1/2 text-[#65736A] pointer-events-none" />
               </div>
             </div>
 
             {/* Right: Experiment Title */}
             <div className="flex flex-col gap-2">
-              <label className="text-[12px] font-bold text-[#17251D]">
+              <label className="text-[12px] font-semibold text-[#17251D]">
                 Experiment Title
               </label>
               <input
@@ -562,28 +552,28 @@ function NewExperimentContent() {
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 placeholder="Experiment on Matbench — Experimental Band Gap (matbench_expt_gap)"
-                className="w-full h-[46px] px-4 rounded-xl bg-[#FFFFFF] border border-[#E5EBE5] text-[13.5px] font-medium text-[#17251D] focus:outline-none focus:border-[#124D32] shadow-xs transition-colors"
+                className="w-full h-[44px] px-4 rounded-[12px] bg-[#FFFFFF] border border-[#E5EBE5] hover:border-[#C8D6C8] text-[14px] font-normal text-[#17251D] placeholder-[#89958D] focus:outline-none focus:border-[#124D32] focus:ring-3 focus:ring-[#124D32]/10 shadow-[0_1px_2px_rgba(18,77,50,0.02)] transition-all duration-180"
               />
             </div>
           </div>
 
-          {/* Project Selection Chips (Matching Reference Image) */}
-          <div className="flex flex-wrap items-center gap-2 pt-2">
-            {projects.slice(0, 4).map((p, idx) => {
+          {/* Refined Project Selection Chips */}
+          <div className="flex flex-wrap items-center gap-2 pt-1.5">
+            {projects.slice(0, 4).map((p) => {
               const isSelected = projectId === p.id;
-              const displayName = p.name.length > 25 ? p.name.slice(0, 24) + "..." : p.name;
+              const displayName = p.name.length > 26 ? p.name.slice(0, 25) + "..." : p.name;
               return (
                 <button
                   key={p.id}
                   type="button"
                   onClick={() => setProjectId(p.id)}
-                  className={`px-4 py-1.5 rounded-full text-[12px] font-medium flex items-center gap-1.5 transition-all cursor-pointer ${
+                  className={`h-[32px] px-3.5 rounded-full text-[12px] font-medium flex items-center gap-1.5 transition-all duration-180 cursor-pointer ${
                     isSelected
-                      ? "bg-[#124D32] text-white shadow-xs"
-                      : "bg-[#FFFFFF] border border-[#E5EBE5] text-[#65736A] hover:bg-[#F5F9F3] hover:text-[#17251D]"
+                      ? "bg-[#124D32] text-white shadow-[0_2px_6px_rgba(18,77,50,0.2)]"
+                      : "bg-[#F8FAF7] border border-[#E5EBE5] text-[#65736A] hover:bg-[#EEF6EA] hover:border-[#DDEEDB] hover:text-[#124D32]"
                   }`}
                 >
-                  {isSelected && <Check size={14} strokeWidth={2.5} />}
+                  {isSelected && <Check size={13} strokeWidth={2.5} />}
                   <span>{displayName}</span>
                 </button>
               );
@@ -592,20 +582,20 @@ function NewExperimentContent() {
         </div>
 
         {/* =========================================================================
-            SECTION 2: EXECUTION APPROACH (EXACT 5 EQUAL CARDS IN ONE ROW ON DESKTOP)
+            SECTION 2: EXECUTION APPROACH (5 EVENLY SIZED PREMIUM CARDS IN ONE ROW)
             ========================================================================= */}
-        <div className="bg-white border border-[#E5EBE5] rounded-3xl p-7 sm:p-8 shadow-xs">
+        <div className="bg-white border border-[#E5EBE5] rounded-[20px] p-6 sm:p-7 shadow-[0_1px_3px_rgba(18,77,50,0.03),0_4px_16px_-6px_rgba(18,77,50,0.04)] hover:shadow-[0_6px_22px_-6px_rgba(18,77,50,0.07)] hover:border-[#D5E0D5] transition-all duration-200">
           {/* Card Header */}
           <div className="flex items-center gap-3.5 mb-6">
-            <span className="w-8 h-8 rounded-full bg-[#DDEEDB] text-[#124D32] flex items-center justify-center font-bold text-[14px] shrink-0">
+            <span className="w-8 h-8 rounded-full bg-[#DDEEDB] text-[#124D32] flex items-center justify-center font-bold text-[13px] shrink-0">
               2
             </span>
-            <h2 className="font-bold text-[20px] text-[#17251D] tracking-tight">
+            <h2 className="text-[20px] sm:text-[23px] font-bold text-[#17251D] tracking-[-0.02em] leading-snug">
               Execution Approach
             </h2>
           </div>
 
-          {/* 5 Cards Grid in One Horizontal Row on Desktop */}
+          {/* 5 Equal-Width Cards Grid */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
             {EXECUTION_APPROACHES.map((appr) => {
               const isSelected = executionApproach === appr.id;
@@ -615,35 +605,44 @@ function NewExperimentContent() {
                 <div
                   key={appr.id}
                   onClick={() => setExecutionApproach(appr.id)}
-                  className={`relative rounded-2xl p-5 flex flex-col justify-between transition-all cursor-pointer select-none min-h-[175px] ${
+                  className={`relative rounded-[18px] p-5 flex flex-col justify-start transition-all duration-200 cursor-pointer select-none h-full min-h-[192px] group ${
                     isSelected
-                      ? "bg-[#EEF6EA] border-[1.5px] border-[#124D32] shadow-xs"
-                      : "bg-white border border-[#E5EBE5] hover:border-[#DDEEDB] hover:bg-[#F5F9F3]/60"
+                      ? "bg-[#EEF6EA] border-[1.5px] border-[#124D32] shadow-[0_4px_14px_-4px_rgba(18,77,50,0.12)]"
+                      : "bg-white border border-[#E5EBE5] hover:border-[#C8DAC8] hover:bg-[#F8FAF7] hover:-translate-y-0.5 hover:shadow-[0_6px_16px_-6px_rgba(18,77,50,0.08)]"
                   }`}
                 >
-                  {/* Top Right Selected Check Badge */}
+                  {/* Top Right Circular Green Check Indicator */}
                   {isSelected && (
-                    <div className="w-5 h-5 rounded-full bg-[#124D32] text-white flex items-center justify-center absolute top-3.5 right-3.5 shadow-xs">
-                      <Check size={12} strokeWidth={3} />
+                    <div className="w-5 h-5 rounded-full bg-[#124D32] text-white flex items-center justify-center absolute top-3.5 right-3.5 shadow-xs transition-transform duration-200 scale-100">
+                      <Check size={12} strokeWidth={2.75} />
                     </div>
                   )}
 
-                  <div>
-                    {/* Sage Circular Icon Container */}
-                    <div className="w-10 h-10 rounded-full bg-[#DDEEDB] flex items-center justify-center mb-4">
-                      <Icon size={19} className="text-[#124D32]" strokeWidth={2} />
-                    </div>
-
-                    {/* Card Title */}
-                    <h3 className={`font-bold text-[14px] leading-snug mb-2 ${isSelected ? "text-[#124D32]" : "text-[#17251D]"}`}>
-                      {appr.name}
-                    </h3>
-
-                    {/* Description */}
-                    <p className="text-[12px] text-[#65736A] leading-relaxed">
-                      {appr.desc}
-                    </p>
+                  {/* Circular Sage Icon Container */}
+                  <div
+                    className={`w-10 h-10 rounded-full flex items-center justify-center mb-4 shrink-0 transition-colors duration-200 ${
+                      isSelected
+                        ? "bg-[#DDEEDB] text-[#124D32]"
+                        : "bg-[#EEF6EA] text-[#124D32] group-hover:bg-[#DDEEDB]"
+                    }`}
+                  >
+                    <Icon size={18} strokeWidth={1.85} />
                   </div>
+
+                  {/* Card Heading (16px, weight 650) */}
+                  <h3
+                    className={`text-[16px] leading-[1.3] mb-2 pr-5 transition-colors duration-180 ${
+                      isSelected ? "text-[#124D32]" : "text-[#17251D]"
+                    }`}
+                    style={{ fontWeight: 650 }}
+                  >
+                    {appr.name}
+                  </h3>
+
+                  {/* Body Description (14px, weight 400, line-height 1.55) */}
+                  <p className="text-[14px] font-normal text-[#65736A] leading-[1.55] m-0">
+                    {appr.desc}
+                  </p>
                 </div>
               );
             })}
@@ -653,15 +652,15 @@ function NewExperimentContent() {
         {/* =========================================================================
             SECTION 3: MODEL CATALOG & ARCHITECTURE
             ========================================================================= */}
-        <div className="bg-white border border-[#E5EBE5] rounded-3xl p-7 sm:p-8 shadow-xs">
+        <div className="bg-white border border-[#E5EBE5] rounded-[20px] p-6 sm:p-7 shadow-[0_1px_3px_rgba(18,77,50,0.03),0_4px_16px_-6px_rgba(18,77,50,0.04)] hover:shadow-[0_6px_22px_-6px_rgba(18,77,50,0.07)] hover:border-[#D5E0D5] transition-all duration-200">
           {/* Card Header */}
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
             <div className="flex items-center gap-3.5">
-              <span className="w-8 h-8 rounded-full bg-[#DDEEDB] text-[#124D32] flex items-center justify-center font-bold text-[14px] shrink-0">
+              <span className="w-8 h-8 rounded-full bg-[#DDEEDB] text-[#124D32] flex items-center justify-center font-bold text-[13px] shrink-0">
                 3
               </span>
-              <h2 className="font-bold text-[20px] text-[#17251D] tracking-tight">
-                Model Catalog & Architecture
+              <h2 className="text-[20px] sm:text-[23px] font-bold text-[#17251D] tracking-[-0.02em] leading-snug">
+                Model Catalog &amp; Architecture
               </h2>
             </div>
 
@@ -669,22 +668,22 @@ function NewExperimentContent() {
               type="button"
               onClick={handleAIRecommend}
               disabled={aiRecommending}
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-[#124D32] hover:bg-[#092F20] text-white text-[13px] font-semibold shadow-xs transition-colors cursor-pointer self-start sm:self-auto"
+              className="inline-flex items-center gap-2 h-[38px] px-5 rounded-full bg-[#124D32] hover:bg-[#092F20] text-white text-[13px] font-semibold shadow-[0_2px_8px_rgba(18,77,50,0.2)] hover:shadow-[0_4px_12px_rgba(18,77,50,0.28)] active:scale-[0.98] disabled:opacity-70 transition-all duration-180 cursor-pointer self-start sm:self-auto"
             >
-              <Sparkles size={15} />
+              <Sparkles size={15} className={aiRecommending ? "animate-spin" : ""} />
               <span>{aiRecommending ? "Analyzing Benchmarks..." : "AI Recommend Model"}</span>
             </button>
           </div>
 
           {/* AI Recommendation Alert */}
           {aiRecommendation && (
-            <div className="p-4 rounded-2xl bg-[#EEF6EA] border border-[#124D32] text-[12.5px] text-[#124D32] font-medium flex items-center gap-2.5 mb-5 shadow-xs">
+            <div className="p-4 rounded-[14px] bg-[#EEF6EA] border border-[#124D32]/30 text-[13.5px] text-[#124D32] font-medium flex items-center gap-2.5 mb-5 transition-all duration-200">
               <Sparkles size={16} className="shrink-0" />
               <span>{aiRecommendation}</span>
             </div>
           )}
 
-          {/* Category Tabs (Exact Reference Style Pills) */}
+          {/* Category Tabs */}
           <div className="flex flex-wrap items-center gap-2 mb-6">
             {Object.keys(CATEGORIZED_MODEL_CATALOG).map((cat) => {
               const isSelected = selectedCategory === cat;
@@ -693,10 +692,10 @@ function NewExperimentContent() {
                   key={cat}
                   type="button"
                   onClick={() => setSelectedCategory(cat)}
-                  className={`px-5 py-2 rounded-full text-[13px] font-semibold transition-all cursor-pointer ${
+                  className={`h-[36px] px-4.5 rounded-full text-[13px] transition-all duration-180 cursor-pointer ${
                     isSelected
-                      ? "bg-[#124D32] text-white shadow-xs"
-                      : "bg-white border border-[#E5EBE5] text-[#17251D] hover:bg-[#F5F9F3]"
+                      ? "bg-[#124D32] text-white font-semibold shadow-[0_2px_8px_rgba(18,77,50,0.18)]"
+                      : "bg-[#F8FAF7] border border-[#E5EBE5] text-[#65736A] font-medium hover:bg-[#EEF6EA] hover:border-[#DDEEDB] hover:text-[#124D32]"
                   }`}
                 >
                   {cat}
@@ -706,7 +705,7 @@ function NewExperimentContent() {
           </div>
 
           {/* Model Selection Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3.5">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {CATEGORIZED_MODEL_CATALOG[selectedCategory]?.map((m) => {
               const isSelected = baselineModel === m.id || candidateModels.includes(m.id);
               return (
@@ -718,21 +717,32 @@ function NewExperimentContent() {
                       setCandidateModels([...candidateModels, m.id]);
                     }
                   }}
-                  className={`p-4 rounded-2xl border transition-all cursor-pointer ${
+                  className={`relative p-5 rounded-[16px] transition-all duration-200 cursor-pointer flex flex-col justify-between ${
                     isSelected
-                      ? "bg-[#EEF6EA] border-[#124D32] shadow-xs"
-                      : "bg-white border-[#E5EBE5] hover:border-[#DDEEDB] hover:bg-[#F5F9F3]"
+                      ? "bg-[#EEF6EA] border-[1.5px] border-[#124D32] shadow-[0_3px_12px_-4px_rgba(18,77,50,0.12)]"
+                      : "bg-white border border-[#E5EBE5] hover:border-[#C8DAC8] hover:bg-[#F8FAF7] hover:-translate-y-0.5 hover:shadow-[0_4px_14px_-6px_rgba(18,77,50,0.08)]"
                   }`}
                 >
-                  <div className="flex items-center justify-between mb-2">
-                    <span className="font-semibold text-[13.5px] text-[#17251D]">
+                  <div className="flex items-start justify-between gap-3 mb-2">
+                    <span
+                      className={`text-[16px] leading-snug ${
+                        isSelected ? "text-[#124D32]" : "text-[#17251D]"
+                      }`}
+                      style={{ fontWeight: 650 }}
+                    >
                       {m.name}
                     </span>
-                    <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-white border border-[#E5EBE5] text-[#124D32]">
+                    <span
+                      className={`text-[11px] font-medium px-2.5 py-0.5 rounded-full shrink-0 ${
+                        isSelected
+                          ? "bg-[#124D32] text-white"
+                          : "bg-[#F8FAF7] border border-[#E5EBE5] text-[#124D32]"
+                      }`}
+                    >
                       {m.tag}
                     </span>
                   </div>
-                  <p className="text-[12px] text-[#65736A] leading-relaxed">
+                  <p className="text-[14px] font-normal text-[#65736A] leading-[1.55] m-0">
                     {m.description}
                   </p>
                 </div>
@@ -744,26 +754,26 @@ function NewExperimentContent() {
         {/* =========================================================================
             SECTION 4: DATASET & PREDICTION TARGET
             ========================================================================= */}
-        <div className="bg-white border border-[#E5EBE5] rounded-3xl p-7 sm:p-8 shadow-xs">
+        <div className="bg-white border border-[#E5EBE5] rounded-[20px] p-6 sm:p-7 shadow-[0_1px_3px_rgba(18,77,50,0.03),0_4px_16px_-6px_rgba(18,77,50,0.04)] hover:shadow-[0_6px_22px_-6px_rgba(18,77,50,0.07)] hover:border-[#D5E0D5] transition-all duration-200">
           <div className="flex items-center gap-3.5 mb-6">
-            <span className="w-8 h-8 rounded-full bg-[#DDEEDB] text-[#124D32] flex items-center justify-center font-bold text-[14px] shrink-0">
+            <span className="w-8 h-8 rounded-full bg-[#DDEEDB] text-[#124D32] flex items-center justify-center font-bold text-[13px] shrink-0">
               4
             </span>
-            <h2 className="font-bold text-[20px] text-[#17251D] tracking-tight">
-              Dataset & Prediction Target
+            <h2 className="text-[20px] sm:text-[23px] font-bold text-[#17251D] tracking-[-0.02em] leading-snug">
+              Dataset &amp; Prediction Target
             </h2>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="flex flex-col gap-2">
-              <label className="text-[12px] font-bold text-[#17251D]">
+              <label className="text-[12px] font-semibold text-[#17251D]">
                 Select Research Dataset
               </label>
               <div className="relative">
                 <select
                   value={datasetId}
                   onChange={(e) => handleDatasetChange(e.target.value)}
-                  className="w-full h-[46px] px-4 pr-10 rounded-xl bg-[#FFFFFF] border border-[#E5EBE5] text-[13.5px] font-medium text-[#17251D] focus:outline-none focus:border-[#124D32] shadow-xs appearance-none cursor-pointer"
+                  className="w-full h-[44px] px-4 pr-10 rounded-[12px] bg-[#FFFFFF] border border-[#E5EBE5] hover:border-[#C8D6C8] text-[14px] font-normal text-[#17251D] focus:outline-none focus:border-[#124D32] focus:ring-3 focus:ring-[#124D32]/10 shadow-[0_1px_2px_rgba(18,77,50,0.02)] appearance-none cursor-pointer transition-all duration-180"
                 >
                   {datasets.map((d) => (
                     <option key={d.id} value={d.id}>
@@ -771,25 +781,25 @@ function NewExperimentContent() {
                     </option>
                   ))}
                 </select>
-                <ChevronDown size={16} className="absolute right-4 top-1/2 -translate-y-1/2 text-[#89958D] pointer-events-none" />
+                <ChevronDown size={16} className="absolute right-3.5 top-1/2 -translate-y-1/2 text-[#65736A] pointer-events-none" />
               </div>
             </div>
 
             <div className="flex flex-col gap-2">
-              <label className="text-[12px] font-bold text-[#17251D]">
+              <label className="text-[12px] font-semibold text-[#17251D]">
                 Target Prediction Column
               </label>
               <div className="relative">
                 <select
                   value={targetColumn}
                   onChange={(e) => setTargetColumn(e.target.value)}
-                  className="w-full h-[46px] px-4 pr-10 rounded-xl bg-[#FFFFFF] border border-[#E5EBE5] text-[13.5px] font-medium text-[#17251D] focus:outline-none focus:border-[#124D32] shadow-xs appearance-none cursor-pointer"
+                  className="w-full h-[44px] px-4 pr-10 rounded-[12px] bg-[#FFFFFF] border border-[#E5EBE5] hover:border-[#C8D6C8] text-[14px] font-normal text-[#17251D] focus:outline-none focus:border-[#124D32] focus:ring-3 focus:ring-[#124D32]/10 shadow-[0_1px_2px_rgba(18,77,50,0.02)] appearance-none cursor-pointer transition-all duration-180"
                 >
                   {supportedTargets.map((t: string) => (
                     <option key={t} value={t}>{t}</option>
                   ))}
                 </select>
-                <ChevronDown size={16} className="absolute right-4 top-1/2 -translate-y-1/2 text-[#89958D] pointer-events-none" />
+                <ChevronDown size={16} className="absolute right-3.5 top-1/2 -translate-y-1/2 text-[#65736A] pointer-events-none" />
               </div>
             </div>
           </div>
@@ -798,20 +808,20 @@ function NewExperimentContent() {
         {/* =========================================================================
             SECTION 5: EXECUTION BUDGET & SCIENTIFIC CONTROLS
             ========================================================================= */}
-        <div className="bg-white border border-[#E5EBE5] rounded-3xl p-7 sm:p-8 shadow-xs">
+        <div className="bg-white border border-[#E5EBE5] rounded-[20px] p-6 sm:p-7 shadow-[0_1px_3px_rgba(18,77,50,0.03),0_4px_16px_-6px_rgba(18,77,50,0.04)] hover:shadow-[0_6px_22px_-6px_rgba(18,77,50,0.07)] hover:border-[#D5E0D5] transition-all duration-200">
           <div className="flex items-center gap-3.5 mb-6">
-            <span className="w-8 h-8 rounded-full bg-[#DDEEDB] text-[#124D32] flex items-center justify-center font-bold text-[14px] shrink-0">
+            <span className="w-8 h-8 rounded-full bg-[#DDEEDB] text-[#124D32] flex items-center justify-center font-bold text-[13px] shrink-0">
               5
             </span>
-            <h2 className="font-bold text-[20px] text-[#17251D] tracking-tight">
-              Execution Budget & Scientific Controls
+            <h2 className="text-[20px] sm:text-[23px] font-bold text-[#17251D] tracking-[-0.02em] leading-snug">
+              Execution Budget &amp; Scientific Controls
             </h2>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-start">
             {/* CPU Budget */}
             <div className="flex flex-col gap-2">
-              <div className="flex justify-between items-center text-[12.5px] font-semibold text-[#17251D]">
+              <div className="flex justify-between items-center text-[12px] font-semibold text-[#17251D]">
                 <span>CPU Wall-Clock Budget</span>
                 <span className="text-[#124D32] font-bold">{cpuBudget}s</span>
               </div>
@@ -822,14 +832,14 @@ function NewExperimentContent() {
                 step="30"
                 value={cpuBudget}
                 onChange={(e) => setCpuBudget(parseFloat(e.target.value))}
-                className="accent-[#124D32] cursor-pointer w-full mt-2"
+                className="accent-[#124D32] cursor-pointer w-full mt-2.5"
               />
-              <span className="text-[11px] text-[#89958D]">Bounded execution limit per model run</span>
+              <span className="text-[11px] font-medium text-[#65736A]">Bounded execution limit per model run</span>
             </div>
 
             {/* Trial Budget */}
             <div className="flex flex-col gap-2">
-              <div className="flex justify-between items-center text-[12.5px] font-semibold text-[#17251D]">
+              <div className="flex justify-between items-center text-[12px] font-semibold text-[#17251D]">
                 <span>Hyperparameter Trials</span>
                 <span className="text-[#124D32] font-bold">{trialBudget}</span>
               </div>
@@ -840,29 +850,29 @@ function NewExperimentContent() {
                 step="5"
                 value={trialBudget}
                 onChange={(e) => setTrialBudget(parseInt(e.target.value))}
-                className="accent-[#124D32] cursor-pointer w-full mt-2"
+                className="accent-[#124D32] cursor-pointer w-full mt-2.5"
               />
-              <span className="text-[11px] text-[#89958D]">Number of Bayesian/Optuna search trials</span>
+              <span className="text-[11px] font-medium text-[#65736A]">Number of Bayesian/Optuna search trials</span>
             </div>
 
             {/* Failure Memory Mode */}
             <div className="flex flex-col gap-2">
-              <label className="text-[12px] font-bold text-[#17251D]">
+              <label className="text-[12px] font-semibold text-[#17251D]">
                 Scientific Memory Mode
               </label>
               <div className="relative">
                 <select
                   value={memoryMode}
                   onChange={(e) => setMemoryMode(e.target.value as any)}
-                  className="w-full h-[46px] px-4 pr-10 rounded-xl bg-[#FFFFFF] border border-[#E5EBE5] text-[13.5px] font-medium text-[#17251D] focus:outline-none focus:border-[#124D32] shadow-xs appearance-none cursor-pointer"
+                  className="w-full h-[44px] px-4 pr-10 rounded-[12px] bg-[#FFFFFF] border border-[#E5EBE5] hover:border-[#C8D6C8] text-[14px] font-normal text-[#17251D] focus:outline-none focus:border-[#124D32] focus:ring-3 focus:ring-[#124D32]/10 shadow-[0_1px_2px_rgba(18,77,50,0.02)] appearance-none cursor-pointer transition-all duration-180"
                 >
-                  <option value="failure_recovery">Verified Failure & Recovery Memory</option>
+                  <option value="failure_recovery">Verified Failure &amp; Recovery Memory</option>
                   <option value="success_only">Success-Only Memory</option>
                   <option value="baseline">Standard Baseline (No Memory)</option>
                 </select>
-                <ChevronDown size={16} className="absolute right-4 top-1/2 -translate-y-1/2 text-[#89958D] pointer-events-none" />
+                <ChevronDown size={16} className="absolute right-3.5 top-1/2 -translate-y-1/2 text-[#65736A] pointer-events-none" />
               </div>
-              <span className="text-[11px] text-[#89958D]">Structured error signature reuse</span>
+              <span className="text-[11px] font-medium text-[#65736A]">Structured error signature reuse</span>
             </div>
           </div>
         </div>
@@ -874,7 +884,7 @@ function NewExperimentContent() {
           <button
             type="button"
             onClick={() => router.back()}
-            className="px-6 py-2.5 rounded-full bg-white border border-[#E5EBE5] text-[13.5px] font-semibold text-[#65736A] hover:bg-[#F5F9F3] hover:text-[#17251D] transition-colors cursor-pointer"
+            className="h-[42px] px-6 rounded-full bg-white border border-[#E5EBE5] text-[14px] font-medium text-[#65736A] hover:bg-[#F8FAF7] hover:border-[#C8D6C8] hover:text-[#17251D] transition-all duration-180 cursor-pointer"
           >
             Cancel
           </button>
@@ -882,7 +892,7 @@ function NewExperimentContent() {
           <button
             type="submit"
             disabled={submitting}
-            className="inline-flex items-center gap-2.5 px-8 py-2.5 rounded-full bg-[#124D32] hover:bg-[#092F20] text-white text-[14px] font-semibold shadow-sm hover:shadow transition-all cursor-pointer"
+            className="inline-flex items-center gap-2.5 h-[42px] px-7 rounded-full bg-[#124D32] hover:bg-[#092F20] text-white text-[14px] font-semibold shadow-[0_2px_10px_rgba(18,77,50,0.22)] hover:shadow-[0_4px_14px_rgba(18,77,50,0.3)] active:scale-[0.98] disabled:opacity-70 transition-all duration-180 cursor-pointer"
           >
             <span>{submitting ? "Initializing Experiment..." : "Create & Launch Experiment"}</span>
             <ArrowRight size={16} />

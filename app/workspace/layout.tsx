@@ -104,34 +104,34 @@ export default function WorkspaceLayout({ children }: { children: ReactNode }) {
   }, [pathname]);
 
   return (
-    <div className="workspace-shell min-h-screen text-[#17251D] bg-[#F5F9F3] flex font-sans antialiased">
-      {/* 1. LEFT SIDEBAR (EXACT MATCH TO REFERENCE: 274px, PURE WHITE) */}
+    <div className="workspace-shell min-h-screen text-[#17251D] bg-[#F8FAF7] flex font-sans antialiased">
+      {/* 1. LEFT SIDEBAR (274px, PURE WHITE, PROFESSIONAL FINISH) */}
       <aside
         className={`shrink-0 border-r border-[#E5EBE5] bg-[#FFFFFF] flex flex-col sticky top-0 h-screen z-40 transition-all duration-200 select-none ${
           isCollapsed ? "w-[72px]" : "w-[274px]"
         }`}
         aria-label="EvoResearch Workspace Navigation"
       >
-        {/* Brand Header */}
-        <div className="p-4 px-5 flex items-center justify-between h-[74px] border-b border-[#EDF0EC]">
+        {/* Brand Header (72px height aligned with top nav) */}
+        <div className="px-5 flex items-center justify-between h-[72px] border-b border-[#EDF0EC]">
           <Link
             href="/workspace"
             className="inline-flex items-center gap-3 no-underline min-w-0 group"
             title="EvoResearch Platform"
           >
             {/* Dark Forest Green Stylized Logo Icon */}
-            <div className="w-9 h-9 rounded-full bg-[#124D32] flex items-center justify-center shrink-0 shadow-xs group-hover:bg-[#092F20] transition-colors">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+            <div className="w-9 h-9 rounded-full bg-[#124D32] flex items-center justify-center shrink-0 shadow-[0_2px_6px_rgba(18,77,50,0.22)] group-hover:bg-[#092F20] transition-colors duration-200">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
                 <path d="m18 15-6-6-6 6"/>
                 <path d="m18 9-6-6-6 6"/>
               </svg>
             </div>
             {!isCollapsed && (
               <div className="overflow-hidden">
-                <div className="font-bold text-[17px] leading-tight text-[#17251D] tracking-tight truncate">
+                <div className="font-bold text-[16px] leading-tight text-[#17251D] tracking-[-0.02em] truncate">
                   EvoResearch
                 </div>
-                <div className="text-[12px] text-[#89958D] leading-tight truncate font-normal mt-0.5">
+                <div className="text-[11px] font-medium text-[#65736A] leading-tight truncate mt-0.5">
                   At a glance
                 </div>
               </div>
@@ -142,10 +142,10 @@ export default function WorkspaceLayout({ children }: { children: ReactNode }) {
             <button
               type="button"
               onClick={() => setIsCollapsed(true)}
-              className="w-8 h-8 rounded-lg hover:bg-[#F5F9F3] flex items-center justify-center text-[#17251D] transition-colors cursor-pointer"
+              className="w-8 h-8 rounded-lg hover:bg-[#F8FAF7] flex items-center justify-center text-[#65736A] hover:text-[#17251D] transition-colors duration-150 cursor-pointer"
               title="Collapse Sidebar"
             >
-              <Menu size={18} strokeWidth={2.2} />
+              <Menu size={17} strokeWidth={2} />
             </button>
           )}
         </div>
@@ -153,13 +153,13 @@ export default function WorkspaceLayout({ children }: { children: ReactNode }) {
         {/* Navigation Group Items */}
         <nav className="flex-1 overflow-y-auto flex flex-col gap-5 py-4 px-3.5 no-scrollbar">
           {navigationGroups.map((grp) => (
-            <div key={grp.group} className="flex flex-col gap-1">
+            <div key={grp.group} className="flex flex-col gap-0.5">
               {!isCollapsed ? (
-                <div className="text-[10px] text-[#89958D] tracking-[0.08em] uppercase px-3 py-1 font-bold select-none truncate">
+                <div className="text-[11px] font-semibold text-[#89958D] tracking-[0.06em] uppercase px-3.5 pb-1.5 pt-0.5 select-none truncate">
                   {grp.group}
                 </div>
               ) : (
-                <div className="w-full h-[1px] bg-[#EDF0EC] my-1" />
+                <div className="w-full h-[1px] bg-[#EDF0EC] my-1.5" />
               )}
 
               {grp.items.map((item) => {
@@ -174,43 +174,47 @@ export default function WorkspaceLayout({ children }: { children: ReactNode }) {
                     key={item.name}
                     href={item.href}
                     title={isCollapsed ? item.name : undefined}
-                    className={`flex items-center rounded-full transition-all duration-150 relative ${
+                    className={`flex items-center rounded-full transition-all duration-180 relative group ${
                       isCollapsed
                         ? "justify-center h-10 w-10 mx-auto"
-                        : "justify-between px-3.5 py-2.5 text-[13.5px]"
+                        : "justify-between px-3.5 py-2 text-[14px] font-medium"
                     } ${
                       isActive
-                        ? "bg-[#124D32] text-[#FFFFFF] font-medium shadow-xs"
-                        : "text-[#17251D] hover:text-[#124D32] hover:bg-[#F5F9F3] font-medium"
+                        ? "bg-[#124D32] text-[#FFFFFF] shadow-[0_2px_8px_rgba(18,77,50,0.2)]"
+                        : "text-[#17251D] hover:text-[#124D32] hover:bg-[#EEF6EA]/70"
                     }`}
                   >
                     <div className="flex items-center gap-3 min-w-0">
                       <Icon
                         size={17}
-                        strokeWidth={isActive ? 2.2 : 1.9}
-                        className={`shrink-0 transition-colors ${
-                          isActive ? "text-[#FFFFFF]" : "text-[#65736A]"
+                        strokeWidth={1.85}
+                        className={`shrink-0 transition-colors duration-180 ${
+                          isActive ? "text-[#FFFFFF]" : "text-[#65736A] group-hover:text-[#124D32]"
                         }`}
                       />
                       {!isCollapsed && (
-                        <span className="truncate whitespace-nowrap">
+                        <span className="truncate whitespace-nowrap leading-snug">
                           {item.name}
                         </span>
                       )}
                     </div>
 
                     {!isCollapsed && (
-                      <div className="flex items-center gap-2 shrink-0">
+                      <div className="flex items-center gap-2 shrink-0 ml-2">
                         {item.badge && (
                           <span
-                            className="text-[11px] px-2 py-0.5 rounded-full font-semibold leading-none text-[#124D32] bg-[#DDEEDB]"
+                            className={`text-[11px] px-2 py-0.5 rounded-full font-semibold leading-none transition-colors ${
+                              isActive
+                                ? "bg-white/20 text-white"
+                                : "text-[#124D32] bg-[#EEF6EA] border border-[#DDEEDB]"
+                            }`}
                           >
                             {item.badge}
                           </span>
                         )}
                         {isActive && (
                           <span
-                            className="w-2.5 h-2.5 rounded-full bg-white shrink-0"
+                            className="w-2 h-2 rounded-full bg-white/95 shrink-0 shadow-xs"
                             aria-hidden="true"
                           />
                         )}
@@ -223,58 +227,58 @@ export default function WorkspaceLayout({ children }: { children: ReactNode }) {
           ))}
         </nav>
 
-        {/* Sidebar Bottom Widgets */}
+        {/* Sidebar Bottom Widgets (Compact, Clean, Restrained) */}
         <div className="p-3.5 border-t border-[#EDF0EC] flex flex-col gap-2.5 bg-[#FFFFFF]">
           {!isCollapsed ? (
             <>
               {/* Widget 1: Engine Status */}
-              <div className="p-3 rounded-2xl bg-[#FFFFFF] border border-[#E5EBE5] shadow-xs">
-                <div className="flex items-center justify-between text-[12px] font-semibold mb-2">
+              <div className="p-3 rounded-[16px] bg-[#F8FAF7] border border-[#E5EBE5] transition-colors hover:border-[#D5E0D5]">
+                <div className="flex items-center justify-between text-[12px] font-semibold mb-1.5">
                   <span className="flex items-center gap-1.5 text-[#17251D]">
-                    <span className="w-2 h-2 rounded-full bg-[#238653] inline-block" />
+                    <span className="w-2 h-2 rounded-full bg-[#237A49] inline-block" />
                     Engine Status
                   </span>
-                  <span className="text-[11px] font-bold text-[#238653] tracking-wide">
+                  <span className="text-[11px] font-semibold text-[#237A49] tracking-wide">
                     {engineStatus === "online" ? "ONLINE" : "STANDBY"}
                   </span>
                 </div>
-                {/* 5-segment green progress bar matching reference image */}
+                {/* 5-segment green progress bar */}
                 <div className="flex items-center gap-1.5 h-1.5 my-1.5">
                   {[...Array(5)].map((_, i) => (
                     <div
                       key={i}
-                      className="flex-1 h-full rounded-full bg-[#238653]"
+                      className="flex-1 h-full rounded-full bg-[#237A49]"
                     />
                   ))}
                 </div>
-                <div className="text-[11px] text-[#89958D] mt-1 truncate">
+                <div className="text-[11px] font-medium text-[#65736A] mt-1 truncate">
                   FastDaemon • Port 8000 active
                 </div>
               </div>
 
               {/* Widget 2: EvoResearch Lab Profile */}
-              <div className="p-2.5 rounded-2xl bg-[#FFFFFF] border border-[#E5EBE5] flex items-center justify-between shadow-xs">
+              <div className="p-2.5 rounded-[16px] bg-[#FFFFFF] border border-[#E5EBE5] flex items-center justify-between transition-colors hover:border-[#D5E0D5]">
                 <div className="flex items-center gap-2.5 min-w-0">
-                  <div className="w-8 h-8 rounded-full bg-[#DDEEDB] text-[#124D32] flex items-center justify-center text-[12px] font-bold shrink-0">
+                  <div className="w-8 h-8 rounded-full bg-[#DDEEDB] text-[#124D32] flex items-center justify-center text-[11px] font-bold shrink-0">
                     HC
                   </div>
                   <div className="min-w-0">
                     <div className="text-[13px] font-semibold text-[#17251D] leading-tight truncate">
                       EvoResearch Lab
                     </div>
-                    <div className="text-[11px] text-[#89958D] leading-tight truncate mt-0.5">
-                      Materials & Edge ML
+                    <div className="text-[11px] font-medium text-[#65736A] leading-tight truncate mt-0.5">
+                      Materials &amp; Edge ML
                     </div>
                   </div>
                 </div>
-                <span className="w-2 h-2 rounded-full bg-[#238653] shrink-0" />
+                <span className="w-2 h-2 rounded-full bg-[#237A49] shrink-0" />
               </div>
             </>
           ) : (
             <button
               type="button"
               onClick={() => setIsCollapsed(false)}
-              className="w-10 h-10 rounded-full bg-[#FFFFFF] border border-[#E5EBE5] flex items-center justify-center mx-auto text-[#89958D] hover:text-[#124D32] hover:border-[#124D32] transition-all cursor-pointer shadow-xs"
+              className="w-10 h-10 rounded-full bg-[#FFFFFF] border border-[#E5EBE5] flex items-center justify-center mx-auto text-[#65736A] hover:text-[#124D32] hover:border-[#124D32] transition-all duration-180 cursor-pointer shadow-xs"
               title="Expand Sidebar"
             >
               <PanelLeftOpen size={16} />
@@ -284,49 +288,50 @@ export default function WorkspaceLayout({ children }: { children: ReactNode }) {
       </aside>
 
       {/* 2. MAIN APPLICATION CONTENT AREA */}
-      <div className="flex-1 flex flex-col min-w-0 overflow-x-hidden bg-[#F5F9F3]">
-        {/* TOP NAVIGATION BAR (74px HIGH, EXACT MATCH TO REFERENCE IMAGE) */}
-        <header className="h-[74px] px-8 sm:px-10 flex items-center justify-between bg-[#FFFFFF] border-b border-[#E5EBE5] sticky top-0 z-30">
+      <div className="flex-1 flex flex-col min-w-0 overflow-x-hidden bg-[#F8FAF7]">
+        {/* TOP NAVIGATION BAR (72px HIGH, REFINED ENTERPRISE FINISH) */}
+        <header className="h-[72px] px-7 sm:px-9 flex items-center justify-between bg-[#FFFFFF] border-b border-[#E5EBE5] sticky top-0 z-30">
           {/* Left Breadcrumb */}
-          <div className="flex items-center gap-2 min-w-0">
+          <div className="flex items-center gap-2.5 min-w-0">
             {isCollapsed && (
               <button
                 type="button"
                 onClick={() => setIsCollapsed(false)}
-                className="w-8 h-8 rounded-full hover:bg-[#F5F9F3] flex items-center justify-center text-[#89958D] hover:text-[#17251D] transition-colors cursor-pointer shrink-0 mr-1"
+                className="w-8 h-8 rounded-lg hover:bg-[#F8FAF7] flex items-center justify-center text-[#65736A] hover:text-[#17251D] transition-colors cursor-pointer shrink-0"
                 title="Expand Navigation Sidebar"
               >
                 <PanelLeftOpen size={17} />
               </button>
             )}
 
-            <div className="flex items-center gap-2 text-[13.5px] truncate">
-              <Link href="/workspace" className="text-[#89958D] hover:text-[#17251D] transition-colors font-normal">
+            <nav aria-label="Breadcrumb" className="flex items-center gap-2 text-[14px] font-medium truncate">
+              <Link href="/workspace" className="text-[#65736A] hover:text-[#124D32] transition-colors duration-150">
                 EvoResearch
               </Link>
-              <span className="text-[#89958D] text-[12px] font-normal">&gt;</span>
-              <span className="text-[#17251D] font-bold truncate">
+              <span className="text-[#89958D] text-[13px] select-none">&rsaquo;</span>
+              <span className="text-[#17251D] font-semibold truncate">
                 {currentTitle}
               </span>
-            </div>
+            </nav>
           </div>
 
           {/* Center Pill Search Bar */}
-          <div className="hidden md:flex items-center w-full max-w-[480px] mx-6">
-            <div className="relative w-full">
+          <div className="hidden md:flex items-center w-full max-w-[460px] mx-6">
+            <div className="relative w-full group">
               <Search
-                size={16}
-                className="absolute left-4 top-1/2 -translate-y-1/2 text-[#89958D] pointer-events-none"
+                size={15}
+                strokeWidth={2}
+                className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#65736A] group-focus-within:text-[#124D32] transition-colors pointer-events-none"
               />
               <input
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Search experiments, materials, models, properties..."
-                className="w-full h-[40px] pl-10 pr-12 bg-[#F5F9F3] hover:bg-[#EEF6EA]/60 focus:bg-[#FFFFFF] border border-[#E5EBE5] rounded-full text-[13px] text-[#17251D] placeholder-[#89958D] focus:outline-none focus:border-[#124D32] transition-all font-sans"
+                className="w-full h-[40px] pl-10 pr-12 bg-[#F8FAF7] hover:bg-[#FFFFFF] focus:bg-[#FFFFFF] border border-[#E5EBE5] rounded-full text-[13.5px] font-normal text-[#17251D] placeholder-[#89958D] focus:outline-none focus:border-[#124D32] focus:ring-3 focus:ring-[#124D32]/10 transition-all duration-180 font-sans"
               />
-              <div className="absolute right-3.5 top-1/2 -translate-y-1/2 pointer-events-none">
-                <kbd className="font-mono text-[10px] px-1.5 py-0.5 rounded bg-[#FFFFFF] border border-[#E5EBE5] text-[#89958D] font-semibold">
+              <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none">
+                <kbd className="font-mono text-[11px] font-medium px-1.5 py-0.5 rounded-md bg-[#FFFFFF] border border-[#E5EBE5] text-[#65736A] shadow-[0_1px_1px_rgba(0,0,0,0.03)]">
                   ⌘K
                 </kbd>
               </div>
@@ -334,32 +339,34 @@ export default function WorkspaceLayout({ children }: { children: ReactNode }) {
           </div>
 
           {/* Right Section: Notifications & User Profile */}
-          <div className="flex items-center gap-3.5">
-            {/* Notification Bell with Green Badge */}
+          <div className="flex items-center gap-3">
+            {/* Notification Bell with Refined Indicator */}
             <button
               type="button"
-              className="relative w-9 h-9 rounded-full hover:bg-[#F5F9F3] flex items-center justify-center text-[#17251D] transition-colors cursor-pointer"
+              className="relative w-9 h-9 rounded-full hover:bg-[#F8FAF7] border border-transparent hover:border-[#E5EBE5] flex items-center justify-center text-[#65736A] hover:text-[#17251D] transition-all duration-180 cursor-pointer"
               title="Notifications"
             >
-              <Bell size={18} strokeWidth={2} />
-              <span className="absolute top-2 right-2 w-2 h-2 rounded-full bg-[#238653]" />
+              <Bell size={17} strokeWidth={1.9} />
+              <span className="absolute top-2 right-2 w-2 h-2 rounded-full bg-[#237A49] ring-2 ring-white" />
             </button>
 
+            <div className="h-5 w-[1px] bg-[#E5EBE5] hidden sm:block" aria-hidden="true" />
+
             {/* User Profile Pill */}
-            <div className="flex items-center gap-2.5 pl-2 cursor-pointer select-none">
-              <div className="w-8 h-8 rounded-full bg-[#124D32] text-[#FFFFFF] flex items-center justify-center text-[12px] font-bold shadow-xs">
+            <div className="flex items-center gap-2.5 pl-1 pr-2 py-1 rounded-full hover:bg-[#F8FAF7] transition-colors duration-180 cursor-pointer select-none">
+              <div className="w-8 h-8 rounded-full bg-[#124D32] text-[#FFFFFF] flex items-center justify-center text-[11.5px] font-bold tracking-wide shadow-[0_2px_6px_rgba(18,77,50,0.2)]">
                 HR
               </div>
-              <span className="text-[13.5px] font-semibold text-[#17251D] hidden sm:block">
+              <span className="text-[14px] font-medium text-[#17251D] hidden sm:block">
                 Harsh Rathod
               </span>
-              <ChevronDown size={14} className="text-[#89958D]" />
+              <ChevronDown size={14} className="text-[#65736A]" />
             </div>
           </div>
         </header>
 
         {/* Content Body: Aligned with consistent padding */}
-        <main className="flex-1 w-full px-8 sm:px-10 py-6 max-w-[1560px] mx-auto flex flex-col">{children}</main>
+        <main className="flex-1 w-full px-7 sm:px-9 py-6 max-w-[1520px] mx-auto flex flex-col">{children}</main>
       </div>
     </div>
   );
