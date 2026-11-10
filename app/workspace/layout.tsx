@@ -151,11 +151,11 @@ export default function WorkspaceLayout({ children }: { children: ReactNode }) {
         </div>
 
         {/* Navigation Group Items */}
-        <nav className="flex-1 overflow-y-auto flex flex-col gap-5 py-4 px-3.5 no-scrollbar">
+        <nav className="flex-1 overflow-y-auto flex flex-col gap-3.5 py-3 px-3 no-scrollbar">
           {navigationGroups.map((grp) => (
             <div key={grp.group} className="flex flex-col gap-0.5">
               {!isCollapsed ? (
-                <div className="text-[11px] font-semibold text-[#89958D] tracking-[0.06em] uppercase px-3.5 pb-1.5 pt-0.5 select-none truncate">
+                <div className="text-[11px] font-semibold text-[#89958D] tracking-[0.06em] uppercase px-3 pb-1 pt-0.5 select-none truncate">
                   {grp.group}
                 </div>
               ) : (
@@ -176,15 +176,15 @@ export default function WorkspaceLayout({ children }: { children: ReactNode }) {
                     title={isCollapsed ? item.name : undefined}
                     className={`flex items-center rounded-full transition-all duration-180 relative group ${
                       isCollapsed
-                        ? "justify-center h-10 w-10 mx-auto"
-                        : "justify-between px-3.5 py-2 text-[14px] font-medium"
+                        ? "justify-center h-9 w-9 mx-auto"
+                        : "justify-between px-3 py-[7px] text-[14px] font-medium"
                     } ${
                       isActive
                         ? "bg-[#124D32] text-[#FFFFFF] shadow-[0_2px_8px_rgba(18,77,50,0.2)]"
                         : "text-[#17251D] hover:text-[#124D32] hover:bg-[#EEF6EA]/70"
                     }`}
                   >
-                    <div className="flex items-center gap-3 min-w-0">
+                    <div className="flex items-center gap-2.5 min-w-0">
                       <Icon
                         size={17}
                         strokeWidth={1.85}
@@ -200,7 +200,7 @@ export default function WorkspaceLayout({ children }: { children: ReactNode }) {
                     </div>
 
                     {!isCollapsed && (
-                      <div className="flex items-center gap-2 shrink-0 ml-2">
+                      <div className="flex items-center gap-1.5 shrink-0 ml-1.5">
                         {item.badge && (
                           <span
                             className={`text-[11px] px-2 py-0.5 rounded-full font-semibold leading-none transition-colors ${
@@ -228,11 +228,11 @@ export default function WorkspaceLayout({ children }: { children: ReactNode }) {
         </nav>
 
         {/* Sidebar Bottom Widgets (Compact, Clean, Restrained) */}
-        <div className="p-3.5 border-t border-[#EDF0EC] flex flex-col gap-2.5 bg-[#FFFFFF]">
+        <div className="p-3 border-t border-[#EDF0EC] flex flex-col gap-2 bg-[#FFFFFF]">
           {!isCollapsed ? (
             <>
               {/* Widget 1: Engine Status */}
-              <div className="p-3 rounded-[16px] bg-[#F8FAF7] border border-[#E5EBE5] transition-colors hover:border-[#D5E0D5]">
+              <div className="p-2.5 rounded-[14px] bg-[#F8FAF7] border border-[#E5EBE5] transition-colors hover:border-[#D5E0D5]">
                 <div className="flex items-center justify-between text-[12px] font-semibold mb-1.5">
                   <span className="flex items-center gap-1.5 text-[#17251D]">
                     <span className="w-2 h-2 rounded-full bg-[#237A49] inline-block" />
@@ -243,7 +243,7 @@ export default function WorkspaceLayout({ children }: { children: ReactNode }) {
                   </span>
                 </div>
                 {/* 5-segment green progress bar */}
-                <div className="flex items-center gap-1.5 h-1.5 my-1.5">
+                <div className="flex items-center gap-1.5 h-1.5 my-1">
                   {[...Array(5)].map((_, i) => (
                     <div
                       key={i}
@@ -257,9 +257,9 @@ export default function WorkspaceLayout({ children }: { children: ReactNode }) {
               </div>
 
               {/* Widget 2: EvoResearch Lab Profile */}
-              <div className="p-2.5 rounded-[16px] bg-[#FFFFFF] border border-[#E5EBE5] flex items-center justify-between transition-colors hover:border-[#D5E0D5]">
+              <div className="p-2 rounded-[14px] bg-[#FFFFFF] border border-[#E5EBE5] flex items-center justify-between transition-colors hover:border-[#D5E0D5]">
                 <div className="flex items-center gap-2.5 min-w-0">
-                  <div className="w-8 h-8 rounded-full bg-[#DDEEDB] text-[#124D32] flex items-center justify-center text-[11px] font-bold shrink-0">
+                  <div className="w-7.5 h-7.5 rounded-full bg-[#DDEEDB] text-[#124D32] flex items-center justify-center text-[11px] font-bold shrink-0">
                     HC
                   </div>
                   <div className="min-w-0">

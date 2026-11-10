@@ -203,12 +203,15 @@ function NewExperimentContent() {
         api.getDatasets().catch(() => [])
       ]);
       
-      const rawList = (pList && pList.length > 0) ? pList : DEFAULT_SEED_PROJECTS;
+      const rawList = (pList && pList.length > 0) ? [...pList, ...DEFAULT_SEED_PROJECTS] : DEFAULT_SEED_PROJECTS;
       const uniqueProjects: Project[] = [];
       const seenIds = new Set<string>();
+      const seenNames = new Set<string>();
       for (const p of rawList) {
-        if (!seenIds.has(p.id)) {
+        const normalizedName = (p.name || "").trim().toLowerCase();
+        if (!seenIds.has(p.id) && normalizedName && !seenNames.has(normalizedName)) {
           seenIds.add(p.id);
+          seenNames.add(normalizedName);
           uniqueProjects.push(p);
         }
       }
